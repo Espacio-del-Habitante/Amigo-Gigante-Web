@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title>Amigo Gigante</title>
+  <desc>Simple monogram AG used as favicon</desc>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0070f3" />
+      <stop offset="100%" stop-color="#5ac8fa" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#g)" />
+  <path
+    d="M18 44V20h10c6.5 0 10 3.6 10 9 0 5.5-3.5 9-10 9h-4v6Zm6-14h4c2.5 0 4-1.3 4-3s-1.5-3-4-3h-4Zm22 14-3.5-8H36l-3.5 8h-4.6L36 20h4l8.1 24Z"
+    fill="#fff"
+  />
+</svg>
