@@ -1,5 +1,8 @@
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { AppBar, Box, Button, Container, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import Image from "next/image";
+
+import Logo from "@/presentation/assets/images/LOGO2.png";
 
 export function HomeNavBar() {
   return (
@@ -24,9 +27,25 @@ export function HomeNavBar() {
                 height: 36,
                 borderRadius: "50%",
                 backgroundColor: "primary.main",
-                display: "block",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden",
+                position: "relative",
+                flexShrink: 0,
               }}
-            />
+            >
+              <Image
+                src={Logo}
+                alt="Amigo Gigante logo"
+                fill
+                sizes="36px"
+                style={{
+                  objectFit: "contain",
+                }}
+                priority
+              />
+            </Box>
             <Typography variant="h6" sx={{ fontWeight: 900, color: "text.primary" }}>
               Amigo Gigante
             </Typography>

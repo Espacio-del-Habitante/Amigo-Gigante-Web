@@ -1,7 +1,16 @@
 import { createTheme } from "@mui/material/styles";
+import type { Shadows } from "@mui/material/styles";
 import { designSystemTokens } from "../../../tailwind.config";
 
 const { colors, fontFamily, borderRadius, boxShadow } = designSystemTokens;
+
+const customShadows: Shadows = [
+  "none",
+  boxShadow.soft,
+  boxShadow.focus,
+  boxShadow.strong,
+  ...Array(21).fill(boxShadow.soft),
+] as Shadows;
 
 export const theme = createTheme({
   palette: {
@@ -40,11 +49,5 @@ export const theme = createTheme({
   shape: {
     borderRadius: borderRadius.lg,
   },
-  shadows: [
-    "none",
-    boxShadow.soft,
-    boxShadow.focus,
-    boxShadow.strong,
-    ...Array(21).fill(boxShadow.soft),
-  ],
+  shadows: customShadows,
 });

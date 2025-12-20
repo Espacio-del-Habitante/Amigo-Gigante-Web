@@ -61,6 +61,10 @@ export const designSystemTokens = {
   },
 };
 
+const tailwindBorderRadius = Object.fromEntries(
+  Object.entries(designSystemTokens.borderRadius).map(([key, value]) => [key, `${value}px`]),
+);
+
 const config: Config = {
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -75,7 +79,7 @@ const config: Config = {
         neutral: designSystemTokens.colors.neutral,
       },
       fontFamily: designSystemTokens.fontFamily,
-      borderRadius: designSystemTokens.borderRadius,
+      borderRadius: tailwindBorderRadius,
       boxShadow: designSystemTokens.boxShadow,
     },
   },
