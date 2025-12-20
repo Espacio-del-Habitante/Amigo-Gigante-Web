@@ -13,9 +13,9 @@ const partners = [
 
 export function PartnersSection() {
   return (
-    <Box component="section" sx={{ py: { xs: 8, md: 10 }, backgroundColor: "#fff" }}>
+    <Box component="section" className="bg-white py-16 md:py-20">
       <Container maxWidth="lg">
-        <Box textAlign="center" sx={{ mb: 6 }}>
+        <Box textAlign="center" className="mb-10">
           <Typography variant="subtitle2" sx={{ color: "primary.main", fontWeight: 800, letterSpacing: 1.2 }}>
             Nuestros Aliados
           </Typography>
@@ -23,14 +23,7 @@ export function PartnersSection() {
             Fundaciones que confían en nosotros
           </Typography>
         </Box>
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={{ xs: 3, md: 6 }}
-          flexWrap="wrap"
-          sx={{ gap: 4 }}
-        >
+        <Stack direction="row" flexWrap="wrap" className="mt-4 flex items-center justify-center gap-8 md:gap-12">
           {partners.map((partner) => (
             <Stack
               key={partner.name}

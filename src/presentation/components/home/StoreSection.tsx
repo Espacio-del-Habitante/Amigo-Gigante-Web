@@ -25,18 +25,11 @@ const storeItems = [
 
 export function StoreSection() {
   return (
-    <Box component="section" sx={{ py: { xs: 8, md: 10 }, backgroundColor: "#f7fbff" }}>
+    <Box component="section" className="bg-[#f7fbff] py-16 md:py-20">
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", lg: "5fr 7fr" },
-            gap: { xs: 4, md: 6 },
-            alignItems: "center",
-          }}
-        >
-          <Box sx={{ order: { xs: 2, lg: 1 } }}>
-            <Stack spacing={1} sx={{ mb: 2 }}>
+        <Box className="grid items-center gap-8 md:gap-10 lg:grid-cols-12">
+          <Box className="order-2 lg:order-1 lg:col-span-5">
+            <Stack className="mb-2 gap-1">
               <Typography variant="subtitle2" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 1 }}>
                 Tienda Solidaria
               </Typography>
@@ -48,7 +41,7 @@ export function StoreSection() {
               Cada producto que compras en nuestra tienda financia alimentos, vacunas y tratamientos médicos para los
               animales que aún esperan un hogar.
             </Typography>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 3 }}>
+            <Stack direction={{ xs: "column", sm: "row" }} className="mt-6 gap-3">
               <Button
                 variant="contained"
                 startIcon={<StorefrontRoundedIcon />}
@@ -66,14 +59,7 @@ export function StoreSection() {
               </Button>
             </Stack>
           </Box>
-          <Box
-            sx={{
-              order: { xs: 1, lg: 2 },
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
-              gap: 3,
-            }}
-          >
+          <Box className="order-1 grid gap-4 sm:grid-cols-2 lg:order-2 lg:col-span-7">
             {storeItems.map((item) => (
               <Card
                 key={item.title}

@@ -10,15 +10,9 @@ interface FeaturedAnimalsSectionProps {
 
 export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps) {
   return (
-    <Box component="section" sx={{ py: { xs: 6, md: 8 }, backgroundColor: "#f7fbff" }}>
+    <Box component="section" className="bg-[#f7fbff] py-12 md:py-16">
       <Container maxWidth="lg">
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems={{ xs: "flex-start", sm: "flex-end" }}
-          spacing={2}
-          sx={{ mb: 4 }}
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} className="mb-8 items-start gap-3 sm:items-end sm:justify-between">
           <Box>
             <Typography variant="h4" sx={{ fontWeight: 800, color: "#0f172a" }}>
               Amigos Destacados
@@ -42,13 +36,7 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
             <ArrowRightAltRoundedIcon />
           </Link>
         </Stack>
-        <Box
-          sx={{
-            display: "grid",
-            gap: 3,
-            gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(4, 1fr)" },
-          }}
-        >
+        <Box className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
           {animals.map((animal) => (
             <AnimalCard key={animal.id} animal={animal} />
           ))}

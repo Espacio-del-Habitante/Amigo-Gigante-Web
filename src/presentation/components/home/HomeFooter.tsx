@@ -7,19 +7,12 @@ const footerLinks = {
 
 export function HomeFooter() {
   return (
-    <Box component="footer" sx={{ backgroundColor: "#fff", borderTop: "1px solid", borderColor: "divider", pt: 10, pb: 6 }}>
+    <Box component="footer" className="bg-white pb-6 pt-10 md:pt-12" sx={{ borderTop: "1px solid", borderColor: "divider" }}>
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: "grid",
-            gap: 6,
-            gridTemplateColumns: { xs: "1fr", md: "repeat(4, 1fr)" },
-            mb: 6,
-          }}
-        >
+        <Box className="mb-8 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <Box>
-            <Stack spacing={2}>
-              <Stack direction="row" spacing={1} alignItems="center">
+            <Stack className="gap-3">
+              <Stack direction="row" alignItems="center" className="gap-2">
                 <Box
                   component="span"
                   sx={{
@@ -37,7 +30,7 @@ export function HomeFooter() {
               <Typography variant="body2" color="text.secondary">
                 Conectando corazones y patas desde 2023. Juntos construimos un mundo mejor para ellos.
               </Typography>
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" className="gap-2">
                 {["FB", "IG", "TW"].map((network) => (
                   <Box
                     key={network}
@@ -63,7 +56,7 @@ export function HomeFooter() {
             <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2 }}>
               Adopción
             </Typography>
-            <Stack spacing={1.2}>
+            <Stack className="gap-3">
               {footerLinks.adopcion.map((item) => (
                 <Link key={item} href="#" underline="none" color="text.secondary" sx={{ fontSize: 14 }}>
                   {item}
@@ -75,7 +68,7 @@ export function HomeFooter() {
             <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2 }}>
               Comunidad
             </Typography>
-            <Stack spacing={1.2}>
+            <Stack className="gap-3">
               {footerLinks.comunidad.map((item) => (
                 <Link key={item} href="#" underline="none" color="text.secondary" sx={{ fontSize: 14 }}>
                   {item}
@@ -90,7 +83,7 @@ export function HomeFooter() {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
               Recibe las últimas noticias y mascotas destacadas.
             </Typography>
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" className="gap-2">
               <TextField size="small" placeholder="Tu email" fullWidth />
               <Button variant="contained" sx={{ fontWeight: 800 }}>
                 OK
@@ -101,14 +94,14 @@ export function HomeFooter() {
         <Stack
           direction={{ xs: "column", md: "row" }}
           justifyContent="space-between"
-          spacing={2}
           alignItems="center"
+          className="gap-3 md:flex-row md:items-center md:justify-between"
           sx={{ borderTop: "1px solid", borderColor: "divider", pt: 3 }}
         >
           <Typography variant="caption" color="text.secondary">
             © 2023 Amigo Gigante. Todos los derechos reservados.
           </Typography>
-          <Stack direction="row" spacing={3} color="text.secondary">
+          <Stack direction="row" className="gap-4" color="text.secondary">
             <Link href="#" underline="none" color="inherit" variant="caption">
               Privacidad
             </Link>
