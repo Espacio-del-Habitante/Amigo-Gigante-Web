@@ -2,7 +2,9 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import VolunteerActivismRoundedIcon from "@mui/icons-material/VolunteerActivismRounded";
 import HealthAndSafetyRoundedIcon from "@mui/icons-material/HealthAndSafetyRounded";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+
+import { Section } from "@/presentation/components/layouts";
 
 const partners = [
   { name: "Huellitas", icon: <PetsRoundedIcon fontSize="large" /> },
@@ -13,48 +15,46 @@ const partners = [
 
 export function PartnersSection() {
   return (
-    <Box component="section" className="bg-white py-16 md:py-20">
-      <Container maxWidth="lg">
-        <Box textAlign="center" className="mb-10">
-          <Typography variant="subtitle2" sx={{ color: "primary.main", fontWeight: 800, letterSpacing: 1.2 }}>
-            Nuestros Aliados
-          </Typography>
-          <Typography variant="h4" sx={{ fontWeight: 800, mt: 1, color: "#0f172a" }}>
-            Fundaciones que confían en nosotros
-          </Typography>
-        </Box>
-        <Stack direction="row" flexWrap="wrap" className="mt-4 flex items-center justify-center gap-8 md:gap-12">
-          {partners.map((partner) => (
-            <Stack
-              key={partner.name}
-              spacing={1.5}
-              alignItems="center"
+    <Section background="paper" spacingY={{ xs: 14, md: 18 }}>
+      <Box textAlign="center" className="mb-10">
+        <Typography variant="subtitle2" sx={{ color: "primary.main", fontWeight: 800, letterSpacing: 1.2 }}>
+          Nuestros Aliados
+        </Typography>
+        <Typography variant="h4" sx={{ fontWeight: 800, mt: 1, color: "text.primary" }}>
+          Fundaciones que confían en nosotros
+        </Typography>
+      </Box>
+      <Stack direction="row" flexWrap="wrap" className="mt-4 flex items-center justify-center gap-8 md:gap-12">
+        {partners.map((partner) => (
+          <Stack
+            key={partner.name}
+            spacing={1.5}
+            alignItems="center"
+            sx={{
+              color: "text.secondary",
+              transition: "all 0.2s ease",
+              ":hover": { color: "primary.main" },
+            }}
+          >
+            <Box
               sx={{
+                width: 80,
+                height: 80,
+                borderRadius: "50%",
+                backgroundColor: "primary.light",
                 color: "text.secondary",
-                transition: "all 0.2s ease",
-                ":hover": { color: "primary.main" },
+                display: "grid",
+                placeItems: "center",
               }}
             >
-              <Box
-                sx={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: "50%",
-                  backgroundColor: "#eef2ff",
-                  color: "#94a3b8",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                {partner.icon}
-              </Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                {partner.name}
-              </Typography>
-            </Stack>
-          ))}
-        </Stack>
-      </Container>
-    </Box>
+              {partner.icon}
+            </Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+              {partner.name}
+            </Typography>
+          </Stack>
+        ))}
+      </Stack>
+    </Section>
   );
 }

@@ -1,6 +1,9 @@
 import ShoppingBagRoundedIcon from "@mui/icons-material/ShoppingBagRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
-import { Box, Button, Card, CardContent, Container, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+
+import { Button } from "@/presentation/components/atoms";
+import { Section } from "@/presentation/components/layouts";
 
 const storeItems = [
   {
@@ -25,94 +28,75 @@ const storeItems = [
 
 export function StoreSection() {
   return (
-    <Box component="section" className="bg-[#f7fbff] py-16 md:py-20">
-      <Container maxWidth="lg">
-        <Box className="grid items-center gap-8 md:gap-10 lg:grid-cols-12">
-          <Box className="order-2 lg:order-1 lg:col-span-5">
-            <Stack className="mb-2 gap-1">
-              <Typography variant="subtitle2" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 1 }}>
-                Tienda Solidaria
-              </Typography>
-              <Typography variant="h4" sx={{ fontWeight: 900, color: "#0f172a" }}>
-                Compra con Propósito
-              </Typography>
-            </Stack>
-            <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-              Cada producto que compras en nuestra tienda financia alimentos, vacunas y tratamientos médicos para los
-              animales que aún esperan un hogar.
+    <Section background="muted" spacingY={{ xs: 16, md: 20 }}>
+      <Box className="grid items-center gap-8 md:gap-10 lg:grid-cols-12">
+        <Box className="order-2 lg:order-1 lg:col-span-5">
+          <Stack className="mb-2 gap-1">
+            <Typography variant="subtitle2" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 1 }}>
+              Tienda Solidaria
             </Typography>
-            <Stack direction={{ xs: "column", sm: "row" }} className="mt-6 gap-3">
-              <Button
-                variant="contained"
-                startIcon={<StorefrontRoundedIcon />}
-                sx={{
-                  backgroundColor: "secondary.main",
-                  color: "#fff",
-                  fontWeight: 800,
-                  px: 3.5,
-                  py: 1.4,
-                  borderRadius: 2.5,
-                  ":hover": { backgroundColor: "#ea580c" },
-                }}
-              >
-                Visitar Tienda
-              </Button>
-            </Stack>
-          </Box>
-          <Box className="order-1 grid gap-4 sm:grid-cols-2 lg:order-2 lg:col-span-7">
-            {storeItems.map((item) => (
-              <Card
-                key={item.title}
-                sx={{
-                  borderRadius: 2,
-                  border: "1px solid",
-                  borderColor: "divider",
-                  boxShadow: "0 12px 30px rgba(15,23,42,0.06)",
-                  overflow: "hidden",
-                }}
-              >
-                <Box
-                  component="img"
-                  src={item.imageUrl}
-                  alt={item.title}
-                  sx={{ height: 160, width: "100%", objectFit: "cover", borderRadius: 0 }}
-                />
-                <CardContent>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body2" color="primary.main" sx={{ fontWeight: 800, mt: 0.5 }}>
-                    {item.price}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
+            <Typography variant="h4" sx={{ fontWeight: 900, color: "text.primary" }}>
+              Compra con Propósito
+            </Typography>
+          </Stack>
+          <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
+            Cada producto que compras en nuestra tienda financia alimentos, vacunas y tratamientos médicos para los
+            animales que aún esperan un hogar.
+          </Typography>
+          <Stack direction={{ xs: "column", sm: "row" }} className="mt-6 gap-3">
+            <Button tone="secondary" startIcon={<StorefrontRoundedIcon />} rounded="default" sx={{ px: 3.5, py: 1.4 }}>
+              Visitar Tienda
+            </Button>
+          </Stack>
+        </Box>
+        <Box className="order-1 grid gap-4 sm:grid-cols-2 lg:order-2 lg:col-span-7">
+          {storeItems.map((item) => (
             <Card
+              key={item.title}
               sx={{
                 borderRadius: 2,
-                backgroundColor: "secondary.main",
-                color: "#fff",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                boxShadow: "0 20px 40px rgba(249,115,22,0.3)",
+                border: "1px solid",
+                borderColor: "divider",
+                boxShadow: 2,
+                overflow: "hidden",
               }}
             >
+              <Box component="img" src={item.imageUrl} alt={item.title} sx={{ height: 160, width: "100%", objectFit: "cover", borderRadius: 0 }} />
               <CardContent>
-                <ShoppingBagRoundedIcon sx={{ fontSize: 40 }} />
-                <Typography variant="h6" sx={{ fontWeight: 800, mt: 1 }}>
-                  100% Solidario
+                <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
+                  {item.title}
                 </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.9, mt: 0.5 }}>
-                  Todas las ganancias van a las fundaciones.
+                <Typography variant="body2" color="primary.main" sx={{ fontWeight: 800, mt: 0.5 }}>
+                  {item.price}
                 </Typography>
               </CardContent>
             </Card>
-          </Box>
+          ))}
+          <Card
+            sx={{
+              borderRadius: 2,
+              backgroundColor: "secondary.main",
+              color: "common.white",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              boxShadow: 3,
+            }}
+          >
+            <CardContent>
+              <ShoppingBagRoundedIcon sx={{ fontSize: 40 }} />
+              <Typography variant="h6" sx={{ fontWeight: 800, mt: 1 }}>
+                100% Solidario
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.9, mt: 0.5 }}>
+                Todas las ganancias van a las fundaciones.
+              </Typography>
+            </CardContent>
+          </Card>
         </Box>
-      </Container>
-    </Box>
+      </Box>
+    </Section>
   );
 }
