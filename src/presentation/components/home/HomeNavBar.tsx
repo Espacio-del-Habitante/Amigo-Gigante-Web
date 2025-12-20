@@ -15,8 +15,8 @@ export function HomeNavBar() {
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ py: 1, gap: 3 }}>
-          <Stack direction="row" spacing={1.2} alignItems="center">
+        <Toolbar disableGutters className="gap-3 py-2 md:py-3">
+          <Stack direction="row" alignItems="center" className="gap-3">
             <Box
               component="span"
               sx={{
@@ -31,19 +31,14 @@ export function HomeNavBar() {
               Amigo Gigante
             </Typography>
           </Stack>
-          <Stack
-            direction="row"
-            spacing={3}
-            alignItems="center"
-            sx={{ flex: 1, display: { xs: "none", md: "flex" }, color: "text.secondary" }}
-          >
+          <Stack direction="row" alignItems="center" className="hidden flex-1 items-center gap-6 text-slate-500 md:flex">
             {["Adopta", "Apadrina", "Fundaciones", "Tienda Solidaria"].map((link) => (
               <Typography key={link} variant="body2" sx={{ fontWeight: 700, cursor: "pointer", "&:hover": { color: "primary.main" } }}>
                 {link}
               </Typography>
             ))}
           </Stack>
-          <Stack direction="row" spacing={1.5} alignItems="center">
+          <Stack direction="row" alignItems="center" className="gap-3">
             <IconButton>
               <SearchRoundedIcon />
             </IconButton>

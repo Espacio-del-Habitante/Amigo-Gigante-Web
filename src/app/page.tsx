@@ -29,14 +29,14 @@ export default function Home() {
 
   if (!homeAnimals) {
     return (
-      <Stack alignItems="center" justifyContent="center" sx={{ minHeight: "100vh" }}>
+      <Stack alignItems="center" justifyContent="center" className="min-h-screen bg-slate-50">
         <CircularProgress />
       </Stack>
     );
   }
 
   return (
-    <Box sx={{ backgroundColor: "#f8fafc" }}>
+    <Box className="bg-slate-50">
       <HomeNavBar />
       <HeroSection heroAnimals={homeAnimals.heroAnimals} />
       <AiBanner />
