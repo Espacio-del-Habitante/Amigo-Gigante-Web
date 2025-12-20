@@ -1,4 +1,5 @@
-const REPOSITORY_TYPES = {};
+const REPOSITORY_TYPES = {
+  DebugRepository: Symbol.for("DebugRepository"),
+};
 
 export { REPOSITORY_TYPES };
-
