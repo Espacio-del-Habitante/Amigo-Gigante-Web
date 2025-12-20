@@ -1,66 +1,49 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { Box, CircularProgress, Stack } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+
+import type { HomeAnimals } from "@/domain/models/HomeAnimals";
+import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
+import { appContainer } from "@/infrastructure/ioc/container";
+import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
+import { AiBanner } from "@/presentation/components/home/AiBanner";
+import { FeaturedAnimalsSection } from "@/presentation/components/home/FeaturedAnimalsSection";
+import { HeroSection } from "@/presentation/components/home/HeroSection";
+import { HomeFooter } from "@/presentation/components/home/HomeFooter";
+import { HomeNavBar } from "@/presentation/components/home/HomeNavBar";
+import { PartnersSection } from "@/presentation/components/home/PartnersSection";
+import { StoreSection } from "@/presentation/components/home/StoreSection";
 
 export default function Home() {
+  const getHomeAnimalsUseCase = useMemo(
+    () => appContainer.get<GetHomeAnimalsUseCase>(USE_CASE_TYPES.GetHomeAnimalsUseCase),
+    [],
+  );
+
+  const [homeAnimals, setHomeAnimals] = useState<HomeAnimals | null>(null);
+
+  useEffect(() => {
+    getHomeAnimalsUseCase.execute().then(setHomeAnimals);
+  }, [getHomeAnimalsUseCase]);
+
+  if (!homeAnimals) {
+    return (
+      <Stack alignItems="center" justifyContent="center" sx={{ minHeight: "100vh" }}>
+        <CircularProgress />
+      </Stack>
+    );
+  }
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Box sx={{ backgroundColor: "#f8fafc" }}>
+      <HomeNavBar />
+      <HeroSection heroAnimals={homeAnimals.heroAnimals} />
+      <AiBanner />
+      <FeaturedAnimalsSection animals={homeAnimals.featuredAnimals} />
+      <PartnersSection />
+      <StoreSection />
+      <HomeFooter />
+    </Box>
   );
 }
