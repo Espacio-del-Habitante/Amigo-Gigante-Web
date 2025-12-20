@@ -115,7 +115,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               {first && (
                 <Card
                   sx={{
-                    borderRadius: 3,
+                    borderRadius: 2,
                     overflow: "hidden",
                     boxShadow: "0 15px 40px rgba(0,0,0,0.08)",
                     border: "1px solid",
@@ -127,7 +127,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               )}
               <Card
                 sx={{
-                  borderRadius: 3,
+                  borderRadius: 2,
                   p: 2.5,
                   display: "flex",
                   alignItems: "center",
@@ -153,7 +153,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 sx={{
                   backgroundColor: "secondary.main",
                   color: "#fff",
-                  borderRadius: 3,
+                  borderRadius: 2,
                   p: 3,
                   minHeight: 140,
                   boxShadow: "0 18px 40px rgba(249,115,22,0.35)",
@@ -167,7 +167,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               {second && (
                 <Card
                   sx={{
-                    borderRadius: 3,
+                    borderRadius: 2,
                     overflow: "hidden",
                     boxShadow: "0 15px 40px rgba(0,0,0,0.08)",
                     border: "1px solid",

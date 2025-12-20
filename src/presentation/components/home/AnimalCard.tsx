@@ -18,7 +18,7 @@ export function AnimalCard({ animal }: AnimalCardProps) {
   return (
     <Card
       sx={{
-        borderRadius: 3,
+        borderRadius: 2,
         border: "1px solid",
         borderColor: "divider",
         boxShadow: "0 10px 30px rgba(15, 23, 42, 0.05)",
@@ -35,6 +35,7 @@ export function AnimalCard({ animal }: AnimalCardProps) {
           position: "relative",
           overflow: "hidden",
           height: 240,
+          borderRadius: 2,
         }}
       >
         <Box

@@ -78,14 +78,19 @@ export function StoreSection() {
               <Card
                 key={item.title}
                 sx={{
-                  borderRadius: 3,
+                  borderRadius: 2,
                   border: "1px solid",
                   borderColor: "divider",
                   boxShadow: "0 12px 30px rgba(15,23,42,0.06)",
                   overflow: "hidden",
                 }}
               >
-                <Box component="img" src={item.imageUrl} alt={item.title} sx={{ height: 160, width: "100%", objectFit: "cover" }} />
+                <Box
+                  component="img"
+                  src={item.imageUrl}
+                  alt={item.title}
+                  sx={{ height: 160, width: "100%", objectFit: "cover", borderRadius: 0 }}
+                />
                 <CardContent>
                   <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
                     {item.title}
@@ -98,7 +103,7 @@ export function StoreSection() {
             ))}
             <Card
               sx={{
-                borderRadius: 3,
+                borderRadius: 2,
                 backgroundColor: "secondary.main",
                 color: "#fff",
                 height: "100%",
