@@ -1,112 +1,49 @@
-# 🎨 Design System — Amigo Gigante (v1)
+# 🎨 Design System — Amigo Gigante
 
-Este documento define el **Design System oficial** del proyecto **Amigo Gigante**.
-
-📌 **Regla fundamental**  
-Tailwind es la **fuente de verdad** para estilos.  
-MUI debe reflejar exactamente estos tokens.
+Este documento describe los **tokens oficiales** y reglas de uso del Design System. Tailwind es la fuente de verdad; el tema de MUI refleja exactamente estos valores.
 
 ---
 
-## 🎯 Objetivos
+## Paleta de colores
 
-- Consistencia visual en toda la app
-- Evitar tamaños, colores y estilos arbitrarios
-- Facilitar trabajo con agentes IA y nuevos devs
-- Escalabilidad sin deuda visual
+- **Brand** (`brand`): gradiente azul para acciones primarias (500: `#1cb0f6`, 300: `#4dc7ff`, 700: `#0f6ab3`).
+- **Accent** (`accent`): naranja para estados destacados o secundarios (500: `#f97316`, 300: `#ffa55a`, 700: `#b54109`).
+- **Neutral** (`neutral`): escala gris/azulada para fondos y texto (50: `#f8fafc`, 600: `#334155`, 800: `#0f172a`, white/black definidos).
+- Solo se permiten colores definidos en `tailwind.config.ts` (`brand`, `accent`, `neutral`); se prohíben colores inline fuera de estos tokens.
 
----
+## Tipografía
 
-## 🎨 Colores
+- Fuente base: `Poppins, Arial, sans-serif` (`fontFamily.sans`).
+- Pesos fuertes (`fontWeightBold: 800`) para títulos (`h4`, `h5`) en MUI.
+- En Tailwind usar `font-sans` para heredar la familia definida en los tokens.
 
-### Brand (Azul / Teal)
+## Espaciado y esquinas
 
-```ts
-brand: {
-  50:  "#E6FBFF",
-  100: "#C8F6FF",
-  200: "#9DEEFF",
-  300: "#6FE5FF",
-  400: "#45EBED",
-  500: "#19D3D6",
-  600: "#0FB3B6",
-  700: "#0A8F91",
-  800: "#066E70",
-  900: "#044D4E",
-}
-```
+- Radio de borde oficial `lg` = `16px` (equivalente al `shape.borderRadius` de MUI). Otros radios disponibles: `sm` (8px), `md` (12px), `xl` (24px), `full`.
+- Mantener consistencia usando las clases de Tailwind (`rounded-lg`, `rounded-md`, etc.). Evitar valores ad-hoc en línea.
 
----
+## Sombras
 
-### Accent (Amarillo — Apadrinar)
+- Sombras tokenizadas en Tailwind (`soft`, `focus`, `strong`):
+  - `soft`: relieve suave para tarjetas.
+  - `focus`: halo azul para estados de foco/accesibilidad.
+  - `strong`: profundidad pronunciada para overlays.
+- El tema MUI reutiliza estos mismos valores en su configuración de `shadows`.
 
-```ts
-accent: {
-  50:  "#FFFBEB",
-  100: "#FEF3C7",
-  200: "#FDE68A",
-  300: "#FCD34D",
-  400: "#FBBF24",
-  500: "#F59E0B",
-  600: "#D97706",
-  700: "#B45309",
-}
-```
+## Botones y reglas de uso
+
+- **Primarios**: usan `brand` (MUI `palette.primary`, Tailwind `bg-brand-500`).
+- **Secundarios/destacados**: usan `accent` (MUI `palette.secondary`, Tailwind `bg-accent-500`).
+- Texto sobre fondos de color debe usar neutrales claros (`neutral-50`) para garantizar contraste.
+- Deshabilitado: reducir opacidad, sin cambiar tokens de color.
+
+## Convenciones obligatorias
+
+- Tailwind es la fuente de verdad; cualquier cambio de tokens se realiza en `tailwind.config.ts`.
+- MUI no puede definir colores ni tamaños fuera de los tokens. `palette.primary` ⇔ `brand`, `palette.secondary` ⇔ `accent`.
+- Evitar estilos inline: preferir utilidades de Tailwind o el tema de MUI.
+- No agregar nuevas dependencias de estilos sin aprobación.
 
 ---
 
-### Neutrales
-
-```ts
-neutral: {
-  0:   "#FFFFFF",
-  50:  "#F7F9FC",
-  100: "#EEF2F7",
-  200: "#D9E2EF",
-  300: "#B7C3D6",
-  400: "#8B98B0",
-  500: "#66748B",
-  600: "#4B5669",
-  700: "#353D4B",
-  800: "#232834",
-  900: "#141824",
-}
-```
-
----
-
-## 🔤 Tipografía
-
-| Uso | Clase | px |
-|---|---|---|
-| Caption | text-sm | 14 |
-| Body | text-base | 16 |
-| Subtitle | text-lg | 18 |
-| H3 | text-2xl | 24 |
-| H2 | text-3xl | 30 |
-| H1 | text-4xl | 36 |
-
----
-
-## 📐 Layout
-
-- Contenedor estándar:
-```
-max-w-6xl mx-auto px-4 md:px-6 lg:px-10
-```
-
----
-
-## 🔘 Botones
-
-- **Primary**: brand-500 (Adoptar, Explorar)
-- **Accent**: accent-500 (Apadrinar)
-- **Secondary**: outline / neutral
-
----
-
-## 🚦 Reglas
-
-- ❌ No estilos inline
-- ❌ No colores fuera de tokens
-- ✅ Todo cambio pasa por este documento
+Cumpliendo estas reglas se garantiza consistencia visual y alineación entre Tailwind y MUI.
