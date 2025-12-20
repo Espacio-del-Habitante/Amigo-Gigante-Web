@@ -1,6 +1,8 @@
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
+
+import { Button } from "@/presentation/components/atoms";
 
 export function AiBanner() {
   return (
@@ -8,11 +10,11 @@ export function AiBanner() {
       <Container maxWidth="lg">
         <Box
           className="relative overflow-hidden rounded-[32px] px-6 py-8 md:px-10 md:py-12"
-          sx={{
-            background: "linear-gradient(90deg, #7c3aed, #1cb0f6)",
-            color: "#fff",
-            boxShadow: "0 20px 45px rgba(37, 99, 235, 0.22)",
-          }}
+          sx={(theme) => ({
+            background: `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.primary.main})`,
+            color: theme.palette.common.white,
+            boxShadow: theme.shadows[3],
+          })}
         >
           <Box
             sx={{
@@ -29,11 +31,11 @@ export function AiBanner() {
           <Stack
             direction={{ xs: "column", md: "row" }}
             alignItems="center"
-            justifyContent="space-between"
-            className="relative flex-col gap-4 md:flex-row md:gap-6"
-          >
-            <Stack className="gap-3">
-              <Stack
+              justifyContent="space-between"
+              className="relative flex-col gap-4 md:flex-row md:gap-6"
+            >
+              <Stack className="gap-3">
+                <Stack
                 direction="row"
                 alignItems="center"
                 className="w-fit items-center gap-2 rounded-full px-3 py-2 text-xs font-extrabold uppercase tracking-[0.05em]"
@@ -51,18 +53,10 @@ export function AiBanner() {
               </Typography>
             </Stack>
             <Button
-              variant="contained"
+              tone="secondary"
+              rounded="default"
               endIcon={<ArrowForwardRoundedIcon />}
-              sx={{
-                backgroundColor: "#fff",
-                color: "#6d28d9",
-                fontWeight: 800,
-                px: 4,
-                py: 1.4,
-                borderRadius: 2.5,
-                boxShadow: "0 15px 30px rgba(0,0,0,0.12)",
-                ":hover": { backgroundColor: "#f5f3ff" },
-              }}
+              sx={{ px: 4, py: 1.4, boxShadow: 3 }}
             >
               Probar recomendador IA
             </Button>

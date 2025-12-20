@@ -11,9 +11,9 @@ import { AiBanner } from "@/presentation/components/home/AiBanner";
 import { FeaturedAnimalsSection } from "@/presentation/components/home/FeaturedAnimalsSection";
 import { HeroSection } from "@/presentation/components/home/HeroSection";
 import { HomeFooter } from "@/presentation/components/home/HomeFooter";
-import { HomeNavBar } from "@/presentation/components/home/HomeNavBar";
 import { PartnersSection } from "@/presentation/components/home/PartnersSection";
 import { StoreSection } from "@/presentation/components/home/StoreSection";
+import { HomeNavBar } from "@/presentation/components/organisms";
 
 export default function Home() {
   const getHomeAnimalsUseCase = useMemo(
