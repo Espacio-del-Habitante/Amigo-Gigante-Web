@@ -1,0 +1,22 @@
+"use client";
+
+import { Box, Container, Typography } from "@mui/material";
+
+export function RegisterFooter() {
+  return (
+    <Box component="footer" className="border-t border-solid border-neutral-200 bg-white">
+      <Container maxWidth="lg">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            py: 3,
+            textAlign: { xs: "center", lg: "left" },
+          }}
+        >
+          © 2024 Amigo Gigante. All rights reserved.
+        </Typography>
+      </Container>
+    </Box>
+  );
+}
