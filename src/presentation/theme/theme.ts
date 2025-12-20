@@ -1,21 +1,34 @@
 import { createTheme } from "@mui/material/styles";
+import { designSystemTokens } from "../../../tailwind.config";
+
+const { colors, fontFamily, borderRadius, boxShadow } = designSystemTokens;
 
 export const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#1cb0f6",
+      main: colors.brand[500],
+      light: colors.brand[300],
+      dark: colors.brand[700],
+      contrastText: colors.neutral[50],
     },
     secondary: {
-      main: "#f97316",
+      main: colors.accent[500],
+      light: colors.accent[300],
+      dark: colors.accent[700],
+      contrastText: colors.neutral[50],
     },
     background: {
-      default: "#f8fafc",
-      paper: "#ffffff",
+      default: colors.neutral[50],
+      paper: colors.neutral.white,
+    },
+    text: {
+      primary: colors.neutral[800],
+      secondary: colors.neutral[600],
     },
   },
   typography: {
-    fontFamily: "Poppins, Arial, sans-serif",
+    fontFamily: fontFamily.sans.join(", "),
     fontWeightBold: 800,
     h4: {
       fontWeight: 800,
@@ -25,6 +38,13 @@ export const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: 16,
+    borderRadius: borderRadius.lg,
   },
+  shadows: [
+    "none",
+    boxShadow.soft,
+    boxShadow.focus,
+    boxShadow.strong,
+    ...Array(21).fill(boxShadow.soft),
+  ],
 });
