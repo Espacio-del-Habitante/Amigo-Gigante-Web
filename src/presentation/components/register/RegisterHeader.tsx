@@ -14,16 +14,10 @@ export function RegisterHeader() {
       justifyContent="space-between"
       spacing={2.5}
     >
-      <Stack direction="row" alignItems="center" spacing={2}>
-        <Logo size={48} showWordmark />
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
-            Amigo Gigante
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Foundations registry
-          </Typography>
-        </Box>
+      <Stack direction="column" alignItems="center" spacing={2}>
+        <Logo size={48} showWordmark subtitle="Foundations registry"/>
+     
+
       </Stack>
       <Button
         component={Link}

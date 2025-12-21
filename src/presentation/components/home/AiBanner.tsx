@@ -7,7 +7,7 @@ import { Button } from "@/presentation/components/atoms";
 export function AiBanner() {
   return (
     <Box component="section" className="bg-white py-12 md:py-16">
-      <Container maxWidth="lg">
+      <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
         <Box
           className="relative overflow-hidden rounded-[32px] px-6 py-8 md:px-10 md:py-12"
           sx={(theme) => ({
@@ -47,7 +47,7 @@ export function AiBanner() {
               <Typography variant="h4" sx={{ fontWeight: 800 }}>
                 ¿No sabes por dónde empezar?
               </Typography>
-              <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.85)", maxWidth: 720, lineHeight: 1.7 }}>
+              <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.85)", maxWidth: 780, lineHeight: 1.7 }}>
                 Nuestra Inteligencia Artificial analiza tu estilo de vida y preferencias para recomendarte el compañero
                 perfecto.
               </Typography>

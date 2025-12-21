@@ -12,7 +12,7 @@ import { RegisterImageSection } from "@/presentation/components/register/Registe
 export default function RegisterPage() {
   return (
     <Box className="min-h-screen bg-neutral-50" sx={{ display: "flex", flexDirection: "column" }}>
-      <Container maxWidth="lg" sx={{ flex: 1, py: { xs: 4, md: 6 } }}>
+      <Container maxWidth="xl" sx={{ flex: 1, py: { xs: 4, md: 6 }, maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
         <Stack spacing={{ xs: 4, md: 6 }}>
           <RegisterHeader />
           <Box className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]" sx={{ alignItems: "stretch" }}>
