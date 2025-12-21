@@ -3,6 +3,7 @@ import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import PlaceRoundedIcon from "@mui/icons-material/PlaceRounded";
 import VolunteerActivismRoundedIcon from "@mui/icons-material/VolunteerActivismRounded";
 import { Box, Card, Container, Stack, Typography } from "@mui/material";
+import Image from "next/image";
 
 import type { Animal } from "@/domain/models/Animal";
 import { Button, Chip } from "@/presentation/components/atoms";
@@ -16,7 +17,11 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
 
   return (
     <Box component="section" className="relative overflow-hidden bg-gradient-to-br from-neutral-50 to-white pb-12 pt-16 md:pb-16 md:pt-20">
-      <Container maxWidth="lg" className="grid items-center gap-8 md:grid-cols-2">
+      <Container
+        maxWidth="xl"
+        className="grid items-center gap-8 md:grid-cols-2"
+        sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}
+      >
         <Stack className="gap-6">
           <Chip
             icon={<PetsRoundedIcon />}
@@ -46,7 +51,11 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               mascota hoy.
             </Typography>
           </Box>
-          <Stack direction={{ xs: "column", sm: "row" }} className="flex flex-col gap-3 rounded-2xl border border-solid bg-white p-4 sm:flex-row" sx={{ maxWidth: 620, borderColor: "divider", boxShadow: 3 }}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            className="flex flex-col gap-3 rounded-2xl border border-solid bg-white p-4 sm:flex-row"
+            sx={{ maxWidth: 620, borderColor: "divider", boxShadow: 3 }}
+          >
             <Button
               fullWidth
               variant="outlined"
@@ -84,7 +93,16 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                   borderColor: "divider",
                 }}
               >
-                <Box component="img" src={first.imageUrl} alt={first.name} sx={{ height: 240, width: "100%", objectFit: "cover" }} />
+                <Box sx={{ position: "relative", height: 240 }}>
+                  <Image
+                    src={first.imageUrl}
+                    alt={first.name}
+                    fill
+                    priority
+                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
+                  />
+                </Box>
               </Card>
             )}
             <Card className="flex items-center gap-3 rounded-2xl border border-solid p-3" sx={{ borderColor: "divider", boxShadow: 2 }}>
@@ -122,7 +140,15 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                   borderColor: "divider",
                 }}
               >
-                <Box component="img" src={second.imageUrl} alt={second.name} sx={{ height: 240, width: "100%", objectFit: "cover" }} />
+                <Box sx={{ position: "relative", height: 240 }}>
+                  <Image
+                    src={second.imageUrl}
+                    alt={second.name}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
+                  />
+                </Box>
               </Card>
             )}
           </Stack>

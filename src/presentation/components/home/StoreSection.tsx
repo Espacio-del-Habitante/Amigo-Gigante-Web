@@ -1,6 +1,7 @@
 import ShoppingBagRoundedIcon from "@mui/icons-material/ShoppingBagRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import Image from "next/image";
 
 import { Button } from "@/presentation/components/atoms";
 import { Section } from "@/presentation/components/layouts";
@@ -30,7 +31,7 @@ export function StoreSection() {
   return (
     <Section background="muted" spacingY={{ xs: 16, md: 20 }}>
       <Box className="grid items-center gap-8 md:gap-10 lg:grid-cols-12">
-        <Box className="order-2 lg:order-1 lg:col-span-5">
+        <Box className="order-2 lg:order-1 lg:col-span-5" sx={{ maxWidth: { lg: 560 } }}>
           <Stack className="mb-2 gap-1">
             <Typography variant="subtitle2" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 1 }}>
               Tienda Solidaria
@@ -61,7 +62,15 @@ export function StoreSection() {
                 overflow: "hidden",
               }}
             >
-              <Box component="img" src={item.imageUrl} alt={item.title} sx={{ height: 160, width: "100%", objectFit: "cover", borderRadius: 0 }} />
+              <Box sx={{ position: "relative", height: 160 }}>
+                <Image
+                  src={item.imageUrl}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 520px"
+                  style={{ objectFit: "cover" }}
+                />
+              </Box>
               <CardContent>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
                   {item.title}

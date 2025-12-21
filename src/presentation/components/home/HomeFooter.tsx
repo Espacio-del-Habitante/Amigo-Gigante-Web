@@ -8,7 +8,7 @@ const footerLinks = {
 export function HomeFooter() {
   return (
     <Box component="footer" className="bg-white pb-6 pt-10 md:pt-12" sx={{ borderTop: "1px solid", borderColor: "divider" }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
         <Box className="mb-8 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <Box>
             <Stack className="gap-3">

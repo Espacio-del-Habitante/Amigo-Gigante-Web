@@ -36,7 +36,7 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
           <ArrowRightAltRoundedIcon />
         </Link>
       </Stack>
-      <Box className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+      <Box className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {animals.map((animal) => (
           <AnimalCard key={animal.id} animal={animal} />
         ))}

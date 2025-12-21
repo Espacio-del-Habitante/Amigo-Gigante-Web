@@ -1,4 +1,4 @@
-import { Box, type BoxProps, Container, type ContainerProps, useTheme } from "@mui/material";
+import { Box, type BoxProps, Container, type ContainerProps, type SxProps, type Theme, useTheme } from "@mui/material";
 
 type SectionBackground = "default" | "paper" | "muted";
 
@@ -32,9 +32,21 @@ export function Section({
     md: spacingY?.md ?? 14,
   };
 
+  const { maxWidth = "lg", sx: containerSx, ...restContainerProps } = containerProps ?? {};
   const normalizedSx = Array.isArray(sx) ? sx : [sx].filter(Boolean);
+  const normalizedContainerSx = Array.isArray(containerSx) ? containerSx : [containerSx].filter(Boolean);
 
-  const content = disableContainer ? children : <Container maxWidth="lg" {...containerProps}>{children}</Container>;
+  const content = disableContainer ? (
+    children
+  ) : (
+    <Container
+      maxWidth={maxWidth}
+      sx={[{ maxWidth: 1440, px: { xs: 3, sm: 4 }, width: "100%" }, ...normalizedContainerSx].filter(Boolean) as SxProps<Theme>}
+      {...restContainerProps}
+    >
+      {children}
+    </Container>
+  );
 
   return (
     <Box component="section" sx={[{ backgroundColor, py: pyValues }, ...normalizedSx]} {...props}>

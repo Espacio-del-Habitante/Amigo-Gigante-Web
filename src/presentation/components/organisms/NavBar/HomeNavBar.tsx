@@ -20,7 +20,7 @@ export function HomeNavBar() {
         borderColor: "divider",
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
         <Toolbar disableGutters sx={{ gap: 2, py: { xs: 1, md: 1.5 } }}>
           <Logo size={40} showWordmark />
           <Stack

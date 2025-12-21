@@ -21,7 +21,7 @@ export function RegisterImageSection() {
         fill
         priority
         style={{ objectFit: "cover" }}
-        sizes="(min-width: 1024px) 600px, 0px"
+        sizes="(min-width: 1536px) 720px, (min-width: 1280px) 640px, (min-width: 1024px) 560px, 0px"
       />
       <Box
         sx={{
