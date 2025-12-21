@@ -14,11 +14,13 @@
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "@supabase/supabase-js": "^2.89.0",
+    "formik": "^2.4.9",
     "inversify": "^7.10.8",
     "next": "16.1.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@types/node": "^20",
