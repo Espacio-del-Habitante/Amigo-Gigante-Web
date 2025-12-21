@@ -2,8 +2,23 @@ import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import PlaceRoundedIcon from "@mui/icons-material/PlaceRounded";
 import VolunteerActivismRoundedIcon from "@mui/icons-material/VolunteerActivismRounded";
-import { Box, Card, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Image from "next/image";
+import { useMemo, useState } from "react";
 
 import type { Animal } from "@/domain/models/Animal";
 import { Button, Chip } from "@/presentation/components/atoms";
@@ -14,6 +29,10 @@ interface HeroSectionProps {
 
 export function HeroSection({ heroAnimals }: HeroSectionProps) {
   const [first, second] = heroAnimals;
+  const theme = useTheme();
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const filterTags = useMemo(() => ["Perros", "Gatos", "Apadrinar"], []);
 
   return (
     <Box component="section" className="relative overflow-hidden bg-gradient-to-br from-neutral-50 to-white pb-12 pt-16 md:pb-16 md:pt-20">
@@ -51,35 +70,60 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               mascota hoy.
             </Typography>
           </Box>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            className="flex flex-col gap-3 rounded-2xl border border-solid bg-white p-4 sm:flex-row"
-            sx={{ maxWidth: 620, borderColor: "divider", boxShadow: 3 }}
+          <Box
+            className="flex flex-col gap-3 rounded-2xl border border-solid bg-white p-4"
+            sx={{ maxWidth: 720, borderColor: "divider", boxShadow: 3 }}
           >
-            <Button
-              fullWidth
-              variant="outlined"
-              rounded="default"
-              startIcon={<FilterAltRoundedIcon />}
-            >
-              Perros
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              rounded="default"
-              startIcon={<PlaceRoundedIcon />}
-            >
-              Cualquier ubicación
-            </Button>
-            <Button
-              fullWidth
-              rounded="default"
-              sx={{ boxShadow: 2, fontWeight: 800 }}
-            >
-              Buscar
-            </Button>
-          </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1.5} alignItems="center">
+                <IconButton
+                  aria-label="Abrir filtros"
+                  onClick={() => setFiltersOpen(true)}
+                  sx={{
+                    borderRadius: 2,
+                    backgroundColor: theme.palette.background.default,
+                    "&:hover": { backgroundColor: theme.palette.action.hover },
+                  }}
+                >
+                  <FilterAltRoundedIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="Seleccionar ubicación"
+                  onClick={() => setFiltersOpen(true)}
+                  sx={{
+                    borderRadius: 2,
+                    backgroundColor: theme.palette.background.default,
+                    "&:hover": { backgroundColor: theme.palette.action.hover },
+                  }}
+                >
+                  <PlaceRoundedIcon />
+                </IconButton>
+              </Stack>
+              <TextField
+                placeholder="Busca por nombre, ciudad o tipo"
+                fullWidth
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    "& fieldset": { borderColor: theme.palette.divider },
+                    "&:hover fieldset": { borderColor: theme.palette.primary.main },
+                    "&.Mui-focused fieldset": {
+                      borderColor: theme.palette.primary.main,
+                      boxShadow: `${theme.shadows[1]}, 0 0 0 3px ${theme.palette.primary.main}22`,
+                    },
+                  },
+                }}
+              />
+              <Button
+                fullWidth={isSmDown}
+                rounded="pill"
+                sx={{ boxShadow: 2, fontWeight: 800, px: 3.5, minWidth: 130 }}
+              >
+                Buscar
+              </Button>
+            </Stack>
+          </Box>
         </Stack>
         <Box className="grid items-start gap-4 sm:grid-cols-2 md:gap-6">
           <Stack className="gap-3 sm:mt-4">
@@ -154,6 +198,35 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
           </Stack>
         </Box>
       </Container>
+      <Dialog open={filtersOpen} onClose={() => setFiltersOpen(false)} fullWidth maxWidth="sm">
+        <DialogTitle sx={{ fontWeight: 800, pb: 1 }}>Filtros</DialogTitle>
+        <DialogContent dividers sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Stack spacing={1}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+              Tipo
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+              {filterTags.map((tag) => (
+                <Chip key={tag} label={tag} tone="neutral" variant="soft" sx={{ mb: 1 }} />
+              ))}
+            </Stack>
+          </Stack>
+          <Stack spacing={1}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+              Ubicación
+            </Typography>
+            <TextField placeholder="Ciudad o región" fullWidth />
+          </Stack>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, py: 2 }}>
+          <Button variant="ghost" tone="neutral" onClick={() => setFiltersOpen(false)}>
+            Cancelar
+          </Button>
+          <Button rounded="pill" onClick={() => setFiltersOpen(false)} sx={{ fontWeight: 800 }}>
+            Aplicar filtros
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
