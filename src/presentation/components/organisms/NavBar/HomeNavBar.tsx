@@ -1,5 +1,5 @@
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import { alpha, AppBar, Box, Container, Divider, Drawer, IconButton as MuiIconButton, List, ListItem, ListItemButton, ListItemText, Stack, Toolbar, useMediaQuery, useTheme } from "@mui/material";
+import { alpha, AppBar, Box, Container, Divider, Drawer, IconButton as MuiIconButton, List, ListItem, ListItemButton, Stack, Toolbar, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
 
 import { Button, Logo } from "@/presentation/components/atoms";
@@ -9,7 +9,6 @@ const navLinks = ["Adopta", "Apadrina", "Fundaciones", "Tienda Solidaria"];
 
 export function HomeNavBar() {
   const theme = useTheme();
-  const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = useState(false);
   const navItems = useMemo(() => navLinks, []);
 
@@ -60,6 +59,7 @@ export function HomeNavBar() {
             alignItems="center"
             spacing={1.5}
             sx={{
+              display: { xs: "none", md: "flex" },
               backgroundColor: alpha(theme.palette.primary.main, 0.05),
               borderRadius: 999,
               pl: 0.5,
@@ -75,7 +75,16 @@ export function HomeNavBar() {
           </Stack>
         </Toolbar>
       </Container>
-      <Drawer anchor="right" open={open} onClose={() => setOpen(false)} PaperProps={{ sx: { width: 280, p: 2, gap: 1.5 } }}>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={() => setOpen(false)}
+        slotProps={{
+          paper: {
+            sx: { width: 280, p: 2, gap: 1.5 },
+          },
+        }}
+      >
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 0.5, pb: 1 }}>
           <Logo size={40} showWordmark />
           <MuiIconButton aria-label="Cerrar menú" onClick={() => setOpen(false)}>
@@ -87,13 +96,16 @@ export function HomeNavBar() {
           {navItems.map((item) => (
             <ListItem key={item} disablePadding>
               <ListItemButton onClick={() => setOpen(false)}>
-                <ListItemText primary={item} primaryTypographyProps={{ fontWeight: 700 }} />
+                <Typography fontWeight={700}>{item}</Typography>
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
         <Stack spacing={1.5} sx={{ mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <SearchButton tone="neutral" variant="ghost" />
+          </Box>
           <Button fullWidth variant="solid" rounded="pill">
             Iniciar Sesión
           </Button>

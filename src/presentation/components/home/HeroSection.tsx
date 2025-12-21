@@ -1,6 +1,5 @@
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
-import PlaceRoundedIcon from "@mui/icons-material/PlaceRounded";
 import VolunteerActivismRoundedIcon from "@mui/icons-material/VolunteerActivismRounded";
 import {
   Box,
@@ -75,50 +74,41 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
             sx={{ maxWidth: 720, borderColor: "divider", boxShadow: 3 }}
           >
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
-              <Stack direction="row" spacing={1.5} alignItems="center">
-                <IconButton
+              <Stack direction="row" spacing={1.5} alignItems="center" sx={{ width: { xs: "100%", sm: "100%" } }}>
+               
+                <TextField
+                  placeholder="Busca por nombre, ciudad o tipo"
+                  fullWidth
+                  size="small"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                      "& fieldset": { borderColor: theme.palette.divider },
+                      "&:hover fieldset": { borderColor: theme.palette.primary.main },
+                      "&.Mui-focused fieldset": {
+                        borderColor: theme.palette.primary.main,
+                        boxShadow: `${theme.shadows[1]}, 0 0 0 3px ${theme.palette.primary.main}22`,
+                      },
+                    },
+                  }}
+                />
+                 <IconButton
                   aria-label="Abrir filtros"
                   onClick={() => setFiltersOpen(true)}
                   sx={{
                     borderRadius: 2,
                     backgroundColor: theme.palette.background.default,
                     "&:hover": { backgroundColor: theme.palette.action.hover },
+                    flexShrink: 0,
                   }}
                 >
                   <FilterAltRoundedIcon />
                 </IconButton>
-                <IconButton
-                  aria-label="Seleccionar ubicación"
-                  onClick={() => setFiltersOpen(true)}
-                  sx={{
-                    borderRadius: 2,
-                    backgroundColor: theme.palette.background.default,
-                    "&:hover": { backgroundColor: theme.palette.action.hover },
-                  }}
-                >
-                  <PlaceRoundedIcon />
-                </IconButton>
               </Stack>
-              <TextField
-                placeholder="Busca por nombre, ciudad o tipo"
-                fullWidth
-                size="small"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    "& fieldset": { borderColor: theme.palette.divider },
-                    "&:hover fieldset": { borderColor: theme.palette.primary.main },
-                    "&.Mui-focused fieldset": {
-                      borderColor: theme.palette.primary.main,
-                      boxShadow: `${theme.shadows[1]}, 0 0 0 3px ${theme.palette.primary.main}22`,
-                    },
-                  },
-                }}
-              />
               <Button
                 fullWidth={isSmDown}
                 rounded="pill"
-                sx={{ boxShadow: 2, fontWeight: 800, px: 3.5, minWidth: 130 }}
+                sx={{ boxShadow: 2, fontWeight: 800, px: 3.5, minWidth: 130, flexShrink: 0 }}
               >
                 Buscar
               </Button>
