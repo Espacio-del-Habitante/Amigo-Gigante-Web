@@ -126,7 +126,7 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
           <Typography variant="h4" sx={{ fontWeight: 900 }}>
             {title}
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
+          <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, maxWidth: 640 }}>
             {subtitle}
           </Typography>
         </Stack>

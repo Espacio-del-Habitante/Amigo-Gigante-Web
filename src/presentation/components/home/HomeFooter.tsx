@@ -1,4 +1,8 @@
-import { Box, Container, Link, Stack, TextField, Typography, Button } from "@mui/material";
+import { Box, Container, Link, Stack, TextField, Typography, Button, alpha } from "@mui/material";
+import { Logo, Copyright } from "../atoms";
+import { theme } from "@/presentation/theme/theme";
+import { IconButton as MuiIconButton } from "@mui/material";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 const footerLinks = {
   adopcion: ["Perros", "Gatos", "Casos Especiales", "Historias de éxito"],
@@ -8,24 +12,13 @@ const footerLinks = {
 export function HomeFooter() {
   return (
     <Box component="footer" className="bg-white pb-6 pt-10 md:pt-12" sx={{ borderTop: "1px solid", borderColor: "divider" }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
         <Box className="mb-8 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <Box>
             <Stack className="gap-3">
               <Stack direction="row" alignItems="center" className="gap-2">
-                <Box
-                  component="span"
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: "50%",
-                    backgroundColor: "primary.main",
-                    display: "block",
-                  }}
-                />
-                <Typography variant="h6" sx={{ fontWeight: 800, color: "text.primary" }}>
-                  Amigo Gigante
-                </Typography>
+              <Logo size={40} showWordmark />
+         
               </Stack>
               <Typography variant="body2" color="text.secondary">
                 Conectando corazones y patas desde 2023. Juntos construimos un mundo mejor para ellos.
@@ -98,9 +91,7 @@ export function HomeFooter() {
           className="gap-3 md:flex-row md:items-center md:justify-between"
           sx={{ borderTop: "1px solid", borderColor: "divider", pt: 3 }}
         >
-          <Typography variant="caption" color="text.secondary">
-            © 2023 Amigo Gigante. Todos los derechos reservados.
-          </Typography>
+          <Copyright variant="caption" />
           <Stack direction="row" className="gap-4" color="text.secondary">
             <Link href="#" underline="none" color="inherit" variant="caption">
               Privacidad
