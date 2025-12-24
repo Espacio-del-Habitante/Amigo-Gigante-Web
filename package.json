@@ -17,6 +17,7 @@
     "formik": "^2.4.9",
     "inversify": "^7.10.8",
     "next": "16.1.0",
+    "next-intl": "^4.6.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "reflect-metadata": "^0.2.2",

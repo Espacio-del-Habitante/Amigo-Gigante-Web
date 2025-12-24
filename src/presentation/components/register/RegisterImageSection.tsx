@@ -1,11 +1,13 @@
 import { alpha, Box, Stack, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=1600&q=80";
 
 export function RegisterImageSection() {
   const theme = useTheme();
+  const t = useTranslations("register");
 
   return (
     <Box
@@ -17,7 +19,7 @@ export function RegisterImageSection() {
     >
       <Image
         src={HERO_IMAGE}
-        alt="Dogs enjoying the outdoors"
+        alt={t("image.alt")}
         fill
         priority
         style={{ objectFit: "cover" }}
@@ -66,7 +68,7 @@ export function RegisterImageSection() {
             }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
-            Join 500+ Foundations
+            {t("image.badge")}
           </Typography>
         </Stack>
         <Stack spacing={1}>
@@ -78,10 +80,10 @@ export function RegisterImageSection() {
               textShadow: "0 10px 30px rgba(0,0,0,0.25)",
             }}
           >
-            “Since joining, we have connected with hundreds of volunteers and adopters in record time.”
+            {t("image.quote")}
           </Typography>
           <Typography variant="body1" sx={{ opacity: 0.85 }}>
-            Fundación Caminos Caninos
+            {t("image.attribution")}
           </Typography>
         </Stack>
       </Stack>

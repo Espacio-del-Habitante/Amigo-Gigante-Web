@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import type { Animal } from "@/domain/models/Animal";
 import { Button, Chip } from "@/presentation/components/atoms";
@@ -29,9 +30,14 @@ interface HeroSectionProps {
 export function HeroSection({ heroAnimals }: HeroSectionProps) {
   const [first, second] = heroAnimals;
   const theme = useTheme();
+  const t = useTranslations("home");
+  const common = useTranslations("common");
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const filterTags = useMemo(() => ["Perros", "Gatos", "Apadrinar"], []);
+  const filterTags = useMemo(
+    () => [t("filters.tags.dogs"), t("filters.tags.cats"), t("filters.tags.sponsor")],
+    [t],
+  );
 
   return (
     <Box component="section" className="relative overflow-hidden bg-gradient-to-br from-neutral-50 to-white pb-12 pt-16 md:pb-16 md:pt-20">
@@ -43,7 +49,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
         <Stack className="gap-6">
           <Chip
             icon={<PetsRoundedIcon />}
-            label="Más de 500 amigos buscando hogar"
+            label={t("hero.badge")}
             tone="brand"
             variant="soft"
             sx={{ alignSelf: "flex-start" }}
@@ -58,15 +64,14 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 color: "text.primary",
               }}
             >
-              Encuentra a tu
+              {t("hero.title")}
               <br />
               <Box component="span" sx={{ color: "primary.main", position: "relative" }}>
-                Compañero Ideal
+                {t("hero.highlight")}
               </Box>
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mt: 2, maxWidth: 560, lineHeight: 1.7 }}>
-              Adoptar salva vidas. Apadrinar da esperanza. Conecta con fundaciones verificadas y cambia el mundo de una
-              mascota hoy.
+              {t("hero.subtitle")}
             </Typography>
           </Box>
           <Box
@@ -77,7 +82,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               <Stack direction="row" spacing={1.5} alignItems="center" sx={{ width: { xs: "100%", sm: "100%" } }}>
                
                 <TextField
-                  placeholder="Busca por nombre, ciudad o tipo"
+                  placeholder={t("hero.searchPlaceholder")}
                   fullWidth
                   size="small"
                   sx={{
@@ -92,8 +97,8 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                     },
                   }}
                 />
-                 <IconButton
-                  aria-label="Abrir filtros"
+                <IconButton
+                  aria-label={common("labels.openFilters")}
                   onClick={() => setFiltersOpen(true)}
                   sx={{
                     borderRadius: 2,
@@ -110,7 +115,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 rounded="pill"
                 sx={{ boxShadow: 2, fontWeight: 800, px: 3.5, minWidth: 130, flexShrink: 0 }}
               >
-                Buscar
+                {common("buttons.search")}
               </Button>
             </Stack>
           </Box>
@@ -142,7 +147,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
             <Card className="flex items-center gap-3 rounded-2xl border border-solid p-3" sx={{ borderColor: "divider", boxShadow: 2 }}>
               <Chip
                 icon={<PetsRoundedIcon color="secondary" />}
-                label="Fundaciones 100% verificadas"
+                label={t("hero.verified")}
                 tone="accent"
                 variant="soft"
               />
@@ -161,7 +166,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
             >
               <VolunteerActivismRoundedIcon sx={{ fontSize: 36, mb: 1 }} />
               <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.3 }}>
-                Apadrina con amor
+                {t("hero.sponsorCard")}
               </Typography>
             </Card>
             {second && (
@@ -189,11 +194,11 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
         </Box>
       </Container>
       <Dialog open={filtersOpen} onClose={() => setFiltersOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle sx={{ fontWeight: 800, pb: 1 }}>Filtros</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 800, pb: 1 }}>{t("filters.title")}</DialogTitle>
         <DialogContent dividers sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Stack spacing={1}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
-              Tipo
+              {t("filters.typeLabel")}
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap">
               {filterTags.map((tag) => (
@@ -203,17 +208,17 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
           </Stack>
           <Stack spacing={1}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
-              Ubicación
+              {t("filters.locationLabel")}
             </Typography>
-            <TextField placeholder="Ciudad o región" fullWidth />
+            <TextField placeholder={t("filters.locationPlaceholder")} fullWidth />
           </Stack>
         </DialogContent>
         <DialogActions sx={{ px: 3, py: 2 }}>
           <Button variant="ghost" tone="neutral" onClick={() => setFiltersOpen(false)}>
-            Cancelar
+            {common("buttons.cancel")}
           </Button>
           <Button rounded="pill" onClick={() => setFiltersOpen(false)} sx={{ fontWeight: 800 }}>
-            Aplicar filtros
+            {common("buttons.applyFilters")}
           </Button>
         </DialogActions>
       </Dialog>

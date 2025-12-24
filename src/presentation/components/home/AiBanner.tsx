@@ -1,10 +1,13 @@
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Box, Container, Stack, Typography } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/presentation/components/atoms";
 
 export function AiBanner() {
+  const t = useTranslations("home");
+
   return (
     <Box component="section" className="bg-white py-12 md:py-16">
       <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
@@ -42,14 +45,13 @@ export function AiBanner() {
                 sx={{ backgroundColor: "rgba(255,255,255,0.18)" }}
               >
                 <AutoAwesomeRoundedIcon sx={{ fontSize: 18 }} />
-                <span>Nuevo: IA Match</span>
+                <span>{t("ai.badge")}</span>
               </Stack>
               <Typography variant="h4" sx={{ fontWeight: 800 }}>
-                ¿No sabes por dónde empezar?
+                {t("ai.title")}
               </Typography>
               <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.85)", maxWidth: 780, lineHeight: 1.7 }}>
-                Nuestra Inteligencia Artificial analiza tu estilo de vida y preferencias para recomendarte el compañero
-                perfecto.
+                {t("ai.description")}
               </Typography>
             </Stack>
             <Button
@@ -58,7 +60,7 @@ export function AiBanner() {
               endIcon={<ArrowForwardRoundedIcon />}
               sx={{ px: 4, py: 1.4, boxShadow: 3 }}
             >
-              Probar recomendador IA
+              {t("ai.cta")}
             </Button>
           </Stack>
         </Box>

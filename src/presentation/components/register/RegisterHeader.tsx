@@ -1,12 +1,16 @@
 "use client";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 import { Button, Logo } from "@/presentation/components/atoms";
+import { LanguageSelector } from "@/presentation/components/molecules";
 
 export function RegisterHeader() {
+  const t = useTranslations("register");
+
   return (
     <Stack
       direction={{ xs: "column", sm: "row" }}
@@ -15,27 +19,30 @@ export function RegisterHeader() {
       spacing={2.5}
     >
       <Stack direction="column" alignItems="center" spacing={2}>
-        <Logo size={48} showWordmark subtitle="Foundations registry"/>
+        <Logo size={48} showWordmark subtitle={t("header.subtitle")} />
      
 
       </Stack>
-      <Button
-        component={Link}
-        href="/"
-        aria-label="Back to Home"
-        variant="outlined"
-        rounded="pill"
-        startIcon={<ArrowBackRoundedIcon />}
-        sx={{
-          fontWeight: 700,
-          "&:hover": {
-            transform: "translateY(-1px)",
-            transition: "transform 150ms ease, box-shadow 150ms ease",
-          },
-        }}
-      >
-        Back to Home
-      </Button>
+      <Stack direction="row" alignItems="center" spacing={1.5}>
+        <LanguageSelector />
+        <Button
+          component={Link}
+          href="/"
+          aria-label={t("header.backAria")}
+          variant="outlined"
+          rounded="pill"
+          startIcon={<ArrowBackRoundedIcon />}
+          sx={{
+            fontWeight: 700,
+            "&:hover": {
+              transform: "translateY(-1px)",
+              transition: "transform 150ms ease, box-shadow 150ms ease",
+            },
+          }}
+        >
+          {t("header.back")}
+        </Button>
+      </Stack>
     </Stack>
   );
 }

@@ -1,55 +1,65 @@
 {
-  "title": "Join Amigo Gigante",
-  "subtitle": "Register your foundation today to start managing adoptions and sponsorships.",
+  "header": {
+    "subtitle": "Foundations registry",
+    "back": "Back to home",
+    "backAria": "Back to home"
+  },
   "form": {
-    "foundationName": {
-      "label": "Foundation Name",
-      "placeholder": "Enter your foundation's official name"
+    "badge": "Foundation onboarding",
+    "title": "Join Amigo Gigante",
+    "subtitle": "Create your foundation account to access donations, volunteers, and tools designed to help you care for every furry friend.",
+    "fields": {
+      "foundationName": {
+        "label": "Foundation name",
+        "placeholder": "Enter your foundation's official name"
+      },
+      "officialEmail": {
+        "label": "Official email",
+        "placeholder": "foundation@email.com"
+      },
+      "taxId": {
+        "label": "Tax ID (optional)",
+        "placeholder": "Add your tax ID"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Create a strong password"
+      },
+      "confirmPassword": {
+        "label": "Confirm password",
+        "placeholder": "Re-enter your password"
+      }
     },
-    "officialEmail": {
-      "label": "Official Email",
-      "placeholder": "foundation@email.com"
+    "passwordToggle": {
+      "show": "Show",
+      "hide": "Hide",
+      "aria": "{action} {label}"
     },
-    "taxId": {
-      "label": "Tax ID (optional)",
-      "placeholder": "Add your tax ID"
-    },
-    "password": {
-      "label": "Password",
-      "placeholder": "Create a strong password"
-    },
-    "confirmPassword": {
-      "label": "Confirm Password",
-      "placeholder": "Re-enter your password"
-    },
-    "acceptTerms": "I agree to the Terms & Conditions and confirm the information is accurate.",
-    "submit": "Register Foundation",
-    "submitting": "Submitting..."
+    "terms": "I agree to the Terms & Conditions and confirm the information is accurate.",
+    "submit": "Register foundation",
+    "submitting": "Submitting...",
+    "submitError": "There was an error registering the foundation. Please try again.",
+    "securityBadge": "Secure registration",
+    "securityNote": "Data encrypted and protected",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log in"
+  },
+  "image": {
+    "alt": "Dogs enjoying the outdoors",
+    "badge": "Join 500+ foundations",
+    "quote": "“Since joining, we have connected with hundreds of volunteers and adopters in record time.”",
+    "attribution": "Fundación Caminos Caninos"
   },
   "validation": {
-    "foundationName": {
-      "required": "Foundation name is required",
-      "minLength": "Name must be at least 3 characters"
-    },
-    "officialEmail": {
-      "required": "Official email is required",
-      "invalid": "Please enter a valid email"
-    },
-    "password": {
-      "required": "Password is required",
-      "minLength": "Password must be at least 8 characters",
-      "pattern": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
-    },
-    "confirmPassword": {
-      "required": "Please confirm your password",
-      "match": "Passwords do not match"
-    },
-    "acceptTerms": {
-      "required": "You must accept the terms and conditions"
-    }
-  },
-  "errors": {
-    "registrationFailed": "An error occurred while registering the foundation. Please try again."
+    "foundationNameRequired": "Foundation name is required",
+    "foundationNameMin": "Name must be at least 3 characters",
+    "officialEmailRequired": "Official email is required",
+    "officialEmailInvalid": "Email must be a valid format",
+    "taxIdInvalid": "Tax ID can only include letters, numbers, and hyphens",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 6 characters",
+    "confirmPasswordRequired": "Please confirm your password",
+    "confirmPasswordMismatch": "Passwords do not match",
+    "acceptTermsRequired": "You must accept the terms and conditions"
   }
 }
-

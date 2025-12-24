@@ -1,54 +1,54 @@
 {
+  "navigation": {
+    "adopt": "Adopt",
+    "sponsor": "Sponsor",
+    "foundations": "Foundations",
+    "store": "Charity Store",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
   "buttons": {
     "search": "Search",
-    "login": "Log In",
-    "register": "Sign Up",
+    "login": "Log in",
+    "register": "Sign up",
     "cancel": "Cancel",
-    "apply": "Apply",
-    "show": "Show",
-    "hide": "Hide",
-    "submit": "Submit",
-    "submitting": "Submitting...",
-    "visitStore": "Visit Store",
-    "tryAiRecommender": "Try AI Recommender"
+    "applyFilters": "Apply filters",
+    "ok": "OK",
+    "visitStore": "Visit store"
   },
   "labels": {
-    "foundationName": "Foundation Name",
-    "officialEmail": "Official Email",
-    "taxId": "Tax ID (optional)",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "type": "Type",
-    "location": "Location"
+    "favorite": "Mark as favorite",
+    "language": "Language",
+    "spanish": "Spanish",
+    "english": "English",
+    "backToHome": "Back to home",
+    "backToHomeAria": "Back to home",
+    "openFilters": "Open filters"
   },
-  "placeholders": {
-    "search": "Search by name, city or type",
-    "cityOrRegion": "City or region",
-    "foundationName": "Enter your foundation's official name",
-    "officialEmail": "foundation@email.com",
-    "taxId": "Add your tax ID",
-    "password": "Create a strong password",
-    "confirmPassword": "Re-enter your password"
-  },
-  "messages": {
-    "secureRegistration": "Secure Registration",
-    "dataEncrypted": "Data encrypted and protected",
-    "alreadyHaveAccount": "Already have an account?",
-    "logIn": "Log in",
-    "allRightsReserved": "All rights reserved",
-    "foundationOnboarding": "Foundation onboarding"
-  },
-  "errors": {
-    "generic": "An error occurred. Please try again.",
-    "registrationError": "An error occurred while registering the foundation. Please try again."
-  },
-  "filters": {
-    "title": "Filters",
-    "applyFilters": "Apply filters"
-  },
-  "menu": {
-    "open": "Open menu",
-    "close": "Close menu"
+  "footer": {
+    "description": "Connecting hearts and paws since 2023. Together we build a better world for them.",
+    "adoption": "Adoption",
+    "community": "Community",
+    "subscribe": "Subscribe",
+    "subscribeDescription": "Get the latest news and featured pets.",
+    "emailPlaceholder": "Your email",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies",
+    "links": {
+      "adoption": {
+        "dogs": "Dogs",
+        "cats": "Cats",
+        "specialCases": "Special cases",
+        "successStories": "Success stories"
+      },
+      "community": {
+        "volunteering": "Volunteering",
+        "blog": "Blog",
+        "events": "Events",
+        "store": "Store"
+      }
+    },
+    "copyright": "© {year} Amigo Gigante. All rights reserved."
   }
 }
-

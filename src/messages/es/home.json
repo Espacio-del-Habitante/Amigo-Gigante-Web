@@ -2,36 +2,49 @@
   "hero": {
     "badge": "Más de 500 amigos buscando hogar",
     "title": "Encuentra a tu",
-    "titleHighlight": "Compañero Ideal",
-    "description": "Adoptar salva vidas. Apadrinar da esperanza. Conecta con fundaciones verificadas y cambia el mundo de una mascota hoy.",
-    "verifiedFoundations": "Fundaciones 100% verificadas",
-    "sponsorWithLove": "Apadrina con amor"
+    "highlight": "Compañero Ideal",
+    "subtitle": "Adoptar salva vidas. Apadrinar da esperanza. Conecta con fundaciones verificadas y cambia el mundo de una mascota hoy.",
+    "searchPlaceholder": "Busca por nombre, ciudad o tipo",
+    "verified": "Fundaciones 100% verificadas",
+    "sponsorCard": "Apadrina con amor"
   },
   "filters": {
-    "dogs": "Perros",
-    "cats": "Gatos",
-    "sponsor": "Apadrinar"
+    "title": "Filtros",
+    "typeLabel": "Tipo",
+    "locationLabel": "Ubicación",
+    "locationPlaceholder": "Ciudad o región",
+    "tags": {
+      "dogs": "Perros",
+      "cats": "Gatos",
+      "sponsor": "Apadrinar"
+    }
   },
-  "aiBanner": {
+  "featured": {
+    "title": "Amigos Destacados",
+    "subtitle": "Recién llegados buscando una segunda oportunidad",
+    "action": "Ver todos"
+  },
+  "ai": {
     "badge": "Nuevo: IA Match",
     "title": "¿No sabes por dónde empezar?",
-    "description": "Nuestra Inteligencia Artificial analiza tu estilo de vida y preferencias para recomendarte el compañero perfecto."
-  },
-  "store": {
-    "badge": "Tienda Solidaria",
-    "title": "Compra con Propósito",
-    "description": "Cada producto que compras en nuestra tienda financia alimentos, vacunas y tratamientos médicos para los animales que aún esperan un hogar.",
-    "items": {
-      "artisanCollars": "Collares Artesanales",
-      "paddedBeds": "Camas Acolchadas",
-      "ecoToys": "Juguetes Eco"
-    },
-    "allProceeds": "100% Solidario",
-    "allProceedsDescription": "Todas las ganancias van a las fundaciones."
+    "description": "Nuestra Inteligencia Artificial analiza tu estilo de vida y preferencias para recomendarte el compañero perfecto.",
+    "cta": "Probar recomendador IA"
   },
   "partners": {
-    "badge": "Nuestros Aliados",
+    "subtitle": "Nuestros Aliados",
     "title": "Fundaciones que confían en nosotros"
+  },
+  "store": {
+    "eyebrow": "Tienda Solidaria",
+    "title": "Compra con Propósito",
+    "description": "Cada producto que compras en nuestra tienda financia alimentos, vacunas y tratamientos médicos para los animales que aún esperan un hogar.",
+    "cta": "Visitar tienda",
+    "highlightTitle": "100% Solidario",
+    "highlightDescription": "Todas las ganancias van a las fundaciones.",
+    "items": {
+      "handmadeCollars": "Collares Artesanales",
+      "paddedBeds": "Camas Acolchadas",
+      "ecoToys": "Juguetes Eco"
+    }
   }
 }
-
