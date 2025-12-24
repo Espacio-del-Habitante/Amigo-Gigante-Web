@@ -8,16 +8,11 @@ import { defaultLocale, locales } from "@/i18n/config";
 const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
-  // "always" asegura que todas las rutas incluyan el locale
-  // Esto hace que / redirija a /es y /register redirija a /es/register
   localePrefix: "always",
-  // Asegurar que siempre detecte y redirija correctamente
   localeDetection: true,
 });
 
-// Rutas públicas (acceso sin autenticación). Ejemplos:
-// - Home de aterrizaje: "/"
-// - Tienda (pública mientras no haya compras): "/tienda"
+// Rutas públicas (acceso sin autenticación)
 const PUBLIC_PATHS = [
   "/",
   "/tienda",
@@ -53,26 +48,59 @@ const isPublicPath = (pathname: string): boolean => {
   );
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Primero, dejar que next-intl maneje TODAS las redirecciones y reescrituras de locale
+  // Log SIEMPRE para debug (sin condiciones)
+  
+  
+  // Excluir rutas estáticas y de Next.js
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/api") ||
+    /\.(ico|png|jpg|jpeg|svg|css|js|woff|woff2|ttf|eot)$/.test(pathname)
+  ) {
+    
+    return NextResponse.next();
+  }
+  
+  // Verificar si la ruta tiene un locale válido
+  const pathnameHasLocale = locales.some(
+    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
+  );
+
+  
+
+  // Si la ruta NO tiene locale, redirigir al locale por defecto
+  if (!pathnameHasLocale) {
+    const redirectPath = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
+    const redirectUrl = new URL(redirectPath, request.url);
+    
+    // Preservar query params
+    request.nextUrl.searchParams.forEach((value, key) => {
+      redirectUrl.searchParams.set(key, value);
+    });
+    
+    
+    return NextResponse.redirect(redirectUrl, 307);
+  }
+  
+  // Si la ruta ya tiene locale, dejar que next-intl maneje todo
   const intlResponse = intlMiddleware(request);
   
-  // Si next-intl redirigió (307 o 308), devolver esa respuesta inmediatamente
+  // Si next-intl redirigió, devolver esa respuesta
   if (intlResponse.status === 307 || intlResponse.status === 308) {
     return intlResponse;
   }
 
   // Obtener el pathname final después de que next-intl lo procese
-  // next-intl puede haber reescrito la ruta internamente (ej: /register -> /es/register)
   const rewriteHeader = intlResponse.headers.get("x-middleware-rewrite");
   const finalPathname = rewriteHeader
     ? new URL(rewriteHeader, request.url).pathname
     : pathname;
 
   // Normalizar el pathname para verificar rutas públicas
-  // Esto quita el prefijo de locale si existe
   const normalizedPathname = normalizePathname(finalPathname);
   const isPublic = isPublicPath(normalizedPathname);
 
@@ -82,26 +110,30 @@ export async function middleware(request: NextRequest) {
   }
 
   // TODO: Consultar la sesión actual de Supabase mediante un Use Case inyectado.
-  // Ejemplo: const session = await appContainer.get(GetSessionUseCase).execute(request);
   const session: AuthSession | null = null;
 
   if (!session) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirectTo", finalPathname);
     const response = NextResponse.redirect(loginUrl);
-    // Preservar las cookies de next-intl
     intlResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie));
     return response;
   }
 
   // TODO: Validar rol contra ROLE_ROUTE_PATTERNS cuando la sesión incluya el rol real.
-  // if (!isRoleAllowed(session, finalPathname)) {
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
 
   return intlResponse;
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)",
+  ],
 };
