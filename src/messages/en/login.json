@@ -16,6 +16,11 @@
       "label": "Password",
       "placeholder": "••••••••"
     },
+    "passwordToggle": {
+      "show": "Show password",
+      "hide": "Hide password",
+      "aria": "{action}"
+    },
     "forgotPassword": "Forgot Password?",
     "secureLogin": "Secure SSL encrypted login",
     "submit": "Log In",
@@ -25,7 +30,7 @@
   "leftColumn": {
     "badge": "Adopt & Care",
     "title": "Every paw matters.",
-    "description": "Join over 500 foundations making a difference in the lives of animals every day."
+    "description": "Join over 500 foundations making a difference in the lives of animals every day.",
+    "imageAlt": "Golden retriever in a park"
   }
 }
-

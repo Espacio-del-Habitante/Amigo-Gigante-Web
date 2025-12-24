@@ -23,16 +23,18 @@ export default async function LocaleLayout({
   
   // Cargar los mensajes directamente desde los archivos JSON usando el locale del params
   // Esto asegura que siempre usemos el locale correcto
-  const [common, home, register] = await Promise.all([
+  const [common, home, register, login] = await Promise.all([
     import(`@/messages/${locale}/common.json`),
     import(`@/messages/${locale}/home.json`),
     import(`@/messages/${locale}/register.json`),
+    import(`@/messages/${locale}/login.json`),
   ]);
 
   const messages = {
     common: common.default,
     home: home.default,
     register: register.default,
+    login: login.default,
   };
 
   // Debug: verificar que los mensajes se cargaron correctamente

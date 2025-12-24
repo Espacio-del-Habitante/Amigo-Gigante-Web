@@ -16,6 +16,11 @@
       "label": "Contraseña",
       "placeholder": "••••••••"
     },
+    "passwordToggle": {
+      "show": "Mostrar contraseña",
+      "hide": "Ocultar contraseña",
+      "aria": "{action}"
+    },
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "secureLogin": "Inicio de sesión seguro SSL encriptado",
     "submit": "Iniciar Sesión",
@@ -25,7 +30,7 @@
   "leftColumn": {
     "badge": "Adopta y Cuida",
     "title": "Cada pata importa.",
-    "description": "Únete a más de 500 fundaciones haciendo la diferencia en la vida de los animales cada día."
+    "description": "Únete a más de 500 fundaciones haciendo la diferencia en la vida de los animales cada día.",
+    "imageAlt": "Golden retriever en un parque"
   }
 }
-
