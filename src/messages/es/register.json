@@ -1,55 +1,65 @@
 {
-  "title": "Únete a Amigo Gigante",
-  "subtitle": "Registra tu fundación hoy para comenzar a gestionar adopciones y apadrinamientos.",
+  "header": {
+    "subtitle": "Registro de fundaciones",
+    "back": "Volver al inicio",
+    "backAria": "Volver al inicio"
+  },
   "form": {
-    "foundationName": {
-      "label": "Nombre de la Fundación",
-      "placeholder": "Ingresa el nombre oficial de tu fundación"
+    "badge": "Onboarding de fundaciones",
+    "title": "Únete a Amigo Gigante",
+    "subtitle": "Crea tu cuenta de fundación para acceder a donaciones, voluntarios y herramientas diseñadas para ayudarte a cuidar a cada amigo peludo.",
+    "fields": {
+      "foundationName": {
+        "label": "Nombre de la fundación",
+        "placeholder": "Ingresa el nombre oficial de tu fundación"
+      },
+      "officialEmail": {
+        "label": "Correo oficial",
+        "placeholder": "fundacion@email.com"
+      },
+      "taxId": {
+        "label": "NIT (opcional)",
+        "placeholder": "Agrega el NIT de tu fundación"
+      },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Crea una contraseña segura"
+      },
+      "confirmPassword": {
+        "label": "Confirmar contraseña",
+        "placeholder": "Repite tu contraseña"
+      }
     },
-    "officialEmail": {
-      "label": "Email Oficial",
-      "placeholder": "foundation@email.com"
+    "passwordToggle": {
+      "show": "Mostrar",
+      "hide": "Ocultar",
+      "aria": "{action} {label}"
     },
-    "taxId": {
-      "label": "Tax ID (opcional)",
-      "placeholder": "Agrega tu Tax ID"
-    },
-    "password": {
-      "label": "Contraseña",
-      "placeholder": "Crea una contraseña segura"
-    },
-    "confirmPassword": {
-      "label": "Confirmar Contraseña",
-      "placeholder": "Vuelve a ingresar tu contraseña"
-    },
-    "acceptTerms": "Acepto los Términos y Condiciones y confirmo que la información es precisa.",
-    "submit": "Registrar Fundación",
-    "submitting": "Enviando..."
+    "terms": "Acepto los Términos y Condiciones y confirmo que la información es correcta.",
+    "submit": "Registrar fundación",
+    "submitting": "Enviando...",
+    "submitError": "Ocurrió un error al registrar la fundación. Inténtalo nuevamente.",
+    "securityBadge": "Registro seguro",
+    "securityNote": "Datos encriptados y protegidos",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "login": "Inicia sesión"
+  },
+  "image": {
+    "alt": "Perros disfrutando al aire libre",
+    "badge": "Únete a +500 fundaciones",
+    "quote": "“Desde que nos unimos, nos conectamos con cientos de voluntarios y adoptantes en tiempo récord.”",
+    "attribution": "Fundación Caminos Caninos"
   },
   "validation": {
-    "foundationName": {
-      "required": "El nombre de la fundación es requerido",
-      "minLength": "El nombre debe tener al menos 3 caracteres"
-    },
-    "officialEmail": {
-      "required": "El email oficial es requerido",
-      "invalid": "Ingresa un email válido"
-    },
-    "password": {
-      "required": "La contraseña es requerida",
-      "minLength": "La contraseña debe tener al menos 8 caracteres",
-      "pattern": "La contraseña debe contener al menos una letra mayúscula, una minúscula y un número"
-    },
-    "confirmPassword": {
-      "required": "Confirma tu contraseña",
-      "match": "Las contraseñas no coinciden"
-    },
-    "acceptTerms": {
-      "required": "Debes aceptar los términos y condiciones"
-    }
-  },
-  "errors": {
-    "registrationFailed": "Ocurrió un error al registrar la fundación. Inténtalo nuevamente."
+    "foundationNameRequired": "El nombre de la fundación es requerido",
+    "foundationNameMin": "El nombre debe tener al menos 3 caracteres",
+    "officialEmailRequired": "El email oficial es requerido",
+    "officialEmailInvalid": "El email debe tener un formato válido",
+    "taxIdInvalid": "El NIT solo puede incluir letras, números y guiones",
+    "passwordRequired": "La contraseña es requerida",
+    "passwordMin": "La contraseña debe tener al menos 6 caracteres",
+    "confirmPasswordRequired": "Debes confirmar la contraseña",
+    "confirmPasswordMismatch": "Las contraseñas no coinciden",
+    "acceptTermsRequired": "Debes aceptar los términos y condiciones"
   }
 }
-

@@ -1,6 +1,7 @@
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import { alpha, Box, Card, CardContent, Stack, Typography, useTheme } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 import type { Animal } from "@/domain/models/Animal";
 import { IconButton } from "@/presentation/components/atoms";
@@ -12,6 +13,7 @@ interface AnimalCardProps {
 
 export function AnimalCard({ animal }: AnimalCardProps) {
   const theme = useTheme();
+  const t = useTranslations("common");
 
   return (
     <Card
@@ -53,7 +55,7 @@ export function AnimalCard({ animal }: AnimalCardProps) {
         <IconButton
           size="small"
           variant="ghost"
-          aria-label="Marcar como favorito"
+          aria-label={t("labels.favorite")}
           sx={{ position: "absolute", top: 12, right: 12, backgroundColor: (theme) => alpha(theme.palette.common.white, 0.9) }}
         >
           <FavoriteBorderRoundedIcon fontSize="small" color="action" />

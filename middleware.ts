@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
 
 import type { AuthSession, UserRole } from "@/domain/types/auth.types";
+import { defaultLocale, locales } from "@/i18n/config";
+
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: "never",
+});
 
 // Rutas públicas (acceso sin autenticación). Ejemplos:
 // - Home de aterrizaje: "/"
@@ -22,15 +30,31 @@ const ROLE_ROUTE_PATTERNS: Record<UserRole, RegExp[]> = {
   external: [/^\/external/],
 };
 
+const normalizePathname = (pathname: string): string => {
+  const segments = pathname.split("/");
+  const possibleLocale = segments[1];
+
+  if (locales.includes(possibleLocale as (typeof locales)[number])) {
+    const normalized = `/${segments.slice(2).join("/")}`;
+    return normalized === "/" ? "/" : normalized.replace(/\/$/, "");
+  }
+
+  return pathname;
+};
+
 const isPublicPath = (pathname: string): boolean => {
-  return PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  const normalizedPathname = normalizePathname(pathname);
+  return PUBLIC_PATHS.some(
+    (path) => normalizedPathname === path || normalizedPathname.startsWith(`${path}/`),
+  );
 };
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const intlResponse = intlMiddleware(request);
 
   if (isPublicPath(pathname)) {
-    return NextResponse.next();
+    return intlResponse;
   }
 
   // TODO: Consultar la sesión actual de Supabase mediante un Use Case inyectado.
@@ -40,7 +64,9 @@ export async function middleware(request: NextRequest) {
   if (!session) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirectTo", pathname);
-    return NextResponse.redirect(loginUrl);
+    const response = NextResponse.redirect(loginUrl);
+    intlResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie));
+    return response;
   }
 
   // TODO: Validar rol contra ROLE_ROUTE_PATTERNS cuando la sesión incluya el rol real.
@@ -48,7 +74,7 @@ export async function middleware(request: NextRequest) {
   //   return NextResponse.redirect(new URL("/", request.url));
   // }
 
-  return NextResponse.next();
+  return intlResponse;
 }
 
 export const config = {

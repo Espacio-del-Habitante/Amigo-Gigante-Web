@@ -3,6 +3,7 @@ import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import VolunteerActivismRoundedIcon from "@mui/icons-material/VolunteerActivismRounded";
 import HealthAndSafetyRoundedIcon from "@mui/icons-material/HealthAndSafetyRounded";
 import { Box, Stack, Typography } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 import { Section } from "@/presentation/components/layouts";
 
@@ -14,14 +15,16 @@ const partners = [
 ];
 
 export function PartnersSection() {
+  const t = useTranslations("home");
+
   return (
     <Section background="paper" spacingY={{ xs: 14, md: 18 }}>
       <Box textAlign="center" className="mb-10">
         <Typography variant="subtitle2" sx={{ color: "primary.main", fontWeight: 800, letterSpacing: 1.2 }}>
-          Nuestros Aliados
+          {t("partners.subtitle")}
         </Typography>
         <Typography variant="h4" sx={{ fontWeight: 800, mt: 1, color: "text.primary" }}>
-          Fundaciones que confían en nosotros
+          {t("partners.title")}
         </Typography>
       </Box>
       <Stack direction="row" flexWrap="wrap" className="mt-4 flex items-center justify-center gap-8 md:gap-12">

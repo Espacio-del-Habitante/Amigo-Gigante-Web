@@ -1,15 +1,29 @@
-import { Box, Container, Link, Stack, TextField, Typography, Button, alpha } from "@mui/material";
-import { Logo, Copyright } from "../atoms";
-import { theme } from "@/presentation/theme/theme";
-import { IconButton as MuiIconButton } from "@mui/material";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import { Box, Button, Container, Link, Stack, TextField, Typography } from "@mui/material";
+import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
-const footerLinks = {
-  adopcion: ["Perros", "Gatos", "Casos Especiales", "Historias de éxito"],
-  comunidad: ["Voluntariado", "Blog", "Eventos", "Tienda"],
-};
+import { Logo, Copyright } from "../atoms";
 
 export function HomeFooter() {
+  const t = useTranslations("common");
+  const footerLinks = useMemo(
+    () => ({
+      adopcion: [
+        t("footer.links.adoption.dogs"),
+        t("footer.links.adoption.cats"),
+        t("footer.links.adoption.specialCases"),
+        t("footer.links.adoption.successStories"),
+      ],
+      comunidad: [
+        t("footer.links.community.volunteering"),
+        t("footer.links.community.blog"),
+        t("footer.links.community.events"),
+        t("footer.links.community.store"),
+      ],
+    }),
+    [t],
+  );
+
   return (
     <Box component="footer" className="bg-white pb-6 pt-10 md:pt-12" sx={{ borderTop: "1px solid", borderColor: "divider" }}>
       <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
@@ -21,7 +35,7 @@ export function HomeFooter() {
          
               </Stack>
               <Typography variant="body2" color="text.secondary">
-                Conectando corazones y patas desde 2023. Juntos construimos un mundo mejor para ellos.
+                {t("footer.description")}
               </Typography>
               <Stack direction="row" className="gap-2">
                 {["FB", "IG", "TW"].map((network) => (
@@ -47,7 +61,7 @@ export function HomeFooter() {
           </Box>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2 }}>
-              Adopción
+              {t("footer.adoption")}
             </Typography>
             <Stack className="gap-3">
               {footerLinks.adopcion.map((item) => (
@@ -59,7 +73,7 @@ export function HomeFooter() {
           </Box>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2 }}>
-              Comunidad
+              {t("footer.community")}
             </Typography>
             <Stack className="gap-3">
               {footerLinks.comunidad.map((item) => (
@@ -71,15 +85,15 @@ export function HomeFooter() {
           </Box>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2 }}>
-              Suscríbete
+              {t("footer.subscribe")}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-              Recibe las últimas noticias y mascotas destacadas.
+              {t("footer.subscribeDescription")}
             </Typography>
             <Stack direction="row" className="gap-2">
-              <TextField size="small" placeholder="Tu email" fullWidth />
+              <TextField size="small" placeholder={t("footer.emailPlaceholder")} fullWidth />
               <Button variant="contained" sx={{ fontWeight: 800 }}>
-                OK
+                {t("buttons.ok")}
               </Button>
             </Stack>
           </Box>
@@ -94,13 +108,13 @@ export function HomeFooter() {
           <Copyright variant="caption" />
           <Stack direction="row" className="gap-4" color="text.secondary">
             <Link href="#" underline="none" color="inherit" variant="caption">
-              Privacidad
+              {t("footer.privacy")}
             </Link>
             <Link href="#" underline="none" color="inherit" variant="caption">
-              Términos
+              {t("footer.terms")}
             </Link>
             <Link href="#" underline="none" color="inherit" variant="caption">
-              Cookies
+              {t("footer.cookies")}
             </Link>
           </Stack>
         </Stack>

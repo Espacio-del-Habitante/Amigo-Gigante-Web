@@ -2,51 +2,56 @@ import ShoppingBagRoundedIcon from "@mui/icons-material/ShoppingBagRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/presentation/components/atoms";
 import { Section } from "@/presentation/components/layouts";
 
-const storeItems = [
-  {
-    title: "Collares Artesanales",
-    price: "$25.000",
-    imageUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAJCRUJJFKLQu9oz9-llyi_l6_3BoqdXrVFOy527zpoHHxh5ZOAYr5_MZNpNYZHHBDKcSJO4RD2C3lydf-2hH_QXXmXIDPwNqgkFxOpnLtxGRQkSQQGx826qUCm3k-x0yx09l-eHXNiRuxff2MscieQkzKoOuxiJrAi_fbOD_b7qabhL6otjlh7iwoznjxfG4s-Y8r7x0sFUKLV8PJYu2wTFrhTus_2R-ZCKOPwXQzEQsYuLsXKWnXNKTGhPZBSLhijLF0Ed0UKHQ",
-  },
-  {
-    title: "Camas Acolchadas",
-    price: "$85.000",
-    imageUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBeKk6P-KLrvGRTKXNS0Ypihrfw51dgYflLU6FUgSXgwt920mqBf7mlxnv-CA2RZI80RBFreuvRZRFfSMk7aw4g6eFJaSjCToaPwkER6ayS9PcjwXXqazUOVN3uRqzQaBdlelFBonwVrzcCoU_OZM7tDxuMdEpkFzqxGEDNlBfJcLD3siK_gk1W4hH7nRZVniAuYpNr90_l9MqXEeENdhC_GmXIWzoKGEBFfML6ddHdYZB46S5m_SgdxjKSUvv92cvpJ1su1075RA",
-  },
-  {
-    title: "Juguetes Eco",
-    price: "$15.000",
-    imageUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBB0ok7Bx9Y15pPGX5YSknishg3lvRslXwd8a_hb7nXRRrBwOc5F-LR03MODQKtHnhMtuXZT3LxV363dTxnEimVwQBOiW5i0KIUKgmm-5adhoDte7L6RgcnsTNDUQsfZpIewNxRBJGfXicTFxRMd8s7YKq5Ar9AVigWlGk0PF4gu29YwFg4a7riAX9DV0Gv2BdiFX86pUwdJdWWjSlSxSQAtJ0hj-6PDgdeXEbRGcuAsZTuQtvl021qX5Y5xrT9BPKCcdsDgG_18w",
-  },
-];
-
 export function StoreSection() {
+  const t = useTranslations("home");
+  const storeItems = useMemo(
+    () => [
+      {
+        title: t("store.items.handmadeCollars"),
+        price: "$25.000",
+        imageUrl:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuAJCRUJJFKLQu9oz9-llyi_l6_3BoqdXrVFOy527zpoHHxh5ZOAYr5_MZNpNYZHHBDKcSJO4RD2C3lydf-2hH_QXXmXIDPwNqgkFxOpnLtxGRQkSQQGx826qUCm3k-x0yx09l-eHXNiRuxff2MscieQkzKoOuxiJrAi_fbOD_b7qabhL6otjlh7iwoznjxfG4s-Y8r7x0sFUKLV8PJYu2wTFrhTus_2R-ZCKOPwXQzEQsYuLsXKWnXNKTGhPZBSLhijLF0Ed0UKHQ",
+      },
+      {
+        title: t("store.items.paddedBeds"),
+        price: "$85.000",
+        imageUrl:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuBeKk6P-KLrvGRTKXNS0Ypihrfw51dgYflLU6FUgSXgwt920mqBf7mlxnv-CA2RZI80RBFreuvRZRFfSMk7aw4g6eFJaSjCToaPwkER6ayS9PcjwXXqazUOVN3uRqzQaBdlelFBonwVrzcCoU_OZM7tDxuMdEpkFzqxGEDNlBfJcLD3siK_gk1W4hH7nRZVniAuYpNr90_l9MqXEeENdhC_GmXIWzoKGEBFfML6ddHdYZB46S5m_SgdxjKSUvv92cvpJ1su1075RA",
+      },
+      {
+        title: t("store.items.ecoToys"),
+        price: "$15.000",
+        imageUrl:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuBB0ok7Bx9Y15pPGX5YSknishg3lvRslXwd8a_hb7nXRRrBwOc5F-LR03MODQKtHnhMtuXZT3LxV363dTxnEimVwQBOiW5i0KIUKgmm-5adhoDte7L6RgcnsTNDUQsfZpIewNxRBJGfXicTFxRMd8s7YKq5Ar9AVigWlGk0PF4gu29YwFg4a7riAX9DV0Gv2BdiFX86pUwdJdWWjSlSxSQAtJ0hj-6PDgdeXEbRGcuAsZTuQtvl021qX5Y5xrT9BPKCcdsDgG_18w",
+      },
+    ],
+    [t],
+  );
+
   return (
     <Section background="muted" spacingY={{ xs: 16, md: 20 }}>
       <Box className="grid items-center gap-8 md:gap-10 lg:grid-cols-12">
         <Box className="order-2 lg:order-1 lg:col-span-5" sx={{ maxWidth: { lg: 560 } }}>
           <Stack className="mb-2 gap-1">
             <Typography variant="subtitle2" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 1 }}>
-              Tienda Solidaria
+              {t("store.eyebrow")}
             </Typography>
             <Typography variant="h4" sx={{ fontWeight: 900, color: "text.primary" }}>
-              Compra con Propósito
+              {t("store.title")}
             </Typography>
           </Stack>
           <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-            Cada producto que compras en nuestra tienda financia alimentos, vacunas y tratamientos médicos para los
-            animales que aún esperan un hogar.
+            {t("store.description")}
           </Typography>
           <Stack direction={{ xs: "column", sm: "row" }} className="mt-6 gap-3">
             <Button tone="secondary" startIcon={<StorefrontRoundedIcon />} rounded="default" sx={{ px: 3.5, py: 1.4 }}>
-              Visitar Tienda
+              {t("store.cta")}
             </Button>
           </Stack>
         </Box>
@@ -97,10 +102,10 @@ export function StoreSection() {
             <CardContent>
               <ShoppingBagRoundedIcon sx={{ fontSize: 40 }} />
               <Typography variant="h6" sx={{ fontWeight: 800, mt: 1 }}>
-                100% Solidario
+                {t("store.highlightTitle")}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.9, mt: 0.5 }}>
-                Todas las ganancias van a las fundaciones.
+                {t("store.highlightDescription")}
               </Typography>
             </CardContent>
           </Card>

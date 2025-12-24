@@ -2,36 +2,49 @@
   "hero": {
     "badge": "Over 500 friends looking for a home",
     "title": "Find your",
-    "titleHighlight": "Ideal Companion",
-    "description": "Adopting saves lives. Sponsoring gives hope. Connect with verified foundations and change a pet's world today.",
-    "verifiedFoundations": "100% Verified Foundations",
-    "sponsorWithLove": "Sponsor with love"
+    "highlight": "Perfect Companion",
+    "subtitle": "Adopting saves lives. Sponsoring brings hope. Connect with verified foundations and change a pet's world today.",
+    "searchPlaceholder": "Search by name, city, or type",
+    "verified": "100% verified foundations",
+    "sponsorCard": "Sponsor with love"
   },
   "filters": {
-    "dogs": "Dogs",
-    "cats": "Cats",
-    "sponsor": "Sponsor"
+    "title": "Filters",
+    "typeLabel": "Type",
+    "locationLabel": "Location",
+    "locationPlaceholder": "City or region",
+    "tags": {
+      "dogs": "Dogs",
+      "cats": "Cats",
+      "sponsor": "Sponsor"
+    }
   },
-  "aiBanner": {
+  "featured": {
+    "title": "Featured Friends",
+    "subtitle": "New arrivals looking for a second chance",
+    "action": "View all"
+  },
+  "ai": {
     "badge": "New: AI Match",
-    "title": "Don't know where to start?",
-    "description": "Our Artificial Intelligence analyzes your lifestyle and preferences to recommend the perfect companion."
-  },
-  "store": {
-    "badge": "Charity Store",
-    "title": "Shop with Purpose",
-    "description": "Every product you buy in our store funds food, vaccines, and medical treatments for animals still waiting for a home.",
-    "items": {
-      "artisanCollars": "Artisan Collars",
-      "paddedBeds": "Padded Beds",
-      "ecoToys": "Eco Toys"
-    },
-    "allProceeds": "100% Charity",
-    "allProceedsDescription": "All proceeds go to foundations."
+    "title": "Not sure where to start?",
+    "description": "Our AI analyzes your lifestyle and preferences to recommend the perfect companion.",
+    "cta": "Try AI recommender"
   },
   "partners": {
-    "badge": "Our Partners",
+    "subtitle": "Our Partners",
     "title": "Foundations that trust us"
+  },
+  "store": {
+    "eyebrow": "Charity Store",
+    "title": "Shop with Purpose",
+    "description": "Every product you buy in our store funds food, vaccines, and medical treatments for animals still waiting for a home.",
+    "cta": "Visit store",
+    "highlightTitle": "100% for good",
+    "highlightDescription": "All proceeds go to foundations.",
+    "items": {
+      "handmadeCollars": "Handmade Collars",
+      "paddedBeds": "Padded Beds",
+      "ecoToys": "Eco Toys"
+    }
   }
 }
-

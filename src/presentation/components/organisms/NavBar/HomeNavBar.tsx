@@ -1,16 +1,24 @@
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { alpha, AppBar, Box, Container, Divider, Drawer, IconButton as MuiIconButton, List, ListItem, ListItemButton, Stack, Toolbar, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Button, Logo } from "@/presentation/components/atoms";
-import { NavLink, SearchButton } from "@/presentation/components/molecules";
-
-const navLinks = ["Adopta", "Apadrina", "Fundaciones", "Tienda Solidaria"];
+import { LanguageSelector, NavLink, SearchButton } from "@/presentation/components/molecules";
 
 export function HomeNavBar() {
   const theme = useTheme();
+  const t = useTranslations("common");
   const [open, setOpen] = useState(false);
-  const navItems = useMemo(() => navLinks, []);
+  const navItems = useMemo(
+    () => [
+      { key: "adopt", label: t("navigation.adopt") },
+      { key: "sponsor", label: t("navigation.sponsor") },
+      { key: "foundations", label: t("navigation.foundations") },
+      { key: "store", label: t("navigation.store") },
+    ],
+    [t],
+  );
 
   return (
     <AppBar
@@ -29,7 +37,7 @@ export function HomeNavBar() {
           <Logo size={40} showWordmark />
           <Box sx={{ flex: 1, display: { xs: "flex", md: "none" }, justifyContent: "flex-end" }}>
             <MuiIconButton
-              aria-label="Abrir menú"
+              aria-label={t("navigation.openMenu")}
               onClick={() => setOpen(true)}
               sx={{
                 borderRadius: 2,
@@ -51,7 +59,7 @@ export function HomeNavBar() {
             }}
           >
             {navItems.map((link) => (
-              <NavLink key={link} label={link} />
+              <NavLink key={link.key} label={link.label} />
             ))}
           </Stack>
           <Stack
@@ -69,8 +77,9 @@ export function HomeNavBar() {
             }}
           >
             <SearchButton tone="neutral" variant="ghost" />
+            <LanguageSelector />
             <Button tone="primary" variant="solid" rounded="pill" sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}>
-              Iniciar Sesión
+              {t("buttons.login")}
             </Button>
           </Stack>
         </Toolbar>
@@ -87,16 +96,16 @@ export function HomeNavBar() {
       >
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 0.5, pb: 1 }}>
           <Logo size={40} showWordmark />
-          <MuiIconButton aria-label="Cerrar menú" onClick={() => setOpen(false)}>
+          <MuiIconButton aria-label={t("navigation.closeMenu")} onClick={() => setOpen(false)}>
             <MenuRoundedIcon />
           </MuiIconButton>
         </Stack>
         <Divider />
         <List sx={{ py: 0 }}>
           {navItems.map((item) => (
-            <ListItem key={item} disablePadding>
+            <ListItem key={item.key} disablePadding>
               <ListItemButton onClick={() => setOpen(false)}>
-                <Typography fontWeight={700}>{item}</Typography>
+                <Typography fontWeight={700}>{item.label}</Typography>
               </ListItemButton>
             </ListItem>
           ))}
@@ -106,8 +115,11 @@ export function HomeNavBar() {
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <SearchButton tone="neutral" variant="ghost" />
           </Box>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <LanguageSelector fullWidth />
+          </Box>
           <Button fullWidth variant="solid" rounded="pill">
-            Iniciar Sesión
+            {t("buttons.login")}
           </Button>
         </Stack>
       </Drawer>

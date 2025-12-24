@@ -1,54 +1,54 @@
 {
+  "navigation": {
+    "adopt": "Adopta",
+    "sponsor": "Apadrina",
+    "foundations": "Fundaciones",
+    "store": "Tienda Solidaria",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
   "buttons": {
     "search": "Buscar",
-    "login": "Iniciar Sesión",
+    "login": "Iniciar sesión",
     "register": "Registrarse",
     "cancel": "Cancelar",
-    "apply": "Aplicar",
-    "show": "Mostrar",
-    "hide": "Ocultar",
-    "submit": "Enviar",
-    "submitting": "Enviando...",
-    "visitStore": "Visitar Tienda",
-    "tryAiRecommender": "Probar recomendador IA"
+    "applyFilters": "Aplicar filtros",
+    "ok": "OK",
+    "visitStore": "Visitar tienda"
   },
   "labels": {
-    "foundationName": "Nombre de la Fundación",
-    "officialEmail": "Email Oficial",
-    "taxId": "Tax ID (opcional)",
-    "password": "Contraseña",
-    "confirmPassword": "Confirmar Contraseña",
-    "type": "Tipo",
-    "location": "Ubicación"
+    "favorite": "Marcar como favorito",
+    "language": "Idioma",
+    "spanish": "Español",
+    "english": "English",
+    "backToHome": "Volver al inicio",
+    "backToHomeAria": "Volver al inicio",
+    "openFilters": "Abrir filtros"
   },
-  "placeholders": {
-    "search": "Busca por nombre, ciudad o tipo",
-    "cityOrRegion": "Ciudad o región",
-    "foundationName": "Ingresa el nombre oficial de tu fundación",
-    "officialEmail": "foundation@email.com",
-    "taxId": "Agrega tu Tax ID",
-    "password": "Crea una contraseña segura",
-    "confirmPassword": "Vuelve a ingresar tu contraseña"
-  },
-  "messages": {
-    "secureRegistration": "Registro Seguro",
-    "dataEncrypted": "Datos encriptados y protegidos",
-    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
-    "logIn": "Iniciar Sesión",
-    "allRightsReserved": "Todos los derechos reservados",
-    "foundationOnboarding": "Onboarding de Fundación"
-  },
-  "errors": {
-    "generic": "Ocurrió un error. Inténtalo nuevamente.",
-    "registrationError": "Ocurrió un error al registrar la fundación. Inténtalo nuevamente."
-  },
-  "filters": {
-    "title": "Filtros",
-    "applyFilters": "Aplicar filtros"
-  },
-  "menu": {
-    "open": "Abrir menú",
-    "close": "Cerrar menú"
+  "footer": {
+    "description": "Conectando corazones y patas desde 2023. Juntos construimos un mundo mejor para ellos.",
+    "adoption": "Adopción",
+    "community": "Comunidad",
+    "subscribe": "Suscríbete",
+    "subscribeDescription": "Recibe las últimas noticias y mascotas destacadas.",
+    "emailPlaceholder": "Tu email",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "cookies": "Cookies",
+    "links": {
+      "adoption": {
+        "dogs": "Perros",
+        "cats": "Gatos",
+        "specialCases": "Casos especiales",
+        "successStories": "Historias de éxito"
+      },
+      "community": {
+        "volunteering": "Voluntariado",
+        "blog": "Blog",
+        "events": "Eventos",
+        "store": "Tienda"
+      }
+    },
+    "copyright": "© {year} Amigo Gigante. Todos los derechos reservados."
   }
 }
-

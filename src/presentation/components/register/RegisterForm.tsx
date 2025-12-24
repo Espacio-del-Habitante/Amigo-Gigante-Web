@@ -20,6 +20,7 @@ import {
   type Theme,
 } from "@mui/material";
 import { type FieldInputProps, useFormik } from "formik";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { type ReactElement, useMemo, useState } from "react";
 
@@ -27,11 +28,9 @@ import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFounda
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
 import { Button, Chip } from "@/presentation/components/atoms";
-import { registerValidationSchema, type RegisterFormValues } from "@/presentation/components/register/registerValidation";
+import { createRegisterValidationSchema, type RegisterFormValues } from "@/presentation/components/register/registerValidation";
 
 interface RegisterFormProps {
-  title: string;
-  subtitle: string;
   ctaIcon?: ReactElement;
   badgeIcon?: ReactElement;
 }
@@ -43,10 +42,25 @@ interface PasswordFieldProps {
   error?: string;
   disabled?: boolean;
   textFieldStyles: SxProps<Theme>;
+  showLabel: string;
+  hideLabel: string;
+  getToggleAriaLabel: (action: string, label: string) => string;
 }
 
-function PasswordField({ label, placeholder, fieldProps, error, disabled, textFieldStyles }: PasswordFieldProps) {
+function PasswordField({
+  label,
+  placeholder,
+  fieldProps,
+  error,
+  disabled,
+  textFieldStyles,
+  showLabel,
+  hideLabel,
+  getToggleAriaLabel,
+}: PasswordFieldProps) {
   const [show, setShow] = useState(false);
+  const actionLabel = show ? hideLabel : showLabel;
+  const ariaLabel = getToggleAriaLabel(actionLabel, label);
 
   return (
     <TextField
@@ -66,7 +80,7 @@ function PasswordField({ label, placeholder, fieldProps, error, disabled, textFi
               tone="neutral"
               type="button"
               onClick={() => setShow((prev) => !prev)}
-              aria-label={`${show ? "Hide" : "Show"} ${label.toLowerCase()}`}
+              aria-label={ariaLabel}
               sx={{
                 minWidth: 0,
                 px: 1.25,
@@ -76,7 +90,7 @@ function PasswordField({ label, placeholder, fieldProps, error, disabled, textFi
               }}
               startIcon={show ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
             >
-              {show ? "Hide" : "Show"}
+              {actionLabel}
             </Button>
           </InputAdornment>
         ),
@@ -86,9 +100,10 @@ function PasswordField({ label, placeholder, fieldProps, error, disabled, textFi
   );
 }
 
-export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFormProps) {
+export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
   const theme = useTheme();
   const router = useRouter();
+  const t = useTranslations("register");
   const registerFoundationUseCase = useMemo(
     () => appContainer.get<RegisterFoundationUseCase>(USE_CASE_TYPES.RegisterFoundationUseCase),
     [],
@@ -117,6 +132,7 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
     }),
     [theme],
   );
+  const validationSchema = useMemo(() => createRegisterValidationSchema(t), [t]);
 
   const formik = useFormik<RegisterFormValues>({
     initialValues: {
@@ -127,7 +143,7 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
       confirmPassword: "",
       acceptTerms: false,
     },
-    validationSchema: registerValidationSchema,
+    validationSchema,
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: async (values, helpers) => {
@@ -146,7 +162,7 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
         const errorMessage =
           error instanceof Error && error.message
             ? error.message
-            : "Ocurrió un error al registrar la fundación. Inténtalo nuevamente.";
+            : t("form.submitError");
 
         setSubmitError(errorMessage);
       } finally {
@@ -189,15 +205,15 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
           tone="neutral"
           variant="soft"
           icon={<MailRoundedIcon fontSize="small" />}
-          label="Foundation onboarding"
+          label={t("form.badge")}
           sx={{ alignSelf: "flex-start" }}
         />
         <Stack spacing={1}>
           <Typography variant="h4" sx={{ fontWeight: 900 }}>
-            {title}
+            {t("form.title")}
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, maxWidth: 640 }}>
-            {subtitle}
+            {t("form.subtitle")}
           </Typography>
         </Stack>
       </Stack>
@@ -205,8 +221,8 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
       <Stack spacing={2.5}>
         <TextField
           {...formik.getFieldProps("foundationName")}
-          label="Foundation Name"
-          placeholder="Enter your foundation's official name"
+          label={t("form.fields.foundationName.label")}
+          placeholder={t("form.fields.foundationName.placeholder")}
           fullWidth
           disabled={formik.isSubmitting}
           error={Boolean(fieldError("foundationName"))}
@@ -215,8 +231,8 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
         />
         <TextField
           {...formik.getFieldProps("officialEmail")}
-          label="Official Email"
-          placeholder="foundation@email.com"
+          label={t("form.fields.officialEmail.label")}
+          placeholder={t("form.fields.officialEmail.placeholder")}
           type="email"
           fullWidth
           disabled={formik.isSubmitting}
@@ -226,8 +242,8 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
         />
         <TextField
           {...formik.getFieldProps("taxId")}
-          label="Tax ID (optional)"
-          placeholder="Add your tax ID"
+          label={t("form.fields.taxId.label")}
+          placeholder={t("form.fields.taxId.placeholder")}
           fullWidth
           disabled={formik.isSubmitting}
           error={Boolean(fieldError("taxId"))}
@@ -235,20 +251,26 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
           sx={textFieldStyles}
         />
         <PasswordField
-          label="Password"
-          placeholder="Create a strong password"
+          label={t("form.fields.password.label")}
+          placeholder={t("form.fields.password.placeholder")}
           fieldProps={formik.getFieldProps("password")}
           error={fieldError("password")}
           disabled={formik.isSubmitting}
           textFieldStyles={textFieldStyles}
+          showLabel={t("form.passwordToggle.show")}
+          hideLabel={t("form.passwordToggle.hide")}
+          getToggleAriaLabel={(action, label) => t("form.passwordToggle.aria", { action, label })}
         />
         <PasswordField
-          label="Confirm Password"
-          placeholder="Re-enter your password"
+          label={t("form.fields.confirmPassword.label")}
+          placeholder={t("form.fields.confirmPassword.placeholder")}
           fieldProps={formik.getFieldProps("confirmPassword")}
           error={fieldError("confirmPassword")}
           disabled={formik.isSubmitting}
           textFieldStyles={textFieldStyles}
+          showLabel={t("form.passwordToggle.show")}
+          hideLabel={t("form.passwordToggle.hide")}
+          getToggleAriaLabel={(action, label) => t("form.passwordToggle.aria", { action, label })}
         />
         <Stack spacing={0.5}>
           <FormControlLabel
@@ -264,7 +286,7 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
             }
             label={
               <Typography variant="body2" color="text.secondary">
-                I agree to the Terms & Conditions and confirm the information is accurate.
+                {t("form.terms")}
               </Typography>
             }
             sx={{
@@ -288,7 +310,7 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
           disabled={isSubmitDisabled}
           sx={{ height: 54, fontSize: 16, fontWeight: 800, boxShadow: theme.shadows[3] }}
         >
-          {formik.isSubmitting ? "Enviando..." : "Register Foundation"}
+          {formik.isSubmitting ? t("form.submitting") : t("form.submit")}
         </Button>
 
         {submitError && (
@@ -315,11 +337,11 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
             tone="brand"
             variant="soft"
             icon={badgeIcon ?? <CheckRoundedIcon fontSize="small" />}
-            label="Secure Registration"
+            label={t("form.securityBadge")}
             sx={{ fontWeight: 700 }}
           />
           <Typography variant="body2" color="text.secondary">
-            Data encrypted and protected
+            {t("form.securityNote")}
           </Typography>
         </Stack>
       </Stack>
@@ -334,13 +356,13 @@ export function RegisterForm({ title, subtitle, ctaIcon, badgeIcon }: RegisterFo
           fontSize: 14,
         }}
       >
-        <Typography variant="body2">Already have an account?</Typography>
+        <Typography variant="body2">{t("form.alreadyHaveAccount")}</Typography>
         <a
           href="/login"
           className="font-semibold text-brand-600 transition-colors hover:text-brand-700"
-          aria-label="Log in"
+          aria-label={t("form.login")}
         >
-          Log in
+          {t("form.login")}
         </a>
       </Box>
     </Box>

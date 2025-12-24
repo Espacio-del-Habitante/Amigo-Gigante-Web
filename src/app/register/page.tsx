@@ -17,8 +17,6 @@ export default function RegisterPage() {
           <RegisterHeader />
           <Box className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]" sx={{ alignItems: "stretch" }}>
             <RegisterForm
-              title="Join Amigo Gigante"
-              subtitle="Create your foundation account to access donations, volunteers, and tools designed to help you care for every furry friend."
               ctaIcon={<ArrowForwardRoundedIcon />}
               badgeIcon={<LockRoundedIcon fontSize="small" />}
             />
