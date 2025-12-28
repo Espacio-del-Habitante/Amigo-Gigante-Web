@@ -110,7 +110,36 @@ export async function proxy(request: NextRequest) {
   }
 
   // TODO: Consultar la sesión actual de Supabase mediante un Use Case inyectado.
-  const session: AuthSession | null = null;
+    let session: AuthSession | null = null;
+
+  // En desarrollo, crear una sesión mock para permitir probar rutas protegidas
+  // Esto se eliminará cuando se implemente la autenticación real
+  if (process.env.NODE_ENV === "development") {
+    // Determinar el rol según la ruta que se está accediendo
+    let mockRole: UserRole = "foundation_user";
+    if (normalizedPathname.startsWith("/admin")) {
+      mockRole = "admin";
+    } else if (normalizedPathname.startsWith("/external")) {
+      mockRole = "external";
+    } else if (normalizedPathname.startsWith("/foundations")) {
+      mockRole = "foundation_user";
+    }
+
+    session = {
+      accessToken: "mock-token-dev",
+      refreshToken: "mock-refresh-token-dev",
+      expiresAt: Date.now() + 3600000, // 1 hora
+      user: {
+        id: "mock-user-id-dev",
+        email: "dev@example.com",
+        role: mockRole,
+      },
+    };
+
+    console.log(
+      `[Proxy] 🔧 DEV MODE: Using mock session with role "${mockRole}" for path "${normalizedPathname}"`,
+    );
+  }
 
   if (!session) {
     const loginUrl = new URL("/login", request.url);

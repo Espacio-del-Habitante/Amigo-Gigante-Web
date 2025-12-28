@@ -1,0 +1,21 @@
+{
+  "brand": {
+    "name": "Amigo Gigante"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "myFoundation": "My Foundation",
+    "animals": "Animals",
+    "adoptions": "Adoptions"
+  },
+  "header": {
+    "notifications": "Notifications",
+    "menu": "Menu",
+    "user": {
+      "name": "Shelter Admin",
+      "email": "admin@amigo.org",
+      "initials": "SA"
+    }
+  },
+  "copyright": "© {year} Amigo Gigante"
+}
