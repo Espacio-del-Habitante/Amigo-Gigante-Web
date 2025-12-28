@@ -69,7 +69,7 @@ export function FoundationSidebar({ activePath, onNavigate }: FoundationSidebarP
         </Typography>
       </Box>
       <Divider className="my-6" />
-      <List className="flex flex-1 flex-col gap-1" disablePadding>
+      <List className="flex flex-1 flex-col gap-2" disablePadding>
         {navigationItems.map((item) => {
           const isActive = activePath?.startsWith(item.href);
 
@@ -80,10 +80,11 @@ export function FoundationSidebar({ activePath, onNavigate }: FoundationSidebarP
               href={item.href}
               onClick={onNavigate}
               selected={isActive}
-              className="rounded-lg"
+              className="flex-none rounded-lg"
               sx={{
+                flex: "0 0 auto",
                 px: 2,
-                py: 1.25,
+                py: 1,
                 gap: 1.5,
                 color: "text.primary",
                 "&.Mui-selected": {
