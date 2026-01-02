@@ -55,6 +55,11 @@
     "cancel": "Cancel",
     "save": "Save Changes"
   },
+  "countries": {
+    "mx": "Mexico",
+    "us": "United States",
+    "es": "Spain"
+  },
   "validation": {
     "name": {
       "required": "Foundation name is required",
@@ -85,4 +90,3 @@
     }
   }
 }
-

@@ -55,6 +55,11 @@
     "cancel": "Cancelar",
     "save": "Guardar Cambios"
   },
+  "countries": {
+    "mx": "México",
+    "us": "Estados Unidos",
+    "es": "España"
+  },
   "validation": {
     "name": {
       "required": "El nombre de la fundación es requerido",
@@ -85,4 +90,3 @@
     }
   }
 }
-
