@@ -15,7 +15,19 @@ export interface CreateProfileParams {
   role: UserRole;
 }
 
+export interface SignInParams {
+  email: string;
+  password: string;
+}
+
+export interface SignInResult {
+  user: AuthUser;
+  session: AuthSession | null;
+}
+
 export interface IAuthRepository {
   signUp(params: SignUpParams): Promise<SignUpResult>;
+  signIn(params: SignInParams): Promise<SignInResult>;
+  getSession(): Promise<AuthSession | null>;
   createProfile(params: CreateProfileParams): Promise<void>;
 }

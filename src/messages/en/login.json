@@ -24,8 +24,20 @@
     "forgotPassword": "Forgot Password?",
     "secureLogin": "Secure SSL encrypted login",
     "submit": "Log In",
+    "submitting": "Signing in...",
     "newUser": "New to Amigo Gigante?",
-    "registerLink": "Register your foundation"
+    "registerLink": "Register your foundation",
+    "errors": {
+      "invalidCredentials": "Incorrect email or password",
+      "userNotFound": "No account exists with this email",
+      "connectionError": "We couldn't connect to the server. Please check your connection",
+      "emailNotVerified": "Please verify your email before signing in",
+      "rateLimit": "Too many attempts. Please wait a few minutes",
+      "generic": "We couldn't sign you in. Please try again"
+    }
+  },
+  "success": {
+    "message": "Login successful. Redirecting..."
   },
   "leftColumn": {
     "badge": "Adopt & Care",

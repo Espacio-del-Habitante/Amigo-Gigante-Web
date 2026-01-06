@@ -24,8 +24,20 @@
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "secureLogin": "Inicio de sesión seguro SSL encriptado",
     "submit": "Iniciar Sesión",
+    "submitting": "Iniciando sesión...",
     "newUser": "¿Nuevo en Amigo Gigante?",
-    "registerLink": "Registra tu fundación"
+    "registerLink": "Registra tu fundación",
+    "errors": {
+      "invalidCredentials": "Email o contraseña incorrectos",
+      "userNotFound": "No existe una cuenta con este email",
+      "connectionError": "No pudimos conectarnos al servidor. Revisa tu conexión",
+      "emailNotVerified": "Por favor verifica tu email antes de iniciar sesión",
+      "rateLimit": "Demasiados intentos. Espera unos minutos",
+      "generic": "No pudimos iniciar sesión. Intenta nuevamente"
+    }
+  },
+  "success": {
+    "message": "Inicio de sesión exitoso. Redirigiendo..."
   },
   "leftColumn": {
     "badge": "Adopta y Cuida",
