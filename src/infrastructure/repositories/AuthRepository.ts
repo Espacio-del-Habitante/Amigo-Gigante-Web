@@ -54,7 +54,7 @@ class AuthRepository implements IAuthRepository {
         // es probable que el usuario fue creado cuando estaba activada.
         // Mostramos un mensaje más claro.
         if (
-          process.env.NODE_ENV === "development" &&
+          process.env.ENV === "development" &&
           (error.message?.toLowerCase().includes("email not confirmed") ||
             error.message?.toLowerCase().includes("not confirmed"))
         ) {
@@ -92,9 +92,26 @@ class AuthRepository implements IAuthRepository {
       return null;
     }
 
-    const role = await this.fetchUserRole(data.session.user.id);
+    // WARNING (Supabase): session.user can come from storage and may not be authentic.
+    // Validate via auth server and use getUser() data for user identity.
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser();
 
-    return this.mapSessionWithRole(data.session, role);
+    if (userError || !userData.user) {
+      return null;
+    }
+
+    const role = await this.fetchUserRole(userData.user.id);
+
+    return {
+      accessToken: data.session.access_token ?? null,
+      refreshToken: data.session.refresh_token,
+      expiresAt: data.session.expires_at,
+      user: {
+        id: userData.user.id,
+        email: userData.user.email ?? "",
+        role,
+      },
+    };
   }
 
   async createProfile(params: CreateProfileParams): Promise<void> {
