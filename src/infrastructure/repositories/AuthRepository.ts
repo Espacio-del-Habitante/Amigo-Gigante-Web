@@ -50,6 +50,19 @@ class AuthRepository implements IAuthRepository {
       });
 
       if (error) {
+        // En desarrollo, si el error es de email no verificado y la verificación está desactivada,
+        // es probable que el usuario fue creado cuando estaba activada.
+        // Mostramos un mensaje más claro.
+        if (
+          process.env.NODE_ENV === "development" &&
+          (error.message?.toLowerCase().includes("email not confirmed") ||
+            error.message?.toLowerCase().includes("not confirmed"))
+        ) {
+          console.warn(
+            "[AuthRepository] Email no verificado. Si desactivaste la verificación en Supabase, " +
+              "verifica este usuario manualmente en el dashboard: Authentication → Users → [usuario] → Confirm email",
+          );
+        }
         throw new Error(this.translateSignInError(error));
       }
 
