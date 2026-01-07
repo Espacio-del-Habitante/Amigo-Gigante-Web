@@ -4,17 +4,27 @@ import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { Box, IconButton, InputAdornment, TextField, type SxProps, type Theme } from "@mui/material";
+import { type FieldInputProps } from "formik";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 interface PasswordInputProps {
-  id: string;
   label: string;
   placeholder: string;
+  fieldProps: FieldInputProps<string>;
+  error?: string;
+  disabled?: boolean;
   textFieldStyles: SxProps<Theme>;
 }
 
-export function PasswordInput({ id, label, placeholder, textFieldStyles }: PasswordInputProps) {
+export function PasswordInput({
+  label,
+  placeholder,
+  fieldProps,
+  error,
+  disabled,
+  textFieldStyles,
+}: PasswordInputProps) {
   const t = useTranslations("login");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,12 +32,14 @@ export function PasswordInput({ id, label, placeholder, textFieldStyles }: Passw
 
   return (
     <TextField
-      id={id}
-      name={id}
+      {...fieldProps}
       label={label}
       type={showPassword ? "text" : "password"}
       placeholder={placeholder}
       fullWidth
+      disabled={disabled}
+      error={Boolean(error)}
+      helperText={error}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">

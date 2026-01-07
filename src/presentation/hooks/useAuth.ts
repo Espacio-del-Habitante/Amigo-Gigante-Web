@@ -5,6 +5,9 @@ import type {
   AuthUser,
   UserRole,
 } from "@/domain/types/auth.types";
+import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
+import { appContainer } from "@/infrastructure/ioc/container";
+import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
 
 interface UseAuthResult {
   user: AuthUser | null;
@@ -17,12 +20,15 @@ interface UseAuthResult {
 /**
  * Hook base para exponer el estado de autenticación y rol.
  *
- * La sesión debe obtenerse desde la capa de Infrastructure (Supabase) a través de un Use Case inyectado.
- * Se deja la estructura preparada con TODOs para conectar con Supabase en futuras HUs.
+ * La sesión se obtiene desde la capa de Infrastructure (Supabase) a través de un Use Case inyectado.
  */
 export const useAuth = (): UseAuthResult => {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const getSessionUseCase = useMemo(
+    () => appContainer.get<GetSessionUseCase>(USE_CASE_TYPES.GetSessionUseCase),
+    [],
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -30,12 +36,14 @@ export const useAuth = (): UseAuthResult => {
     const loadSession = async () => {
       setLoading(true);
       try {
-        // TODO: inyectar un Use Case de infraestructura que consulte la sesión activa de Supabase.
-        // Ejemplo esperado: const currentSession = await appContainer.get(GetSessionUseCase).execute();
-        const currentSession: AuthSession | null = null;
+        const currentSession = await getSessionUseCase.execute();
 
         if (!isMounted) return;
         setSession(currentSession);
+      } catch {
+        if (isMounted) {
+          setSession(null);
+        }
       } finally {
         if (isMounted) {
           setLoading(false);
@@ -48,7 +56,7 @@ export const useAuth = (): UseAuthResult => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [getSessionUseCase]);
 
   const user = useMemo<AuthUser | null>(() => session?.user ?? null, [session]);
   const role = useMemo<UserRole | null>(() => user?.role ?? null, [user]);

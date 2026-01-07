@@ -4,10 +4,12 @@ import { AuthApiError } from "@supabase/supabase-js";
 import type {
   CreateProfileParams,
   IAuthRepository,
+  SignInParams,
+  SignInResult,
   SignUpParams,
   SignUpResult,
 } from "@/domain/repositories/IAuthRepository";
-import type { AuthSession, AuthUser } from "@/domain/types/auth.types";
+import type { AuthSession, AuthUser, UserRole } from "@/domain/types/auth.types";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
 class AuthRepository implements IAuthRepository {
@@ -36,6 +38,63 @@ class AuthRepository implements IAuthRepository {
 
       throw new Error("Ocurrió un error desconocido al registrar el usuario.");
     }
+  }
+
+  async signIn(params: SignInParams): Promise<SignInResult> {
+    const { email, password } = params;
+
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        // En desarrollo, si el error es de email no verificado y la verificación está desactivada,
+        // es probable que el usuario fue creado cuando estaba activada.
+        // Mostramos un mensaje más claro.
+        if (
+          process.env.NODE_ENV === "development" &&
+          (error.message?.toLowerCase().includes("email not confirmed") ||
+            error.message?.toLowerCase().includes("not confirmed"))
+        ) {
+          console.warn(
+            "[AuthRepository] Email no verificado. Si desactivaste la verificación en Supabase, " +
+              "verifica este usuario manualmente en el dashboard: Authentication → Users → [usuario] → Confirm email",
+          );
+        }
+        throw new Error(this.translateSignInError(error));
+      }
+
+      if (!data.user) {
+        throw new Error(this.translateSignInError(new Error("Missing user")));
+      }
+
+      const role = await this.fetchUserRole(data.user.id);
+
+      return {
+        user: this.mapUserWithRole(data.user, role),
+        session: this.mapSessionWithRole(data.session, role),
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(this.normalizeSignInError(error));
+      }
+
+      throw new Error("form.errors.generic");
+    }
+  }
+
+  async getSession(): Promise<AuthSession | null> {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error || !data.session) {
+      return null;
+    }
+
+    const role = await this.fetchUserRole(data.session.user.id);
+
+    return this.mapSessionWithRole(data.session, role);
   }
 
   async createProfile(params: CreateProfileParams): Promise<void> {
@@ -67,6 +126,14 @@ class AuthRepository implements IAuthRepository {
     };
   }
 
+  private mapUserWithRole(user: User, role: UserRole): AuthUser {
+    return {
+      id: user.id,
+      email: user.email ?? "",
+      role,
+    };
+  }
+
   private mapSession(session: Session | null): AuthSession | null {
     if (!session) return null;
 
@@ -78,6 +145,47 @@ class AuthRepository implements IAuthRepository {
       expiresAt: session.expires_at,
       user,
     };
+  }
+
+  private mapSessionWithRole(session: Session | null, role: UserRole): AuthSession | null {
+    if (!session) return null;
+
+    const user = this.mapUserWithRole(session.user, role);
+
+    return {
+      accessToken: session.access_token ?? null,
+      refreshToken: session.refresh_token,
+      expiresAt: session.expires_at,
+      user,
+    };
+  }
+
+  private async fetchUserRole(userId: string): Promise<UserRole> {
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id", userId)
+      .single();
+
+    if (error || !data?.role) {
+      throw new Error("form.errors.generic");
+    }
+
+    const role = this.normalizeRole(data.role);
+
+    if (!role) {
+      throw new Error("form.errors.generic");
+    }
+
+    return role;
+  }
+
+  private normalizeRole(role: string): UserRole | null {
+    if (role === "admin" || role === "foundation_user" || role === "external") {
+      return role;
+    }
+
+    return null;
   }
 
   private translateAuthError(error: Error): string {
@@ -96,6 +204,44 @@ class AuthRepository implements IAuthRepository {
     }
 
     return "No se pudo registrar tu cuenta. Inténtalo nuevamente en unos instantes.";
+  }
+
+  private translateSignInError(error: Error): string {
+    const message = error.message?.toLowerCase?.() ?? "";
+
+    if (error instanceof AuthApiError && error.status === 0) {
+      return "form.errors.connectionError";
+    }
+
+    if (error instanceof AuthApiError && error.status === 429) {
+      return "form.errors.rateLimit";
+    }
+
+    if (message.includes("invalid login credentials") || message.includes("invalid credentials")) {
+      return "form.errors.invalidCredentials";
+    }
+
+    if (message.includes("user not found")) {
+      return "form.errors.userNotFound";
+    }
+
+    if (message.includes("email not confirmed") || message.includes("not confirmed")) {
+      return "form.errors.emailNotVerified";
+    }
+
+    if (message.includes("rate limit")) {
+      return "form.errors.rateLimit";
+    }
+
+    return "form.errors.generic";
+  }
+
+  private normalizeSignInError(error: Error): string {
+    if (error.message.startsWith("form.errors.")) {
+      return error.message;
+    }
+
+    return "form.errors.generic";
   }
 
   private translateProfileError(error: PostgrestError | Error): string {

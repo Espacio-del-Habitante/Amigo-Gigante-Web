@@ -4,6 +4,8 @@ export type {
   IAuthRepository,
   SignUpParams,
   SignUpResult,
+  SignInParams,
+  SignInResult,
   CreateProfileParams,
 } from "./IAuthRepository";
 export type {

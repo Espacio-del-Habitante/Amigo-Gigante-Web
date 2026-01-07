@@ -20,7 +20,7 @@ import {
   type Theme,
 } from "@mui/material";
 import { type FieldInputProps, useFormik } from "formik";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { type ReactElement, useMemo, useState } from "react";
 
@@ -103,6 +103,7 @@ function PasswordField({
 export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
   const theme = useTheme();
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations("register");
   const registerFoundationUseCase = useMemo(
     () => appContainer.get<RegisterFoundationUseCase>(USE_CASE_TYPES.RegisterFoundationUseCase),
@@ -157,7 +158,7 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
           taxId: values.taxId.trim() || undefined,
         });
 
-        router.push("/dashboard");
+        router.push(`/${locale}/foundations`);
       } catch (error) {
         const errorMessage =
           error instanceof Error && error.message

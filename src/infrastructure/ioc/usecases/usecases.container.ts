@@ -6,6 +6,8 @@ import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
 import type { IFoundationRepository } from "@/domain/repositories/IFoundationRepository";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
+import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
+import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
@@ -40,6 +42,22 @@ const useCasesModule = new ContainerModule(
         );
 
         return new RegisterFoundationUseCase(authRepository, foundationRepository);
+      })
+      .inSingletonScope();
+
+    bind<LoginUseCase>(USE_CASE_TYPES.LoginUseCase)
+      .toDynamicValue((context) => {
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new LoginUseCase(authRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetSessionUseCase>(USE_CASE_TYPES.GetSessionUseCase)
+      .toDynamicValue((context) => {
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new GetSessionUseCase(authRepository);
       })
       .inSingletonScope();
   },
