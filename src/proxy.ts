@@ -4,6 +4,8 @@ import createMiddleware from "next-intl/middleware";
 
 import type { AuthSession, UserRole } from "@/domain/types/auth.types";
 import { defaultLocale, locales } from "@/i18n/config";
+import { GetSessionUseCase } from "./domain/usecases/auth/GetSessionUseCase";
+import { AuthMiddlewareRepository } from "./infrastructure/repositories/AuthMiddlewareRepository";
 
 const intlMiddleware = createMiddleware({
   locales,
@@ -18,6 +20,7 @@ const PUBLIC_PATHS = [
   "/tienda",
   "/login",
   "/register",
+  "/403",
   "/_next",
   "/favicon.ico",
   "/public",
@@ -27,6 +30,14 @@ const ROLE_ROUTE_PATTERNS: Record<UserRole, RegExp[]> = {
   admin: [/^\/admin/],
   foundation_user: [/^\/foundations/],
   external: [/^\/external/],
+};
+
+const getRequiredRoleForPath = (pathname: string): UserRole | null => {
+  return (
+    (Object.entries(ROLE_ROUTE_PATTERNS) as [UserRole, RegExp[]][])
+      .find(([, patterns]) => patterns.some((pattern) => pattern.test(pathname)))
+      ?.[0] ?? null
+  );
 };
 
 const normalizePathname = (pathname: string): string => {
@@ -109,20 +120,33 @@ export async function proxy(request: NextRequest) {
     return intlResponse;
   }
 
-  // TODO: Consultar la sesión actual de Supabase mediante un Use Case inyectado.
-    let session: AuthSession | null = null;
+  // Solo aplicar auth/roles a rutas que realmente estén protegidas por patrón.
+  const requiredRole = getRequiredRoleForPath(normalizedPathname);
 
+  // Si la ruta no está bajo ningún prefijo protegido, permitir el acceso.
+  if (!requiredRole) {
+    return intlResponse;
+  }
+
+  let session: AuthSession | null = null;
+
+  try {
+    const authRepository = new AuthMiddlewareRepository(request, intlResponse);
+    const getSessionUseCase = new GetSessionUseCase(authRepository);
+    session = await getSessionUseCase.execute();
+  } catch {
+    session = null;
+  }
   // En desarrollo, crear una sesión mock para permitir probar rutas protegidas
   // Esto se eliminará cuando se implemente la autenticación real
-  if (process.env.NODE_ENV === "development") {
+ 
+  if (process.env.ENV === "development") {
     // Determinar el rol según la ruta que se está accediendo
     let mockRole: UserRole = "foundation_user";
     if (normalizedPathname.startsWith("/admin")) {
       mockRole = "admin";
     } else if (normalizedPathname.startsWith("/external")) {
       mockRole = "external";
-    } else if (normalizedPathname.startsWith("/foundations")) {
-      mockRole = "foundation_user";
     }
 
     session = {
@@ -149,9 +173,12 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
-  // TODO: Validar rol contra ROLE_ROUTE_PATTERNS cuando la sesión incluya el rol real.
-
-  return intlResponse;
+  if (session.user?.role === requiredRole) {
+    return intlResponse;
+  }
+  // Si la ruta está protegida pero el rol no coincide, redirigir a 403 (sin loop porque es pública).
+  const error403Url = new URL("/403", request.url);
+  return NextResponse.redirect(error403Url);
 }
 
 export const config = {
@@ -163,6 +190,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)",
+    String.raw`/((?!api|_next/static|_next/image|favicon.ico|.*\.).*)`,
   ],
 };

@@ -44,7 +44,7 @@ export default async function LocaleLayout({
   };
 
   // Debug: verificar que los mensajes se cargaron correctamente
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.ENV === "development") {
     console.log(`[LocaleLayout] Locale: ${locale}, Param locale: ${paramLocale}`);
     console.log(`[LocaleLayout] Messages keys:`, Object.keys(messages));
     console.log(`[LocaleLayout] Sample home.hero.title:`, messages.home.hero?.title || "NOT FOUND");
