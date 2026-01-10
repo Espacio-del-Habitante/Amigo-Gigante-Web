@@ -2,7 +2,10 @@
 
 import { useFormik } from 'formik';
 import {
+  Alert,
+  Box,
   Button,
+  CircularProgress,
   Divider,
   InputAdornment,
   MenuItem,
@@ -18,32 +21,193 @@ import {
   WhatsApp,
 } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useState } from 'react';
 import LogoSection from './LogoSection';
 import { getProfileValidationSchema } from './ProfileValidation';
+import type { FoundationProfile } from '@/domain/models/FoundationProfile';
+import { GetFoundationProfileUseCase } from '@/domain/usecases/foundation/GetFoundationProfileUseCase';
+import { UpdateFoundationProfileUseCase } from '@/domain/usecases/foundation/UpdateFoundationProfileUseCase';
+import { appContainer } from '@/infrastructure/ioc/container';
+import { USE_CASE_TYPES } from '@/infrastructure/ioc/usecases/usecases.types';
+import { ConfirmDialog } from '@/presentation/components/atoms/ConfirmDialog';
+
+interface ProfileFormValues {
+  name: string;
+  description: string;
+  address: string;
+  city: string;
+  country: string;
+  publicEmail: string;
+  publicPhone: string;
+  instagramUrl: string;
+  whatsappUrl: string;
+}
+
+interface ProfileMeta {
+  foundationId: string;
+  logoUrl: string | null;
+}
+
+const emptyProfileValues: ProfileFormValues = {
+  name: '',
+  description: '',
+  address: '',
+  city: '',
+  country: '',
+  publicEmail: '',
+  publicPhone: '',
+  instagramUrl: '',
+  whatsappUrl: '',
+};
+
+const errorMessageKeys = new Set([
+  'errors.unauthorized',
+  'errors.notFound',
+  'errors.connection',
+  'errors.generic',
+]);
 
 const ProfileForm = () => {
   const t = useTranslations('profile');
+  const foundationT = useTranslations('foundation');
+  const getFoundationProfileUseCase = useMemo(
+    () => appContainer.get<GetFoundationProfileUseCase>(USE_CASE_TYPES.GetFoundationProfileUseCase),
+    [],
+  );
+  const updateFoundationProfileUseCase = useMemo(
+    () =>
+      appContainer.get<UpdateFoundationProfileUseCase>(
+        USE_CASE_TYPES.UpdateFoundationProfileUseCase,
+      ),
+    [],
+  );
+  const [initialValues, setInitialValues] = useState<ProfileFormValues>(emptyProfileValues);
+  const [profileMeta, setProfileMeta] = useState<ProfileMeta>({ foundationId: '', logoUrl: null });
+  const [isLoading, setIsLoading] = useState(true);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false);
+
+  const resolveErrorMessage = (error: unknown) => {
+    if (error instanceof Error && errorMessageKeys.has(error.message)) {
+      return foundationT(error.message);
+    }
+
+    return foundationT('errors.generic');
+  };
+
+  const loadProfile = async () => {
+    setIsLoading(true);
+    setSubmitError(null);
+
+    try {
+      const profile = await getFoundationProfileUseCase.execute();
+      setInitialValues({
+        name: profile.name,
+        description: profile.description,
+        address: profile.address,
+        city: profile.city,
+        country: profile.country,
+        publicEmail: profile.publicEmail,
+        publicPhone: profile.publicPhone,
+        instagramUrl: profile.instagramUrl,
+        whatsappUrl: profile.whatsappUrl,
+      });
+      setProfileMeta({ foundationId: profile.foundationId, logoUrl: profile.logoUrl });
+    } catch (error) {
+      setSubmitError(resolveErrorMessage(error));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadProfile();
+  }, []);
 
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      description: '',
-      address: '',
-      city: '',
-      country: '',
-      publicEmail: '',
-      publicPhone: '',
-      instagramUrl: '',
-      whatsappUrl: '',
-    },
+    initialValues,
     validationSchema: getProfileValidationSchema(t),
-    onSubmit: () => undefined,
+    enableReinitialize: true,
+    onSubmit: async (values, helpers) => {
+      setSubmitError(null);
+      setSubmitSuccess(null);
+
+      try {
+        const payload: FoundationProfile = {
+          foundationId: profileMeta.foundationId,
+          logoUrl: profileMeta.logoUrl,
+          ...values,
+        };
+
+        const updatedProfile = await updateFoundationProfileUseCase.execute(payload);
+
+        setSubmitSuccess(t('feedback.saveSuccess'));
+        const nextValues: ProfileFormValues = {
+          name: updatedProfile.name,
+          description: updatedProfile.description,
+          address: updatedProfile.address,
+          city: updatedProfile.city,
+          country: updatedProfile.country,
+          publicEmail: updatedProfile.publicEmail,
+          publicPhone: updatedProfile.publicPhone,
+          instagramUrl: updatedProfile.instagramUrl,
+          whatsappUrl: updatedProfile.whatsappUrl,
+        };
+
+        setInitialValues(nextValues);
+        setProfileMeta({
+          foundationId: updatedProfile.foundationId,
+          logoUrl: updatedProfile.logoUrl,
+        });
+        helpers.resetForm({ values: nextValues });
+      } catch (error) {
+        setSubmitError(resolveErrorMessage(error));
+      } finally {
+        helpers.setSubmitting(false);
+      }
+    },
   });
 
   const descriptionCount = formik.values.description.length;
 
+  const handleCancel = () => {
+    setSubmitSuccess(null);
+    setSubmitError(null);
+
+    if (!formik.dirty) {
+      return;
+    }
+
+    setShowDiscardDialog(true);
+  };
+
+  const handleDiscardConfirm = async () => {
+    setShowDiscardDialog(false);
+    await loadProfile();
+  };
+
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-8">
+      {isLoading && (
+        <Box className="flex items-center gap-3 text-neutral-600">
+          <CircularProgress size={20} />
+          <Typography variant="body2">{t('status.loading')}</Typography>
+        </Box>
+      )}
+
+      {submitError && (
+        <Alert severity="error" className="font-semibold">
+          {submitError}
+        </Alert>
+      )}
+
+      {submitSuccess && (
+        <Alert severity="success" className="font-semibold">
+          {submitSuccess}
+        </Alert>
+      )}
+
       <div className="flex flex-col gap-2">
         <Typography variant="h4" className="text-neutral-900">
           {t('title')}
@@ -250,19 +414,34 @@ const ProfileForm = () => {
           className="border-neutral-300 text-neutral-700 hover:border-neutral-400"
           type="button"
           fullWidth
+          disabled={formik.isSubmitting || isLoading}
+          onClick={handleCancel}
         >
           {t('buttons.cancel')}
         </Button>
         <Button
           variant="contained"
           className="bg-brand-500 text-white hover:bg-brand-600"
-          startIcon={<Save />}
+          startIcon={
+            formik.isSubmitting ? <CircularProgress size={18} color="inherit" /> : <Save />
+          }
           type="submit"
           fullWidth
+          disabled={formik.isSubmitting || isLoading}
         >
-          {t('buttons.save')}
+          {formik.isSubmitting ? t('buttons.saving') : t('buttons.save')}
         </Button>
       </div>
+
+      <ConfirmDialog
+        open={showDiscardDialog}
+        title={t('dialog.discard.title')}
+        description={t('dialog.discard.description')}
+        confirmLabel={t('dialog.discard.confirm')}
+        cancelLabel={t('dialog.discard.cancel')}
+        onConfirm={handleDiscardConfirm}
+        onClose={() => setShowDiscardDialog(false)}
+      />
     </form>
   );
 };

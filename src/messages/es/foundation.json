@@ -9,6 +9,11 @@
     "notifications": "Notificaciones",
     "menu": "Menú"
   },
+  "errors": {
+    "unauthorized": "No tienes permisos para editar esta fundación.",
+    "notFound": "No pudimos encontrar la información de la fundación.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo de nuevo.",
+    "generic": "Ocurrió un error inesperado. Inténtalo nuevamente."
+  },
   "copyright": "© {year} Amigo Gigante"
 }
-

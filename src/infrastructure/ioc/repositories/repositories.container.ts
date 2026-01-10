@@ -4,10 +4,12 @@ import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository"
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
 import type { IFoundationRepository } from "@/domain/repositories/IFoundationRepository";
+import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
 import { AuthRepository } from "@/infrastructure/repositories/AuthRepository";
 import { DebugRepository } from "@/infrastructure/repositories/DebugRepository";
 import { FoundationRepository } from "@/infrastructure/repositories/FoundationRepository";
+import { FoundationProfileRepository } from "@/infrastructure/repositories/FoundationProfileRepository";
 import { REPOSITORY_TYPES } from "./repositories.types";
 
 const repositoriesModule = new ContainerModule(
@@ -26,6 +28,10 @@ const repositoriesModule = new ContainerModule(
 
     bind<IFoundationRepository>(REPOSITORY_TYPES.FoundationRepository)
       .to(FoundationRepository)
+      .inSingletonScope();
+
+    bind<IFoundationProfileRepository>(REPOSITORY_TYPES.FoundationProfileRepository)
+      .to(FoundationProfileRepository)
       .inSingletonScope();
   },
 );

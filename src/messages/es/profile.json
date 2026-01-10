@@ -53,7 +53,8 @@
   },
   "buttons": {
     "cancel": "Cancelar",
-    "save": "Guardar Cambios"
+    "save": "Guardar Cambios",
+    "saving": "Guardando..."
   },
   "countries": {
     "mx": "México",
@@ -87,6 +88,20 @@
     },
     "whatsappUrl": {
       "invalid": "Ingresa una URL válida de WhatsApp"
+    }
+  },
+  "status": {
+    "loading": "Cargando información..."
+  },
+  "feedback": {
+    "saveSuccess": "La información se guardó correctamente."
+  },
+  "dialog": {
+    "discard": {
+      "title": "Descartar cambios",
+      "description": "Tienes cambios sin guardar. ¿Seguro que deseas descartarlos?",
+      "confirm": "Descartar",
+      "cancel": "Continuar editando"
     }
   }
 }

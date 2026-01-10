@@ -4,11 +4,14 @@ import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository"
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
 import type { IFoundationRepository } from "@/domain/repositories/IFoundationRepository";
+import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
+import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
+import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
 
@@ -58,6 +61,26 @@ const useCasesModule = new ContainerModule(
         const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
 
         return new GetSessionUseCase(authRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetFoundationProfileUseCase>(USE_CASE_TYPES.GetFoundationProfileUseCase)
+      .toDynamicValue((context) => {
+        const foundationProfileRepository = context.get<IFoundationProfileRepository>(
+          REPOSITORY_TYPES.FoundationProfileRepository,
+        );
+
+        return new GetFoundationProfileUseCase(foundationProfileRepository);
+      })
+      .inSingletonScope();
+
+    bind<UpdateFoundationProfileUseCase>(USE_CASE_TYPES.UpdateFoundationProfileUseCase)
+      .toDynamicValue((context) => {
+        const foundationProfileRepository = context.get<IFoundationProfileRepository>(
+          REPOSITORY_TYPES.FoundationProfileRepository,
+        );
+
+        return new UpdateFoundationProfileUseCase(foundationProfileRepository);
       })
       .inSingletonScope();
   },
