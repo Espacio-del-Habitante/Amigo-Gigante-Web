@@ -23,7 +23,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import LogoSection from './LogoSection';
-import { getProfileValidationSchema } from './ProfileValidation';
+import { getProfileValidationSchema, type TranslationFunction } from './ProfileValidation';
 import type { FoundationProfile } from '@/domain/models/FoundationProfile';
 import { GetFoundationProfileUseCase } from '@/domain/usecases/foundation/GetFoundationProfileUseCase';
 import { UpdateFoundationProfileUseCase } from '@/domain/usecases/foundation/UpdateFoundationProfileUseCase';
@@ -129,7 +129,7 @@ const ProfileForm = () => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: getProfileValidationSchema(t),
+    validationSchema: getProfileValidationSchema(t as unknown as TranslationFunction),
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       setSubmitError(null);
