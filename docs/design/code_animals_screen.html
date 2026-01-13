@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Animal Management - Amigo Gigante</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec6d",
+                        "background-light": "#f0f9ff", // Adjusted to slight sky blue tint per user request
+                        "background-dark": "#102218",
+                        "azul-cielo": "#e0f2fe", // Light sky blue
+                        "azul-text": "#0369a1", // Darker blue for text
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "0.75rem", 
+                        "xl": "1rem", 
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 overflow-x-hidden transition-colors duration-200">
+<div class="flex h-screen w-full overflow-hidden">
+<!-- SideNavBar -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hidden lg:flex flex-col z-20">
+<div class="h-full flex flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Brand -->
+<div class="flex items-center gap-3 px-2">
+<div class="bg-gradient-to-br from-primary to-emerald-600 rounded-full h-10 w-10 flex items-center justify-center shadow-lg shadow-primary/20" data-alt="Logo abstract shape">
+<span class="material-symbols-outlined text-white">pets</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Amigo Gigante</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Admin Panel</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-azul-cielo dark:bg-primary/20 text-azul-text dark:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined icon-fill">pets</span>
+<p class="text-sm font-bold">Animals</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">favorite</span>
+<p class="text-sm font-medium">Adoptions</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">savings</span>
+<p class="text-sm font-medium">Donations</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">diversity_3</span>
+<p class="text-sm font-medium">Volunteers</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">settings</span>
+<p class="text-sm font-medium">Settings</p>
+</a>
+<div class="flex items-center gap-3 px-3 py-4 mt-2 border-t border-slate-100 dark:border-slate-800">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-9 w-9 ring-2 ring-primary/30" data-alt="Profile picture of admin user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB4oGzjtvIOTlJXMr1pbBkRFiAEO5RpEM3fSJb-CDKASdDKQcDBk1FQYH9tIpMMbd0Z1sD2ZauaqS7_nYqNmC1N4xhCwkS8WGNKR5N_BwCGxklFMqe6Mw6_CG4CTgpKD4zpUZjYXtXfmH4nnpOuHxXaKc7V80NyRVAs_GKm3-h1Y01XZU4vsnp-vZkwwiW_7qZTKA-n0VN15BIel5adguEyaKRzJ9uAJHLJn30Uwczb71te8LGKuR2dyU8h0fQMJdcILONNlGVwWA");'></div>
+<div class="flex flex-col">
+<p class="text-slate-900 dark:text-white text-sm font-bold">Sofia Martinez</p>
+<p class="text-slate-500 text-xs">Foundation Admin</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top Mobile Bar -->
+<div class="lg:hidden flex items-center justify-between p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-2">
+<div class="bg-primary rounded-full h-8 w-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-lg">pets</span>
+</div>
+<span class="font-bold text-slate-900 dark:text-white">Amigo Gigante</span>
+</div>
+<button class="text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 md:p-8">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Page Heading -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Animal Management</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base">Manage adoption profiles, edit details, and update statuses.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary hover:bg-emerald-400 active:bg-emerald-500 text-slate-900 px-5 py-3 rounded-lg font-bold shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5">
+<span class="material-symbols-outlined">add</span>
+<span>Add New Animal</span>
+</button>
+</div>
+<!-- Search and Filters Toolbar -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 flex flex-col xl:flex-row xl:items-center gap-4">
+<!-- Search -->
+<div class="flex-1 relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg leading-5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent sm:text-sm transition-shadow" placeholder="Search by name, ID, or breed..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap items-center gap-3">
+<div class="hidden md:block h-6 w-px bg-slate-200 dark:bg-slate-700"></div>
+<!-- Status Filter -->
+<div class="relative">
+<button class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-azul-cielo/50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 transition-colors">
+<span>Status: All</span>
+<span class="material-symbols-outlined text-lg text-slate-400">arrow_drop_down</span>
+</button>
+</div>
+<!-- Species Filter -->
+<div class="relative">
+<button class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-azul-cielo/50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 transition-colors">
+<span>Species: All</span>
+<span class="material-symbols-outlined text-lg text-slate-400">arrow_drop_down</span>
+</button>
+</div>
+<!-- Sort -->
+<div class="relative">
+<button class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-azul-cielo/50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 transition-colors">
+<span class="material-symbols-outlined text-lg">sort</span>
+<span>Newest First</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">Profile</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">Name &amp; ID</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">Species</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">Admission Date</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">Status</th>
+<th class="px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="bg-white dark:bg-slate-900 divide-y divide-slate-200 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-azul-cielo/30 dark:hover:bg-slate-800 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="h-12 w-12 rounded-lg bg-slate-200 bg-cover bg-center shadow-sm" data-alt="Golden Retriever dog smiling" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHajL7qUu2h4Rc0h0YIty4I2pLAHzuH_2dQZ8NjwOe5b3EnVkDl3no-Ds5PPs84UbAPED1mQfwAgfSPnc1EqkF6GdArJAjOMAjxVZgoAAY8hcy0x_-6wubX0kHjnhbeZCQ0C2bEPBaalOhXMQP5BugXt4KngIHbshCHaNXuG5Uz3g1TQIviiaSDZjPkbw1D_kY7FA0ApEN2dcYXJLzsB38wfcI8VMfKihUWorCDkT8NaS8UmLW45isnuLqicqIH8UWas8F-is7yQ');"></div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Buddy</span>
+<span class="text-xs text-slate-500">#AG-2309</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Dog (Golden Ret.)</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Oct 12, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
+                                                Available
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-azul-cielo/30 dark:hover:bg-slate-800 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="h-12 w-12 rounded-lg bg-slate-200 bg-cover bg-center shadow-sm" data-alt="Siamese cat looking at camera" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2xglRv3LsFLeRF4f0iQ4u_20Kwmq5GrDstzb9SfxPoLlB-XlyPwo_M3eC4CORBwhxgsNu2ZOlvA7x4wVKGB2exhfbWRWASkYtkaa1oTu4IeBSFncIr2_LErkXuFkwHpzK9eg_i1xdYu1jIQLx5hhLATmEWMoWMfmFNzIDo9Hae8LQdiq23oZFwRd-p9fgyntgROo03hIf8FH_xvT48xbktlCYAEKjGbVIo9DwfdSADELFYEBeKSs3Q2VD53ok1QoIrRYMO7hjJg');"></div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Luna</span>
+<span class="text-xs text-slate-500">#AG-2411</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Cat (Siamese)</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Oct 14, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+                                                Pending
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-azul-cielo/30 dark:hover:bg-slate-800 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="h-12 w-12 rounded-lg bg-slate-200 bg-cover bg-center shadow-sm" data-alt="Brown beagle puppy outdoors" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBtE-fB1NIsZau3TXLrnXIWYBFtbk6iK6a4mX20HO3VXB8_FOZR9pw9pmjp8QnjBO2QCpkqSPlkj5tLUvNDcwJHcHvrtmOwdj2l85IN-zgvGYWRUbLqg3IRlSy17mdOHi_-bhq9r215i6DVEwtUb3iemyqmu_6R-tUp2ow6aUG16c57IUjVkQ7JCVTbN0kEjaw8_DfocXMyG14jq9ehi7k4c-l3kr6TEpE_8xxQz7Zy8D4i0ACdVTi6qht8cxJzQ1NLy99fzISolw');"></div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Max</span>
+<span class="text-xs text-slate-500">#AG-2055</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Dog (Beagle)</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Sep 05, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
+                                                Adopted
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-azul-cielo/30 dark:hover:bg-slate-800 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="h-12 w-12 rounded-lg bg-slate-200 bg-cover bg-center shadow-sm" data-alt="Parrot with colorful feathers" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCw_KwZkwSM9ummyf68j696PP2ilHoMyuhz1IRjnEJ8T3B0RwWtdRlIdRa91o6uQ5mzFJVIcDpJ94gwyFNpqcLwKHnUanHnDy2lELWM7qVD5AzP3nmzmhP1BvEZSaZrIvs8jOZ_CC_hHo8bmby_emHrnZtZCVNfTbRyQdtQh6ei23AGsNuzaW1cosbcxRYFDPF9vDkpAPzzri5tVAeZBq8YAE35XmFqEF6p2SEGIumtHE-ogdkU19ylNn7WvSd8TI0JNIL31ZLUqQ');"></div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Coco</span>
+<span class="text-xs text-slate-500">#AG-2501</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Bird (Parrot)</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Oct 15, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
+                                                Available
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-azul-cielo/30 dark:hover:bg-slate-800 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="h-12 w-12 rounded-lg bg-slate-200 bg-cover bg-center shadow-sm" data-alt="Black cat with yellow eyes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAzGWFziuWqfZNOMdUpsbVheYf14xXS4oRmukm0xNALO9qaToEIOK1G-ZYXM1MfVFQp8DP9OTiTk_DWBRAMi3OxkUlOT3Ju6sY9rKAL2oXFA4GVLCc0qVYUttOJ0CyDk8Rk1PKK8hW6ic6x3mPR8OWPguXpWr60CIocdR0EfP1N-U2_NqED9_THBoIPXrv7elzODdxBLlDgYYxzXddiuHykeLNRAjQsY2rWpODpZgImY9i7j3_GZCjNCrIXtL6W_YYKuz0_cRFUQg');"></div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Shadow</span>
+<span class="text-xs text-slate-500">#AG-1902</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Cat (Bombay)</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-slate-700 dark:text-slate-300">Aug 20, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
+                                                Available
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-white dark:bg-slate-900 px-4 py-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between sm:px-6">
+<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-slate-700 dark:text-slate-400">
+                                        Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">42</span> results
+                                    </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+<a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700" href="#">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</a>
+<a aria-current="page" class="z-10 bg-azul-cielo/50 dark:bg-primary/20 border-primary text-primary relative inline-flex items-center px-4 py-2 border text-sm font-bold" href="#">
+                                            1
+                                        </a>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">
+                                            2
+                                        </a>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">
+                                            3
+                                        </a>
+<span class="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-700 dark:text-slate-400">
+                                            ...
+                                        </span>
+<a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700" href="#">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
