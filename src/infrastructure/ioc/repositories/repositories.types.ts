@@ -3,6 +3,7 @@ const REPOSITORY_TYPES = {
   AnimalRepository: Symbol.for("AnimalRepository"),
   AuthRepository: Symbol.for("AuthRepository"),
   FoundationRepository: Symbol.for("FoundationRepository"),
+  FoundationProfileRepository: Symbol.for("FoundationProfileRepository"),
 };
 
 export { REPOSITORY_TYPES };

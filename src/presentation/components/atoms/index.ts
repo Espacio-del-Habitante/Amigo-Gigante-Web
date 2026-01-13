@@ -1,5 +1,6 @@
 export * from "./Button";
 export * from "./Chip";
+export * from "./ConfirmDialog";
 export * from "./Copyright";
 export * from "./IconButton";
 export * from "./Logo";

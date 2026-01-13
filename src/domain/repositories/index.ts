@@ -15,3 +15,4 @@ export type {
   CreateFoundationMemberParams,
   FoundationMemberRole,
 } from "./IFoundationRepository";
+export type { IFoundationProfileRepository } from "./IFoundationProfileRepository";

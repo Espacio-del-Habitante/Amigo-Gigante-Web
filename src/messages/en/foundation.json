@@ -9,6 +9,11 @@
     "notifications": "Notifications",
     "menu": "Menu"
   },
+  "errors": {
+    "unauthorized": "You don't have permission to edit this foundation.",
+    "notFound": "We couldn't find the foundation information.",
+    "connection": "We couldn't connect to the server. Check your connection and try again.",
+    "generic": "An unexpected error occurred. Please try again."
+  },
   "copyright": "© {year} Amigo Gigante"
 }
-
