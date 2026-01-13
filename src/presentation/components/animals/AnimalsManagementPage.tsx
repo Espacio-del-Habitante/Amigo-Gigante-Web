@@ -3,7 +3,7 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { Box, Button, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import {
   animalsManagementMock,
@@ -71,6 +71,26 @@ export function AnimalsManagementPage() {
 
   const pageSize = 5;
 
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    setPage(1);
+  };
+
+  const handleStatusChange = (value: AnimalsStatusFilter) => {
+    setStatus(value);
+    setPage(1);
+  };
+
+  const handleSpeciesChange = (value: AnimalsSpeciesFilter) => {
+    setSpecies(value);
+    setPage(1);
+  };
+
+  const handleSortChange = (value: AnimalsSortOption) => {
+    setSort(value);
+    setPage(1);
+  };
+
   const filteredAnimals = useMemo(() => {
     const query = normalize(searchValue);
 
@@ -90,20 +110,14 @@ export function AnimalsManagementPage() {
     return sortAnimals(filtered, sort);
   }, [searchValue, sort, species, status]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [searchValue, sort, species, status]);
-
   const pageCount = useMemo(() => Math.max(1, Math.ceil(filteredAnimals.length / pageSize)), [filteredAnimals.length]);
 
-  useEffect(() => {
-    setPage((current) => Math.min(current, pageCount));
-  }, [pageCount]);
+  const effectivePage = Math.min(page, pageCount);
 
   const pagedAnimals = useMemo(() => {
-    const start = (page - 1) * pageSize;
+    const start = (effectivePage - 1) * pageSize;
     return filteredAnimals.slice(start, start + pageSize);
-  }, [filteredAnimals, page]);
+  }, [effectivePage, filteredAnimals, pageSize]);
 
   return (
     <Box className="flex w-full flex-col gap-6">
@@ -128,18 +142,18 @@ export function AnimalsManagementPage() {
 
       <AnimalsSearchBar
         searchValue={searchValue}
-        onSearchChange={setSearchValue}
+        onSearchChange={handleSearchChange}
         status={status}
-        onStatusChange={setStatus}
+        onStatusChange={handleStatusChange}
         species={species}
-        onSpeciesChange={setSpecies}
+        onSpeciesChange={handleSpeciesChange}
         sort={sort}
-        onSortChange={setSort}
+        onSortChange={handleSortChange}
       />
 
       <AnimalsTable animals={pagedAnimals} />
 
-      <AnimalsPagination total={filteredAnimals.length} page={page} pageSize={pageSize} onPageChange={setPage} />
+      <AnimalsPagination total={filteredAnimals.length} page={effectivePage} pageSize={pageSize} onPageChange={setPage} />
     </Box>
   );
 }
