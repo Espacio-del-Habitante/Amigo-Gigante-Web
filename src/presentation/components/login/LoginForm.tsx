@@ -106,8 +106,11 @@ export function LoginForm() {
   };
 
   const resolveErrorMessage = (error: unknown) => {
-    if (error instanceof Error && errorMessageKeys.has(error.message)) {
-      return t(error.message as LoginErrorMessageKey);
+    if (error instanceof Error) {
+      const key = error.message as LoginErrorMessageKey;
+      if (errorMessageKeys.has(key)) {
+        return t(key);
+      }
     }
 
     return t("form.errors.generic");
