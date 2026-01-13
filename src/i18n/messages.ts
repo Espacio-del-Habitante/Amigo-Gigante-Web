@@ -1,11 +1,23 @@
 import common from "../messages/en/common.json";
+import dashboard from "../messages/en/dashboard.json";
+import foundation from "../messages/en/foundation.json";
 import home from "../messages/en/home.json";
+import login from "../messages/en/login.json";
+import navigation from "../messages/en/navigation.json";
+import profile from "../messages/en/profile.json";
 import register from "../messages/en/register.json";
+import animals from "../messages/en/animals.json";
 
 export const messages = {
   common,
+  dashboard,
+  foundation,
   home,
+  login,
+  navigation,
+  profile,
   register,
+  animals,
 };
 
 export type AppMessages = typeof messages;

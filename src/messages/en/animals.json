@@ -1,0 +1,52 @@
+{
+  "title": "Animal Management",
+  "subtitle": "Manage adoption profiles, edit details, and update statuses.",
+  "addButton": "+ Add New Animal",
+  "search": {
+    "placeholder": "Search by name, ID, or breed...",
+    "noResults": "No animals found"
+  },
+  "filters": {
+    "status": {
+      "label": "Status",
+      "all": "All",
+      "available": "Available",
+      "adopted": "Adopted",
+      "pending": "Pending",
+      "in_treatment": "In Treatment",
+      "inactive": "Inactive"
+    },
+    "species": {
+      "label": "Species",
+      "all": "All",
+      "dog": "Dog",
+      "cat": "Cat",
+      "bird": "Bird",
+      "other": "Other"
+    },
+    "sort": {
+      "label": "Sort",
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "nameAsc": "Name A-Z",
+      "nameDesc": "Name Z-A"
+    }
+  },
+  "table": {
+    "columns": {
+      "profile": "Profile",
+      "nameId": "Name & ID",
+      "species": "Species",
+      "admissionDate": "Admission Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+  "pagination": {
+    "showing": "Showing {from} to {to} of {total} results"
+  }
+}
