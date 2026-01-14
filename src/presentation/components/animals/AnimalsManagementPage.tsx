@@ -3,7 +3,7 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { AnimalManagement } from "@/domain/models/AnimalManagement";
 import type { GetAnimalsFilters } from "@/domain/repositories/IAnimalRepository";
@@ -19,16 +19,17 @@ import {
 } from "@/presentation/components/animals/AnimalsSearchBar";
 import { AnimalsTable } from "@/presentation/components/animals/AnimalsTable";
 
+const animalsErrorKeyList = ["errors.unauthorized", "errors.connection", "errors.generic"] as const;
+type AnimalsErrorKey = (typeof animalsErrorKeyList)[number];
+
 export function AnimalsManagementPage() {
   const t = useTranslations("animals");
   const getAnimalsUseCase = useMemo(
     () => appContainer.get<GetAnimalsUseCase>(USE_CASE_TYPES.GetAnimalsUseCase),
     [],
   );
-
-  const animalsErrorKeyList = ["errors.unauthorized", "errors.connection", "errors.generic"] as const;
-  type AnimalsErrorKey = (typeof animalsErrorKeyList)[number];
   const animalsErrorKeys = useMemo(() => new Set<AnimalsErrorKey>(animalsErrorKeyList), []);
+  const requestCounterRef = useRef(0);
 
   const [searchValue, setSearchValue] = useState("");
   const [status, setStatus] = useState<AnimalsStatusFilter>("all");
@@ -53,74 +54,87 @@ export function AnimalsManagementPage() {
     return "errors.generic";
   };
 
-  const buildFilters = (): GetAnimalsFilters => {
-    const filters: GetAnimalsFilters = { sort };
+  const buildFilters = useCallback(
+    (input: { searchValue: string; status: AnimalsStatusFilter; species: AnimalsSpeciesFilter; sort: AnimalsSortOption }): GetAnimalsFilters => {
+      const filters: GetAnimalsFilters = { sort: input.sort };
 
-    if (status !== "all") {
-      filters.status = status;
-    }
+      if (input.status !== "all") {
+        filters.status = input.status;
+      }
 
-    if (species !== "all") {
-      filters.species = species;
-    }
+      if (input.species !== "all") {
+        filters.species = input.species;
+      }
 
-    const search = searchValue.trim();
-    if (search.length > 0) {
-      filters.search = search;
-    }
+      const search = input.searchValue.trim();
+      if (search.length > 0) {
+        filters.search = search;
+      }
 
-    return filters;
-  };
+      return filters;
+    },
+    [],
+  );
 
-  const loadAnimals = async (nextPage: number) => {
-    setIsLoading(true);
-    setErrorKey(null);
+  const effectiveFilters = useMemo(
+    () => buildFilters({ searchValue, status, species, sort }),
+    [buildFilters, searchValue, species, sort, status],
+  );
 
-    try {
-      const result = await getAnimalsUseCase.execute({
-        filters: buildFilters(),
-        pagination: { page: nextPage, pageSize },
-      });
+  const loadAnimals = useCallback(
+    async (input: { page: number; filters: GetAnimalsFilters }) => {
+      const requestId = ++requestCounterRef.current;
+      setIsLoading(true);
+      setErrorKey(null);
 
-      setAnimals(result.animals);
-      setTotal(result.total);
-    } catch (error) {
-      setAnimals([]);
-      setTotal(0);
-      setErrorKey(resolveErrorMessage(error));
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      try {
+        const result = await getAnimalsUseCase.execute({
+          filters: input.filters,
+          pagination: { page: input.page, pageSize },
+        });
+
+        if (requestId !== requestCounterRef.current) return;
+
+        setAnimals(result.animals);
+        setTotal(result.total);
+      } catch (error) {
+        if (requestId !== requestCounterRef.current) return;
+
+        setAnimals([]);
+        setTotal(0);
+        setErrorKey(resolveErrorMessage(error));
+      } finally {
+        if (requestId === requestCounterRef.current) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [getAnimalsUseCase, pageSize, resolveErrorMessage],
+  );
 
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
     setPage(1);
-    void loadAnimals(1);
   };
 
   const handleStatusChange = (value: AnimalsStatusFilter) => {
     setStatus(value);
     setPage(1);
-    void loadAnimals(1);
   };
 
   const handleSpeciesChange = (value: AnimalsSpeciesFilter) => {
     setSpecies(value);
     setPage(1);
-    void loadAnimals(1);
   };
 
   const handleSortChange = (value: AnimalsSortOption) => {
     setSort(value);
     setPage(1);
-    void loadAnimals(1);
   };
 
   useEffect(() => {
-    void loadAnimals(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    void loadAnimals({ page, filters: effectiveFilters });
+  }, [effectiveFilters, loadAnimals, page]);
 
   return (
     <Box className="flex w-full flex-col gap-6">
@@ -172,7 +186,6 @@ export function AnimalsManagementPage() {
         pageSize={pageSize}
         onPageChange={(nextPage) => {
           setPage(nextPage);
-          void loadAnimals(nextPage);
         }}
       />
     </Box>
