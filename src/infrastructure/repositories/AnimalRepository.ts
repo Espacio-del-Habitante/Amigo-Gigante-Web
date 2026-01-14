@@ -100,25 +100,32 @@ export class AnimalRepository implements IAnimalRepository {
   }
 
   async getAdoptDetail(id: number | string): Promise<AdoptDetail> {
-    const { data, error } = await supabaseClient
-      .from("animals")
-      .select("id, name, species, breed, sex, age_months, size, status, description, cover_image_url")
-      .eq("id", id)
-      .eq("is_published", true)
-      .maybeSingle();
+    const primaryResult = await this.fetchAdoptDetailRow(id);
+    if (primaryResult.error) {
+      throw new Error(this.translateAnimalsError(primaryResult.error));
+    }
 
-    if (error) {
-      throw new Error(this.translateAnimalsError(error));
+    let data = primaryResult.data ?? null;
+    if (!data) {
+      const fallbackId = this.getAlternateAnimalId(id);
+      if (fallbackId !== null) {
+        const fallbackResult = await this.fetchAdoptDetailRow(fallbackId);
+        if (fallbackResult.error) {
+          throw new Error(this.translateAnimalsError(fallbackResult.error));
+        }
+        data = fallbackResult.data ?? null;
+      }
     }
 
     if (!data) {
       throw new Error("errors.notFound");
     }
 
+    const resolvedId = data.id;
     const { data: photosData, error: photosError } = await supabaseClient
       .from("animal_photos")
       .select("url, sort_order")
-      .eq("animal_id", id)
+      .eq("animal_id", resolvedId)
       .order("sort_order", { ascending: true });
 
     if (photosError) {
@@ -150,12 +157,14 @@ export class AnimalRepository implements IAnimalRepository {
   async getRelatedAnimals(animalId: number | string, limit: number): Promise<AdoptCatalogItem[]> {
     if (!Number.isFinite(limit) || limit <= 0) return [];
 
+    const normalizedId = typeof animalId === "string" ? animalId.trim() : animalId;
+
     const { data, error } = await supabaseClient
       .from("animals")
       .select("id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at")
       .eq("status", "available")
       .eq("is_published", true)
-      .neq("id", animalId)
+      .neq("id", normalizedId)
       .limit(limit);
 
     if (error) {
@@ -408,6 +417,29 @@ export class AnimalRepository implements IAnimalRepository {
     if (!Number.isFinite(createdMs)) return isPuppy;
     const cutoffMs = Date.now() - 90 * 24 * 60 * 60 * 1000;
     return createdMs <= cutoffMs || isPuppy;
+  }
+
+  private async fetchAdoptDetailRow(id: number | string) {
+    return supabaseClient
+      .from("animals")
+      .select("id, name, species, breed, sex, age_months, size, status, description, cover_image_url")
+      .eq("id", id)
+      .eq("is_published", true)
+      .maybeSingle();
+  }
+
+  private getAlternateAnimalId(id: number | string): number | string | null {
+    if (typeof id === "number") {
+      return String(id);
+    }
+
+    const trimmed = id.trim();
+    if (!/^\d+$/.test(trimmed)) return null;
+
+    const parsed = Number(trimmed);
+    if (!Number.isSafeInteger(parsed)) return null;
+
+    return parsed;
   }
 
   private normalizeAdoptSpecies(value: string | null): AdoptCatalogItem["species"] {

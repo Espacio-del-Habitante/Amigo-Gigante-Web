@@ -98,7 +98,11 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
     }
 
     const numericId = Number(normalizedId);
-    const idValue = Number.isFinite(numericId) ? numericId : normalizedId;
+    const idValue =
+      /^\d+$/.test(normalizedId) && Number.isSafeInteger(numericId)
+        ? numericId
+        : normalizedId;
+
     void loadDetail(idValue);
   }, [animalId, loadDetail]);
 
