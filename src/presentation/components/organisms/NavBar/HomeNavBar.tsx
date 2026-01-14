@@ -1,10 +1,30 @@
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import { alpha, AppBar, Box, Container, Divider, Drawer, IconButton as MuiIconButton, List, ListItem, ListItemButton, Stack, Toolbar, Typography, useTheme } from "@mui/material";
+import {
+  alpha,
+  AppBar,
+  Box,
+  Container,
+  Divider,
+  Drawer,
+  IconButton as MuiIconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  Stack,
+  Toolbar,
+  Typography,
+  useTheme,
+  Link,
+} from "@mui/material";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { Button, Logo } from "@/presentation/components/atoms";
-import { LanguageSelector, NavLink, SearchButton } from "@/presentation/components/molecules";
+import {
+  LanguageSelector,
+  NavLink,
+  SearchButton,
+} from "@/presentation/components/molecules";
 
 export function HomeNavBar() {
   const theme = useTheme();
@@ -17,7 +37,7 @@ export function HomeNavBar() {
       { key: "foundations", label: t("navigation.foundations") },
       { key: "store", label: t("navigation.store") },
     ],
-    [t],
+    [t]
   );
 
   return (
@@ -35,14 +55,22 @@ export function HomeNavBar() {
       <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
         <Toolbar disableGutters sx={{ gap: 2, py: { xs: 1, md: 1.5 } }}>
           <Logo size={40} showWordmark />
-          <Box sx={{ flex: 1, display: { xs: "flex", md: "none" }, justifyContent: "flex-end" }}>
+          <Box
+            sx={{
+              flex: 1,
+              display: { xs: "flex", md: "none" },
+              justifyContent: "flex-end",
+            }}
+          >
             <MuiIconButton
               aria-label={t("navigation.openMenu")}
               onClick={() => setOpen(true)}
               sx={{
                 borderRadius: 2,
                 backgroundColor: alpha(theme.palette.primary.main, 0.08),
-                "&:hover": { backgroundColor: alpha(theme.palette.primary.main, 0.16) },
+                "&:hover": {
+                  backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                },
               }}
             >
               <MenuRoundedIcon />
@@ -78,9 +106,17 @@ export function HomeNavBar() {
           >
             <SearchButton tone="neutral" variant="ghost" />
             <LanguageSelector />
-            <Button tone="primary" variant="solid" rounded="pill" sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}>
-              {t("buttons.login")}
-            </Button>
+
+            <Link href="/login">
+              <Button
+                tone="primary"
+                variant="solid"
+                rounded="pill"
+                sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}
+              >
+                {t("buttons.login")}
+              </Button>
+            </Link>
           </Stack>
         </Toolbar>
       </Container>
@@ -94,9 +130,17 @@ export function HomeNavBar() {
           },
         }}
       >
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 0.5, pb: 1 }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ px: 0.5, pb: 1 }}
+        >
           <Logo size={40} showWordmark />
-          <MuiIconButton aria-label={t("navigation.closeMenu")} onClick={() => setOpen(false)}>
+          <MuiIconButton
+            aria-label={t("navigation.closeMenu")}
+            onClick={() => setOpen(false)}
+          >
             <MenuRoundedIcon />
           </MuiIconButton>
         </Stack>
