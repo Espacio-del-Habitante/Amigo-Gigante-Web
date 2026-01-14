@@ -43,16 +43,19 @@ export function AnimalsManagementPage() {
 
   const pageSize = 5;
 
-  const resolveErrorMessage = (error: unknown): AnimalsErrorKey => {
-    if (error instanceof Error) {
-      const candidate = error.message as AnimalsErrorKey;
-      if (animalsErrorKeys.has(candidate)) {
-        return candidate;
+  const resolveErrorMessage = useCallback(
+    (error: unknown): AnimalsErrorKey => {
+      if (error instanceof Error) {
+        const candidate = error.message as AnimalsErrorKey;
+        if (animalsErrorKeys.has(candidate)) {
+          return candidate;
+        }
       }
-    }
 
-    return "errors.generic";
-  };
+      return "errors.generic";
+    },
+    [animalsErrorKeys],
+  );
 
   const buildFilters = useCallback(
     (input: { searchValue: string; status: AnimalsStatusFilter; species: AnimalsSpeciesFilter; sort: AnimalsSortOption }): GetAnimalsFilters => {
