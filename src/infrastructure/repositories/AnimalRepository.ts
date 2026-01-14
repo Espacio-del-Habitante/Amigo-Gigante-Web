@@ -7,6 +7,77 @@ export class AnimalRepository implements IAnimalRepository {
     return animalsMock;
   }
 
+  async createAnimal({
+    foundationId,
+    name,
+    species,
+    breed,
+    sex,
+    ageMonths,
+    size,
+    status,
+    description,
+    coverImageUrl,
+    isPublished,
+  }: Parameters<IAnimalRepository["createAnimal"]>[0]) {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .insert({
+        foundation_id: foundationId,
+        name,
+        species,
+        breed: breed ?? null,
+        sex,
+        age_months: ageMonths,
+        size,
+        status,
+        description,
+        cover_image_url: coverImageUrl ?? null,
+        is_published: isPublished,
+      })
+      .select("id, name, species, breed, sex, age_months, size, status, cover_image_url, created_at")
+      .single();
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.generic");
+    }
+
+    return {
+      id: data.id,
+      name: data.name ?? "",
+      species: data.species,
+      breed: data.breed ?? "",
+      sex: data.sex ?? "unknown",
+      ageMonths: data.age_months ?? null,
+      size: data.size ?? "unknown",
+      status: data.status,
+      coverImageUrl: data.cover_image_url ?? null,
+      createdAt: data.created_at,
+    };
+  }
+
+  async createAnimalPhotos(params: Parameters<IAnimalRepository["createAnimalPhotos"]>[0]) {
+    if (params.length === 0) return;
+
+    const { error } = await supabaseClient
+      .from("animal_photos")
+      .insert(
+        params.map((photo) => ({
+          animal_id: photo.animalId,
+          url: photo.url,
+          sort_order: photo.sortOrder,
+        })),
+      );
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+  }
+
   async getAnimals({ foundationId, filters, pagination }: Parameters<IAnimalRepository["getAnimals"]>[0]) {
     const pageSize = pagination.pageSize;
     const from = Math.max(0, (pagination.page - 1) * pageSize);

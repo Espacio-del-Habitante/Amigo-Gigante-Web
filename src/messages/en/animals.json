@@ -56,5 +56,143 @@
     "generic": "Something went wrong while loading animals. Please try again.",
     "connection": "We couldn't connect to the server. Please check your connection and try again.",
     "unauthorized": "You don't have permission to view these animals."
+  },
+  "add": {
+    "breadcrumb": {
+      "ariaLabel": "Breadcrumb",
+      "dashboard": "Dashboard",
+      "myAnimals": "My Animals",
+      "addNew": "Add New"
+    },
+    "header": {
+      "title": "Add a New Amigo",
+      "subtitle": "Fill in the details below to add a new animal to the adoption catalog."
+    },
+    "sections": {
+      "basics": { "title": "The Basics" },
+      "media": {
+        "title": "Media Gallery",
+        "subtitle": "Good photos increase adoption chances! Try to upload at least 3."
+      },
+      "story": { "title": "Their Story" }
+    },
+    "fields": {
+      "name": {
+        "label": "Animal Name",
+        "placeholder": "e.g. Buddy"
+      },
+      "breed": {
+        "label": "Breed",
+        "placeholder": "e.g. Mixed",
+        "hint": "Mixed if unknown"
+      },
+      "species": {
+        "label": "Species",
+        "placeholder": "Select species",
+        "options": {
+          "dog": "Dog",
+          "cat": "Cat",
+          "bird": "Bird",
+          "other": "Other"
+        }
+      },
+      "age": {
+        "label": "Age",
+        "placeholder": "0"
+      },
+      "ageUnit": {
+        "label": "Unit",
+        "options": {
+          "years": "Years",
+          "months": "Months"
+        }
+      },
+      "gender": {
+        "label": "Gender",
+        "placeholder": "Select gender",
+        "options": {
+          "male": "Male",
+          "female": "Female"
+        }
+      },
+      "size": {
+        "label": "Size",
+        "placeholder": "Select size",
+        "options": {
+          "small": "Small (0-10kg)",
+          "medium": "Medium (11-25kg)",
+          "large": "Large (26-40kg)",
+          "giant": "Giant (41kg+)"
+        }
+      },
+      "currentLocation": {
+        "label": "Current Location",
+        "placeholder": "City, shelter name"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Tell us about their personality, story, and what kind of home they need...",
+        "counter": "{count}/1000 characters"
+      },
+      "status": {
+        "label": "Status",
+        "placeholder": "Select status",
+        "options": {
+          "available": "Available for Adoption",
+          "inactive": "Sponsorship Only",
+          "inTreatment": "Foster Care Needed",
+          "pending": "Adoption Pending"
+        }
+      },
+      "healthStatus": {
+        "label": "Health Status",
+        "vaccinated": "Vaccinated",
+        "spayedNeutered": "Spayed/Neutered",
+        "wormed": "Wormed"
+      }
+    },
+    "media": {
+      "upload": {
+        "ariaLabel": "Upload photos",
+        "title": "Click to upload or drag and drop",
+        "hint": "SVG, PNG, JPG or GIF (MAX. 5MB)",
+        "limit": "MAX. 5MB per image"
+      },
+      "preview": {
+        "alt": "Uploaded photo {index}",
+        "remove": "Remove photo {index}"
+      },
+      "errors": {
+        "tooMany": "You can upload up to 10 images.",
+        "tooLarge": "One of the images exceeds 5MB.",
+        "invalidType": "Invalid image format. Allowed: SVG, PNG, JPG, GIF.",
+        "readFailed": "We couldn't read one of the images. Please try again."
+      }
+    },
+    "actions": {
+      "saveDraft": "Save Draft",
+      "publish": "Publish Profile"
+    },
+    "validation": {
+      "nameRequired": "Animal Name is required",
+      "speciesRequired": "Species is required",
+      "ageRequired": "Age is required",
+      "ageInteger": "Age must be a whole number",
+      "ageMin": "Age must be 0 or greater",
+      "ageUnitInvalid": "Age unit is invalid",
+      "genderRequired": "Gender is required",
+      "descriptionRequired": "Description is required",
+      "descriptionMin": "Description must be at least 100 characters",
+      "statusRequired": "Status is required",
+      "photosMin": "You must upload at least 1 photo to publish",
+      "photosMax": "You can't upload more than 10 photos"
+    },
+    "success": {
+      "draft": "Animal saved as draft.",
+      "published": "Animal published successfully."
+    },
+    "errors": {
+      "generic": "Something went wrong while creating the animal. Please try again."
+    }
   }
 }
