@@ -1,0 +1,78 @@
+{
+  "hero": {
+    "title": "Adopta un amigo",
+    "subtitle": "Explora animales disponibles y filtra según tus preferencias."
+  },
+  "filters": {
+    "title": "Filtros",
+    "urgent": "Necesidad urgente",
+    "species": {
+      "label": "Tipo de animal",
+      "all": "Todos",
+      "dog": "Perros",
+      "cat": "Gatos",
+      "other": "Otros"
+    },
+    "age": {
+      "label": "Edad",
+      "all": "Todas",
+      "puppy": "Cachorro",
+      "young": "Joven",
+      "adult": "Adulto",
+      "senior": "Senior"
+    },
+    "size": {
+      "label": "Tamaño",
+      "all": "Todos",
+      "small": "Pequeño",
+      "medium": "Mediano",
+      "large": "Grande"
+    }
+  },
+  "search": {
+    "placeholder": "Buscar por nombre, raza..."
+  },
+  "sort": {
+    "label": "Ordenar",
+    "newest": "Llegados recientemente",
+    "oldest": "Llegados hace más tiempo",
+    "urgent": "Necesidad urgente"
+  },
+  "badges": {
+    "urgent": "URGENTE"
+  },
+  "sex": {
+    "male": "Macho",
+    "female": "Hembra",
+    "unknown": "Sin dato"
+  },
+  "labels": {
+    "ageUnknown": "Edad desconocida",
+    "sizeUnknown": "Tamaño desconocido"
+  },
+  "age": {
+    "months": "{count, plural, one {# mes} other {# meses}}",
+    "years": "{count, plural, one {# año} other {# años}}"
+  },
+  "card": {
+    "meta": "{age} • {size}"
+  },
+  "buttons": {
+    "adopt": "Adoptar",
+    "details": "Detalles"
+  },
+  "pagination": {
+    "showing": "Mostrando {from}-{to} de {total}"
+  },
+  "states": {
+    "loading": "Cargando catálogo",
+    "emptyTitle": "No encontramos resultados",
+    "emptySubtitle": "Prueba ajustando tu búsqueda o filtros."
+  },
+  "errors": {
+    "unauthorized": "No autorizado.",
+    "connection": "No pudimos conectar. Intenta nuevamente.",
+    "generic": "Ocurrió un error. Intenta nuevamente."
+  }
+}
+

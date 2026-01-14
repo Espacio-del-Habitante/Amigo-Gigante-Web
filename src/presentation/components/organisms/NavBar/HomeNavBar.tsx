@@ -17,9 +17,10 @@ import {
   Link,
 } from "@mui/material";
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
 import NextLink from "next/link";
+import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { Button, Logo } from "@/presentation/components/atoms";
 import {
@@ -30,23 +31,25 @@ import {
 
 export function HomeNavBar() {
   const theme = useTheme();
-  const t = useTranslations("common");
+  const locale = useLocale();
   const pathname = usePathname();
+  const t = useTranslations("common");
   const [open, setOpen] = useState(false);
 
-  const isActive = (href: string) => {
-    if (!pathname) return false;
-    return pathname === href || pathname.endsWith(href);
-  };
+  const adoptHref = `/${locale}/adopt`;
+  const foundationsHref = `/${locale}/foundations`;
+  const shopHref = `/${locale}/shop`;
+
+  const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
 
   const navItems = useMemo(
     () => [
-      { key: "adopt", label: t("navigation.adopt"), href: "#" },
+      { key: "adopt", label: t("navigation.adopt"), href: adoptHref, active: isHrefActive(adoptHref) },
       { key: "sponsor", label: t("navigation.sponsor"), href: "#" },
-      { key: "foundations", label: t("navigation.foundations"), href: "/foundations" },
-      { key: "store", label: t("navigation.store"), href: "/shop" },
+      { key: "foundations", label: t("navigation.foundations"), href: foundationsHref, active: isHrefActive(foundationsHref) },
+      { key: "store", label: t("navigation.store"), href: shopHref, active: isHrefActive(shopHref) },
     ],
-    [t]
+    [adoptHref, foundationsHref, shopHref, t, pathname],
   );
 
   return (
@@ -96,7 +99,7 @@ export function HomeNavBar() {
             }}
           >
             {navItems.map((link) => (
-              <NavLink key={link.key} label={link.label} href={link.href} active={isActive(link.href)} />
+              <NavLink key={link.key} label={link.label} href={link.href} active={Boolean(link.active)} />
             ))}
           </Stack>
           <Stack
@@ -116,7 +119,7 @@ export function HomeNavBar() {
             <SearchButton tone="neutral" variant="ghost" />
             <LanguageSelector />
 
-            <Link href="/login">
+            <Link href={`/${locale}/login`}>
               <Button
                 tone="primary"
                 variant="solid"

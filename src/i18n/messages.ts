@@ -7,6 +7,7 @@ import navigation from "../messages/en/navigation.json";
 import profile from "../messages/en/profile.json";
 import register from "../messages/en/register.json";
 import animals from "../messages/en/animals.json";
+import adopt from "../messages/en/adopt.json";
 import shop from "../messages/en/shop.json";
 
 export const messages = {
@@ -19,6 +20,7 @@ export const messages = {
   profile,
   register,
   animals,
+  adopt,
   shop,
 };
 
