@@ -35,16 +35,21 @@ export function HomeNavBar() {
   const pathname = usePathname();
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
+
   const adoptHref = `/${locale}/adopt`;
-  const isAdoptActive = pathname === adoptHref;
+  const foundationsHref = `/${locale}/foundations`;
+  const shopHref = `/${locale}/shop`;
+
+  const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
+
   const navItems = useMemo(
     () => [
-      { key: "adopt", label: t("navigation.adopt"), href: adoptHref, active: isAdoptActive },
+      { key: "adopt", label: t("navigation.adopt"), href: adoptHref, active: isHrefActive(adoptHref) },
       { key: "sponsor", label: t("navigation.sponsor"), href: "#" },
-      { key: "foundations", label: t("navigation.foundations"), href: "#" },
-      { key: "store", label: t("navigation.store"), href: "#" },
+      { key: "foundations", label: t("navigation.foundations"), href: foundationsHref, active: isHrefActive(foundationsHref) },
+      { key: "store", label: t("navigation.store"), href: shopHref, active: isHrefActive(shopHref) },
     ],
-    [adoptHref, isAdoptActive, t],
+    [adoptHref, foundationsHref, shopHref, t, pathname],
   );
 
   return (

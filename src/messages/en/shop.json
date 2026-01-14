@@ -1,0 +1,47 @@
+{
+  "hero": {
+    "title": "Charity Store",
+    "subtitle": "Every purchase is a friendly paw. 100% of the proceeds go directly to foundations to help pets looking for a home."
+  },
+  "search": {
+    "placeholder": "Search beds, toys, leashes...",
+    "allFoundations": "All foundations",
+    "submit": "Search"
+  },
+  "foundation": {
+    "viewAll": "View all",
+    "noLocation": "Location unavailable"
+  },
+  "product": {
+    "buy": "Buy",
+    "noImage": "No image",
+    "noDescription": "No description",
+    "priceUnavailable": "Price unavailable"
+  },
+  "donationCard": {
+    "title": "Donate a Bag",
+    "description": "Don't need products? Buy food directly for the shelter.",
+    "cta": "Donate now"
+  },
+  "cta": {
+    "title": "Do you have a foundation?",
+    "description": "Join our platform and sell your charity products. Reach more hearts willing to help.",
+    "primary": "Register my Foundation",
+    "secondary": "Learn more"
+  },
+  "pagination": {
+    "total": "{count, plural, one {# product} other {# products}}"
+  },
+  "empty": {
+    "title": "No products found",
+    "description": "Try a different search or select another foundation."
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "unauthorized": "You don't have permission to view these products.",
+    "notFound": "We couldn't find the requested products.",
+    "connection": "We couldn't connect to the server. Check your connection and try again.",
+    "generic": "An unexpected error occurred. Please try again."
+  }
+}
+
