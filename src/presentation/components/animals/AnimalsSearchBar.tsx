@@ -52,6 +52,7 @@ export function AnimalsSearchBar({
   return (
     <Box className="flex flex-col gap-3 md:flex-row md:items-center">
       <TextField
+        id="animals-search-input"
         value={searchValue}
         onChange={(event) => onSearchChange(event.target.value)}
         placeholder={t("search.placeholder")}

@@ -9,6 +9,7 @@ import type { IFoundationMembershipRepository } from "@/domain/repositories/IFou
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
+import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
@@ -51,6 +52,18 @@ const useCasesModule = new ContainerModule(
         );
 
         return new GetAnimalsUseCase(animalRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<CreateAnimalUseCase>(USE_CASE_TYPES.CreateAnimalUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new CreateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
       })
       .inSingletonScope();
 
