@@ -3,15 +3,19 @@ import { ContainerModule, ContainerModuleLoadOptions } from "inversify";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
+import type { IEventRepository } from "@/domain/repositories/IEventRepository";
 import type { IFoundationRepository } from "@/domain/repositories/IFoundationRepository";
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
+import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
 import { AuthRepository } from "@/infrastructure/repositories/AuthRepository";
 import { DebugRepository } from "@/infrastructure/repositories/DebugRepository";
+import { EventRepository } from "@/infrastructure/repositories/EventRepository";
 import { FoundationMembershipRepository } from "@/infrastructure/repositories/FoundationMembershipRepository";
 import { FoundationRepository } from "@/infrastructure/repositories/FoundationRepository";
 import { FoundationProfileRepository } from "@/infrastructure/repositories/FoundationProfileRepository";
+import { ProductRepository } from "@/infrastructure/repositories/ProductRepository";
 import { REPOSITORY_TYPES } from "./repositories.types";
 
 const repositoriesModule = new ContainerModule(
@@ -22,6 +26,14 @@ const repositoriesModule = new ContainerModule(
 
     bind<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository)
       .to(AnimalRepository)
+      .inSingletonScope();
+
+    bind<IEventRepository>(REPOSITORY_TYPES.EventRepository)
+      .to(EventRepository)
+      .inSingletonScope();
+
+    bind<IProductRepository>(REPOSITORY_TYPES.ProductRepository)
+      .to(ProductRepository)
       .inSingletonScope();
 
     bind<IAuthRepository>(REPOSITORY_TYPES.AuthRepository)

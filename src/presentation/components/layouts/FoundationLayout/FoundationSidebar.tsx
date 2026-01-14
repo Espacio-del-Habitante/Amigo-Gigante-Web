@@ -36,7 +36,7 @@ export function FoundationSidebar({ activePath, onNavigate }: FoundationSidebarP
         key: "dashboard",
         label: t("sidebar.dashboard"),
         icon: <DashboardRoundedIcon fontSize="small" />,
-        href: `${basePath}/dashboard`,
+        href: basePath,
       },
       {
         key: "myFoundation",
@@ -71,7 +71,10 @@ export function FoundationSidebar({ activePath, onNavigate }: FoundationSidebarP
       <Divider className="my-6" />
       <List className="flex flex-1 flex-col gap-2" disablePadding>
         {navigationItems.map((item) => {
-          const isActive = activePath?.startsWith(item.href);
+          const isActive =
+            item.key === "dashboard"
+              ? activePath === basePath
+              : activePath?.startsWith(item.href);
 
           return (
             <ListItemButton

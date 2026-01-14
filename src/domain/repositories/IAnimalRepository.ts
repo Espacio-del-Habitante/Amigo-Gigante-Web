@@ -29,4 +29,7 @@ export interface GetAnimalsResult {
 export interface IAnimalRepository {
   getHomeAnimals(): Promise<HomeAnimals>;
   getAnimals(params: GetAnimalsParams): Promise<GetAnimalsResult>;
+  getAnimalsCount(foundationId: string): Promise<number>;
+  getRecentAnimals(foundationId: string, limit: number): Promise<AnimalManagement[]>;
+  getAnimalsInTreatment(foundationId: string): Promise<AnimalManagement[]>;
 }

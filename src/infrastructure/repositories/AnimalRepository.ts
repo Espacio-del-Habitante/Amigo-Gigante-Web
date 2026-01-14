@@ -77,6 +77,51 @@ export class AnimalRepository implements IAnimalRepository {
     };
   }
 
+  async getAnimalsCount(foundationId: string): Promise<number> {
+    const { count, error } = await supabaseClient
+      .from("animals")
+      .select("id", { count: "exact", head: true })
+      .eq("foundation_id", foundationId);
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    return count ?? 0;
+  }
+
+  async getRecentAnimals(foundationId: string, limit: number): Promise<AnimalManagement[]> {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select("id, name, species, breed, sex, age_months, size, status, cover_image_url, created_at")
+      .eq("foundation_id", foundationId)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    const animals = (data ?? []).map((row) => this.mapAnimalManagementRow(row));
+    return this.attachCoverPhotoFallback(animals);
+  }
+
+  async getAnimalsInTreatment(foundationId: string): Promise<AnimalManagement[]> {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select("id, name, species, breed, sex, age_months, size, status, cover_image_url, created_at")
+      .eq("foundation_id", foundationId)
+      .eq("status", "in_treatment")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    const animals = (data ?? []).map((row) => this.mapAnimalManagementRow(row));
+    return this.attachCoverPhotoFallback(animals);
+  }
+
   private async attachCoverPhotoFallback<T extends { id: number; coverImageUrl: string | null }>(animals: T[]): Promise<T[]> {
     const missingCover = animals.filter((animal) => !animal.coverImageUrl);
     if (missingCover.length === 0) return animals;
@@ -127,6 +172,32 @@ export class AnimalRepository implements IAnimalRepository {
     }
 
     return null;
+  }
+
+  private mapAnimalManagementRow(row: {
+    id: number;
+    name: string | null;
+    species: AnimalManagement["species"];
+    breed: string | null;
+    sex: AnimalManagement["sex"] | null;
+    age_months: number | null;
+    size: AnimalManagement["size"] | null;
+    status: AnimalManagement["status"];
+    cover_image_url: string | null;
+    created_at: string;
+  }): AnimalManagement {
+    return {
+      id: row.id,
+      name: row.name ?? "",
+      species: row.species,
+      breed: row.breed ?? "",
+      sex: row.sex ?? "unknown",
+      ageMonths: row.age_months ?? null,
+      size: row.size ?? "unknown",
+      status: row.status,
+      coverImageUrl: row.cover_image_url ?? null,
+      createdAt: row.created_at,
+    };
   }
 
   private translateAnimalsError(error: { message?: string }): string {

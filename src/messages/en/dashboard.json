@@ -17,5 +17,104 @@
       "initials": "SA"
     }
   },
+  "dashboardHeader": {
+    "greeting": "Hi, {foundationName}!",
+    "subtitle": "{date} - Daily activity summary",
+    "notifications": "Notifications",
+    "viewMode": "View Mode"
+  },
+  "kpi": {
+    "animalsInCare": {
+      "label": "Animals in Care"
+    },
+    "activeSponsorships": {
+      "label": "Active Sponsorships"
+    },
+    "pendingAdoptions": {
+      "label": "Pending Adoptions"
+    },
+    "monthlyRevenue": {
+      "label": "Raised (Month)"
+    }
+  },
+  "adoptionFunnel": {
+    "title": "Adoption Funnel Status",
+    "viewReport": "View report",
+    "applicationsReceived": "Applications Received",
+    "interviewsScheduled": "Interviews Scheduled",
+    "homeVisits": "Home Visits",
+    "adoptionsCompleted": "Adoptions Completed",
+    "legend": {
+      "inProcess": "In progress",
+      "totalInput": "Total input"
+    }
+  },
+  "recentActivity": {
+    "title": "Recent Activity",
+    "columns": {
+      "subject": "Animal / Subject",
+      "type": "Type",
+      "date": "Date",
+      "status": "Status"
+    },
+    "types": {
+      "animal": "Animal",
+      "event": "Event",
+      "product": "Product"
+    },
+    "status": {
+      "animal": {
+        "available": "Available",
+        "adopted": "Adopted",
+        "in_treatment": "In treatment",
+        "inactive": "Inactive"
+      },
+      "event": {
+        "upcoming": "Upcoming",
+        "created": "Created"
+      },
+      "product": {
+        "added": "Added"
+      }
+    },
+    "date": {
+      "today": "Today, {time}",
+      "yesterday": "Yesterday, {time}"
+    }
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "newAnimal": "+ New Animal",
+    "registerExpense": "Log Expense",
+    "createCampaign": "Create Campaign"
+  },
+  "needsAttention": {
+    "title": "Needs Attention",
+    "viewAllTasks": "View all tasks",
+    "alerts": {
+      "veterinaryReview": {
+        "title": "Veterinary Review",
+        "message": "{animalName} needs their annual vaccine before {date}."
+      },
+      "lowStock": {
+        "title": "Low Stock",
+        "message": "Less than {count} puppy food bags remaining."
+      },
+      "volunteersNeeded": {
+        "title": "Saturday Volunteers",
+        "message": "{count} spots left for the cleaning shift."
+      }
+    }
+  },
+  "loading": {
+    "label": "Loading dashboard..."
+  },
+  "errors": {
+    "generic": "Something went wrong while loading the dashboard. Please try again.",
+    "connection": "We couldn't connect to the server. Please check your connection and try again.",
+    "unauthorized": "You don't have permission to view this foundation dashboard.",
+    "notFound": "We couldn't find your foundation information.",
+    "retry": "Try again"
+  },
   "copyright": "© {year} Amigo Gigante"
 }
