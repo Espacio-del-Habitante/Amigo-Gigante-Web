@@ -2,7 +2,8 @@
 
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { AnimalManagement } from "@/domain/models/AnimalManagement";
@@ -24,6 +25,9 @@ type AnimalsErrorKey = (typeof animalsErrorKeyList)[number];
 
 export function AnimalsManagementPage() {
   const t = useTranslations("animals");
+  const locale = useLocale();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const getAnimalsUseCase = useMemo(
     () => appContainer.get<GetAnimalsUseCase>(USE_CASE_TYPES.GetAnimalsUseCase),
     [],
@@ -40,8 +44,16 @@ export function AnimalsManagementPage() {
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<AnimalsErrorKey | null>(null);
+  const [showCreateSuccess, setShowCreateSuccess] = useState(true);
 
   const pageSize = 5;
+  const createdParam = searchParams.get("created");
+  const createSuccessMessageKey =
+    createdParam === "published"
+      ? "add.success.published"
+      : createdParam === "draft"
+        ? "add.success.draft"
+        : null;
 
   const resolveErrorMessage = useCallback(
     (error: unknown): AnimalsErrorKey => {
@@ -155,10 +167,19 @@ export function AnimalsManagementPage() {
           startIcon={<AddRoundedIcon />}
           className="w-full md:w-auto"
           aria-label={t("addButton")}
+          onClick={() => {
+            router.push(`/${locale}/foundations/animals/add`);
+          }}
         >
           {t("addButton")}
         </Button>
       </Box>
+
+      {createSuccessMessageKey && showCreateSuccess ? (
+        <Alert severity="success" onClose={() => setShowCreateSuccess(false)}>
+          {t(createSuccessMessageKey)}
+        </Alert>
+      ) : null}
 
       <AnimalsSearchBar
         searchValue={searchValue}

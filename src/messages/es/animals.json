@@ -56,5 +56,143 @@
     "generic": "Ocurrió un error al cargar los animales. Inténtalo nuevamente.",
     "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
     "unauthorized": "No tienes permisos para ver los animales de esta fundación."
+  },
+  "add": {
+    "breadcrumb": {
+      "ariaLabel": "Migas de pan",
+      "dashboard": "Dashboard",
+      "myAnimals": "Mis animales",
+      "addNew": "Agregar nuevo"
+    },
+    "header": {
+      "title": "Agregar un Nuevo Amigo",
+      "subtitle": "Completa los detalles a continuación para agregar un nuevo animal al catálogo de adopción."
+    },
+    "sections": {
+      "basics": { "title": "Información básica" },
+      "media": {
+        "title": "Galería de medios",
+        "subtitle": "¡Las buenas fotos aumentan las posibilidades de adopción! Intenta subir al menos 3."
+      },
+      "story": { "title": "Su historia" }
+    },
+    "fields": {
+      "name": {
+        "label": "Nombre del animal",
+        "placeholder": "ej. Buddy"
+      },
+      "breed": {
+        "label": "Raza",
+        "placeholder": "ej. Mestizo",
+        "hint": "Mestizo si se desconoce"
+      },
+      "species": {
+        "label": "Especie",
+        "placeholder": "Seleccionar especie",
+        "options": {
+          "dog": "Perro",
+          "cat": "Gato",
+          "bird": "Ave",
+          "other": "Otro"
+        }
+      },
+      "age": {
+        "label": "Edad",
+        "placeholder": "0"
+      },
+      "ageUnit": {
+        "label": "Unidad",
+        "options": {
+          "years": "Años",
+          "months": "Meses"
+        }
+      },
+      "gender": {
+        "label": "Género",
+        "placeholder": "Seleccionar género",
+        "options": {
+          "male": "Macho",
+          "female": "Hembra"
+        }
+      },
+      "size": {
+        "label": "Tamaño",
+        "placeholder": "Seleccionar tamaño",
+        "options": {
+          "small": "Pequeño (0-10kg)",
+          "medium": "Mediano (11-25kg)",
+          "large": "Grande (26-40kg)",
+          "giant": "Gigante (41kg+)"
+        }
+      },
+      "currentLocation": {
+        "label": "Ubicación actual",
+        "placeholder": "Ciudad, nombre del refugio"
+      },
+      "description": {
+        "label": "Descripción",
+        "placeholder": "Cuéntanos sobre su personalidad, historia y qué tipo de hogar necesita...",
+        "counter": "{count}/1000 caracteres"
+      },
+      "status": {
+        "label": "Estado",
+        "placeholder": "Seleccionar estado",
+        "options": {
+          "available": "Disponible para adopción",
+          "inactive": "Solo apadrinamiento",
+          "inTreatment": "Necesita hogar temporal",
+          "pending": "Adopción pendiente"
+        }
+      },
+      "healthStatus": {
+        "label": "Estado de salud",
+        "vaccinated": "Vacunado",
+        "spayedNeutered": "Esterilizado/Castrado",
+        "wormed": "Desparasitado"
+      }
+    },
+    "media": {
+      "upload": {
+        "ariaLabel": "Subir fotos",
+        "title": "Haz clic para subir o arrastra y suelta",
+        "hint": "SVG, PNG, JPG o GIF (MÁX. 5MB)",
+        "limit": "MÁX. 5MB por imagen"
+      },
+      "preview": {
+        "alt": "Foto subida {index}",
+        "remove": "Eliminar foto {index}"
+      },
+      "errors": {
+        "tooMany": "Puedes subir hasta 10 imágenes.",
+        "tooLarge": "Una de las imágenes supera los 5MB.",
+        "invalidType": "Formato de imagen inválido. Permitidos: SVG, PNG, JPG, GIF.",
+        "readFailed": "No pudimos leer una de las imágenes. Inténtalo nuevamente."
+      }
+    },
+    "actions": {
+      "saveDraft": "Guardar borrador",
+      "publish": "Publicar perfil"
+    },
+    "validation": {
+      "nameRequired": "El nombre del animal es requerido",
+      "speciesRequired": "La especie es requerida",
+      "ageRequired": "La edad es requerida",
+      "ageInteger": "La edad debe ser un número entero",
+      "ageMin": "La edad debe ser mayor o igual a 0",
+      "ageUnitInvalid": "La unidad de edad no es válida",
+      "genderRequired": "El género es requerido",
+      "descriptionRequired": "La descripción es requerida",
+      "descriptionMin": "La descripción debe tener al menos 100 caracteres",
+      "statusRequired": "El estado es requerido",
+      "photosMin": "Debes subir al menos 1 foto para publicar",
+      "photosMax": "No puedes subir más de 10 fotos"
+    },
+    "success": {
+      "draft": "Animal guardado como borrador.",
+      "published": "Animal publicado exitosamente."
+    },
+    "errors": {
+      "generic": "Ocurrió un error al crear el animal. Inténtalo nuevamente."
+    }
   }
 }
