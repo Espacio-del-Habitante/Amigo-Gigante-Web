@@ -12,6 +12,7 @@ import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
+import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
@@ -40,6 +41,14 @@ const useCasesModule = new ContainerModule(
         );
 
         return new GetHomeAnimalsUseCase(animalRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetAdoptCatalogUseCase>(USE_CASE_TYPES.GetAdoptCatalogUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+
+        return new GetAdoptCatalogUseCase(animalRepository);
       })
       .inSingletonScope();
 

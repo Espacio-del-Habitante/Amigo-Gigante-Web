@@ -8,6 +8,95 @@ export class AnimalRepository implements IAnimalRepository {
     return animalsMock;
   }
 
+  async getAdoptCatalog({ filters, pagination }: Parameters<IAnimalRepository["getAdoptCatalog"]>[0]) {
+    const pageSize = pagination.pageSize;
+    const from = Math.max(0, (pagination.page - 1) * pageSize);
+    const to = from + pageSize - 1;
+
+    let query = supabaseClient
+      .from("animals")
+      .select(
+        "id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at",
+        { count: "exact" },
+      )
+      .eq("status", "available")
+      .eq("is_published", true);
+
+    if (filters?.species) {
+      query = query.eq("species", filters.species);
+    }
+
+    if (filters?.size) {
+      query = query.eq("size", filters.size);
+    }
+
+    if (filters?.age) {
+      if (filters.age === "puppy") query = query.gte("age_months", 0).lte("age_months", 11);
+      if (filters.age === "young") query = query.gte("age_months", 12).lte("age_months", 35);
+      if (filters.age === "adult") query = query.gte("age_months", 36).lte("age_months", 83);
+      if (filters.age === "senior") query = query.gte("age_months", 84);
+    }
+
+    const sort = filters?.sort ?? "newest";
+    const urgentEnabled = Boolean(filters?.urgentOnly) || sort === "urgent";
+
+    const rawSearch = filters?.search?.trim() ?? "";
+    const hasSearch = rawSearch.length > 0;
+    const searchLike = `%${rawSearch}%`;
+
+    const urgentCutoffDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+    const urgentCreatedAtExpr = `created_at.lte.${urgentCutoffDate}`;
+    const urgentAgeExpr = "age_months.lte.6";
+    const nameExpr = `name.ilike.${searchLike}`;
+    const breedExpr = `breed.ilike.${searchLike}`;
+
+    const orParts: string[] = [];
+    if (urgentEnabled && hasSearch) {
+      orParts.push(`and(${urgentCreatedAtExpr},${nameExpr})`);
+      orParts.push(`and(${urgentCreatedAtExpr},${breedExpr})`);
+      orParts.push(`and(${urgentAgeExpr},${nameExpr})`);
+      orParts.push(`and(${urgentAgeExpr},${breedExpr})`);
+    } else if (urgentEnabled) {
+      orParts.push(urgentCreatedAtExpr, urgentAgeExpr);
+    } else if (hasSearch) {
+      orParts.push(nameExpr, breedExpr);
+    }
+
+    if (orParts.length > 0) {
+      query = query.or(orParts.join(","));
+    }
+
+    if (sort === "oldest" || sort === "urgent") query = query.order("created_at", { ascending: true });
+    if (sort === "newest") query = query.order("created_at", { ascending: false });
+
+    const { data, error, count } = await query.range(from, to);
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    const items = (data ?? []).map((row) => ({
+      id: row.id,
+      name: row.name ?? "",
+      species: row.species,
+      breed: row.breed ?? "",
+      sex: row.sex ?? "unknown",
+      ageMonths: row.age_months ?? null,
+      size: row.size ?? "unknown",
+      description: row.description ?? "",
+      coverImageUrl: row.cover_image_url ?? null,
+      createdAt: row.created_at,
+      isUrgent: this.isUrgentNeed(row.created_at, row.age_months ?? null),
+    }));
+
+    const itemsWithPhotos = await this.attachCoverPhotoFallback(items);
+
+    return {
+      items: itemsWithPhotos,
+      total: count ?? 0,
+    };
+  }
+
   async createAnimal({
     foundationId,
     name,
@@ -227,6 +316,14 @@ export class AnimalRepository implements IAnimalRepository {
       if (!fallback) return animal;
       return { ...animal, coverImageUrl: fallback };
     });
+  }
+
+  private isUrgentNeed(createdAt: string, ageMonths: number | null): boolean {
+    const isPuppy = typeof ageMonths === "number" && ageMonths <= 6;
+    const createdMs = new Date(createdAt).getTime();
+    if (!Number.isFinite(createdMs)) return isPuppy;
+    const cutoffMs = Date.now() - 90 * 24 * 60 * 60 * 1000;
+    return createdMs <= cutoffMs || isPuppy;
   }
 
   private parseAnimalIdToNumber(search: string): number | null {
