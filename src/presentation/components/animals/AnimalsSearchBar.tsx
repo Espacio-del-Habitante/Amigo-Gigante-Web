@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 
-import type { AnimalManagementSpecies, AnimalManagementStatus } from "@/infrastructure/mocks/animals-management.mock";
+import type { AnimalManagementSpecies, AnimalManagementStatus } from "@/domain/models/AnimalManagement";
+import type { AnimalsSortOption as RepoAnimalsSortOption } from "@/domain/repositories/IAnimalRepository";
 
 export type AnimalsStatusFilter = "all" | AnimalManagementStatus;
 export type AnimalsSpeciesFilter = "all" | AnimalManagementSpecies;
-export type AnimalsSortOption = "newest" | "oldest" | "nameAsc" | "nameDesc";
+export type AnimalsSortOption = RepoAnimalsSortOption;
 
 export interface AnimalsSearchBarProps {
   searchValue: string;

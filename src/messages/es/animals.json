@@ -48,5 +48,13 @@
   },
   "pagination": {
     "showing": "Mostrando {from} a {to} de {total} resultados"
+  },
+  "loading": {
+    "label": "Cargando animales..."
+  },
+  "errors": {
+    "generic": "Ocurrió un error al cargar los animales. Inténtalo nuevamente.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
+    "unauthorized": "No tienes permisos para ver los animales de esta fundación."
   }
 }

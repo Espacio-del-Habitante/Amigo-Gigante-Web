@@ -3,7 +3,7 @@
 import { alpha, useTheme } from "@mui/material";
 import { useTranslations } from "next-intl";
 
-import type { AnimalManagementStatus } from "@/infrastructure/mocks/animals-management.mock";
+import type { AnimalManagementStatus } from "@/domain/models/AnimalManagement";
 import { Chip } from "@/presentation/components/atoms";
 
 export interface AnimalStatusBadgeProps {
