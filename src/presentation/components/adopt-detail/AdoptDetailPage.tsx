@@ -25,7 +25,7 @@ type AdoptDetailErrorKey =
   | "errors.generic";
 
 interface AdoptDetailPageProps {
-  animalId: string;
+  animalId?: string | string[];
 }
 
 export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
@@ -86,7 +86,8 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
   );
 
   useEffect(() => {
-    const normalizedId = animalId.trim();
+    const resolvedId = Array.isArray(animalId) ? animalId[0] : animalId;
+    const normalizedId = typeof resolvedId === "string" ? resolvedId.trim() : "";
     if (!normalizedId) {
       requestCounterRef.current += 1;
       setDetail(null);
