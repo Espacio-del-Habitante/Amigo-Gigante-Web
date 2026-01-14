@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Amigo Gigante - Detalle de Adopción</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Rounded:wght@400;600;700;800&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#38BDF8", // Sky blue (Azul Cielo)
+                        "primary-dark": "#0EA5E9",
+                        secondary: "#FDBA74", // Peach/Soft Orange for contrast
+                        accent: "#F472B6", // Pink for sponsorship
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                        "text-light": "#334155",
+                        "text-dark": "#E2E8F0"
+                    },
+                    fontFamily: {
+                        display: ["'Nunito Rounded'", "sans-serif"],
+                        body: ["'Quicksand'", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        'xl': "1.5rem",
+                        '2xl': "2rem"
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-body min-h-screen flex flex-col transition-colors duration-300">
+<nav class="sticky top-0 z-50 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-20 items-center">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-full">
+<span class="material-icons-round text-primary text-3xl">pets</span>
+</div>
+<span class="font-display font-bold text-2xl tracking-tight text-gray-800 dark:text-white">Amigo<span class="text-primary">Gigante</span></span>
+</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-bold text-gray-500 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition" href="#">Inicio</a>
+<a class="font-bold text-primary dark:text-primary transition" href="#">Adopta</a>
+<a class="font-bold text-gray-500 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition" href="#">Apadrina</a>
+<a class="font-bold text-gray-500 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition" href="#">Blog</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+<span class="material-icons-round">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden border-2 border-white dark:border-gray-600 shadow-sm">
+<img alt="Perfil de usuario" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAACi7NomPMv2XrFkwIzPHKbZJxWze95pv3Obk5180z6zoDSv6dJVM4deFpBhN2kbsfqRVq09kLlv4d67TSlOAcVfSX-sMxkhjw7UFWVqcLyaANL2AsDD4cM4dQiRujDfaWXcodHmjlFy37qFpDzVIdeDU3xE-oFiGm60XoYxWAR0t0gJjZVkZKclg-ilUxSAkMGG0PteBEp2ePHyejjQzKovvCjO88PCGzMBeRWlzS6zTT0T4sfdA4nyX3HGEgyAewulC_zJV2_g"/>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<main class="flex-grow py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+<nav aria-label="Breadcrumb" class="flex mb-6 text-sm font-medium text-gray-500 dark:text-gray-400">
+<ol class="inline-flex items-center space-x-1 md:space-x-3">
+<li class="inline-flex items-center">
+<a class="hover:text-primary dark:hover:text-white" href="#">Perros</a>
+</li>
+<li><span class="material-icons-round text-xs mx-1">chevron_right</span></li>
+<li class="inline-flex items-center">
+<a class="hover:text-primary dark:hover:text-white" href="#">Adopciones</a>
+</li>
+<li><span class="material-icons-round text-xs mx-1">chevron_right</span></li>
+<li aria-current="page">
+<span class="text-primary font-bold">Benito</span>
+</li>
+</ol>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+<div class="lg:col-span-7 space-y-4">
+<div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-lg group">
+<img alt="Benito jugando en el parque" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxqEF85Bmj9WWj9f3-e9aKwoLOE_yvl7KEtuV-BQAK5ZCRkDpiNxprHGPJzSN95dRpp57brM1mb-OHUTfJUv40NLno-LbqnRmwsHz9513pgOw5rZHTJIGK51PPYp5L2VeyFlCu6vnW7RD0CUyp238OpQt9ohnQ_LIQgHF-KX6Bw5UwpfU69iGQL4f1yl07d3JorAo7SBZXx3Rea9Ju9s93KzbqHk9W8SXytNCL8WxTsdf2tOVkGntA1uoG7UlPKKQRRdw9hUynAw"/>
+<div class="absolute top-4 left-4">
+<span class="bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur text-primary dark:text-primary px-3 py-1 rounded-full text-sm font-bold shadow-sm border border-primary/20 flex items-center gap-1">
+<span class="material-icons-round text-base">verified</span> Disponible
+                        </span>
+</div>
+<button class="absolute bottom-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full text-white transition">
+<span class="material-icons-round">favorite_border</span>
+</button>
+</div>
+<div class="grid grid-cols-4 gap-3">
+<button class="relative aspect-square rounded-xl overflow-hidden ring-2 ring-primary ring-offset-2 dark:ring-offset-gray-900">
+<img alt="Thumbnail 1" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1t7H_z5WHNY-PCAW5cRli0aLrbuVbWSTkiRR-s3orm3-YvdahAypjYxEd0edwaig0sLQD2a4REwvOIhVwNaaO1_RH0X5nFCRPQsM2xvp5IRqEHkgDVZFEVrK1LCUx6UMKuFNRXaP1rpH4XW4yijGTuJyng9G59rgYBRqaDK-WeziUxKtfOKRZ5ELj0txK1tWjRrHDY1-Iez9h-p7KCiTh6H6prHGEow5Js1BBT1EZ6nwGQlfwd-r-ra31neGlTyNzGfn2iSQGHA"/>
+</button>
+<button class="relative aspect-square rounded-xl overflow-hidden hover:opacity-80 transition">
+<img alt="Thumbnail 2" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaMJ_0Zu725N8sjib20Rdzst-f6CWbKFLp4DoU-94WRIujjq7HrGivWGuSh7ClkLHYcTLQGJ8WG05-U2j4vsnvz3Etnto_4PmAXQXDeXRgLotiqjPIDJ3ea8NSjOtfgdzg_q9bsL9iE8vBi7FZOtY0-R-g4PO8NIqu3lmKAgWIMHP9qgtQLE1ZUUtpYfbLU47v7z2NgSfgeRnSarJd5WuXTwzP7RTkqapsmFl0g-HlmMigatMS51R3aeQ7pBOPOJR7HefkS7rDzw"/>
+</button>
+<button class="relative aspect-square rounded-xl overflow-hidden hover:opacity-80 transition">
+<img alt="Thumbnail 3" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-Hx8gyb60oox2yWjyi21eelWfxkwcoHfmSQVTZANENEcCU-vHMLl3hXPfvMpth3hyEINLS_0HIKYXLOyJMBNgMxatOrt26fBF_dlK4R8m0wSCVnbu_9j7MIyHXWhl21CsLC47LNqQJssfJCEMBw_swr0dUpmaxhpL8IoxZXweWWumQyTfMPA1OOaJLP-njM_n8hZ1sm3g79JwHhYKvJGk7ylmXvcjZ4rX7ilTpuMGSkBz94CU8IlwChe_09hygcPtenl0wOxqyA"/>
+</button>
+<button class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition group">
+<span class="material-icons-round group-hover:scale-110 transition-transform">videocam</span>
+</button>
+</div>
+</div>
+<div class="lg:col-span-5 flex flex-col h-full">
+<div class="bg-surface-light dark:bg-surface-dark rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-800 sticky top-24">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h1 class="font-display text-4xl font-extrabold text-gray-800 dark:text-white mb-2">Benito</h1>
+<p class="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-1">
+<span class="material-icons-round text-primary text-lg">place</span>
+                                Refugio "Patitas Felices", CDMX
+                            </p>
+</div>
+<div class="flex flex-col items-end">
+<div class="text-3xl font-bold text-secondary">3 años</div>
+<div class="text-xs text-gray-400 uppercase tracking-wider font-bold">Edad</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-bold rounded-lg flex items-center gap-1">
+<span class="material-icons-round text-sm">vaccines</span> Vacunado
+                        </span>
+<span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-lg flex items-center gap-1">
+<span class="material-icons-round text-sm">content_cut</span> Esterilizado
+                        </span>
+<span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-lg flex items-center gap-1">
+<span class="material-icons-round text-sm">male</span> Macho
+                        </span>
+<span class="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs font-bold rounded-lg flex items-center gap-1">
+<span class="material-icons-round text-sm">fitness_center</span> Energía Alta
+                        </span>
+</div>
+<div class="prose prose-sm dark:prose-invert mb-8 text-gray-600 dark:text-gray-300 leading-relaxed">
+<p>
+                            ¡Hola! Soy Benito. Me encontraron vagando cerca de un parque, un poco asustado pero moviendo la cola a todos los que pasaban. Soy un corgi mix con una personalidad gigante. Me encanta correr detrás de las pelotas (aunque a veces olvido traerlas de vuelta) y soy experto en dar besitos.
+                        </p>
+<p class="mt-2">
+                            Busco una familia activa que me lleve de aventuras los fines de semana. Me llevo genial con otros perros y niños. ¿Me das una oportunidad?
+                        </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+<button class="bg-primary hover:bg-primary-dark text-white font-display font-bold text-lg py-4 px-6 rounded-2xl shadow-lg shadow-primary/30 transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-2">
+<span class="material-icons-round">volunteer_activism</span> Adoptar
+                        </button>
+<button class="bg-accent hover:bg-pink-500 text-white font-display font-bold text-lg py-4 px-6 rounded-2xl shadow-lg shadow-accent/30 transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-2">
+<span class="material-icons-round">star</span> Apadrinar
+                        </button>
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 pt-6">
+<h3 class="font-display font-bold text-lg text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-icons-round text-secondary">history</span>
+                            Historial de Benito
+                        </h3>
+<div class="space-y-4">
+<div class="relative pl-6 border-l-2 border-gray-200 dark:border-gray-700">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-green-400 border-2 border-white dark:border-surface-dark shadow-sm"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-gray-400 uppercase">Hoy, 10:30 AM</span>
+<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Paseo matutino completado. ¡Corrió 3km! 🏃‍♂️</span>
+</div>
+</div>
+<div class="relative pl-6 border-l-2 border-gray-200 dark:border-gray-700">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-blue-400 border-2 border-white dark:border-surface-dark shadow-sm"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-gray-400 uppercase">Ayer, 4:15 PM</span>
+<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Baño y corte de pelo. Quedó guapísimo. 🛁</span>
+</div>
+</div>
+<div class="relative pl-6 border-l-2 border-gray-200 dark:border-gray-700">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-purple-400 border-2 border-white dark:border-surface-dark shadow-sm"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-gray-400 uppercase">20 Oct, 2023</span>
+<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Consulta veterinaria: Desparasitación interna. 💊</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section class="mt-16">
+<h2 class="font-display font-bold text-2xl text-gray-800 dark:text-white mb-6">Otros amigos buscando hogar</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl p-3 shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-800 transition group cursor-pointer">
+<div class="aspect-[4/3] rounded-xl overflow-hidden mb-3 relative">
+<img alt="Perrito" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZbGgJyLQtgZVly9kNjdQXXQ7738gMS4cPchD0RcifcxZgzsHnC9poNfzAPM6v2eXKNmvXivI1nn-1OpEYSh6SbmkpykSwf244d038xeNEllwLGihrs232ud34JqiB_wIVkD1Oxb9urifqnUbOCQvb_leIodKzwKVQ8k1e9OhtkE2-U8AVz2hElTQlMVvc2jNmZ5orZ6P8Z8dkTF-jDHwJz63JWLWfTu6FRMhIglG3QcX_yJhyP0WU-pCibtx9-fQUb5BIOlAFZw"/>
+<div class="absolute bottom-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold text-gray-800 dark:text-white">
+                            2 años
+                        </div>
+</div>
+<div class="px-1 pb-1">
+<h3 class="font-display font-bold text-lg text-gray-800 dark:text-white">Luna</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">Mestiza • Hembra</p>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl p-3 shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-800 transition group cursor-pointer">
+<div class="aspect-[4/3] rounded-xl overflow-hidden mb-3 relative">
+<img alt="Perrito" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-_Y3FmBzD0k0iALwP1jfDecYalDjbEYcq972--lhYDkwZyOlA-ZP2Ri1c9_joKiFC9HgAPAdE1V_YpWUA2eC6GKy58Reunw0p17FelgKxOueFq-lxEacYd-w8ojwZkpxqFFGrCB0ymOSJaZA05_TO2DIE3KmQUrCrLAh-PlJ3iB1HB0zvjeDFbfXLAHPDrZiotYBrY4V32y8IMOPGjZcT8xwnPIfZHXmWhfHDnoPEV8240O9-CJbVqA2Xyg9NfjfDK6eBmwAxMQ"/>
+<div class="absolute bottom-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold text-gray-800 dark:text-white">
+                            5 meses
+                        </div>
+</div>
+<div class="px-1 pb-1">
+<h3 class="font-display font-bold text-lg text-gray-800 dark:text-white">Coco</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">Pastor • Macho</p>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl p-3 shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-800 transition group cursor-pointer">
+<div class="aspect-[4/3] rounded-xl overflow-hidden mb-3 relative">
+<img alt="Perrito" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwbSIm_MKIHp_qVz5O9wgH1bCdCXoiLe7YamRu540JsDt8rZRtKVrJzsw9oq70KSuIz2iXaBtImZnYzURv2aVIb6XH8pyCZK3kAyQUKrt6PbtnVuyBh9vLRkErQxHzcy865x76C1nAPl92QgcR6jBLgUwLYcwFV9bKSxW5RElK8iik_oxo3MldiCnCHhcXhEiMm-VHK6U_qmu8jD_m7DUE_MqBveqEkXPKrhYC1imy3CkIGNNcp2DUOiJSeXzvSVpSqKP0Uob_FQ"/>
+<div class="absolute bottom-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold text-gray-800 dark:text-white">
+                            4 años
+                        </div>
+</div>
+<div class="px-1 pb-1">
+<h3 class="font-display font-bold text-lg text-gray-800 dark:text-white">Max</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">Golden • Macho</p>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl p-3 shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-800 transition group cursor-pointer">
+<div class="aspect-[4/3] rounded-xl overflow-hidden mb-3 relative">
+<img alt="Perrito" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKfrTpwVSOIzA6dW-5MCAzweR-QJJeGptRUHtz07QP9hGDYfTN0mhYdU7_nb0hR6cRYQ-L_I9HiFr_F5w1jed5DcF6XCX_zEjfOf2IUDKCiY1l1z3MU4xuA2_h4JgmoEf7HkS8l2KSF8-nmtu1wgGcpLEmamxv4xVBHAgZU07wwJdhS4JsNbh0OlG-HoSJ-bZD_SJeAnpRXAWJt_4G2VIdnmLGmSunRoOlOci50V-l8235fWCuEO6FK-LYYEVk6iEg8uzUHfgJmw"/>
+<div class="absolute bottom-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold text-gray-800 dark:text-white">
+                            1 año
+                        </div>
+</div>
+<div class="px-1 pb-1">
+<h3 class="font-display font-bold text-lg text-gray-800 dark:text-white">Bella</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">Pug • Hembra</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 mt-12 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-primary text-2xl">pets</span>
+<span class="font-display font-bold text-xl text-gray-800 dark:text-white">Amigo<span class="text-primary">Gigante</span></span>
+</div>
+<div class="text-sm text-gray-500 dark:text-gray-400 text-center md:text-right">
+<p>© 2023 Amigo Gigante. Hecho con ❤️ para los peluditos.</p>
+<div class="flex gap-4 justify-center md:justify-end mt-2">
+<a class="hover:text-primary transition" href="#">Términos</a>
+<a class="hover:text-primary transition" href="#">Privacidad</a>
+<a class="hover:text-primary transition" href="#">Contacto</a>
+</div>
+</div>
+</div>
+</footer>
+<div class="fixed bottom-6 right-6 z-50">
+<button class="bg-surface-light dark:bg-surface-dark text-gray-600 dark:text-gray-300 w-12 h-12 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none" id="theme-toggle">
+<span class="material-icons-round dark:hidden">dark_mode</span>
+<span class="material-icons-round hidden dark:block">light_mode</span>
+</button>
+</div>
+<script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        // Check for saved user preference, if any, on load of the website
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+    </script>
+
+</body></html>

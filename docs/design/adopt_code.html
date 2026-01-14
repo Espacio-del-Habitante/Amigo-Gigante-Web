@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Amigo Gigante - Adoption Catalog</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#38bdf8", // Sky blue (azul cielo)
+                        secondary: "#0ea5e9", // Slightly darker sky blue for hover states
+                        accent: "#fbbf24", // Warm accent for 'urgent' or special actions
+                        "background-light": "#f0f9ff", // Very light blue-ish white
+                        "background-dark": "#0f172a", // Dark slate blue
+                        "card-light": "#ffffff",
+                        "card-dark": "#1e293b",
+                        "text-light": "#334155",
+                        "text-dark": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        display: ["Nunito", "sans-serif"],
+                        body: ["Nunito", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        "xl": "1.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-300 min-h-screen font-body flex flex-col">
+<nav class="sticky top-0 z-50 bg-card-light/90 dark:bg-card-dark/90 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-20 items-center">
+<div class="flex items-center gap-3">
+<img alt="Amigo Gigante Logo" class="h-12 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxtYiZklU9BhP_7mecn_yCqC23ysZHqNP8_yomicWTzYdbLT_UMBPle_AlCu_H5iQH2Mr2BJP8c1h0LDSKIykxWKz8NbNIxyxv_lJtvSHkB1mO2ULHxOfEFjxJaQmkbT8FiZ5hampVO5G1u5tLWuhiVi9w4t3wLrI29YzX4duW_Rhljy6TLYlGvF998UrfjhYWngr0h2qut2yt4nSldfsFb1fFNs_UPLjqwefExbYen9-tNpECr4ZIMb6wa7g5sHUtl91fsUFZIw"/>
+<span class="font-display font-extrabold text-2xl tracking-tight text-primary">Amigo Gigante</span>
+</div>
+<div class="hidden md:flex space-x-8 items-center">
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold transition" href="#">Home</a>
+<a class="text-primary font-extrabold transition" href="#">Adopt</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold transition" href="#">Sponsor</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold transition" href="#">About Us</a>
+<button class="bg-primary hover:bg-secondary text-white px-6 py-2.5 rounded-full font-bold shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5">
+                        Donate
+                    </button>
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-icons-round text-gray-500 dark:text-gray-400">dark_mode</span>
+</button>
+</div>
+<div class="md:hidden flex items-center">
+<button class="p-2 mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-icons-round text-gray-500 dark:text-gray-400">dark_mode</span>
+</button>
+<button class="text-gray-500 hover:text-primary focus:outline-none">
+<span class="material-icons-round text-3xl">menu</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+<div class="mb-10 text-center md:text-left">
+<h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 dark:text-white mb-4">
+                Find your new <span class="text-primary">best friend</span>
+</h1>
+<p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl">
+                Browse our catalog of loving animals waiting for a forever home or a generous sponsor. 
+                Every adoption saves a life.
+            </p>
+</div>
+<div class="flex flex-col lg:flex-row gap-8">
+<aside class="w-full lg:w-1/4 flex-shrink-0">
+<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 sticky top-24">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+<span class="material-icons-round text-primary">filter_list</span> Filters
+                        </h2>
+<button class="text-sm text-primary hover:text-secondary font-semibold">Reset</button>
+</div>
+<div class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-100 dark:border-red-800/30">
+<label class="flex items-center cursor-pointer justify-between">
+<span class="text-red-600 dark:text-red-400 font-bold text-sm flex items-center gap-1">
+<span class="material-icons-round text-base">campaign</span> Urgent Need
+                            </span>
+<div class="relative">
+<input class="sr-only" type="checkbox"/>
+<div class="w-10 h-6 bg-gray-200 dark:bg-gray-700 rounded-full shadow-inner"></div>
+<div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+</div>
+</label>
+</div>
+<div class="space-y-6">
+<div>
+<h3 class="font-bold text-gray-700 dark:text-gray-300 mb-3 text-sm uppercase tracking-wider">Animal Type</h3>
+<div class="space-y-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 dark:border-gray-600 focus:ring-primary dark:bg-gray-800" type="checkbox"/>
+<span class="text-gray-600 dark:text-gray-400 group-hover:text-primary transition">Dogs</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 dark:border-gray-600 focus:ring-primary dark:bg-gray-800" type="checkbox"/>
+<span class="text-gray-600 dark:text-gray-400 group-hover:text-primary transition">Cats</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 dark:border-gray-600 focus:ring-primary dark:bg-gray-800" type="checkbox"/>
+<span class="text-gray-600 dark:text-gray-400 group-hover:text-primary transition">Others</span>
+</label>
+</div>
+</div>
+<hr class="border-gray-100 dark:border-gray-800"/>
+<div>
+<h3 class="font-bold text-gray-700 dark:text-gray-300 mb-3 text-sm uppercase tracking-wider">Age</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1 text-sm border border-gray-200 dark:border-gray-700 rounded-full hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition bg-transparent dark:text-gray-400">Puppy</button>
+<button class="px-3 py-1 text-sm border border-gray-200 dark:border-gray-700 rounded-full hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition bg-transparent dark:text-gray-400">Young</button>
+<button class="px-3 py-1 text-sm border border-primary text-white bg-primary rounded-full shadow-sm">Adult</button>
+<button class="px-3 py-1 text-sm border border-gray-200 dark:border-gray-700 rounded-full hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition bg-transparent dark:text-gray-400">Senior</button>
+</div>
+</div>
+<hr class="border-gray-100 dark:border-gray-800"/>
+<div>
+<h3 class="font-bold text-gray-700 dark:text-gray-300 mb-3 text-sm uppercase tracking-wider">Size</h3>
+<div class="space-y-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 dark:border-gray-600 focus:ring-primary dark:bg-gray-800" type="checkbox"/>
+<span class="text-gray-600 dark:text-gray-400 group-hover:text-primary transition">Small</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 dark:border-gray-600 focus:ring-primary dark:bg-gray-800" type="checkbox"/>
+<span class="text-gray-600 dark:text-gray-400 group-hover:text-primary transition">Medium</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 dark:border-gray-600 focus:ring-primary dark:bg-gray-800" type="checkbox"/>
+<span class="text-gray-600 dark:text-gray-400 group-hover:text-primary transition">Large</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<section class="flex-grow">
+<div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+<div class="relative w-full sm:w-96">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-round text-gray-400">search</span>
+</span>
+<input class="pl-10 block w-full rounded-xl border-gray-200 dark:border-gray-700 bg-white dark:bg-card-dark text-gray-900 dark:text-white focus:ring-primary focus:border-primary py-3 shadow-sm" placeholder="Search by name, breed..." type="text"/>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">Sort by:</span>
+<select class="block w-full sm:w-auto pl-3 pr-10 py-2 text-base border-gray-200 dark:border-gray-700 bg-white dark:bg-card-dark text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-lg shadow-sm">
+<option>Newest Arrivals</option>
+<option>Oldest Arrivals</option>
+<option>Urgent Need</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-primary/30 transition duration-300 group flex flex-col h-full relative">
+<div class="absolute top-3 right-3 z-10 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-md flex items-center gap-1 animate-pulse">
+<span class="material-icons-round text-sm">warning</span> URGENT
+                        </div>
+<div class="relative h-60 overflow-hidden">
+<img alt="Sad looking beagle dog" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGLJMlXWl_9UERvbNqkOofAuj8rEOEo3JlcUrivSEpY-5ocrSgOz3JJ1qXOxj59JqlgdxLMqIDZFxyh8B_QuTqCN2G8qY089UpBueJ0JscJzxYTFRaEwi8VW-iFtakGg1ham75Xze3hkU6xtvoKYU46dkXESL3o6l5QCxcrzSRvxDWxgSJ63rcbogUXwx1xldCGAvWBxF7YI5Xkja6s3jYysiwdhv2Iw2wlCtkEfogy3bKr-DOn2iMFsP2FIxEWK3SmCRAB9voTw"/>
+<button class="absolute bottom-3 right-3 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition">
+<span class="material-icons-round">favorite_border</span>
+</button>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-extrabold text-gray-900 dark:text-white">Benji</h3>
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-bold uppercase">Male</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">Sweet Beagle mix, loves cuddles but needs medical attention for his paw. Very gentle soul.</p>
+<div class="mt-auto space-y-3">
+<div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">cake</span> 4 yrs
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">straighten</span> Medium
+                                    </div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="flex-1 bg-primary hover:bg-secondary text-white py-2 rounded-lg font-bold text-sm transition">Sponsor</button>
+<button class="flex-1 border border-primary text-primary hover:bg-primary/5 dark:hover:bg-primary/10 py-2 rounded-lg font-bold text-sm transition">Details</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-primary/30 transition duration-300 group flex flex-col h-full">
+<div class="relative h-60 overflow-hidden">
+<img alt="Close up of a cute cat" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOUNk718hGWUzr-j8MdgKBWoDpLubCv4UgpZXhtimWmoANzSfRz3q_lhsdtbkam4ZEiweapYmYLa5XBEAwWiY5yc53QnSlsWCmLRPHCwxyZOtLWdxPydFCSFPPQFZTd6oRxG5rQEUU6Td-0xMoAPM7khLnN6i9XE4BHwvdnps7adTUoCuRjQ0ZVlp3mhw8igSlDcWDdvm-QCxyESbncfn7vFa4vi_b2qpbNDXhl7OdQlXr9Fe3wJ0tcR7SDTy7CUr-83Yvom6aTw"/>
+<button class="absolute bottom-3 right-3 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition">
+<span class="material-icons-round">favorite_border</span>
+</button>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-extrabold text-gray-900 dark:text-white">Luna</h3>
+<span class="bg-pink-100 dark:bg-pink-900/30 text-pink-500 px-2 py-1 rounded text-xs font-bold uppercase">Female</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">Playful kitten looking for a warm lap. Great with kids and other cats.</p>
+<div class="mt-auto space-y-3">
+<div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">cake</span> 6 mos
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">straighten</span> Small
+                                    </div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="flex-1 bg-primary hover:bg-secondary text-white py-2 rounded-lg font-bold text-sm transition">Adopt</button>
+<button class="flex-1 border border-primary text-primary hover:bg-primary/5 dark:hover:bg-primary/10 py-2 rounded-lg font-bold text-sm transition">Details</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-primary/30 transition duration-300 group flex flex-col h-full">
+<div class="relative h-60 overflow-hidden">
+<img alt="Happy golden retriever dog" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyhecPQufVIxNQGG62KS18jn2qo6vB2Usae6rMfeY_tG0JHNbOFPGvtWIWaDZxcnnYGrm7y6B0nCLNFnjhCHbLZ8JSOSVH57OXG1Eai7pWAncRw5usiXJ5Fk9q078HYt07Kys2ft9GNXSF3ReEscHWigvBREHXZ6MZympSr8ez1nGyIYZRTaiNDQQ6XM91hj1xXFQobQetOMIJ9POzmnjZ_qRyo721-5U5Zc-nl5KOiu88JJPlheY8Eky6wDFoWrEFz_gssdiTZw"/>
+<button class="absolute bottom-3 right-3 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition">
+<span class="material-icons-round">favorite_border</span>
+</button>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-extrabold text-gray-900 dark:text-white">Max</h3>
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-bold uppercase">Male</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">Energetic Golden Retriever mix. Loves playing fetch and going for long runs.</p>
+<div class="mt-auto space-y-3">
+<div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">cake</span> 2 yrs
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">straighten</span> Large
+                                    </div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="flex-1 bg-primary hover:bg-secondary text-white py-2 rounded-lg font-bold text-sm transition">Adopt</button>
+<button class="flex-1 border border-primary text-primary hover:bg-primary/5 dark:hover:bg-primary/10 py-2 rounded-lg font-bold text-sm transition">Details</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-primary/30 transition duration-300 group flex flex-col h-full">
+<div class="relative h-60 overflow-hidden">
+<img alt="Grey fluffy cat looking up" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwzLFzhuNTVcCgLI21TK_lAL686KDMklK4TOKhe4K5bNm8prJiIx3G0ZBF3plz2ZDEJShwNk1vmoBAaEM9vXcLvuWnNy0lPI42DesTVnJW9j56UlRteKJY_ESQ4Z40z-6_fGIaC_Pi9CZ4yzvClJo6vhxpZZCHzbF-Y50HhKu_ouRULnVRkuYGQviaj9IUDO3adcvTXbCgA_8-m4T4UerWtJrGkp9gWfzdnzVwmrIuCJE5TgojgIxBPeyAVTDE-vhIP7tQVX8Zbw"/>
+<button class="absolute bottom-3 right-3 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition">
+<span class="material-icons-round">favorite_border</span>
+</button>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-extrabold text-gray-900 dark:text-white">Misty</h3>
+<span class="bg-pink-100 dark:bg-pink-900/30 text-pink-500 px-2 py-1 rounded text-xs font-bold uppercase">Female</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">A bit shy at first, but incredibly affectionate once she knows you.</p>
+<div class="mt-auto space-y-3">
+<div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">cake</span> 3 yrs
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">straighten</span> Medium
+                                    </div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="flex-1 bg-primary hover:bg-secondary text-white py-2 rounded-lg font-bold text-sm transition">Adopt</button>
+<button class="flex-1 border border-primary text-primary hover:bg-primary/5 dark:hover:bg-primary/10 py-2 rounded-lg font-bold text-sm transition">Details</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-primary/30 transition duration-300 group flex flex-col h-full relative">
+<div class="absolute top-3 right-3 z-10 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-md flex items-center gap-1 animate-pulse">
+<span class="material-icons-round text-sm">warning</span> URGENT
+                        </div>
+<div class="relative h-60 overflow-hidden">
+<img alt="Scruffy terrier dog" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBt2iHeqtvoMB4-56OypwMYHWMleuOcIGGHNuP-QBPy78qndMyBW-IrdDaCxGLHPjlUAbBKY_PNZc3KFDQc_pvFRHxc41auz-ec9ExfaXTXEj2LWZhGgNNrzyB42l-6q5SSkNdsP9GQoE8QVbjPTFWAkarM4aqEdox58lYMyXwR6GsmEDYP8weQMK8ogfW6vSsMO-nUqZUjYJjMs-5K4SGEBqKKGwoIqYkYmS0MV9z7KIT2pmp5LiFVHTs8Vz8vo_kqNdon0LlfA"/>
+<button class="absolute bottom-3 right-3 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition">
+<span class="material-icons-round">favorite_border</span>
+</button>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-extrabold text-gray-900 dark:text-white">Charlie</h3>
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-bold uppercase">Male</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">Needs a special diet and a loving home. Has been in the shelter for 200 days.</p>
+<div class="mt-auto space-y-3">
+<div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">cake</span> 7 yrs
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">straighten</span> Small
+                                    </div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="flex-1 bg-primary hover:bg-secondary text-white py-2 rounded-lg font-bold text-sm transition">Sponsor</button>
+<button class="flex-1 border border-primary text-primary hover:bg-primary/5 dark:hover:bg-primary/10 py-2 rounded-lg font-bold text-sm transition">Details</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-primary/30 transition duration-300 group flex flex-col h-full">
+<div class="relative h-60 overflow-hidden">
+<img alt="Two dogs running together" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXRpXbhgww34D4AC964AtrktDUTf21j33IXGEZZodyrsTqlcqEFqqMddyZ1zQN-Phkrpy3y5gFUAYUBEVmZ-SSQID5M5s7ekgD4yUfLsNezB9Yr3YkuFj_siRWMxMq9PCbwNVHlt7MclEUuKwvo6nm9RhX9OLpJzwWYT9kBX2riTUkRoHZAxXoggjFKWtuqirJgxv1nPbMKYoUxLdpIjuYkK6uAbbsIMQOzIVeyIyFROX-kwWxcMkSzx6K6qyhDTlBUStIQQKZXw"/>
+<button class="absolute bottom-3 right-3 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition">
+<span class="material-icons-round">favorite_border</span>
+</button>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-extrabold text-gray-900 dark:text-white">Bella &amp; Coco</h3>
+<span class="bg-pink-100 dark:bg-pink-900/30 text-pink-500 px-2 py-1 rounded text-xs font-bold uppercase">Female</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">Bonded pair! Must be adopted together. They are inseparable sisters.</p>
+<div class="mt-auto space-y-3">
+<div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">cake</span> 2 yrs
+                                    </div>
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-lg text-gray-400">straighten</span> Med
+                                    </div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="flex-1 bg-primary hover:bg-secondary text-white py-2 rounded-lg font-bold text-sm transition">Adopt</button>
+<button class="flex-1 border border-primary text-primary hover:bg-primary/5 dark:hover:bg-primary/10 py-2 rounded-lg font-bold text-sm transition">Details</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 flex justify-center">
+<nav class="flex items-center gap-2">
+<button class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">
+<span class="material-icons-round">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-primary text-white font-bold">1</button>
+<button class="w-10 h-10 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold transition">2</button>
+<button class="w-10 h-10 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold transition">3</button>
+<span class="text-gray-400">...</span>
+<button class="w-10 h-10 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold transition">8</button>
+<button class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">
+<span class="material-icons-round">chevron_right</span>
+</button>
+</nav>
+</div>
+</section>
+</div>
+</main>
+<footer class="bg-card-light dark:bg-card-dark border-t border-gray-100 dark:border-gray-800 mt-12 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Amigo Gigante Footer Logo" class="h-10 w-auto opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEDJomyfmFWkmttaCDCg9FBN4sYFOFOpGM1Cj02a-SyiT8cQsaMXYXC353hZ6a5F5i4lrghXne3gbWyNx0SLk-5iNMRSlYsjhHT-JqqeWcaTogrW_lRs0FnRxqRRdZ9u_9ZUDBm7XKO9DomjdaNSFUJBWKIKlSKYPqbLe4-4MIww18w4O18AssRdl7IuysMrka8f-8FwhvAHXLuTNqrXppS5xvtNJfGl-bYckzNMbgjDKK-BcJ88WeYGwZ5RgZVOQmGy7OI5Uu0g"/>
+<span class="font-display font-extrabold text-xl tracking-tight text-gray-800 dark:text-white">Amigo Gigante</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm">Connecting hearts and paws since 2023. Help us make a difference.</p>
+</div>
+<div>
+<h4 class="font-bold text-gray-900 dark:text-white mb-4">Quick Links</h4>
+<ul class="space-y-2 text-sm text-gray-500 dark:text-gray-400">
+<li><a class="hover:text-primary transition" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition" href="#">Adopt a Pet</a></li>
+<li><a class="hover:text-primary transition" href="#">Sponsor</a></li>
+<li><a class="hover:text-primary transition" href="#">Success Stories</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-gray-900 dark:text-white mb-4">Get Involved</h4>
+<ul class="space-y-2 text-sm text-gray-500 dark:text-gray-400">
+<li><a class="hover:text-primary transition" href="#">Volunteer</a></li>
+<li><a class="hover:text-primary transition" href="#">Donate Supplies</a></li>
+<li><a class="hover:text-primary transition" href="#">Corporate Partnerships</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-gray-900 dark:text-white mb-4">Newsletter</h4>
+<form class="flex flex-col gap-2">
+<input class="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm py-2 px-3 focus:ring-primary focus:border-primary" placeholder="Your email address" type="email"/>
+<button class="bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg font-bold text-sm transition">Subscribe</button>
+</form>
+</div>
+</div>
+<div class="border-t border-gray-100 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+<p>© 2024 Amigo Gigante. All rights reserved.</p>
+<div class="flex space-x-4 mt-4 md:mt-0">
+<a class="hover:text-primary" href="#"><span class="material-icons-round text-lg">facebook</span></a>
+<a class="hover:text-primary" href="#"><span class="material-icons-round text-lg">photo_camera</span></a>
+<a class="hover:text-primary" href="#"><span class="material-icons-round text-lg">alternate_email</span></a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>
