@@ -48,5 +48,13 @@
   },
   "pagination": {
     "showing": "Showing {from} to {to} of {total} results"
+  },
+  "loading": {
+    "label": "Loading animals..."
+  },
+  "errors": {
+    "generic": "Something went wrong while loading animals. Please try again.",
+    "connection": "We couldn't connect to the server. Please check your connection and try again.",
+    "unauthorized": "You don't have permission to view these animals."
   }
 }

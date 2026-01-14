@@ -5,7 +5,7 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Avatar, Box, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useLocale, useTranslations } from "next-intl";
 
-import type { AnimalManagement } from "@/infrastructure/mocks/animals-management.mock";
+import type { AnimalManagement } from "@/domain/models/AnimalManagement";
 import { AnimalStatusBadge } from "@/presentation/components/animals/AnimalStatusBadge";
 
 function formatAnimalId(id: number) {
@@ -68,7 +68,7 @@ export function AnimalsTable({ animals }: AnimalsTableProps) {
                 >
                   <TableCell>
                     <Avatar
-                      src={animal.cover_image_url ?? undefined}
+                      src={animal.coverImageUrl ?? undefined}
                       alt={animal.name}
                       sx={{ width: 44, height: 44 }}
                     >
@@ -95,7 +95,7 @@ export function AnimalsTable({ animals }: AnimalsTableProps) {
 
                   <TableCell>
                     <Typography variant="body2" color="text.secondary">
-                      {formatAdmissionDate(animal.created_at, locale)}
+                      {formatAdmissionDate(animal.createdAt, locale)}
                     </Typography>
                   </TableCell>
 
