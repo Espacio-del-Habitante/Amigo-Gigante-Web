@@ -1,5 +1,7 @@
-import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
+import type { AdoptCatalogItem } from "@/domain/models/AdoptCatalogItem";
+import type { AdoptDetail } from "@/domain/models/AdoptDetail";
 import type { AnimalManagement } from "@/domain/models/AnimalManagement";
+import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import { animalsMock } from "@/infrastructure/mocks/animals.mock";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
@@ -95,6 +97,86 @@ export class AnimalRepository implements IAnimalRepository {
       items: itemsWithPhotos,
       total: count ?? 0,
     };
+  }
+
+  async getAdoptDetail(id: number): Promise<AdoptDetail> {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select("id, name, species, breed, sex, age_months, size, status, description, cover_image_url")
+      .eq("id", id)
+      .eq("is_published", true)
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+
+    const { data: photosData, error: photosError } = await supabaseClient
+      .from("animal_photos")
+      .select("url, sort_order")
+      .eq("animal_id", id)
+      .order("sort_order", { ascending: true });
+
+    if (photosError) {
+      throw new Error(this.translateAnimalsError(photosError));
+    }
+
+    const photos = (photosData ?? [])
+      .map((photo) => ({
+        url: photo.url ?? "",
+        sortOrder: photo.sort_order ?? 0,
+      }))
+      .filter((photo) => Boolean(photo.url));
+
+    return {
+      id: data.id,
+      name: data.name ?? "",
+      species: this.normalizeAdoptSpecies(data.species),
+      breed: data.breed ?? "",
+      sex: this.normalizeAdoptSex(data.sex),
+      ageMonths: data.age_months ?? null,
+      size: this.normalizeAdoptSize(data.size),
+      status: this.normalizeAdoptStatus(data.status),
+      description: data.description ?? "",
+      coverImageUrl: data.cover_image_url ?? null,
+      photos,
+    };
+  }
+
+  async getRelatedAnimals(animalId: number, limit: number): Promise<AdoptCatalogItem[]> {
+    if (!Number.isFinite(limit) || limit <= 0) return [];
+
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select("id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at")
+      .eq("status", "available")
+      .eq("is_published", true)
+      .neq("id", animalId)
+      .limit(limit);
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    const items = (data ?? []).map((row) => ({
+      id: row.id,
+      name: row.name ?? "",
+      species: this.normalizeAdoptSpecies(row.species),
+      breed: row.breed ?? "",
+      sex: this.normalizeAdoptSex(row.sex),
+      ageMonths: row.age_months ?? null,
+      size: this.normalizeAdoptSize(row.size),
+      description: row.description ?? "",
+      coverImageUrl: row.cover_image_url ?? null,
+      createdAt: row.created_at,
+      isUrgent: this.isUrgentNeed(row.created_at, row.age_months ?? null),
+    }));
+
+    return this.attachCoverPhotoFallback(items);
   }
 
   async createAnimal({
@@ -324,6 +406,34 @@ export class AnimalRepository implements IAnimalRepository {
     if (!Number.isFinite(createdMs)) return isPuppy;
     const cutoffMs = Date.now() - 90 * 24 * 60 * 60 * 1000;
     return createdMs <= cutoffMs || isPuppy;
+  }
+
+  private normalizeAdoptSpecies(value: string | null): AdoptCatalogItem["species"] {
+    if (value === "dog" || value === "cat" || value === "other") {
+      return value;
+    }
+    return "other";
+  }
+
+  private normalizeAdoptSex(value: string | null): AdoptCatalogItem["sex"] {
+    if (value === "male" || value === "female") {
+      return value;
+    }
+    return "unknown";
+  }
+
+  private normalizeAdoptSize(value: string | null): AdoptCatalogItem["size"] {
+    if (value === "small" || value === "medium" || value === "large") {
+      return value;
+    }
+    return "unknown";
+  }
+
+  private normalizeAdoptStatus(value: string | null): AdoptDetail["status"] {
+    if (value === "available" || value === "adopted" || value === "pending" || value === "in_treatment" || value === "inactive") {
+      return value;
+    }
+    return "available";
   }
 
   private parseAnimalIdToNumber(search: string): number | null {

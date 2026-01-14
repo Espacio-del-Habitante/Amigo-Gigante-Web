@@ -1,0 +1,75 @@
+{
+  "breadcrumbs": {
+    "ariaLabel": "Breadcrumbs",
+    "adoptions": "Adoptions",
+    "species": {
+      "dog": "Dogs",
+      "cat": "Cats",
+      "other": "Others"
+    }
+  },
+  "gallery": {
+    "mainImageAlt": "Photo of {name}",
+    "thumbnailAlt": "Thumbnail {index}"
+  },
+  "status": {
+    "available": "Available",
+    "adopted": "Adopted",
+    "pending": "Pending",
+    "in_treatment": "In treatment",
+    "inactive": "Inactive"
+  },
+  "labels": {
+    "locationUnknown": "Location not available",
+    "ageLabel": "Age",
+    "ageUnknown": "Unknown age",
+    "descriptionTitle": "Description",
+    "descriptionEmpty": "No description available",
+    "breedUnknown": "Breed not available"
+  },
+  "age": {
+    "months": "{count, plural, one {# month} other {# months}}",
+    "years": "{count, plural, one {# year} other {# years}}"
+  },
+  "chips": {
+    "sex": {
+      "male": "Male",
+      "female": "Female",
+      "unknown": "Unknown"
+    },
+    "size": {
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "unknown": "Unknown size"
+    },
+    "species": {
+      "dog": "Dog",
+      "cat": "Cat",
+      "other": "Other"
+    }
+  },
+  "actions": {
+    "adopt": "Adopt",
+    "sponsor": "Sponsor"
+  },
+  "history": {
+    "title": "History",
+    "empty": "No history information available."
+  },
+  "related": {
+    "title": "Other friends looking for a home",
+    "empty": "No other friends available right now.",
+    "meta": "{breed} • {sex}",
+    "imageAlt": "Photo of {name}"
+  },
+  "states": {
+    "loading": "Loading details"
+  },
+  "errors": {
+    "unauthorized": "Unauthorized.",
+    "connection": "We couldn't connect. Please try again.",
+    "notFound": "We couldn't find this animal.",
+    "generic": "Something went wrong. Please try again."
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "breadcrumbs": {
+    "ariaLabel": "Migas de pan",
+    "adoptions": "Adopciones",
+    "species": {
+      "dog": "Perros",
+      "cat": "Gatos",
+      "other": "Otros"
+    }
+  },
+  "gallery": {
+    "mainImageAlt": "Foto de {name}",
+    "thumbnailAlt": "Miniatura {index}"
+  },
+  "status": {
+    "available": "Disponible",
+    "adopted": "Adoptado",
+    "pending": "Pendiente",
+    "in_treatment": "En tratamiento",
+    "inactive": "Inactivo"
+  },
+  "labels": {
+    "locationUnknown": "Ubicación no disponible",
+    "ageLabel": "Edad",
+    "ageUnknown": "Edad desconocida",
+    "descriptionTitle": "Descripción",
+    "descriptionEmpty": "Sin descripción disponible",
+    "breedUnknown": "Raza no disponible"
+  },
+  "age": {
+    "months": "{count, plural, one {# mes} other {# meses}}",
+    "years": "{count, plural, one {# año} other {# años}}"
+  },
+  "chips": {
+    "sex": {
+      "male": "Macho",
+      "female": "Hembra",
+      "unknown": "Sin dato"
+    },
+    "size": {
+      "small": "Pequeño",
+      "medium": "Mediano",
+      "large": "Grande",
+      "unknown": "Tamaño desconocido"
+    },
+    "species": {
+      "dog": "Perro",
+      "cat": "Gato",
+      "other": "Otro"
+    }
+  },
+  "actions": {
+    "adopt": "Adoptar",
+    "sponsor": "Apadrinar"
+  },
+  "history": {
+    "title": "Historial",
+    "empty": "Sin información de historial disponible."
+  },
+  "related": {
+    "title": "Otros amigos buscando hogar",
+    "empty": "No hay más amigos disponibles por ahora.",
+    "meta": "{breed} • {sex}",
+    "imageAlt": "Foto de {name}"
+  },
+  "states": {
+    "loading": "Cargando detalle"
+  },
+  "errors": {
+    "unauthorized": "No autorizado.",
+    "connection": "No pudimos conectar. Intenta nuevamente.",
+    "notFound": "No encontramos este animal.",
+    "generic": "Ocurrió un error. Intenta nuevamente."
+  }
+}
