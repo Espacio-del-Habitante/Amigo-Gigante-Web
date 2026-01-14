@@ -16,6 +16,9 @@ export function NeedsAttentionSection({ alerts, locale }: NeedsAttentionSectionP
   const t = useTranslations("dashboard");
 
   const badge = String(alerts.length);
+  const translate = (key: string, values?: Record<string, unknown>): string => {
+    return (t as unknown as (k: string, v?: Record<string, unknown>) => string)(key, values);
+  };
 
   const getAlertStyles = (variant: DashboardAttentionAlert["variant"]) => {
     if (variant === "danger") {
@@ -61,14 +64,14 @@ export function NeedsAttentionSection({ alerts, locale }: NeedsAttentionSectionP
       <div className="flex flex-col gap-3 p-4">
         {alerts.map((alert, idx) => {
           const styles = getAlertStyles(alert.variant);
-          const title = t(`needsAttention.alerts.${alert.key}.title` as never);
+          const title = translate(`needsAttention.alerts.${alert.key}.title`);
           const message =
             alert.key === "veterinaryReview"
-              ? t(`needsAttention.alerts.${alert.key}.message` as never, {
+              ? translate(`needsAttention.alerts.${alert.key}.message`, {
                   animalName: alert.animalName ?? "",
                   date: alert.dueDate ? formatDueDate(alert.dueDate) : "",
                 })
-              : t(`needsAttention.alerts.${alert.key}.message` as never, {
+              : translate(`needsAttention.alerts.${alert.key}.message`, {
                   count: alert.count ?? 0,
                 });
 
