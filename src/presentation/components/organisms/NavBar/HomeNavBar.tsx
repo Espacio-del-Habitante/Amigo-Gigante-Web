@@ -17,6 +17,9 @@ import {
   Link,
 } from "@mui/material";
 import { useMemo, useState } from "react";
+import NextLink from "next/link";
+import { useLocale } from "next-intl";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { Button, Logo } from "@/presentation/components/atoms";
@@ -28,16 +31,20 @@ import {
 
 export function HomeNavBar() {
   const theme = useTheme();
+  const locale = useLocale();
+  const pathname = usePathname();
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
+  const adoptHref = `/${locale}/adopt`;
+  const isAdoptActive = pathname === adoptHref;
   const navItems = useMemo(
     () => [
-      { key: "adopt", label: t("navigation.adopt") },
-      { key: "sponsor", label: t("navigation.sponsor") },
-      { key: "foundations", label: t("navigation.foundations") },
-      { key: "store", label: t("navigation.store") },
+      { key: "adopt", label: t("navigation.adopt"), href: adoptHref, active: isAdoptActive },
+      { key: "sponsor", label: t("navigation.sponsor"), href: "#" },
+      { key: "foundations", label: t("navigation.foundations"), href: "#" },
+      { key: "store", label: t("navigation.store"), href: "#" },
     ],
-    [t]
+    [adoptHref, isAdoptActive, t],
   );
 
   return (
@@ -87,7 +94,7 @@ export function HomeNavBar() {
             }}
           >
             {navItems.map((link) => (
-              <NavLink key={link.key} label={link.label} />
+              <NavLink key={link.key} label={link.label} href={link.href} active={Boolean(link.active)} />
             ))}
           </Stack>
           <Stack
@@ -107,7 +114,7 @@ export function HomeNavBar() {
             <SearchButton tone="neutral" variant="ghost" />
             <LanguageSelector />
 
-            <Link href="/login">
+            <Link href={`/${locale}/login`}>
               <Button
                 tone="primary"
                 variant="solid"
@@ -148,7 +155,11 @@ export function HomeNavBar() {
         <List sx={{ py: 0 }}>
           {navItems.map((item) => (
             <ListItem key={item.key} disablePadding>
-              <ListItemButton onClick={() => setOpen(false)}>
+              <ListItemButton
+                component={item.href === "#" ? "button" : NextLink}
+                href={item.href === "#" ? undefined : item.href}
+                onClick={() => setOpen(false)}
+              >
                 <Typography fontWeight={700}>{item.label}</Typography>
               </ListItemButton>
             </ListItem>

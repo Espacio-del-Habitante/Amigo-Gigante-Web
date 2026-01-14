@@ -1,0 +1,78 @@
+{
+  "hero": {
+    "title": "Adopt a friend",
+    "subtitle": "Browse available animals and filter by your preferences."
+  },
+  "filters": {
+    "title": "Filters",
+    "urgent": "Urgent Need",
+    "species": {
+      "label": "Animal type",
+      "all": "All",
+      "dog": "Dogs",
+      "cat": "Cats",
+      "other": "Others"
+    },
+    "age": {
+      "label": "Age",
+      "all": "All",
+      "puppy": "Puppy",
+      "young": "Young",
+      "adult": "Adult",
+      "senior": "Senior"
+    },
+    "size": {
+      "label": "Size",
+      "all": "All",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    }
+  },
+  "search": {
+    "placeholder": "Search by name, breed..."
+  },
+  "sort": {
+    "label": "Sort",
+    "newest": "Newest Arrivals",
+    "oldest": "Oldest Arrivals",
+    "urgent": "Urgent Need"
+  },
+  "badges": {
+    "urgent": "URGENT"
+  },
+  "sex": {
+    "male": "Male",
+    "female": "Female",
+    "unknown": "Unknown"
+  },
+  "labels": {
+    "ageUnknown": "Unknown age",
+    "sizeUnknown": "Unknown size"
+  },
+  "age": {
+    "months": "{count, plural, one {# month} other {# months}}",
+    "years": "{count, plural, one {# year} other {# years}}"
+  },
+  "card": {
+    "meta": "{age} • {size}"
+  },
+  "buttons": {
+    "adopt": "Adopt",
+    "details": "Details"
+  },
+  "pagination": {
+    "showing": "Showing {from}-{to} of {total}"
+  },
+  "states": {
+    "loading": "Loading catalog",
+    "emptyTitle": "No results found",
+    "emptySubtitle": "Try adjusting your search or filters."
+  },
+  "errors": {
+    "unauthorized": "Unauthorized.",
+    "connection": "We couldn't connect. Please try again.",
+    "generic": "Something went wrong. Please try again."
+  }
+}
+
