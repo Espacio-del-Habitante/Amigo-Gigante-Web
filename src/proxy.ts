@@ -180,16 +180,3 @@ export async function proxy(request: NextRequest) {
   const error403Url = new URL("/403", request.url);
   return NextResponse.redirect(error403Url);
 }
-
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    String.raw`/((?!api|_next/static|_next/image|favicon.ico|.*\.).*)`,
-  ],
-};
