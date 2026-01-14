@@ -23,7 +23,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import LogoSection from './LogoSection';
-import { getProfileValidationSchema } from './ProfileValidation';
+import { getProfileValidationSchema, type TranslationFunction } from './ProfileValidation';
 import type { FoundationProfile } from '@/domain/models/FoundationProfile';
 import { GetFoundationProfileUseCase } from '@/domain/usecases/foundation/GetFoundationProfileUseCase';
 import { UpdateFoundationProfileUseCase } from '@/domain/usecases/foundation/UpdateFoundationProfileUseCase';
@@ -60,12 +60,11 @@ const emptyProfileValues: ProfileFormValues = {
   whatsappUrl: '',
 };
 
-const errorMessageKeys = new Set([
-  'errors.unauthorized',
-  'errors.notFound',
-  'errors.connection',
-  'errors.generic',
-]);
+const errorMessageKeyList = ['errors.unauthorized', 'errors.notFound', 'errors.connection', 'errors.generic'] as const;
+
+type FoundationErrorMessageKey = (typeof errorMessageKeyList)[number];
+
+const errorMessageKeys = new Set<FoundationErrorMessageKey>(errorMessageKeyList);
 
 const ProfileForm = () => {
   const t = useTranslations('profile');
@@ -89,8 +88,11 @@ const ProfileForm = () => {
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
 
   const resolveErrorMessage = (error: unknown) => {
-    if (error instanceof Error && errorMessageKeys.has(error.message)) {
-      return foundationT(error.message);
+    if (error instanceof Error) {
+      const key = error.message as FoundationErrorMessageKey;
+      if (errorMessageKeys.has(key)) {
+        return foundationT(key);
+      }
     }
 
     return foundationT('errors.generic');
@@ -127,7 +129,7 @@ const ProfileForm = () => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: getProfileValidationSchema(t),
+    validationSchema: getProfileValidationSchema(t as unknown as TranslationFunction),
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       setSubmitError(null);

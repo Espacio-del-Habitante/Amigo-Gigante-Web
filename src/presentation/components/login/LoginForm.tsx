@@ -33,14 +33,18 @@ interface LoginFormValues {
   password: string;
 }
 
-const errorMessageKeys = new Set([
+const errorMessageKeyList = [
   "form.errors.invalidCredentials",
   "form.errors.userNotFound",
   "form.errors.connectionError",
   "form.errors.emailNotVerified",
   "form.errors.rateLimit",
   "form.errors.generic",
-]);
+] as const;
+
+type LoginErrorMessageKey = (typeof errorMessageKeyList)[number];
+
+const errorMessageKeys = new Set<LoginErrorMessageKey>(errorMessageKeyList);
 
 export function LoginForm() {
   const theme = useTheme();
@@ -102,8 +106,11 @@ export function LoginForm() {
   };
 
   const resolveErrorMessage = (error: unknown) => {
-    if (error instanceof Error && errorMessageKeys.has(error.message)) {
-      return t(error.message);
+    if (error instanceof Error) {
+      const key = error.message as LoginErrorMessageKey;
+      if (errorMessageKeys.has(key)) {
+        return t(key);
+      }
     }
 
     return t("form.errors.generic");

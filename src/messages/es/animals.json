@@ -1,0 +1,52 @@
+{
+  "title": "Gestión de Animales",
+  "subtitle": "Gestiona perfiles de adopción, edita detalles y actualiza estados.",
+  "addButton": "+ Agregar Nuevo Animal",
+  "search": {
+    "placeholder": "Buscar por nombre, ID o raza...",
+    "noResults": "No se encontraron animales"
+  },
+  "filters": {
+    "status": {
+      "label": "Estado",
+      "all": "Todos",
+      "available": "Disponible",
+      "adopted": "Adoptado",
+      "pending": "Pendiente",
+      "in_treatment": "En tratamiento",
+      "inactive": "Inactivo"
+    },
+    "species": {
+      "label": "Especie",
+      "all": "Todas",
+      "dog": "Perro",
+      "cat": "Gato",
+      "bird": "Ave",
+      "other": "Otro"
+    },
+    "sort": {
+      "label": "Orden",
+      "newest": "Más recientes",
+      "oldest": "Más antiguos",
+      "nameAsc": "Nombre A-Z",
+      "nameDesc": "Nombre Z-A"
+    }
+  },
+  "table": {
+    "columns": {
+      "profile": "Perfil",
+      "nameId": "Nombre e ID",
+      "species": "Especie",
+      "admissionDate": "Fecha de admisión",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar"
+    }
+  },
+  "pagination": {
+    "showing": "Mostrando {from} a {to} de {total} resultados"
+  }
+}
