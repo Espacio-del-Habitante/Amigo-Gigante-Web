@@ -17,5 +17,104 @@
       "initials": "SA"
     }
   },
+  "dashboardHeader": {
+    "greeting": "Hola, {foundationName}!",
+    "subtitle": "{date} - Resumen diario de actividad",
+    "notifications": "Notificaciones",
+    "viewMode": "Modo Vista"
+  },
+  "kpi": {
+    "animalsInCare": {
+      "label": "Animales en Cuidado"
+    },
+    "activeSponsorships": {
+      "label": "Patrocinios Activos"
+    },
+    "pendingAdoptions": {
+      "label": "Adopciones Pendientes"
+    },
+    "monthlyRevenue": {
+      "label": "Recaudado (Mes)"
+    }
+  },
+  "adoptionFunnel": {
+    "title": "Estado del Embudo de Adopción",
+    "viewReport": "Ver reporte",
+    "applicationsReceived": "Solicitudes Recibidas",
+    "interviewsScheduled": "Entrevistas Programadas",
+    "homeVisits": "Visitas Domiciliarias",
+    "adoptionsCompleted": "Adopciones Completadas",
+    "legend": {
+      "inProcess": "En proceso",
+      "totalInput": "Entrada total"
+    }
+  },
+  "recentActivity": {
+    "title": "Actividad Reciente",
+    "columns": {
+      "subject": "Animal / Asunto",
+      "type": "Tipo",
+      "date": "Fecha",
+      "status": "Estado"
+    },
+    "types": {
+      "animal": "Animal",
+      "event": "Evento",
+      "product": "Producto"
+    },
+    "status": {
+      "animal": {
+        "available": "Disponible",
+        "adopted": "Adoptado",
+        "in_treatment": "En tratamiento",
+        "inactive": "Inactivo"
+      },
+      "event": {
+        "upcoming": "Próximo",
+        "created": "Creado"
+      },
+      "product": {
+        "added": "Agregado"
+      }
+    },
+    "date": {
+      "today": "Hoy, {time}",
+      "yesterday": "Ayer, {time}"
+    }
+  },
+  "quickActions": {
+    "title": "Acciones Rápidas",
+    "newAnimal": "+ Nuevo Animal",
+    "registerExpense": "Registrar Gasto",
+    "createCampaign": "Crear Campaña"
+  },
+  "needsAttention": {
+    "title": "Requiere Atención",
+    "viewAllTasks": "Ver todas las tareas",
+    "alerts": {
+      "veterinaryReview": {
+        "title": "Revisión Veterinaria",
+        "message": "{animalName} necesita su vacuna anual antes del {date}."
+      },
+      "lowStock": {
+        "title": "Stock Bajo",
+        "message": "Quedan menos de {count} bolsas de alimento cachorro."
+      },
+      "volunteersNeeded": {
+        "title": "Voluntarios Sábado",
+        "message": "Faltan {count} cupos para la jornada de limpieza."
+      }
+    }
+  },
+  "loading": {
+    "label": "Cargando dashboard..."
+  },
+  "errors": {
+    "generic": "Ocurrió un error al cargar el dashboard. Inténtalo nuevamente.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
+    "unauthorized": "No tienes permisos para ver el dashboard de esta fundación.",
+    "notFound": "No pudimos encontrar la información de tu fundación.",
+    "retry": "Reintentar"
+  },
   "copyright": "© {year} Amigo Gigante"
 }

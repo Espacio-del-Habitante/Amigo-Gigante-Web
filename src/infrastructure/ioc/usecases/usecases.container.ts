@@ -3,9 +3,11 @@ import { ContainerModule, ContainerModuleLoadOptions } from "inversify";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
+import type { IEventRepository } from "@/domain/repositories/IEventRepository";
 import type { IFoundationRepository } from "@/domain/repositories/IFoundationRepository";
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
+import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
@@ -13,6 +15,7 @@ import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsU
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
+import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
 import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
@@ -61,6 +64,28 @@ const useCasesModule = new ContainerModule(
         );
 
         return new CreateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetDashboardDataUseCase>(USE_CASE_TYPES.GetDashboardDataUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+        const eventRepository = context.get<IEventRepository>(REPOSITORY_TYPES.EventRepository);
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationRepository = context.get<IFoundationRepository>(REPOSITORY_TYPES.FoundationRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetDashboardDataUseCase(
+          animalRepository,
+          eventRepository,
+          productRepository,
+          authRepository,
+          foundationRepository,
+          foundationMembershipRepository,
+        );
       })
       .inSingletonScope();
 

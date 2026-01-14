@@ -87,6 +87,20 @@ class FoundationRepository implements IFoundationRepository {
     }
   }
 
+  async getFoundationById(foundationId: string): Promise<Foundation> {
+    const { data, error } = await supabaseClient
+      .from("foundations")
+      .select("id, name")
+      .eq("id", foundationId)
+      .single();
+
+    if (error || !data) {
+      throw new Error(this.translateFoundationLookupError(error ?? new Error("not found")));
+    }
+
+    return { id: data.id, name: data.name ?? "", taxId: null };
+  }
+
   async rollbackFoundation(foundationId: string): Promise<void> {
     await supabaseClient.from("foundations").delete().eq("id", foundationId);
   }
@@ -153,6 +167,24 @@ class FoundationRepository implements IFoundationRepository {
     }
 
     return "No se pudo guardar el miembro de la fundación. Inténtalo nuevamente.";
+  }
+
+  private translateFoundationLookupError(error: PostgrestError | Error): string {
+    const message = error.message?.toLowerCase?.() ?? "";
+
+    if (message.includes("permission") || message.includes("row level")) {
+      return "errors.unauthorized";
+    }
+
+    if (message.includes("not found")) {
+      return "errors.notFound";
+    }
+
+    if (message.includes("connection") || message.includes("network")) {
+      return "errors.connection";
+    }
+
+    return "errors.generic";
   }
 }
 
