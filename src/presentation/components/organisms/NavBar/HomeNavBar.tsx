@@ -18,6 +18,8 @@ import {
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import NextLink from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Button, Logo } from "@/presentation/components/atoms";
 import {
@@ -29,13 +31,20 @@ import {
 export function HomeNavBar() {
   const theme = useTheme();
   const t = useTranslations("common");
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  const isActive = (href: string) => {
+    if (!pathname) return false;
+    return pathname === href || pathname.endsWith(href);
+  };
+
   const navItems = useMemo(
     () => [
-      { key: "adopt", label: t("navigation.adopt") },
-      { key: "sponsor", label: t("navigation.sponsor") },
-      { key: "foundations", label: t("navigation.foundations") },
-      { key: "store", label: t("navigation.store") },
+      { key: "adopt", label: t("navigation.adopt"), href: "#" },
+      { key: "sponsor", label: t("navigation.sponsor"), href: "#" },
+      { key: "foundations", label: t("navigation.foundations"), href: "/foundations" },
+      { key: "store", label: t("navigation.store"), href: "/shop" },
     ],
     [t]
   );
@@ -87,7 +96,7 @@ export function HomeNavBar() {
             }}
           >
             {navItems.map((link) => (
-              <NavLink key={link.key} label={link.label} />
+              <NavLink key={link.key} label={link.label} href={link.href} active={isActive(link.href)} />
             ))}
           </Stack>
           <Stack
@@ -148,7 +157,11 @@ export function HomeNavBar() {
         <List sx={{ py: 0 }}>
           {navItems.map((item) => (
             <ListItem key={item.key} disablePadding>
-              <ListItemButton onClick={() => setOpen(false)}>
+              <ListItemButton
+                component={item.href === "#" ? "button" : NextLink}
+                href={item.href === "#" ? undefined : item.href}
+                onClick={() => setOpen(false)}
+              >
                 <Typography fontWeight={700}>{item.label}</Typography>
               </ListItemButton>
             </ListItem>

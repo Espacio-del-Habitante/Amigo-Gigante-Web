@@ -1,0 +1,47 @@
+{
+  "hero": {
+    "title": "Tienda Solidaria",
+    "subtitle": "Cada compra es una patita amiga. El 100% de las ganancias van directamente a las fundaciones para ayudar a peludos que buscan un hogar."
+  },
+  "search": {
+    "placeholder": "Buscar camitas, juguetes, correas...",
+    "allFoundations": "Todas las fundaciones",
+    "submit": "Buscar"
+  },
+  "foundation": {
+    "viewAll": "Ver todo",
+    "noLocation": "Ubicación no disponible"
+  },
+  "product": {
+    "buy": "Comprar",
+    "noImage": "Sin imagen",
+    "noDescription": "Sin descripción",
+    "priceUnavailable": "Precio no disponible"
+  },
+  "donationCard": {
+    "title": "Dona un Bulto",
+    "description": "¿No necesitas productos? Compra comida directamente para el refugio.",
+    "cta": "Donar ahora"
+  },
+  "cta": {
+    "title": "¿Tienes una fundación?",
+    "description": "Únete a nuestra plataforma y vende tus productos solidarios. Llega a más corazones dispuestos a ayudar.",
+    "primary": "Registrar mi Fundación",
+    "secondary": "Saber más"
+  },
+  "pagination": {
+    "total": "{count, plural, one {# producto} other {# productos}}"
+  },
+  "empty": {
+    "title": "No encontramos productos",
+    "description": "Prueba con otra búsqueda o selecciona una fundación diferente."
+  },
+  "errors": {
+    "title": "Ocurrió un error",
+    "unauthorized": "No tienes permisos para ver estos productos.",
+    "notFound": "No pudimos encontrar los productos solicitados.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo de nuevo.",
+    "generic": "Ocurrió un error inesperado. Inténtalo nuevamente."
+  }
+}
+

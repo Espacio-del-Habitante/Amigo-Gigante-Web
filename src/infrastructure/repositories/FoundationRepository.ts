@@ -7,6 +7,7 @@ import type {
   IFoundationRepository,
 } from "@/domain/repositories/IFoundationRepository";
 import type { Foundation } from "@/domain/models/Foundation";
+import type { ShopFoundation } from "@/domain/models/ShopFoundation";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
 class FoundationRepository implements IFoundationRepository {
@@ -99,6 +100,25 @@ class FoundationRepository implements IFoundationRepository {
     }
 
     return { id: data.id, name: data.name ?? "", taxId: null };
+  }
+
+  async getFoundationsList(): Promise<ShopFoundation[]> {
+    const { data, error } = await supabaseClient
+      .from("foundations")
+      .select("id, name, city, country, logo_url")
+      .returns<Array<{ id: string; name: string | null; city: string | null; country: string | null; logo_url: string | null }>>();
+
+    if (error) {
+      throw new Error(this.translateFoundationLookupError(error));
+    }
+
+    return (data ?? []).map((row) => ({
+      id: row.id,
+      name: row.name ?? "",
+      city: row.city ?? null,
+      country: row.country ?? null,
+      logoUrl: row.logo_url ?? null,
+    }));
   }
 
   async rollbackFoundation(foundationId: string): Promise<void> {

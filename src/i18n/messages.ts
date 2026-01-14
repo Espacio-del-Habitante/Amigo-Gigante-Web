@@ -7,6 +7,7 @@ import navigation from "../messages/en/navigation.json";
 import profile from "../messages/en/profile.json";
 import register from "../messages/en/register.json";
 import animals from "../messages/en/animals.json";
+import shop from "../messages/en/shop.json";
 
 export const messages = {
   common,
@@ -18,6 +19,7 @@ export const messages = {
   profile,
   register,
   animals,
+  shop,
 };
 
 export type AppMessages = typeof messages;
