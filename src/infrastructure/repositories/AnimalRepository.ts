@@ -1,4 +1,5 @@
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
+import type { AnimalManagement } from "@/domain/models/AnimalManagement";
 import { animalsMock } from "@/infrastructure/mocks/animals.mock";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
