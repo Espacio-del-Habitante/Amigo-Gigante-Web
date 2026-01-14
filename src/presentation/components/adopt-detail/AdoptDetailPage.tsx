@@ -59,7 +59,7 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
   }, []);
 
   const loadDetail = useCallback(
-    async (id: number) => {
+    async (id: number | string) => {
       const requestId = ++requestCounterRef.current;
       setIsLoading(true);
       setErrorKey(null);
@@ -86,8 +86,8 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
   );
 
   useEffect(() => {
-    const parsedId = Number(animalId);
-    if (!Number.isFinite(parsedId) || parsedId <= 0) {
+    const normalizedId = animalId.trim();
+    if (!normalizedId) {
       requestCounterRef.current += 1;
       setDetail(null);
       setRelatedAnimals([]);
@@ -96,7 +96,9 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
       return;
     }
 
-    void loadDetail(parsedId);
+    const numericId = Number(normalizedId);
+    const idValue = Number.isFinite(numericId) ? numericId : normalizedId;
+    void loadDetail(idValue);
   }, [animalId, loadDetail]);
 
   const statusLabel = detail ? t(`status.${detail.status}`) : "";

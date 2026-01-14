@@ -99,7 +99,7 @@ export class AnimalRepository implements IAnimalRepository {
     };
   }
 
-  async getAdoptDetail(id: number): Promise<AdoptDetail> {
+  async getAdoptDetail(id: number | string): Promise<AdoptDetail> {
     const { data, error } = await supabaseClient
       .from("animals")
       .select("id, name, species, breed, sex, age_months, size, status, description, cover_image_url")
@@ -147,7 +147,7 @@ export class AnimalRepository implements IAnimalRepository {
     };
   }
 
-  async getRelatedAnimals(animalId: number, limit: number): Promise<AdoptCatalogItem[]> {
+  async getRelatedAnimals(animalId: number | string, limit: number): Promise<AdoptCatalogItem[]> {
     if (!Number.isFinite(limit) || limit <= 0) return [];
 
     const { data, error } = await supabaseClient
@@ -365,7 +365,9 @@ export class AnimalRepository implements IAnimalRepository {
     return this.attachCoverPhotoFallback(animals);
   }
 
-  private async attachCoverPhotoFallback<T extends { id: number; coverImageUrl: string | null }>(animals: T[]): Promise<T[]> {
+  private async attachCoverPhotoFallback<T extends { id: number | string; coverImageUrl: string | null }>(
+    animals: T[],
+  ): Promise<T[]> {
     const missingCover = animals.filter((animal) => !animal.coverImageUrl);
     if (missingCover.length === 0) return animals;
 
@@ -382,7 +384,7 @@ export class AnimalRepository implements IAnimalRepository {
       return animals;
     }
 
-    const firstPhotoByAnimalId = new Map<number, string>();
+    const firstPhotoByAnimalId = new Map<number | string, string>();
     for (const row of data ?? []) {
       const animalId = row.animal_id as number | undefined;
       const url = row.url as string | undefined;

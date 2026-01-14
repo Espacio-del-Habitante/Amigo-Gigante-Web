@@ -8,7 +8,7 @@ export interface AdoptDetailPhoto {
 }
 
 export interface AdoptDetail {
-  id: number;
+  id: number | string;
   name: string;
   species: AdoptSpeciesFilter;
   breed: string;

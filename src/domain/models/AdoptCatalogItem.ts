@@ -7,7 +7,7 @@ export type AdoptSex = "male" | "female" | "unknown";
 export type AdoptAgeFilter = "puppy" | "young" | "adult" | "senior";
 
 export interface AdoptCatalogItem {
-  id: number;
+  id: number | string;
   name: string;
   species: AdoptSpeciesFilter;
   breed: string;

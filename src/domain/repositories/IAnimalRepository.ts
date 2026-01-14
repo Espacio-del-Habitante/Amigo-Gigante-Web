@@ -94,6 +94,6 @@ export interface IAnimalRepository {
   createAnimal(params: CreateAnimalParams): Promise<AnimalManagement>;
   createAnimalPhotos(params: CreateAnimalPhotoParams[]): Promise<void>;
   getAdoptCatalog(params: GetAdoptCatalogParams): Promise<GetAdoptCatalogResult>;
-  getAdoptDetail(id: number): Promise<AdoptDetail>;
-  getRelatedAnimals(animalId: number, limit: number): Promise<AdoptCatalogItem[]>;
+  getAdoptDetail(id: number | string): Promise<AdoptDetail>;
+  getRelatedAnimals(animalId: number | string, limit: number): Promise<AdoptCatalogItem[]>;
 }
