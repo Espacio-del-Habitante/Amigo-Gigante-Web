@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Amigo Gigante Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2ce9ed",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#102122",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1a2c2c",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white transition-colors duration-200">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-card-light dark:bg-card-dark flex flex-col justify-between hidden md:flex transition-colors duration-200">
+<div class="flex flex-col gap-6 p-6">
+<!-- Foundation Profile -->
+<div class="flex items-center gap-3 mb-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 shadow-sm" data-alt="Foundation logo showing a paw print" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5w_QI6FcbyEWIIJZTSCcWlg7mnhGNiUXM1XjyXHNPTTlzfGkkI4vTXyAAHqz5Ls-q_Xq21HLc4tSFiXKh_COqq8j_915neCVkV-px1jIHZlUouF6NLvgfBfyxCh7OJwORuZWsYIhBrGQfyuKHuo4BIKcFyn0wZazEdMIMRsQJOgmhUJpfJlvAJYpOLcjC6ECyFX_WBds7z-hC9AwobwZkgBVjiPd48NFqJM_zzKrv7tyJAQyMgdR5zwclxN6oE8-d1McMIriDjg");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Amigo Gigante</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Fundación Huellitas</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/20 text-slate-900 dark:text-white font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined text-primary dark:text-primary">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-500">pets</span>
+<span class="text-sm">Animales</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-500">volunteer_activism</span>
+<span class="text-sm">Adopciones</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-500">loyalty</span>
+<span class="text-sm">Patrocinios</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-500">storefront</span>
+<span class="text-sm">Tienda Solidaria</span>
+</a>
+</nav>
+</div>
+<div class="p-6 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-500">settings</span>
+<span class="text-sm">Configuración</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors font-medium mt-1" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm">Cerrar Sesión</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Mobile Header (Visible only on small screens) -->
+<div class="md:hidden flex items-center justify-between p-4 bg-card-light dark:bg-card-dark border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Foundation logo placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGB6zPcIpi_Nd5NujbNLHWJJd5NYdUxCEPJhxT65gQcIaAnMkwTAuFoKHcf5kvYzf951lJit8mdoF8wtrOUkf145hUyMVKvSxGH69p1Gf85tyvlGLMJFzFn7zXaAj_a3_HrpTOpdxpi4Mwli-9UP5mkMQFDevJMyDNH1w3OOJ4gGAmtyM55v1JEslrBWAkQv7iAOqmaQ0RVUiKXipnTEj2BKq9XAw_vmFHkbkkvbsw-979wZd_oNmZpTiuYIC7GG-18cJp_U9pOA");'></div>
+<span class="font-bold text-slate-900 dark:text-white">Amigo Gigante</span>
+</div>
+<button class="text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Header -->
+<div class="flex flex-wrap justify-between items-end gap-4">
+<div class="flex flex-col gap-1">
+<h1 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-extrabold tracking-tight">Hola, Fundación Huellitas!</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm md:text-base font-medium">Oct 26, 2023 - Resumen diario de actividad</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full bg-white dark:bg-card-dark border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 px-4 flex items-center bg-white dark:bg-card-dark border border-slate-200 dark:border-slate-700 rounded-full text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
+<span>Modo Vista</span>
+</div>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+<!-- Card 1 -->
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-between h-full group hover:border-primary/50 transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">pets</span>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +2%
+                                </span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Animales en Cuidado</p>
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white">45</h3>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-between h-full group hover:border-primary/50 transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +12%
+                                </span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Patrocinios Activos</p>
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white">120</h3>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-between h-full group hover:border-primary/50 transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined">home</span>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400">
+                                    0%
+                                </span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Adopciones Pendientes</p>
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white">3</h3>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-between h-full group hover:border-primary/50 transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-teal-50 dark:bg-teal-900/20 rounded-lg text-teal-600 dark:text-teal-400">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +5%
+                                </span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Recaudado (Mes)</p>
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white">$1,250</h3>
+</div>
+</div>
+</div>
+<!-- Main Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<!-- Left Column (Wider) -->
+<div class="xl:col-span-2 flex flex-col gap-6">
+<!-- Adoptions Funnel Chart Section -->
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Estado del Embudo de Adopción</h3>
+<button class="text-sm font-semibold text-primary hover:text-cyan-400 transition-colors">Ver reporte</button>
+</div>
+<div class="p-6 flex flex-col gap-6">
+<!-- Custom CSS Charts (No JS libraries) -->
+<div class="flex flex-col gap-4">
+<!-- Bar 1 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-sm font-medium">
+<span class="text-slate-700 dark:text-slate-300">Solicitudes Recibidas</span>
+<span class="text-slate-900 dark:text-white font-bold">24</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-slate-400 rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-sm font-medium">
+<span class="text-slate-700 dark:text-slate-300">Entrevistas Programadas</span>
+<span class="text-slate-900 dark:text-white font-bold">12</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full opacity-60" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-sm font-medium">
+<span class="text-slate-700 dark:text-slate-300">Visitas Domiciliarias</span>
+<span class="text-slate-900 dark:text-white font-bold">5</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full opacity-80" style="width: 20%;"></div>
+</div>
+</div>
+<!-- Bar 4 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-sm font-medium">
+<span class="text-slate-700 dark:text-slate-300">Adopciones Completadas</span>
+<span class="text-slate-900 dark:text-white font-bold">3</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 12%;"></div>
+</div>
+</div>
+</div>
+<div class="flex gap-4 mt-2">
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+<div class="size-2 rounded-full bg-primary"></div>
+<span>En proceso</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+<div class="size-2 rounded-full bg-slate-400"></div>
+<span>Entrada total</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Table -->
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Actividad Reciente</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+<tr>
+<th class="px-6 py-4">Animal / Asunto</th>
+<th class="px-6 py-4">Tipo</th>
+<th class="px-6 py-4">Fecha</th>
+<th class="px-6 py-4">Estado</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Portrait of a golden retriever dog" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBNKGHTVFDP6wW6P9W01VV0HNiru1KwwWdidoVfBCUF3cOuDyu-CDC7rDfaVqvkxpGzzp7Pc3wnESlo-AiUjnAtQxgBGef5nTgyRIcfFgBVe7bjNJ9DO4jfljacZYOyrtofXUUDqmKRBMhiRJEMGP9SqgoEiuqWZpEZYhoEMlqEu4dBSdUexmgeC9P4AXPFASGxR8O0OIvk62SwXmdFPsbLCa1fIZipoFSXlf_OTFWPQ_Ij1wRsz9LwxfOJK0Qi0kyNbYhENJcz8Q");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Max</p>
+<p class="text-xs">Golden Retriever</p>
+</div>
+</td>
+<td class="px-6 py-4">Solicitud Adopción</td>
+<td class="px-6 py-4">Hoy, 10:30 AM</td>
+<td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Pendiente</span></td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Portrait of a black cat looking curious" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBvhcN1cbeinvuYx-LlyUcZowAryT7HK40ZnUbEkJxsENUGEHS3KMEY2SmvTUAIwKXWXMastYobh4UqM-Dk62Zbdm57GC66lux-8yP60e4R7GsjGtvrr-hsYatKKfKpGMYsSm7uSa7QC0wyW5Jd_9Z2AiiJejguiX2MFbfEvXvhpPwATqek2EvIt4KNo0I-R61R-rnrQExJC2hRCHgkHeOA_vXp9lUXvl824tKnQIYCD03LpKqoRzxkdTsYUtZFWrfDXpykoXEccw");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Luna</p>
+<p class="text-xs">Gato Mestizo</p>
+</div>
+</td>
+<td class="px-6 py-4">Nuevo Padrino</td>
+<td class="px-6 py-4">Ayer, 4:15 PM</td>
+<td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Activo</span></td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="size-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold text-xs">
+                                                        TS
+                                                    </div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Pedido #2034</p>
+<p class="text-xs">Tienda Solidaria</p>
+</div>
+</td>
+<td class="px-6 py-4">Venta Online</td>
+<td class="px-6 py-4">25 Oct, 2023</td>
+<td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">Enviado</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column (Narrower) -->
+<div class="flex flex-col gap-6">
+<!-- Quick Actions -->
+<div class="bg-primary/10 dark:bg-primary/5 rounded-2xl p-6 border border-primary/20">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Acciones Rápidas</h3>
+<div class="flex flex-col gap-3">
+<button class="flex items-center justify-center w-full gap-2 rounded-xl h-12 px-4 bg-primary text-slate-900 font-bold shadow-md shadow-primary/20 hover:bg-cyan-300 hover:shadow-lg transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">add_circle</span>
+<span>Nuevo Animal</span>
+</button>
+<button class="flex items-center justify-center w-full gap-2 rounded-xl h-12 px-4 bg-white dark:bg-card-dark text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">receipt_long</span>
+<span>Registrar Gasto</span>
+</button>
+<button class="flex items-center justify-center w-full gap-2 rounded-xl h-12 px-4 bg-white dark:bg-card-dark text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">campaign</span>
+<span>Crear Campaña</span>
+</button>
+</div>
+</div>
+<!-- Needs Attention -->
+<div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col flex-1">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Requiere Atención</h3>
+<span class="flex size-6 items-center justify-center rounded-full bg-red-100 text-red-600 text-xs font-bold dark:bg-red-900/30 dark:text-red-400">3</span>
+</div>
+<div class="p-4 flex flex-col gap-3">
+<!-- Alert Item 1 -->
+<div class="flex gap-4 p-3 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20">
+<div class="mt-1 min-w-[24px]">
+<span class="material-symbols-outlined text-red-500">medical_services</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Revisión Veterinaria</p>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">Rocky necesita su vacuna anual antes del viernes.</p>
+</div>
+</div>
+<!-- Alert Item 2 -->
+<div class="flex gap-4 p-3 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/20">
+<div class="mt-1 min-w-[24px]">
+<span class="material-symbols-outlined text-amber-500">inventory_2</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Stock Bajo</p>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">Quedan menos de 5 bolsas de alimento cachorro.</p>
+</div>
+</div>
+<!-- Alert Item 3 -->
+<div class="flex gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<div class="mt-1 min-w-[24px]">
+<span class="material-symbols-outlined text-slate-400">schedule</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Voluntarios Sábado</p>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">Faltan 2 cupos para la jornada de limpieza.</p>
+</div>
+</div>
+</div>
+<div class="p-4 mt-auto border-t border-slate-100 dark:border-slate-800">
+<button class="w-full py-2 text-sm font-semibold text-slate-500 hover:text-primary transition-colors">Ver todas las tareas</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

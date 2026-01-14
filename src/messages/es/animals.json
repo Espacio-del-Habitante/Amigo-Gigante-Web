@@ -1,7 +1,7 @@
 {
   "title": "Gestión de Animales",
   "subtitle": "Gestiona perfiles de adopción, edita detalles y actualiza estados.",
-  "addButton": "+ Agregar Nuevo Animal",
+  "addButton": "Agregar Nuevo Animal",
   "search": {
     "placeholder": "Buscar por nombre, ID o raza...",
     "noResults": "No se encontraron animales"
