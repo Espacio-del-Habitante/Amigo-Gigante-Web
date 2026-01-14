@@ -4,6 +4,7 @@ const REPOSITORY_TYPES = {
   AuthRepository: Symbol.for("AuthRepository"),
   FoundationRepository: Symbol.for("FoundationRepository"),
   FoundationProfileRepository: Symbol.for("FoundationProfileRepository"),
+  FoundationMembershipRepository: Symbol.for("FoundationMembershipRepository"),
 };
 
 export { REPOSITORY_TYPES };
