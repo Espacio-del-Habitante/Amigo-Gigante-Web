@@ -72,6 +72,11 @@ export function AddAnimalForm() {
   const [isReadingFiles, setIsReadingFiles] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
 
+  const addErrorKeyList = ["errors.unauthorized", "errors.connection", "errors.generic", "add.errors.generic"] as const;
+  type AddErrorKey = (typeof addErrorKeyList)[number];
+  const isAddErrorKey = (value: string): value is AddErrorKey =>
+    (addErrorKeyList as readonly string[]).includes(value);
+
   const validationSchema = useMemo(() => createAddAnimalValidationSchema(t), [t]);
 
   const formik = useFormik<AddAnimalFormValues>({
@@ -132,11 +137,7 @@ export function AddAnimalForm() {
       } catch (error) {
         if (error instanceof Error && error.message) {
           const candidate = error.message;
-          if (candidate.startsWith("errors.") || candidate.startsWith("add.")) {
-            setSubmitError(t(candidate));
-          } else {
-            setSubmitError(candidate);
-          }
+          setSubmitError(isAddErrorKey(candidate) ? t(candidate) : candidate);
         } else {
           setSubmitError(t("add.errors.generic"));
         }
