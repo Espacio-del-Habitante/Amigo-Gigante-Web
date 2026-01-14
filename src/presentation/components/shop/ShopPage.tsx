@@ -17,9 +17,16 @@ import { ShopPagination } from "./ShopPagination";
 
 const DEFAULT_PAGE_SIZE = 12;
 
-const getErrorKey = (message: string | undefined): string => {
+type ShopErrorKey = "errors.unauthorized" | "errors.notFound" | "errors.connection" | "errors.generic";
+
+const getErrorKey = (message: string | undefined): ShopErrorKey => {
   if (!message) return "errors.generic";
-  if (message.startsWith("errors.")) return message;
+
+  if (message === "errors.unauthorized") return "errors.unauthorized";
+  if (message === "errors.notFound") return "errors.notFound";
+  if (message === "errors.connection") return "errors.connection";
+  if (message === "errors.generic") return "errors.generic";
+
   return "errors.generic";
 };
 
@@ -33,7 +40,7 @@ export function ShopPage() {
 
   const [catalog, setCatalog] = useState<ShopCatalogResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorKey, setErrorKey] = useState<string | null>(null);
+  const [errorKey, setErrorKey] = useState<ShopErrorKey | null>(null);
 
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<ShopSearchState>({ query: "", foundationId: "" });
