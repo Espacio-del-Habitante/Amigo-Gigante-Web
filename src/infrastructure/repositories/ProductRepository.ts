@@ -57,8 +57,7 @@ export class ProductRepository implements IProductRepository {
       .select("id, foundation_id, name, description, price, image_url, is_published, created_at", { count: "exact" })
       .eq("is_published", true)
       .order("created_at", { ascending: false })
-      .range(from, to)
-      .returns<ShopProductRow[]>();
+      .range(from, to);
 
     if (foundationId) {
       request = request.eq("foundation_id", foundationId);
@@ -69,7 +68,7 @@ export class ProductRepository implements IProductRepository {
       request = request.or(`name.ilike.%${normalizedQuery}%,description.ilike.%${normalizedQuery}%`);
     }
 
-    const { data, error, count } = await request;
+    const { data, error, count } = await request.returns<ShopProductRow[]>();
 
     if (error) {
       throw new Error(this.translateProductsError(error));
