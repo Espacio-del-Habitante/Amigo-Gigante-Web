@@ -1,0 +1,231 @@
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Carrito de Compras - Amigo Gigante</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#38bdf8", // Sky blue (azul cielo)
+                        secondary: "#0ea5e9", // A slightly darker sky blue
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e293b",
+                        "text-light": "#334155",
+                        "text-dark": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        display: ["Nunito", "sans-serif"],
+                        body: ["Quicksand", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body text-text-light dark:text-text-dark transition-colors duration-300">
+<nav class="sticky top-0 z-50 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-20 items-center">
+<div class="flex items-center gap-3">
+<img alt="Amigo Gigante Logo" class="h-12 w-12 rounded-full object-cover border-2 border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdSN8B-6DFmJzkJxlKTMlG1BXHhd7CjiZ3RSng3u68FQOWvtS94DF5MOfFh9yzFPBzEaqlZ2_1rUMuhBaVlbQgEfxu33RYT59xt0qCko0r5F275o85IWOreKfvWIZEo-fiX4zBNhdlEq1_k0YBhtfoSRkqwNQow__ma2SpkWIdzM8Wv4CWE5P90CSu5jpV3xywLA9-xf1xUvAEYQHqf33dDCN3GUpJSee_AQUZJn9zGBi-TT0EbgK3of2tZvc3nofJx5HtQHcFPg"/>
+<span class="font-display font-bold text-2xl text-primary tracking-tight">Amigo Gigante</span>
+</div>
+<div class="hidden md:flex space-x-8 items-center font-bold text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400">
+<a class="hover:text-primary transition-colors" href="#">Inicio</a>
+<a class="hover:text-primary transition-colors" href="#">Adopta</a>
+<a class="text-primary" href="#">Tienda</a>
+<a class="hover:text-primary transition-colors" href="#">Fundaciones</a>
+<button class="bg-primary text-white px-5 py-2.5 rounded-full hover:bg-secondary transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        Donar
+                    </button>
+</div>
+<div class="md:hidden flex items-center">
+<button class="text-gray-500 hover:text-primary focus:outline-none">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="flex items-center gap-3 mb-10">
+<a class="flex items-center text-primary hover:text-secondary font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined mr-1">arrow_back</span>
+                Volver a la tienda
+            </a>
+<h1 class="font-display text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-white">Tu Carrito de Compras</h1>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col sm:flex-row gap-6 items-center">
+<div class="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 bg-gray-100">
+<img alt="Cama para perro" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoRn9kNAo24ucL0IusvHKsjWeMk5TkzqX3zf1wV6pkblzldG_MqXrfEfRRvutLXoiJBkPML-QK6Zn_IvwV1cL6zhrDxNY7-VoGLNwu44BJnkHcnlyrTt4aVV3eclipTVQuiFP0d6ygJTq_U_4gPGKRZMYlydlNOILEFGWsW_Stf4zAl1cbtmh34UiVrNCkSfHi28trl3CJ8muikjXlKpkDaOsSGe4_byX4tNxl3fnUvXf48-27OEatZG7XAx8TRHzLVNSXrdKf2A"/>
+</div>
+<div class="flex-grow text-center sm:text-left">
+<span class="text-xs font-bold text-primary uppercase tracking-wider">Fundación Huellitas de Amor</span>
+<h3 class="font-display font-bold text-xl text-gray-800 dark:text-white mb-1">Cama Anti-estrés "Nube Suave"</h3>
+<p class="text-gray-500 dark:text-gray-400 text-sm mb-2">Talla M • Gris Ártico</p>
+<span class="font-bold text-lg text-primary">$85.000</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-gray-50 dark:bg-slate-800 rounded-xl p-1 border border-gray-100 dark:border-gray-700">
+<button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<span class="w-10 text-center font-bold text-gray-800 dark:text-white">1</span>
+<button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col sm:flex-row gap-6 items-center">
+<div class="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 bg-gray-100">
+<img alt="Placa de identificación" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4tFx4xKs7fGPnUS35KifG37r2sKxeo7Jsqc5NuJoqDKFxf-GmWJWcP6cBlL8aIaeEo-9PomYWqkTnN_F3DzaXNls5I-EJOkFxzofBUlbzxTe7Of78DM_lZUffA9zVWyGLXFKej9K-hf_Cjy7ztAgJpSqNpYnRqdHnBJYIRqQ9yNJZBdzXYN7FQjLg4kZHpj3T7rp7s1fEBETeG924mSWxTM8uZPEv3HvLiFtGvJ4c9tJONaKT8Q3_1emAHgTaELa-EKvKpP4eYA"/>
+</div>
+<div class="flex-grow text-center sm:text-left">
+<span class="text-xs font-bold text-primary uppercase tracking-wider">Fundación Huellitas de Amor</span>
+<h3 class="font-display font-bold text-xl text-gray-800 dark:text-white mb-1">Placa de Identificación</h3>
+<p class="text-gray-500 dark:text-gray-400 text-sm mb-2">Acero Inoxidable • Personalizada</p>
+<span class="font-bold text-lg text-primary">$15.000</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-gray-50 dark:bg-slate-800 rounded-xl p-1 border border-gray-100 dark:border-gray-700">
+<button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<span class="w-10 text-center font-bold text-gray-800 dark:text-white">2</span>
+<button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-3xl border border-blue-100 dark:border-blue-800/50">
+<span class="material-symbols-outlined text-primary text-3xl">info</span>
+<p class="text-sm text-blue-800 dark:text-blue-200">Al finalizar la compra, te conectaremos directamente con la fundación para coordinar el pago y el envío de tus productos de forma segura.</p>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-surface-light dark:bg-surface-dark p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-lg sticky top-28">
+<h2 class="font-display font-bold text-2xl text-gray-800 dark:text-white mb-6">Resumen de compra</h2>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between text-gray-600 dark:text-gray-400">
+<span>Subtotal (3 productos)</span>
+<span class="font-semibold">$115.000</span>
+</div>
+<div class="flex justify-between text-gray-600 dark:text-gray-400">
+<span>Envío</span>
+<span class="text-sm italic">Por acordar</span>
+</div>
+<div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Donación extra para la fundación</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+<input class="w-full bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-gray-700 rounded-xl pl-8 pr-4 py-3 focus:ring-primary focus:border-primary text-gray-800 dark:text-white" placeholder="0" type="number"/>
+</div>
+<p class="text-[10px] text-gray-400 mt-2 uppercase tracking-wide font-bold">100% destinado al cuidado de los rescatados</p>
+</div>
+</div>
+<div class="pt-6 border-t border-gray-100 dark:border-gray-700 mb-8">
+<div class="flex justify-between items-end">
+<span class="font-bold text-gray-800 dark:text-white text-lg">Total</span>
+<div class="text-right">
+<span class="block text-3xl font-extrabold text-primary">$115.000</span>
+<span class="text-[10px] text-gray-400 uppercase font-bold">Pesos Colombianos (COP)</span>
+</div>
+</div>
+</div>
+<a class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-md hover:shadow-xl flex items-center justify-center gap-3 transform hover:-translate-y-1" href="https://wa.me/your-number">
+<span class="material-symbols-outlined">chat</span>
+                        Finalizar Compra via WhatsApp
+                    </a>
+<p class="text-center text-xs text-gray-400 mt-6 leading-relaxed">
+                        Serás redirigido a WhatsApp para finalizar los detalles de pago y envío directamente con el representante de la fundación.
+                    </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-light dark:bg-surface-dark p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-2">verified_user</span>
+<span class="text-[10px] font-bold uppercase text-gray-500">Compra Segura</span>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-2">volunteer_activism</span>
+<span class="text-[10px] font-bold uppercase text-gray-500">Impacto Social</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-slate-900 pt-16 pb-8 border-t border-gray-100 dark:border-gray-800 mt-20">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-4">
+<img alt="Logo Footer" class="h-10 w-10 rounded-full border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP_l05jh9AIW6kK8i8D3-po7JHyuQtb6EoSxcqXBtZ_gycEhUucC3X1QcPTeHwU-4dcCUM49b3aUZZ4_ts5jYKU99cfZo-WCStSzZ3D_9521S-662OB5Tb49CWOCYuPKeKzkC6OMD872gqSoVhj-cf78FVjGccdxzj14-tGqWyqsooKJ_dp0R-h9Z9zURfEAuXFvw4Cji0QWXPZFgcOI3NuWiBjYzyZH6xagXGP88nMCO_bAT-CKPSvN3xHmPTgp10S55svpv0mQ"/>
+<span class="font-display font-bold text-xl text-gray-800 dark:text-white">Amigo Gigante</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Conectando corazones humanos con patitas necesitadas. Adopta, dona y compra con propósito.
+                    </p>
+</div>
+<div>
+<h4 class="font-bold text-gray-800 dark:text-white mb-4">Explora</h4>
+<ul class="space-y-2 text-sm text-gray-500 dark:text-gray-400">
+<li><a class="hover:text-primary transition-colors" href="#">Adopta un amigo</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Tienda Solidaria</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Historias de éxito</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Eventos</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-gray-800 dark:text-white mb-4">Legal</h4>
+<ul class="space-y-2 text-sm text-gray-500 dark:text-gray-400">
+<li><a class="hover:text-primary transition-colors" href="#">Términos y condiciones</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Política de privacidad</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Transparencia financiera</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-gray-800 dark:text-white mb-4">Síguenos</h4>
+<div class="flex space-x-4">
+<a class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+<a class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">thumb_up</span>
+</a>
+<a class="bg-gray-100 dark:bg-gray-800 p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">camera_alt</span>
+</a>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-100 dark:border-gray-800 pt-8 text-center">
+<p class="text-sm text-gray-400">© 2023 Amigo Gigante. Hecho con <span class="text-red-500">♥</span> para los animales.</p>
+</div>
+</div>
+</footer>
+
+</body></html>

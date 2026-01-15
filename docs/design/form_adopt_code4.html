@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Amigo Gigante - Formulario de Adopción - Paso 4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0EA5E9", // Azul Cielo
+                        secondary: "#FB923C", // Peach/Orange
+                        "background-light": "#F0F9FF",
+                        "background-dark": "#0F172A",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                    },
+                    fontFamily: {
+                        display: ["'Nunito'", "sans-serif"],
+                        body: ["'Quicksand'", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        'xl': "1.5rem",
+                        '2xl': "2rem",
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(14, 165, 233, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea {
+                @apply bg-slate-50 border-slate-200 rounded-xl focus:ring-primary focus:border-primary dark:bg-slate-800 dark:border-slate-700 dark:text-white transition-all duration-200;
+            }
+            input[type="checkbox"] {
+                @apply rounded text-primary focus:ring-primary border-slate-300 dark:bg-slate-800 dark:border-slate-600;
+            }
+            label {
+                @apply block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 ml-1;
+            }
+        }
+        .step-active { @apply text-primary font-bold; }
+        .step-inactive { @apply text-slate-400; }
+        .step-line { @apply h-1 flex-1 bg-slate-100 dark:bg-slate-800 rounded-full mx-2; }
+        .step-line-completed { @apply bg-primary; }
+        .upload-zone {
+            @apply border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800/50 hover:border-primary/50 hover:bg-sky-50 dark:hover:bg-sky-900/10 transition-all cursor-pointer;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen font-body text-slate-700 dark:text-slate-300 transition-colors duration-300">
+<div class="max-w-4xl mx-auto px-4 py-12">
+<header class="text-center mb-10">
+<div class="flex justify-center mb-4">
+<img alt="Amigo Gigante Logo" class="h-20 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4PF1NPsquyBZBh8wK0T5-QBLD52nFyWeFiKftfbajxqzvUZQ0I4-hd08kiRmO-gjfgbEX6motKhM9Hmv3qojyE81zqzJFRyjvjLNJvo6H7f8zDup3qRuw9P1wcEjCPcXEtVuO9toWiA0L2uCCJK_mIkgomTIiQxCAfjp6dQRIyoWqwFS8_f79zPvSqfXF98iTx_upbJh7YAWqw1VZLmdlERphXmMUyb7AA5jqN2lpj3qt2MUGxPU52VN0A5bCa3D5U4v_ua7HcQ"/>
+</div>
+<h1 class="font-display text-3xl md:text-4xl font-extrabold text-slate-800 dark:text-white mb-2">Formulario de Adopción</h1>
+<p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto">Último paso para completar tu solicitud para adoptar a <span class="text-primary font-bold">Max</span>.</p>
+</header>
+<div class="mb-10 px-4">
+<div class="flex items-center justify-between text-xs md:text-sm">
+<div class="flex flex-col items-center gap-2 group">
+<span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</span>
+<span class="step-inactive">Básico</span>
+</div>
+<div class="step-line step-line-completed"></div>
+<div class="flex flex-col items-center gap-2">
+<span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</span>
+<span class="step-inactive">Hogar</span>
+</div>
+<div class="step-line step-line-completed"></div>
+<div class="flex flex-col items-center gap-2">
+<span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">3</span>
+<span class="step-inactive">Estilo</span>
+</div>
+<div class="step-line step-line-completed"></div>
+<div class="flex flex-col items-center gap-2">
+<span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold ring-4 ring-sky-100 dark:ring-sky-900/30">4</span>
+<span class="step-active">Docs</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden">
+<form action="#" class="p-8 md:p-10" method="POST">
+<div class="space-y-8" id="step-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="flex items-center gap-1 mb-3">
+                                Documento de Identidad (Cédula)
+                                <span class="material-symbols-outlined text-slate-400 text-sm cursor-help" title="Sube una foto legible de tu documento de identidad por ambos lados">info</span>
+</label>
+<div class="upload-zone">
+<span class="material-symbols-outlined text-primary text-3xl mb-2">badge</span>
+<span class="text-sm font-semibold text-slate-600 dark:text-slate-300">Subir Documento</span>
+<span class="text-xs text-slate-400 mt-1">PDF, JPG o PNG (Máx 5MB)</span>
+<input class="hidden" id="doc_id" name="doc_id" type="file"/>
+</div>
+</div>
+<div>
+<label class="flex items-center gap-1 mb-3">
+                                Fotos del hogar
+                                <span class="material-symbols-outlined text-slate-400 text-sm cursor-help" title="Sube fotos de las áreas donde permanecerá la mascota">info</span>
+</label>
+<div class="upload-zone">
+<span class="material-symbols-outlined text-primary text-3xl mb-2">add_a_photo</span>
+<span class="text-sm font-semibold text-slate-600 dark:text-slate-300">Subir Fotos</span>
+<span class="text-xs text-slate-400 mt-1">Sube hasta 5 fotos del espacio</span>
+<input class="hidden" id="home_photos" multiple="" name="home_photos" type="file"/>
+</div>
+</div>
+</div>
+<div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="mt-1">
+<input class="w-5 h-5" name="vet_costs" required="" type="checkbox"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors">Acepto costos veterinarios</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Entiendo que la mascota requiere gastos de alimentación, salud y bienestar general.</span>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="mt-1">
+<input class="w-5 h-5" name="lifetime_commitment" required="" type="checkbox"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors">Compromiso de por vida</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Me comprometo a cuidar de Max durante toda su vida, brindándole amor y protección.</span>
+</div>
+</label>
+</div>
+</div>
+<div class="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<button class="px-6 py-3 text-slate-500 font-bold hover:text-slate-800 dark:hover:text-white transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined">arrow_back</span>
+                        Atrás
+                    </button>
+<button class="bg-primary hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-sky-100 dark:shadow-none transition-all flex items-center gap-2 transform active:scale-95" type="submit">
+                        Enviar Solicitud
+                        <span class="material-symbols-outlined">pets</span>
+</button>
+</div>
+</form>
+</div>
+<div class="mt-6 flex flex-col items-center justify-center gap-4 text-sm text-slate-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">volunteer_activism</span>
+<span>Tus datos están seguros y serán usados únicamente para el proceso de adopción.</span>
+</div>
+<div class="flex items-center gap-2 opacity-60">
+<img alt="Corgi Icon" class="w-8 h-8 rounded-full bg-primary/10 p-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2xBa-DQckLjw6L6F9a9fMcOvmW4PgvPmkHm2VTWcpZhiyQS5Tc-fYm3zA870OT3Yi60XNf64uXMkw-LKANGWKfmxl2JbALlK_D5FvhgpB5MFSXzfMsl4OLef49nNxKHQ5vdUqtAz1WfhhGfZLVXyKUyZdsfVyHea2GxPbfFcNrXU8Qx50HYsF_b6xAhDzHNwKbi7TLRtcz4fgBk0d-MiMw9QyMEqltyeqvsSDabhjbbdzfgad8AmAD3yRF6I-WpSJX8mmauluZg"/>
+<span class="font-medium italic">"¡Gracias por darnos una oportunidad!" - El equipo de Amigo Gigante</span>
+</div>
+</div>
+</div>
+<button class="fixed bottom-6 right-6 p-3 bg-white dark:bg-slate-700 text-slate-800 dark:text-white rounded-full shadow-lg hover:shadow-xl transition-all z-50 border border-slate-200 dark:border-slate-600" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-symbols-outlined block dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+
+</body></html>
