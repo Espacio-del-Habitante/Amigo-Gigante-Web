@@ -8,6 +8,7 @@ export type AdoptAgeFilter = "puppy" | "young" | "adult" | "senior";
 
 export interface AdoptCatalogItem {
   id: number;
+  foundationId: string;
   name: string;
   species: AdoptSpeciesFilter;
   breed: string;

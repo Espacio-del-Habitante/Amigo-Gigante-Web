@@ -16,7 +16,7 @@ export class AnimalRepository implements IAnimalRepository {
     let query = supabaseClient
       .from("animals")
       .select(
-        "id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at",
+        "id, foundation_id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at",
         { count: "exact" },
       )
       .eq("status", "available")
@@ -77,6 +77,7 @@ export class AnimalRepository implements IAnimalRepository {
 
     const items = (data ?? []).map((row) => ({
       id: row.id,
+      foundationId: row.foundation_id,
       name: row.name ?? "",
       species: row.species,
       breed: row.breed ?? "",
@@ -161,7 +162,7 @@ export class AnimalRepository implements IAnimalRepository {
     const { data, error } = await supabaseClient
       .from("animals")
       .select(
-        "id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at",
+        "id, foundation_id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at",
       )
       .eq("status", "available")
       .eq("is_published", true)
@@ -174,6 +175,7 @@ export class AnimalRepository implements IAnimalRepository {
 
     const items = (data ?? []).map((row) => ({
       id: row.id,
+      foundationId: row.foundation_id,
       name: row.name ?? "",
       species: row.species,
       breed: row.breed ?? "",
