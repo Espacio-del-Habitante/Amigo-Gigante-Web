@@ -18,7 +18,7 @@ import {
   useTheme,
   Link,
 } from "@mui/material";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NextLink from "next/link";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
@@ -33,6 +33,18 @@ import {
 } from "@/presentation/components/molecules";
 import { useCart } from "@/presentation/hooks/useCart";
 
+const cartPulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
 export function HomeNavBar() {
   const theme = useTheme();
   const locale = useLocale();
@@ -41,7 +53,7 @@ export function HomeNavBar() {
   const [open, setOpen] = useState(false);
   const { totalItems } = useCart();
   const [isCartPulsing, setIsCartPulsing] = useState(false);
-  const previousCartCountRef = useRef<number | null>(null);
+  const pulseTimeoutRef = useRef<number | null>(null);
 
   const adoptHref = `/${locale}/adopt`;
   const foundationsHref = `/${locale}/foundations`;
@@ -50,37 +62,30 @@ export function HomeNavBar() {
 
   const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
 
-  const cartPulse = useMemo(
-    () =>
-      keyframes`
-        0% {
-          transform: scale(1);
-        }
-        40% {
-          transform: scale(1.08);
-        }
-        100% {
-          transform: scale(1);
-        }
-      `,
-    [],
-  );
+  const handleCartPulse = useCallback(() => {
+    if (pulseTimeoutRef.current) {
+      window.clearTimeout(pulseTimeoutRef.current);
+    }
+    setIsCartPulsing(true);
+    pulseTimeoutRef.current = window.setTimeout(() => setIsCartPulsing(false), 600);
+  }, []);
 
   useEffect(() => {
-    if (previousCartCountRef.current === null) {
-      previousCartCountRef.current = totalItems;
+    if (typeof window === "undefined") {
       return;
     }
 
-    if (previousCartCountRef.current !== totalItems) {
-      setIsCartPulsing(true);
-      const timeout = window.setTimeout(() => setIsCartPulsing(false), 600);
-      previousCartCountRef.current = totalItems;
-      return () => window.clearTimeout(timeout);
-    }
+    const handler = () => handleCartPulse();
 
-    previousCartCountRef.current = totalItems;
-  }, [totalItems]);
+    window.addEventListener("cart:updated", handler);
+
+    return () => {
+      window.removeEventListener("cart:updated", handler);
+      if (pulseTimeoutRef.current) {
+        window.clearTimeout(pulseTimeoutRef.current);
+      }
+    };
+  }, [handleCartPulse]);
 
   const navItems = useMemo(
     () => [
