@@ -55,7 +55,8 @@
   "errors": {
     "generic": "Ocurrió un error al cargar los animales. Inténtalo nuevamente.",
     "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
-    "unauthorized": "No tienes permisos para ver los animales de esta fundación."
+    "unauthorized": "No tienes permisos para ver los animales de esta fundación.",
+    "notFound": "No encontramos este animal."
   },
   "add": {
     "breadcrumb": {
@@ -193,6 +194,26 @@
     },
     "errors": {
       "generic": "Ocurrió un error al crear el animal. Inténtalo nuevamente."
+    }
+  },
+  "edit": {
+    "breadcrumb": {
+      "ariaLabel": "Migas de pan",
+      "dashboard": "Dashboard",
+      "myAnimals": "Mis animales",
+      "edit": "Editar"
+    },
+    "header": {
+      "title": "Editar amigo",
+      "subtitle": "Actualiza los detalles del animal y mantén su perfil al día."
+    },
+    "status": {
+      "loading": "Cargando datos del animal..."
+    },
+    "errors": {
+      "load": "No pudimos cargar los datos del animal. Inténtalo nuevamente.",
+      "generic": "Ocurrió un error al actualizar el animal. Inténtalo nuevamente.",
+      "invalidId": "El identificador del animal no es válido."
     }
   }
 }
