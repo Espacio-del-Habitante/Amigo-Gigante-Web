@@ -50,10 +50,27 @@ export interface UpdateProductPublishStatusParams {
   isPublished: boolean;
 }
 
+export interface GetProductByIdParams {
+  foundationId: string;
+  productId: number;
+}
+
+export interface UpdateProductParams {
+  foundationId: string;
+  productId: number;
+  name: string;
+  description?: string | null;
+  price?: number | null;
+  imageUrl?: string | null;
+  isPublished: boolean;
+}
+
 export interface IProductRepository {
   getRecentProducts(foundationId: string, limit: number): Promise<RecentProduct[]>;
   getShopProducts(params: GetShopProductsParams): Promise<ShopProductsPage>;
   getProducts(params: GetProductsParams): Promise<GetProductsResult>;
+  getProductById(params: GetProductByIdParams): Promise<ShopProduct>;
   updatePublishStatus(params: UpdateProductPublishStatusParams): Promise<void>;
+  updateProduct(params: UpdateProductParams): Promise<void>;
 }
 

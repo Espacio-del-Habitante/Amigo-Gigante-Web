@@ -193,6 +193,13 @@ export function ProductsManagementPage() {
     [resolveErrorMessage, status, updatePublishUseCase],
   );
 
+  const handleEditProduct = useCallback(
+    (productId: number) => {
+      router.push(`/${locale}/foundations/products/${productId}/edit`);
+    },
+    [locale, router],
+  );
+
   return (
     <Box className="flex w-full flex-col gap-6">
       <Box className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -244,6 +251,7 @@ export function ProductsManagementPage() {
           updatingIds={updatingIds}
           formatPrice={formatPrice}
           onTogglePublish={handleTogglePublish}
+          onEdit={handleEditProduct}
         />
       )}
 

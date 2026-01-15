@@ -1,0 +1,89 @@
+{
+  "edit": {
+    "breadcrumb": {
+      "ariaLabel": "Breadcrumbs",
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "edit": "Edit"
+    },
+    "header": {
+      "title": "Edit product",
+      "subtitle": "Update the product details to keep your catalog up to date."
+    },
+    "status": {
+      "loading": "Loading product details..."
+    },
+    "errors": {
+      "load": "We couldn't load the product details. Please try again.",
+      "generic": "Something went wrong while updating the product. Please try again.",
+      "invalidId": "The product identifier is not valid."
+    }
+  },
+  "form": {
+    "sections": {
+      "general": {
+        "title": "General information"
+      },
+      "image": {
+        "title": "Product image",
+        "hint": "PNG, JPG up to 5MB."
+      },
+      "visibility": {
+        "title": "Visibility",
+        "description": "When published, this product will be visible in the Solidarity Shop."
+      }
+    },
+    "fields": {
+      "name": {
+        "label": "Product name",
+        "placeholder": "e.g. Organic cotton t-shirt"
+      },
+      "price": {
+        "label": "Price (USD)",
+        "placeholder": "0.00"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Describe the product, its materials, and how it helps the foundation..."
+      },
+      "imageUrl": {
+        "label": "Image URL",
+        "placeholder": "https://..."
+      }
+    },
+    "media": {
+      "upload": {
+        "ariaLabel": "Upload product image",
+        "title": "Click to upload or drag and drop",
+        "hint": "SVG, PNG or JPG (MAX. 5MB)",
+        "limit": "MAX. 5MB"
+      },
+      "preview": {
+        "alt": "Product image",
+        "remove": "Remove image",
+        "current": "Current image",
+        "size": "{size}"
+      },
+      "errors": {
+        "tooLarge": "The image exceeds 5MB.",
+        "invalidType": "Invalid image format. Allowed: SVG, PNG, JPG.",
+        "readFailed": "We couldn't read the image. Please try again."
+      }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save product"
+    }
+  },
+  "validation": {
+    "nameRequired": "Product name is required",
+    "priceInvalid": "Price must be a valid number greater than or equal to 0",
+    "imageUrlInvalid": "Image URL is not valid"
+  },
+  "errors": {
+    "unauthorized": "You don't have permission to edit this product.",
+    "connection": "We couldn't connect to the server. Please check your connection and try again.",
+    "notFound": "We couldn't find this product.",
+    "generic": "Something went wrong while saving the product. Please try again."
+  }
+}

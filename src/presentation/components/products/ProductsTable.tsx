@@ -13,9 +13,10 @@ export interface ProductsTableProps {
   updatingIds: Set<number>;
   formatPrice: (price: number) => string;
   onTogglePublish: (productId: number, nextValue: boolean) => void;
+  onEdit?: (productId: number) => void;
 }
 
-export function ProductsTable({ products, updatingIds, formatPrice, onTogglePublish }: ProductsTableProps) {
+export function ProductsTable({ products, updatingIds, formatPrice, onTogglePublish, onEdit }: ProductsTableProps) {
   const t = useTranslations("products");
 
   return (
@@ -102,6 +103,7 @@ export function ProductsTable({ products, updatingIds, formatPrice, onTogglePubl
                         aria-label={t("table.actions.edit")}
                         title={t("table.actions.edit")}
                         sx={{ color: "text.secondary" }}
+                        onClick={() => onEdit?.(product.id)}
                       >
                         <EditRoundedIcon fontSize="small" />
                       </IconButton>
