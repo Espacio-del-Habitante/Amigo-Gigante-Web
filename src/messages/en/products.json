@@ -1,0 +1,53 @@
+{
+  "title": "Product Management",
+  "subtitle": "Manage items in your Tienda Solidaria to support the foundation.",
+  "addButton": "Add New Product",
+  "search": {
+    "placeholder": "Search by name or description...",
+    "noResults": "No products found"
+  },
+  "filters": {
+    "status": {
+      "label": "Status",
+      "all": "All",
+      "published": "Published",
+      "draft": "Draft"
+    },
+    "price": {
+      "label": "Price",
+      "all": "All",
+      "under10": "Under $10",
+      "between10And25": "$10 - $25",
+      "over25": "$25+"
+    }
+  },
+  "table": {
+    "columns": {
+      "image": "Image",
+      "details": "Product Details",
+      "price": "Price",
+      "published": "Published",
+      "actions": "Actions"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "noDescription": "No description available",
+    "priceUnavailable": "Price not available"
+  },
+  "pagination": {
+    "showing": "Showing {from} to {to} of {total} products"
+  },
+  "loading": {
+    "label": "Loading products..."
+  },
+  "errors": {
+    "generic": "Something went wrong while loading products. Please try again.",
+    "connection": "We couldn't connect to the server. Please check your connection and try again.",
+    "unauthorized": "You don't have permission to view these products."
+  },
+  "toggle": {
+    "ariaLabel": "Toggle publish status for {name}"
+  }
+}

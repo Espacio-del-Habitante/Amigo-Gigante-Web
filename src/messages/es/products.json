@@ -1,0 +1,53 @@
+{
+  "title": "Gestión de Productos",
+  "subtitle": "Gestiona los productos de tu Tienda Solidaria para apoyar a la fundación.",
+  "addButton": "Agregar Nuevo Producto",
+  "search": {
+    "placeholder": "Buscar por nombre o descripción...",
+    "noResults": "No se encontraron productos"
+  },
+  "filters": {
+    "status": {
+      "label": "Estado",
+      "all": "Todos",
+      "published": "Publicados",
+      "draft": "Borradores"
+    },
+    "price": {
+      "label": "Precio",
+      "all": "Todos",
+      "under10": "Menos de $10",
+      "between10And25": "$10 - $25",
+      "over25": "$25+"
+    }
+  },
+  "table": {
+    "columns": {
+      "image": "Imagen",
+      "details": "Detalles del producto",
+      "price": "Precio",
+      "published": "Publicado",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "noDescription": "Sin descripción disponible",
+    "priceUnavailable": "Precio no disponible"
+  },
+  "pagination": {
+    "showing": "Mostrando {from} a {to} de {total} productos"
+  },
+  "loading": {
+    "label": "Cargando productos..."
+  },
+  "errors": {
+    "generic": "Ocurrió un error al cargar los productos. Inténtalo nuevamente.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
+    "unauthorized": "No tienes permisos para ver los productos de esta fundación."
+  },
+  "toggle": {
+    "ariaLabel": "Cambiar estado de publicación de {name}"
+  }
+}

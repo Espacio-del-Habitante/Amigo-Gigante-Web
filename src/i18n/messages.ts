@@ -9,6 +9,7 @@ import register from "../messages/en/register.json";
 import animals from "../messages/en/animals.json";
 import adopt from "../messages/en/adopt.json";
 import shop from "../messages/en/shop.json";
+import products from "../messages/en/products.json";
 
 export const messages = {
   common,
@@ -22,6 +23,7 @@ export const messages = {
   animals,
   adopt,
   shop,
+  products,
 };
 
 export type AppMessages = typeof messages;

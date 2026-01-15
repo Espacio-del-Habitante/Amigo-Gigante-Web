@@ -22,6 +22,8 @@ import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFounda
 import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
 import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
+import { GetProductsUseCase } from "@/domain/usecases/products/GetProductsUseCase";
+import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/UpdateProductPublishStatusUseCase";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
 
@@ -178,6 +180,34 @@ const useCasesModule = new ContainerModule(
         const foundationRepository = context.get<IFoundationRepository>(REPOSITORY_TYPES.FoundationRepository);
 
         return new GetShopCatalogUseCase(productRepository, foundationRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetProductsUseCase>(USE_CASE_TYPES.GetProductsUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetProductsUseCase(productRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<UpdateProductPublishStatusUseCase>(USE_CASE_TYPES.UpdateProductPublishStatusUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new UpdateProductPublishStatusUseCase(
+          productRepository,
+          authRepository,
+          foundationMembershipRepository,
+        );
       })
       .inSingletonScope();
   },

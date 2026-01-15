@@ -3,6 +3,7 @@
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
+import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import StoreRoundedIcon from "@mui/icons-material/StoreRounded";
 import {
   Box,
@@ -49,6 +50,12 @@ export function FoundationSidebar({ activePath, onNavigate }: FoundationSidebarP
         label: t("sidebar.animals"),
         icon: <PetsRoundedIcon fontSize="small" />,
         href: `${basePath}/animals`,
+      },
+      {
+        key: "products",
+        label: t("sidebar.products"),
+        icon: <StorefrontRoundedIcon fontSize="small" />,
+        href: `${basePath}/products`,
       },
       {
         key: "adoptions",
