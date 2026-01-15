@@ -28,7 +28,8 @@
       "unauthorized": "No tienes permisos para eliminar este {item}."
     },
     "entity": {
-      "animal": "animal"
+      "animal": "animal",
+      "product": "producto"
     }
   },
   "labels": {

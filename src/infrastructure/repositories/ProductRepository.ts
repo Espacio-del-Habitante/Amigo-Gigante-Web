@@ -1,5 +1,7 @@
 import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type {
+  CreateProductParams,
+  DeleteProductParams,
   GetProductByIdParams,
   GetProductsParams,
   GetProductsResult,
@@ -156,6 +158,100 @@ export class ProductRepository implements IProductRepository {
     return this.mapShopProduct(data);
   }
 
+  async createProduct({
+    foundationId,
+    name,
+    description,
+    price,
+    imageUrl,
+    imageFile,
+    isPublished,
+  }: CreateProductParams): Promise<ShopProduct> {
+    let resolvedImageUrl = imageUrl;
+
+    if (imageFile) {
+      try {
+        resolvedImageUrl = await this.uploadProductImage(imageFile, foundationId);
+      } catch (error) {
+        if (this.isStorageUnavailableError(error) && imageUrl) {
+          resolvedImageUrl = imageUrl;
+        } else {
+          throw error;
+        }
+      }
+    }
+
+    const { data, error } = await supabaseClient
+      .from("products")
+      .insert({
+        foundation_id: foundationId,
+        name,
+        description,
+        price,
+        image_url: resolvedImageUrl,
+        is_published: isPublished,
+      })
+      .select("id, foundation_id, name, description, price, image_url, is_published, created_at")
+      .single();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.generic");
+    }
+
+    return this.mapShopProduct(data);
+  }
+
+  async updateProduct({
+    foundationId,
+    productId,
+    name,
+    description,
+    price,
+    imageUrl,
+    imageFile,
+    isPublished,
+  }: UpdateProductParams): Promise<void> {
+    let resolvedImageUrl = imageUrl;
+
+    if (imageFile) {
+      try {
+        resolvedImageUrl = await this.uploadProductImage(imageFile, foundationId);
+      } catch (error) {
+        if (this.isStorageUnavailableError(error) && imageUrl) {
+          resolvedImageUrl = imageUrl;
+        } else {
+          throw error;
+        }
+      }
+    }
+
+    const { data, error } = await supabaseClient
+      .from("products")
+      .update({
+        name,
+        description,
+        price,
+        image_url: resolvedImageUrl,
+        is_published: isPublished,
+      })
+      .eq("id", productId)
+      .eq("foundation_id", foundationId)
+      .select("id")
+      .single();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+  }
+
   async updatePublishStatus({
     foundationId,
     productId,
@@ -172,35 +268,20 @@ export class ProductRepository implements IProductRepository {
     }
   }
 
-  async updateProduct({
-    foundationId,
-    productId,
-    name,
-    description,
-    price,
-    imageUrl,
-    isPublished,
-  }: UpdateProductParams): Promise<void> {
+  async deleteProduct({ productId, foundationId }: DeleteProductParams): Promise<void> {
     const { data, error } = await supabaseClient
       .from("products")
-      .update({
-        name,
-        description: description ?? null,
-        price: price ?? null,
-        image_url: imageUrl ?? null,
-        is_published: isPublished,
-      })
+      .delete()
       .eq("id", productId)
       .eq("foundation_id", foundationId)
-      .select("id")
-      .single();
+      .select("id");
 
     if (error) {
       throw new Error(this.translateProductsError(error));
     }
 
-    if (!data) {
-      throw new Error("errors.notFound");
+    if (!data || data.length === 0) {
+      throw new Error("errors.unauthorized");
     }
   }
 
@@ -224,11 +305,40 @@ export class ProductRepository implements IProductRepository {
     };
   }
 
+  private async uploadProductImage(file: File, foundationId: string): Promise<string> {
+    const sanitizedName = this.sanitizeFileName(file.name);
+    const filePath = `${foundationId}/${Date.now()}-${sanitizedName}`;
+
+    const { data, error } = await supabaseClient.storage.from("products").upload(filePath, file, {
+      upsert: false,
+    });
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    const publicUrl = supabaseClient.storage.from("products").getPublicUrl(data?.path ?? "").data.publicUrl;
+
+    if (!publicUrl) {
+      throw new Error("errors.generic");
+    }
+
+    return publicUrl;
+  }
+
+  private sanitizeFileName(fileName: string): string {
+    return fileName.replace(/[^a-z0-9.\-_]/gi, "-").toLowerCase();
+  }
+
+  private isStorageUnavailableError(error: unknown): boolean {
+    return error instanceof Error && error.message === "errors.storageUnavailable";
+  }
+
   private translateProductsError(error: { message?: string; code?: string }): string {
     const message = error.message?.toLowerCase?.() ?? "";
     const code = error.code?.toLowerCase?.() ?? "";
 
-    if (code === "pgrst116" || message.includes("no rows") || message.includes("0 rows") || message.includes("not found")) {
+    if (code === "pgrst116" || message.includes("no rows") || message.includes("0 rows")) {
       return "errors.notFound";
     }
 
@@ -238,6 +348,15 @@ export class ProductRepository implements IProductRepository {
 
     if (message.includes("connection") || message.includes("network")) {
       return "errors.connection";
+    }
+
+    if (
+      message.includes("bucket") ||
+      message.includes("resource") ||
+      message.includes("storage") ||
+      message.includes("not found")
+    ) {
+      return "errors.storageUnavailable";
     }
 
     return "errors.generic";

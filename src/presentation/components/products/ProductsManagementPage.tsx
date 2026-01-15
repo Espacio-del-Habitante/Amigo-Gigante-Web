@@ -8,10 +8,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type { GetProductsFilters } from "@/domain/repositories/IProductRepository";
+import { DeleteProductUseCase } from "@/domain/usecases/products/DeleteProductUseCase";
 import { GetProductsUseCase } from "@/domain/usecases/products/GetProductsUseCase";
 import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/UpdateProductPublishStatusUseCase";
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
+import { ConfirmDeleteModal } from "@/presentation/components/common/ConfirmDeleteModal";
 import {
   ProductsFilters,
   type ProductsPriceFilter,
@@ -25,6 +27,7 @@ type ProductsErrorKey = (typeof productsErrorKeyList)[number];
 
 export function ProductsManagementPage() {
   const t = useTranslations("products");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
   const getProductsUseCase = useMemo(
@@ -33,6 +36,10 @@ export function ProductsManagementPage() {
   );
   const updatePublishUseCase = useMemo(
     () => appContainer.get<UpdateProductPublishStatusUseCase>(USE_CASE_TYPES.UpdateProductPublishStatusUseCase),
+    [],
+  );
+  const deleteProductUseCase = useMemo(
+    () => appContainer.get<DeleteProductUseCase>(USE_CASE_TYPES.DeleteProductUseCase),
     [],
   );
   const productsErrorKeys = useMemo(() => new Set<ProductsErrorKey>(productsErrorKeyList), []);
@@ -48,6 +55,10 @@ export function ProductsManagementPage() {
   const [errorKey, setErrorKey] = useState<ProductsErrorKey | null>(null);
   const [updateErrorKey, setUpdateErrorKey] = useState<ProductsErrorKey | null>(null);
   const [updatingIds, setUpdatingIds] = useState<Set<number>>(() => new Set());
+  const [selectedProduct, setSelectedProduct] = useState<ShopProduct | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteErrorKey, setDeleteErrorKey] = useState<ProductsErrorKey | null>(null);
 
   const pageSize = 4;
 
@@ -199,6 +210,50 @@ export function ProductsManagementPage() {
     },
     [locale, router],
   );
+  const handleDeleteRequest = (product: ShopProduct) => {
+    setSelectedProduct(product);
+    setDeleteErrorKey(null);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteClose = useCallback(() => {
+    if (isDeleting) return;
+    setIsDeleteModalOpen(false);
+    setSelectedProduct(null);
+    setDeleteErrorKey(null);
+  }, [isDeleting]);
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (!selectedProduct) return;
+    setIsDeleting(true);
+    setDeleteErrorKey(null);
+
+    try {
+      await deleteProductUseCase.execute({ productId: selectedProduct.id });
+      setIsDeleteModalOpen(false);
+      setSelectedProduct(null);
+      await loadProducts({ page, filters: effectiveFilters });
+    } catch (error) {
+      setDeleteErrorKey(resolveErrorMessage(error));
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [deleteProductUseCase, effectiveFilters, loadProducts, page, resolveErrorMessage, selectedProduct]);
+
+  const deleteItemLabel = tCommon("deleteModal.entity.product");
+  const deleteModalTitle = tCommon("deleteModal.title", { item: deleteItemLabel });
+  const deleteModalDescription = tCommon("deleteModal.description", { item: deleteItemLabel });
+  const deleteErrorMessageKeyByError: Record<
+    ProductsErrorKey,
+    "deleteModal.errors.generic" | "deleteModal.errors.connection" | "deleteModal.errors.unauthorized"
+  > = {
+    "errors.generic": "deleteModal.errors.generic",
+    "errors.connection": "deleteModal.errors.connection",
+    "errors.unauthorized": "deleteModal.errors.unauthorized",
+  };
+  const deleteErrorMessage = deleteErrorKey
+    ? tCommon(deleteErrorMessageKeyByError[deleteErrorKey], { item: deleteItemLabel })
+    : null;
 
   return (
     <Box className="flex w-full flex-col gap-6">
@@ -252,8 +307,22 @@ export function ProductsManagementPage() {
           formatPrice={formatPrice}
           onTogglePublish={handleTogglePublish}
           onEdit={handleEditProduct}
+          onDelete={handleDeleteRequest}
         />
       )}
+
+      <ConfirmDeleteModal
+        open={isDeleteModalOpen}
+        title={deleteModalTitle}
+        description={deleteModalDescription}
+        confirmLabel={tCommon("deleteModal.confirm")}
+        cancelLabel={tCommon("deleteModal.cancel")}
+        loadingLabel={tCommon("deleteModal.loading")}
+        isLoading={isDeleting}
+        errorMessage={deleteErrorMessage}
+        onConfirm={handleDeleteConfirm}
+        onClose={handleDeleteClose}
+      />
 
       <ProductsPagination
         total={total}

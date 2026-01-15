@@ -24,6 +24,8 @@ import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFounda
 import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
 import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
+import { CreateProductUseCase } from "@/domain/usecases/products/CreateProductUseCase";
+import { DeleteProductUseCase } from "@/domain/usecases/products/DeleteProductUseCase";
 import { GetProductsUseCase } from "@/domain/usecases/products/GetProductsUseCase";
 import { GetProductByIdUseCase } from "@/domain/usecases/products/GetProductByIdUseCase";
 import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/UpdateProductPublishStatusUseCase";
@@ -219,6 +221,18 @@ const useCasesModule = new ContainerModule(
       })
       .inSingletonScope();
 
+    bind<CreateProductUseCase>(USE_CASE_TYPES.CreateProductUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new CreateProductUseCase(productRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
     bind<GetProductByIdUseCase>(USE_CASE_TYPES.GetProductByIdUseCase)
       .toDynamicValue((context) => {
         const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
@@ -256,6 +270,22 @@ const useCasesModule = new ContainerModule(
         );
 
         return new UpdateProductUseCase(productRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<DeleteProductUseCase>(USE_CASE_TYPES.DeleteProductUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new DeleteProductUseCase(
+          productRepository,
+          authRepository,
+          foundationMembershipRepository,
+        );
       })
       .inSingletonScope();
   },

@@ -1,8 +1,85 @@
 {
+  "breadcrumb": {
+    "ariaLabel": "Breadcrumbs de creación de producto",
+    "dashboard": "Panel",
+    "products": "Productos",
+    "addNew": "Agregar producto"
+  },
+  "header": {
+    "title": "Agregar nuevo producto",
+    "subtitle": "Gestiona los productos de tu Tienda Solidaria para apoyar a la fundación."
+  },
+  "sections": {
+    "general": {
+      "title": "Información general"
+    },
+    "image": {
+      "title": "Imagen del producto",
+      "upload": {
+        "title": "Subir imagen",
+        "hint": "PNG, JPG hasta 5MB",
+        "ariaLabel": "Subir imagen del producto"
+      },
+      "url": {
+        "label": "URL de la imagen",
+        "placeholder": "https://example.com/producto.jpg"
+      },
+      "preview": {
+        "label": "Imagen seleccionada",
+        "fromUrl": "URL de la imagen",
+        "remove": "Quitar imagen"
+      },
+      "errors": {
+        "invalidType": "Solo se permiten archivos PNG o JPG.",
+        "tooLarge": "La imagen debe pesar 5MB o menos.",
+        "readFailed": "No pudimos leer la imagen. Inténtalo nuevamente."
+      }
+    },
+    "visibility": {
+      "title": "Visibilidad",
+      "description": "Al publicar, este producto estará visible para el público en la Tienda Solidaria de inmediato.",
+      "toggleAria": "Cambiar visibilidad del producto"
+    }
+  },
+  "fields": {
+    "name": {
+      "label": "Nombre del producto",
+      "placeholder": "Ej. Camiseta de algodón orgánico Amigo Gigante"
+    },
+    "price": {
+      "label": "Precio (COP)",
+      "placeholder": "20.000"
+    },
+    "description": {
+      "label": "Descripción",
+      "placeholder": "Describe los materiales, tallas y cómo la compra ayuda a los animales..."
+    }
+  },
+  "actions": {
+    "cancel": "Cancelar",
+    "save": "Guardar producto"
+  },
+  "footer": {
+    "hint": "Todos los ingresos de esta tienda son deducibles de impuestos para el fondo del refugio."
+  },
+  "validation": {
+    "nameRequired": "El nombre del producto es obligatorio.",
+    "priceRequired": "El precio es obligatorio.",
+    "priceMin": "El precio debe ser 0 o mayor.",
+    "descriptionRequired": "La descripción es obligatoria.",
+    "imageRequired": "La imagen del producto es obligatoria.",
+    "imageUrlInvalid": "Ingresa una URL de imagen válida."
+  },
+  "errors": {
+    "generic": "Ocurrió un error al guardar el producto. Inténtalo nuevamente.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
+    "unauthorized": "No tienes permisos para crear productos.",
+    "storageUnavailable": "No se pudo subir la imagen. Usa una URL directa o configura el almacenamiento."
+  },
   "edit": {
     "breadcrumb": {
       "ariaLabel": "Migas de pan",
-      "dashboard": "Dashboard",
+      "dashboard": "Panel",
       "products": "Productos",
       "edit": "Editar"
     },
@@ -16,74 +93,10 @@
     "errors": {
       "load": "No pudimos cargar los datos del producto. Inténtalo nuevamente.",
       "generic": "Ocurrió un error al actualizar el producto. Inténtalo nuevamente.",
-      "invalidId": "El identificador del producto no es válido."
+      "invalidId": "El identificador del producto no es válido.",
+      "notFound": "No encontramos este producto.",
+      "unauthorized": "No tienes permisos para editar este producto.",
+      "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente."
     }
-  },
-  "form": {
-    "sections": {
-      "general": {
-        "title": "Información general"
-      },
-      "image": {
-        "title": "Imagen del producto",
-        "hint": "PNG, JPG hasta 5MB."
-      },
-      "visibility": {
-        "title": "Visibilidad",
-        "description": "Cuando esté publicado, este producto estará visible en la Tienda Solidaria."
-      }
-    },
-    "fields": {
-      "name": {
-        "label": "Nombre del producto",
-        "placeholder": "ej. Camiseta de algodón orgánico"
-      },
-      "price": {
-        "label": "Precio (USD)",
-        "placeholder": "0.00"
-      },
-      "description": {
-        "label": "Descripción",
-        "placeholder": "Describe el producto, sus materiales y cómo ayuda a la fundación..."
-      },
-      "imageUrl": {
-        "label": "URL de la imagen",
-        "placeholder": "https://..."
-      }
-    },
-    "media": {
-      "upload": {
-        "ariaLabel": "Subir imagen del producto",
-        "title": "Haz clic para subir o arrastra y suelta",
-        "hint": "SVG, PNG o JPG (MÁX. 5MB)",
-        "limit": "MÁX. 5MB"
-      },
-      "preview": {
-        "alt": "Imagen del producto",
-        "remove": "Eliminar imagen",
-        "current": "Imagen actual",
-        "size": "{size}"
-      },
-      "errors": {
-        "tooLarge": "La imagen supera los 5MB.",
-        "invalidType": "Formato de imagen inválido. Permitidos: SVG, PNG, JPG.",
-        "readFailed": "No pudimos leer la imagen. Inténtalo nuevamente."
-      }
-    },
-    "actions": {
-      "cancel": "Cancelar",
-      "save": "Guardar producto"
-    }
-  },
-  "validation": {
-    "nameRequired": "El nombre del producto es requerido",
-    "priceInvalid": "El precio debe ser un número válido mayor o igual a 0",
-    "imageUrlInvalid": "La URL de la imagen no es válida"
-  },
-  "errors": {
-    "unauthorized": "No tienes permisos para editar este producto.",
-    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
-    "notFound": "No encontramos este producto.",
-    "generic": "Ocurrió un error al guardar el producto. Inténtalo nuevamente."
   }
 }

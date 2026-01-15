@@ -11,31 +11,35 @@ export interface ProductFormValues {
 
 type ProductFormTranslator = ReturnType<typeof useTranslations>;
 
-const isValidImageUrl = (value?: string) => {
-  const trimmed = value?.trim() ?? "";
-  if (!trimmed) return true;
-  if (trimmed.startsWith("data:")) return true;
-  try {
-    const parsed = new URL(trimmed);
-    return parsed.protocol === "http:" || parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
+export const parsePriceInput = (value?: string | null): number | null => {
+  if (!value) return null;
+  const digits = value.replace(/[^\d]/g, "");
+  if (!digits) return null;
+  const parsed = Number(digits);
+  return Number.isFinite(parsed) ? parsed : null;
 };
 
-export const createProductFormValidationSchema = (t: ProductFormTranslator) =>
+export const createProductFormValidationSchema = (t: ProductFormTranslator, hasImageFile: () => boolean) =>
   Yup.object().shape({
     name: Yup.string().trim().required(t("validation.nameRequired")),
     price: Yup.string()
       .trim()
-      .test("price-valid", t("validation.priceInvalid"), (value) => {
-        if (!value) return true;
-        const parsed = Number(value);
-        return Number.isFinite(parsed) && parsed >= 0;
+      .required(t("validation.priceRequired"))
+      .test("price-number", t("validation.priceRequired"), (value) => parsePriceInput(value) !== null)
+      .test("price-min", t("validation.priceMin"), (value) => {
+        const parsed = parsePriceInput(value);
+        return parsed !== null && parsed >= 0;
       }),
-    description: Yup.string().trim().notRequired(),
+    description: Yup.string().trim().required(t("validation.descriptionRequired")),
     imageUrl: Yup.string()
       .trim()
-      .test("image-url-valid", t("validation.imageUrlInvalid"), (value) => isValidImageUrl(value)),
-    isPublished: Yup.boolean().required(),
+      .test("image-required", t("validation.imageRequired"), (value) => {
+        if (hasImageFile()) return true;
+        return Boolean(value && value.trim().length > 0);
+      })
+      .test("image-url", t("validation.imageUrlInvalid"), (value) => {
+        if (!value) return true;
+        return Yup.string().url().isValidSync(value);
+      }),
+    isPublished: Yup.boolean().notRequired(),
   });

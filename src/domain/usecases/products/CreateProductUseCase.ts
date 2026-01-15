@@ -1,25 +1,25 @@
+import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 
-export interface UpdateProductInput {
-  productId: number;
+export interface CreateProductInput {
   name: string;
   description: string;
   price: number;
-  imageUrl: string | null;
+  imageUrl?: string | null;
   imageFile?: File | null;
   isPublished: boolean;
 }
 
-export class UpdateProductUseCase {
+export class CreateProductUseCase {
   constructor(
     private readonly productRepository: IProductRepository,
     private readonly authRepository: IAuthRepository,
     private readonly foundationMembershipRepository: IFoundationMembershipRepository,
   ) {}
 
-  async execute(input: UpdateProductInput): Promise<void> {
+  async execute(input: CreateProductInput): Promise<ShopProduct> {
     const session = await this.authRepository.getSession();
 
     if (!session?.user?.id) {
@@ -32,13 +32,12 @@ export class UpdateProductUseCase {
 
     const foundationId = await this.foundationMembershipRepository.getFoundationIdForUser(session.user.id);
 
-    await this.productRepository.updateProduct({
+    return this.productRepository.createProduct({
       foundationId,
-      productId: input.productId,
-      name: input.name,
-      description: input.description,
+      name: input.name.trim(),
+      description: input.description.trim(),
       price: input.price,
-      imageUrl: input.imageUrl,
+      imageUrl: input.imageUrl?.trim() || null,
       imageFile: input.imageFile ?? null,
       isPublished: input.isPublished,
     });
