@@ -168,6 +168,124 @@ export class AnimalRepository implements IAnimalRepository {
     }
   }
 
+  async getAnimalById({ animalId, foundationId }: Parameters<IAnimalRepository["getAnimalById"]>[0]) {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select(
+        "id, name, species, breed, sex, age_months, size, status, description, cover_image_url, is_published, created_at",
+      )
+      .eq("id", animalId)
+      .eq("foundation_id", foundationId)
+      .single();
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+
+    const { data: photosData, error: photosError } = await supabaseClient
+      .from("animal_photos")
+      .select("url, sort_order")
+      .eq("animal_id", animalId)
+      .order("sort_order", { ascending: true });
+
+    if (photosError) {
+      throw new Error(this.translateAnimalsError(photosError));
+    }
+
+    const photos =
+      photosData?.map((row) => ({
+        url: row.url as string,
+        sortOrder: row.sort_order as number,
+      })).filter((photo) => Boolean(photo.url)) ?? [];
+
+    const coverImageUrl = data.cover_image_url ?? photos[0]?.url ?? null;
+
+    return {
+      id: data.id,
+      name: data.name ?? "",
+      species: data.species,
+      breed: data.breed ?? "",
+      sex: data.sex ?? "unknown",
+      ageMonths: data.age_months ?? null,
+      size: data.size ?? "unknown",
+      status: data.status,
+      description: data.description ?? "",
+      coverImageUrl,
+      isPublished: Boolean(data.is_published),
+      photos,
+    };
+  }
+
+  async updateAnimal({
+    animalId,
+    foundationId,
+    name,
+    species,
+    breed,
+    sex,
+    ageMonths,
+    size,
+    status,
+    description,
+    coverImageUrl,
+    isPublished,
+  }: Parameters<IAnimalRepository["updateAnimal"]>[0]) {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .update({
+        name,
+        species,
+        breed: breed ?? null,
+        sex,
+        age_months: ageMonths,
+        size,
+        status,
+        description,
+        cover_image_url: coverImageUrl ?? null,
+        is_published: isPublished,
+      })
+      .eq("id", animalId)
+      .eq("foundation_id", foundationId)
+      .select("id")
+      .single();
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+  }
+
+  async replaceAnimalPhotos({ animalId, photoUrls }: Parameters<IAnimalRepository["replaceAnimalPhotos"]>[0]) {
+    const normalized = photoUrls.map((url) => url.trim()).filter(Boolean);
+
+    const { error: deleteError } = await supabaseClient.from("animal_photos").delete().eq("animal_id", animalId);
+
+    if (deleteError) {
+      throw new Error(this.translateAnimalsError(deleteError));
+    }
+
+    if (normalized.length === 0) return;
+
+    const { error: insertError } = await supabaseClient.from("animal_photos").insert(
+      normalized.map((url, index) => ({
+        animal_id: animalId,
+        url,
+        sort_order: index,
+      })),
+    );
+
+    if (insertError) {
+      throw new Error(this.translateAnimalsError(insertError));
+    }
+  }
+
   async getAnimals({ foundationId, filters, pagination }: Parameters<IAnimalRepository["getAnimals"]>[0]) {
     const pageSize = pagination.pageSize;
     const from = Math.max(0, (pagination.page - 1) * pageSize);
@@ -369,8 +487,13 @@ export class AnimalRepository implements IAnimalRepository {
     };
   }
 
-  private translateAnimalsError(error: { message?: string }): string {
+  private translateAnimalsError(error: { message?: string; code?: string }): string {
     const message = error.message?.toLowerCase?.() ?? "";
+    const code = error.code?.toLowerCase?.() ?? "";
+
+    if (code === "pgrst116" || message.includes("no rows") || message.includes("0 rows")) {
+      return "errors.notFound";
+    }
 
     if (message.includes("permission") || message.includes("row level")) {
       return "errors.unauthorized";

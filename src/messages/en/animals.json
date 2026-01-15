@@ -55,7 +55,8 @@
   "errors": {
     "generic": "Something went wrong while loading animals. Please try again.",
     "connection": "We couldn't connect to the server. Please check your connection and try again.",
-    "unauthorized": "You don't have permission to view these animals."
+    "unauthorized": "You don't have permission to view these animals.",
+    "notFound": "We couldn't find this animal."
   },
   "add": {
     "breadcrumb": {
@@ -193,6 +194,26 @@
     },
     "errors": {
       "generic": "Something went wrong while creating the animal. Please try again."
+    }
+  },
+  "edit": {
+    "breadcrumb": {
+      "ariaLabel": "Breadcrumb",
+      "dashboard": "Dashboard",
+      "myAnimals": "My Animals",
+      "edit": "Edit"
+    },
+    "header": {
+      "title": "Edit Amigo",
+      "subtitle": "Update the animal details to keep their profile current."
+    },
+    "status": {
+      "loading": "Loading animal details..."
+    },
+    "errors": {
+      "load": "We couldn't load the animal details. Please try again.",
+      "generic": "Something went wrong while updating the animal. Please try again.",
+      "invalidId": "The animal identifier is invalid."
     }
   }
 }

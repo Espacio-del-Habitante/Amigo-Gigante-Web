@@ -4,6 +4,7 @@ import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Avatar, Box, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 import type { AnimalManagement } from "@/domain/models/AnimalManagement";
 import { AnimalStatusBadge } from "@/presentation/components/animals/AnimalStatusBadge";
@@ -29,6 +30,7 @@ export interface AnimalsTableProps {
 export function AnimalsTable({ animals }: AnimalsTableProps) {
   const t = useTranslations("animals");
   const locale = useLocale();
+  const router = useRouter();
 
   return (
     <Box className="overflow-x-auto rounded-2xl border border-neutral-100 bg-white">
@@ -110,6 +112,9 @@ export function AnimalsTable({ animals }: AnimalsTableProps) {
                         startIcon={<EditRoundedIcon fontSize="small" />}
                         variant="text"
                         aria-label={t("table.actions.edit")}
+                        onClick={() => {
+                          router.push(`/${locale}/foundations/animals/${animal.id}/edit`);
+                        }}
                       >
                         {t("table.actions.edit")}
                       </Button>
