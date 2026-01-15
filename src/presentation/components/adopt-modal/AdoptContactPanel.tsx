@@ -79,13 +79,14 @@ export function AdoptContactPanel({ foundationId }: AdoptContactPanelProps) {
 
   const foundationName = contact?.foundationName || t("contact.foundationFallback");
 
-  const whatsappUrl = contact?.whatsappUrl ?? null;
+  const rawWhatsapp = contact?.whatsappUrl ?? "";
   const instagramUrl = contact?.instagramUrl ?? null;
   const phone = contact?.publicPhone ?? null;
   const email = contact?.publicEmail ?? null;
   const address = contact?.address ?? null;
-  const phoneHref = phone ? `tel:${phone.replace(/\\s+/g, "")}` : undefined;
+  const phoneHref = phone ? `tel:${phone.replace(/\s+/g, "")}` : undefined;
   const emailHref = email ? `mailto:${email}` : undefined;
+  const whatsappLink = buildWhatsappLink(rawWhatsapp, phone);
 
   return (
     <Box className="space-y-6">
@@ -114,11 +115,11 @@ export function AdoptContactPanel({ foundationId }: AdoptContactPanelProps) {
         <Box className="space-y-4">
           <Button
             fullWidth
-            tone="secondary"
+            tone="primary"
             startIcon={<ChatRoundedIcon fontSize="small" />}
-            component={whatsappUrl ? "a" : "button"}
-            href={whatsappUrl ?? undefined}
-            disabled={!whatsappUrl}
+            component={whatsappLink ? "a" : "button"}
+            href={whatsappLink ?? undefined}
+            disabled={!whatsappLink}
           >
             {t("contact.actions.whatsapp")}
           </Button>
@@ -186,4 +187,25 @@ export function AdoptContactPanel({ foundationId }: AdoptContactPanelProps) {
       ) : null}
     </Box>
   );
+}
+
+function buildWhatsappLink(rawUrl: string, phone: string | null): string | null {
+  const trimmed = rawUrl.trim();
+  if (trimmed.length > 0) {
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+      return trimmed;
+    }
+
+    const digits = trimmed.replace(/\D/g, "");
+    if (digits.length > 0) {
+      return `https://api.whatsapp.com/send?phone=${digits}`;
+    }
+  }
+
+  const phoneDigits = phone?.replace(/\D/g, "") ?? "";
+  if (phoneDigits.length > 0) {
+    return `https://api.whatsapp.com/send?phone=${phoneDigits}`;
+  }
+
+  return null;
 }

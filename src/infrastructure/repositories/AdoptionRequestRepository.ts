@@ -16,6 +16,8 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       throw new Error("errors.documentsRequired");
     }
 
+    await this.ensureAdopterProfile(adopterUserId);
+
     const request = await this.insertRequest({
       animalId,
       foundationId,
@@ -97,6 +99,31 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
 
     if (error) {
       throw new Error(this.translateAdoptionError(error));
+    }
+  }
+
+  private async ensureAdopterProfile(adopterUserId: string): Promise<void> {
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("id")
+      .eq("id", adopterUserId)
+      .maybeSingle<{ id: string }>();
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    if (data?.id) {
+      return;
+    }
+
+    const { error: insertError } = await supabaseClient.from("profiles").insert({
+      id: adopterUserId,
+      role: "external",
+    });
+
+    if (insertError) {
+      throw new Error(this.translateAdoptionError(insertError));
     }
   }
 
