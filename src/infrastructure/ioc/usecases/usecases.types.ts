@@ -4,6 +4,7 @@ const USE_CASE_TYPES = {
   GetAnimalsUseCase: Symbol.for("GetAnimalsUseCase"),
   GetAnimalByIdUseCase: Symbol.for("GetAnimalByIdUseCase"),
   GetAdoptCatalogUseCase: Symbol.for("GetAdoptCatalogUseCase"),
+  GetAdoptDetailUseCase: Symbol.for("GetAdoptDetailUseCase"),
   GetDashboardDataUseCase: Symbol.for("GetDashboardDataUseCase"),
   CreateAnimalUseCase: Symbol.for("CreateAnimalUseCase"),
   DeleteAnimalUseCase: Symbol.for("DeleteAnimalUseCase"),

@@ -13,6 +13,7 @@ import type {
   AdoptSizeFilter,
   AdoptSpeciesFilter,
 } from "@/domain/models/AdoptCatalogItem";
+import type { AdoptDetail } from "@/domain/models/AdoptDetail";
 
 export type AnimalsSortOption = "newest" | "oldest" | "nameAsc" | "nameDesc";
 
@@ -114,6 +115,15 @@ export interface GetAdoptCatalogResult {
   total: number;
 }
 
+export interface GetAdoptDetailParams {
+  id: number | string;
+}
+
+export interface GetRelatedAnimalsParams {
+  id: number | string;
+  limit?: number;
+}
+
 export interface IAnimalRepository {
   getHomeAnimals(): Promise<HomeAnimals>;
   getAnimals(params: GetAnimalsParams): Promise<GetAnimalsResult>;
@@ -127,4 +137,6 @@ export interface IAnimalRepository {
   updateAnimal(params: UpdateAnimalParams): Promise<void>;
   replaceAnimalPhotos(params: ReplaceAnimalPhotosParams): Promise<void>;
   getAdoptCatalog(params: GetAdoptCatalogParams): Promise<GetAdoptCatalogResult>;
+  getAdoptDetail(params: GetAdoptDetailParams): Promise<AdoptDetail>;
+  getRelatedAnimals(params: GetRelatedAnimalsParams): Promise<AdoptCatalogItem[]>;
 }

@@ -82,17 +82,20 @@ function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
-function resolveAgeValues(ageMonths: number | null): { age: number | ""; ageUnit: "years" | "months" } {
+type AgeValue = AddAnimalFormValues["age"];
+type AgeUnitValue = AddAnimalFormValues["ageUnit"];
+
+function resolveAgeValues(ageMonths: number | null): { age: AgeValue; ageUnit: AgeUnitValue } {
   if (!Number.isFinite(ageMonths ?? NaN)) {
-    return { age: "", ageUnit: "years" as const };
+    return { age: "", ageUnit: "years" };
   }
 
   const safe = Math.max(0, Math.floor(ageMonths as number));
   if (safe >= 12 && safe % 12 === 0) {
-    return { age: safe / 12, ageUnit: "years" as const };
+    return { age: safe / 12, ageUnit: "years" };
   }
 
-  return { age: safe, ageUnit: "months" as const };
+  return { age: safe, ageUnit: "months" };
 }
 
 export interface EditAnimalFormProps {

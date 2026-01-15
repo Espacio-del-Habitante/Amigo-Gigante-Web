@@ -1,0 +1,73 @@
+{
+  "breadcrumbs": {
+    "species": {
+      "dog": "Perros",
+      "cat": "Gatos",
+      "other": "Otros"
+    },
+    "adoptions": "Adopciones"
+  },
+  "gallery": {
+    "favorite": "Marcar como favorito",
+    "thumbnail": "Miniatura {index}"
+  },
+  "status": {
+    "available": "Disponible",
+    "adopted": "Adoptado",
+    "pending": "En proceso",
+    "in_treatment": "En tratamiento",
+    "inactive": "Inactivo"
+  },
+  "labels": {
+    "age": "Edad",
+    "ageUnknown": "Edad desconocida",
+    "locationPlaceholder": "Ubicación no disponible",
+    "breedUnknown": "Mestizo",
+    "descriptionEmpty": "Sin descripción disponible.",
+    "sizeUnknown": "Tamaño desconocido",
+    "sexUnknown": "Sexo desconocido",
+    "speciesUnknown": "Otro"
+  },
+  "age": {
+    "months": "{count, plural, one {# mes} other {# meses}}",
+    "years": "{count, plural, one {# año} other {# años}}"
+  },
+  "sex": {
+    "male": "Macho",
+    "female": "Hembra",
+    "unknown": "Desconocido"
+  },
+  "size": {
+    "small": "Pequeño",
+    "medium": "Mediano",
+    "large": "Grande",
+    "unknown": "Desconocido"
+  },
+  "species": {
+    "dog": "Perro",
+    "cat": "Gato",
+    "other": "Otro"
+  },
+  "buttons": {
+    "adopt": "Adoptar",
+    "sponsor": "Apadrinar"
+  },
+  "history": {
+    "title": "Historial",
+    "empty": "Sin información disponible."
+  },
+  "related": {
+    "title": "Otros amigos buscando hogar",
+    "empty": "No hay recomendaciones disponibles."
+  },
+  "states": {
+    "loading": "Cargando detalle",
+    "loadingName": "Cargando..."
+  },
+  "errors": {
+    "unauthorized": "No autorizado.",
+    "connection": "No pudimos conectar. Intenta nuevamente.",
+    "generic": "Ocurrió un error. Intenta nuevamente.",
+    "notFound": "No encontramos este animal."
+  }
+}
