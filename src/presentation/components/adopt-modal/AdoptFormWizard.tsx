@@ -289,8 +289,11 @@ export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }:
           "errors.documentsRequired",
           "errors.duplicate",
           "errors.generic",
-        ];
-        setSubmitError(errorKeys.includes(key) ? t(key) : key);
+        ] as const;
+        const isErrorKey = (value: string): value is (typeof errorKeys)[number] =>
+          (errorKeys as readonly string[]).includes(value);
+
+        setSubmitError(isErrorKey(key) ? t(key) : key);
       } else {
         setSubmitError(t("errors.generic"));
       }
