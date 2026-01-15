@@ -45,8 +45,8 @@ export function HomeNavBar() {
   const navItems = useMemo(
     () => [
       { key: "adopt", label: t("navigation.adopt"), href: adoptHref, active: isHrefActive(adoptHref) },
-      { key: "sponsor", label: t("navigation.sponsor"), href: "#" },
-      { key: "foundations", label: t("navigation.foundations"), href: foundationsHref, active: isHrefActive(foundationsHref) },
+    //  { key: "sponsor", label: t("navigation.sponsor"), href: "#" },
+    //  { key: "foundations", label: t("navigation.foundations"), href: foundationsHref, active: isHrefActive(foundationsHref) },
       { key: "store", label: t("navigation.store"), href: shopHref, active: isHrefActive(shopHref) },
     ],
     [adoptHref, foundationsHref, shopHref, t, pathname],
@@ -66,7 +66,9 @@ export function HomeNavBar() {
     >
       <Container maxWidth="xl" sx={{ maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
         <Toolbar disableGutters sx={{ gap: 2, py: { xs: 1, md: 1.5 } }}>
-          <Logo size={40} showWordmark />
+          <Link href="/" sx={{ textDecoration: "none" }}>
+            <Logo size={40} showWordmark />
+          </Link>
           <Box
             sx={{
               flex: 1,
