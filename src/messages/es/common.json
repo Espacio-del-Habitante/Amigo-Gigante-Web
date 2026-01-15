@@ -16,6 +16,21 @@
     "ok": "OK",
     "visitStore": "Visitar tienda"
   },
+  "deleteModal": {
+    "title": "¿Estás seguro de eliminar este {item}?",
+    "description": "Esta acción eliminará el {item} de forma permanente. No podrás deshacer este cambio.",
+    "confirm": "Sí, eliminar",
+    "cancel": "Cancelar",
+    "loading": "Eliminando...",
+    "errors": {
+      "generic": "No pudimos eliminar el {item}. Inténtalo nuevamente.",
+      "connection": "No pudimos conectarnos para eliminar el {item}. Revisa tu conexión e inténtalo nuevamente.",
+      "unauthorized": "No tienes permisos para eliminar este {item}."
+    },
+    "entity": {
+      "animal": "animal"
+    }
+  },
   "labels": {
     "favorite": "Marcar como favorito",
     "language": "Idioma",
