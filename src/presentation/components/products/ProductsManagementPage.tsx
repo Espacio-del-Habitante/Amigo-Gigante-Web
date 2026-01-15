@@ -204,6 +204,12 @@ export function ProductsManagementPage() {
     [resolveErrorMessage, status, updatePublishUseCase],
   );
 
+  const handleEditProduct = useCallback(
+    (productId: number) => {
+      router.push(`/${locale}/foundations/products/${productId}/edit`);
+    },
+    [locale, router],
+  );
   const handleDeleteRequest = (product: ShopProduct) => {
     setSelectedProduct(product);
     setDeleteErrorKey(null);
@@ -300,6 +306,7 @@ export function ProductsManagementPage() {
           updatingIds={updatingIds}
           formatPrice={formatPrice}
           onTogglePublish={handleTogglePublish}
+          onEdit={handleEditProduct}
           onDelete={handleDeleteRequest}
         />
       )}

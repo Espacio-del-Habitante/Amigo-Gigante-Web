@@ -19,6 +19,14 @@ export const parsePriceInput = (value?: string | null): number | null => {
   return Number.isFinite(parsed) ? parsed : null;
 };
 
+const isValidImageUrl = (value?: string | null): boolean => {
+  if (!value) return true;
+  const trimmed = value.trim();
+  if (!trimmed) return true;
+  if (trimmed.startsWith("data:")) return true;
+  return Yup.string().url().isValidSync(trimmed);
+};
+
 export const createProductFormValidationSchema = (t: ProductFormTranslator, hasImageFile: () => boolean) =>
   Yup.object().shape({
     name: Yup.string().trim().required(t("validation.nameRequired")),
@@ -37,9 +45,6 @@ export const createProductFormValidationSchema = (t: ProductFormTranslator, hasI
         if (hasImageFile()) return true;
         return Boolean(value && value.trim().length > 0);
       })
-      .test("image-url", t("validation.imageUrlInvalid"), (value) => {
-        if (!value) return true;
-        return Yup.string().url().isValidSync(value);
-      }),
+      .test("image-url", t("validation.imageUrlInvalid"), (value) => isValidImageUrl(value)),
     isPublished: Yup.boolean().notRequired(),
   });

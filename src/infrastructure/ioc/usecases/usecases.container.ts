@@ -27,7 +27,9 @@ import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/Upd
 import { CreateProductUseCase } from "@/domain/usecases/products/CreateProductUseCase";
 import { DeleteProductUseCase } from "@/domain/usecases/products/DeleteProductUseCase";
 import { GetProductsUseCase } from "@/domain/usecases/products/GetProductsUseCase";
+import { GetProductByIdUseCase } from "@/domain/usecases/products/GetProductByIdUseCase";
 import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/UpdateProductPublishStatusUseCase";
+import { UpdateProductUseCase } from "@/domain/usecases/products/UpdateProductUseCase";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
 
@@ -231,6 +233,18 @@ const useCasesModule = new ContainerModule(
       })
       .inSingletonScope();
 
+    bind<GetProductByIdUseCase>(USE_CASE_TYPES.GetProductByIdUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetProductByIdUseCase(productRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
     bind<UpdateProductPublishStatusUseCase>(USE_CASE_TYPES.UpdateProductPublishStatusUseCase)
       .toDynamicValue((context) => {
         const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
@@ -244,6 +258,18 @@ const useCasesModule = new ContainerModule(
           authRepository,
           foundationMembershipRepository,
         );
+      })
+      .inSingletonScope();
+
+    bind<UpdateProductUseCase>(USE_CASE_TYPES.UpdateProductUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new UpdateProductUseCase(productRepository, authRepository, foundationMembershipRepository);
       })
       .inSingletonScope();
 

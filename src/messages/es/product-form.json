@@ -75,5 +75,28 @@
     "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
     "unauthorized": "No tienes permisos para crear productos.",
     "storageUnavailable": "No se pudo subir la imagen. Usa una URL directa o configura el almacenamiento."
+  },
+  "edit": {
+    "breadcrumb": {
+      "ariaLabel": "Migas de pan",
+      "dashboard": "Panel",
+      "products": "Productos",
+      "edit": "Editar"
+    },
+    "header": {
+      "title": "Editar producto",
+      "subtitle": "Actualiza los datos del producto para mantener tu catálogo al día."
+    },
+    "status": {
+      "loading": "Cargando datos del producto..."
+    },
+    "errors": {
+      "load": "No pudimos cargar los datos del producto. Inténtalo nuevamente.",
+      "generic": "Ocurrió un error al actualizar el producto. Inténtalo nuevamente.",
+      "invalidId": "El identificador del producto no es válido.",
+      "notFound": "No encontramos este producto.",
+      "unauthorized": "No tienes permisos para editar este producto.",
+      "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente."
+    }
   }
 }

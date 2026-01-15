@@ -1,13 +1,15 @@
 import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type {
+  CreateProductParams,
   DeleteProductParams,
+  GetProductByIdParams,
   GetProductsParams,
   GetProductsResult,
   GetShopProductsParams,
   IProductRepository,
   RecentProduct,
   ShopProductsPage,
-  CreateProductParams,
+  UpdateProductParams,
   UpdateProductPublishStatusParams,
 } from "@/domain/repositories/IProductRepository";
 import { supabaseClient } from "@/infrastructure/config/supabase";
@@ -136,6 +138,26 @@ export class ProductRepository implements IProductRepository {
     };
   }
 
+  async getProductById({ foundationId, productId }: GetProductByIdParams): Promise<ShopProduct> {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("id, foundation_id, name, description, price, image_url, is_published, created_at")
+      .eq("id", productId)
+      .eq("foundation_id", foundationId)
+      .single()
+      .returns<ShopProductRow>();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+
+    return this.mapShopProduct(data);
+  }
+
   async createProduct({
     foundationId,
     name,
@@ -181,6 +203,53 @@ export class ProductRepository implements IProductRepository {
     }
 
     return this.mapShopProduct(data);
+  }
+
+  async updateProduct({
+    foundationId,
+    productId,
+    name,
+    description,
+    price,
+    imageUrl,
+    imageFile,
+    isPublished,
+  }: UpdateProductParams): Promise<void> {
+    let resolvedImageUrl = imageUrl;
+
+    if (imageFile) {
+      try {
+        resolvedImageUrl = await this.uploadProductImage(imageFile, foundationId);
+      } catch (error) {
+        if (this.isStorageUnavailableError(error) && imageUrl) {
+          resolvedImageUrl = imageUrl;
+        } else {
+          throw error;
+        }
+      }
+    }
+
+    const { data, error } = await supabaseClient
+      .from("products")
+      .update({
+        name,
+        description,
+        price,
+        image_url: resolvedImageUrl,
+        is_published: isPublished,
+      })
+      .eq("id", productId)
+      .eq("foundation_id", foundationId)
+      .select("id")
+      .single();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
   }
 
   async updatePublishStatus({
@@ -265,8 +334,13 @@ export class ProductRepository implements IProductRepository {
     return error instanceof Error && error.message === "errors.storageUnavailable";
   }
 
-  private translateProductsError(error: { message?: string }): string {
+  private translateProductsError(error: { message?: string; code?: string }): string {
     const message = error.message?.toLowerCase?.() ?? "";
+    const code = error.code?.toLowerCase?.() ?? "";
+
+    if (code === "pgrst116" || message.includes("no rows") || message.includes("0 rows")) {
+      return "errors.notFound";
+    }
 
     if (message.includes("permission") || message.includes("row level")) {
       return "errors.unauthorized";
@@ -276,7 +350,12 @@ export class ProductRepository implements IProductRepository {
       return "errors.connection";
     }
 
-    if (message.includes("bucket") || message.includes("not found") || message.includes("resource")) {
+    if (
+      message.includes("bucket") ||
+      message.includes("resource") ||
+      message.includes("storage") ||
+      message.includes("not found")
+    ) {
       return "errors.storageUnavailable";
     }
 
