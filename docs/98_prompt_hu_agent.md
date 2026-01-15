@@ -42,14 +42,19 @@ CONTENIDO MÍNIMO A INCLUIR EN LA HU:
 - Definición de Hecho completa (marcada como checklist).
 
 OUTPUT:
-- Entregar ÚNICAMENTE el contenido de la HU, listo para guardar como HUs/HU-XXX.md.
-- No agregar explicaciones ni texto extra fuera del template.
+- Entregar el contenido completo de la HU, listo para guardar como HUs/HU-XXX.md.
+- Al final, incluir un bloque "EJECUTAR LOCALMENTE" con el comando para crear la tarea en ClickUp.
 
-PASO POSTERIOR (obligatorio si el entorno tiene variables de ClickUp):
+NOTA SOBRE EJECUCIÓN:
+- Si estás en cursor.com/agents/ (web): NO intentes ejecutar scripts Node.js.
+- En su lugar, entrega el comando exacto que el usuario debe ejecutar localmente.
+- El usuario ejecutará el comando en su terminal local (donde sí tiene acceso a variables de entorno).
+
+PASO POSTERIOR:
 1) Guardar la HU en `HUs/HU-XXX.md`.
-2) Ejecutar:
+2) Ejecutar localmente (en tu terminal, no desde el agente web):
    `node scripts/clickup/flow.mjs --title "HU-XXX — <Título>" --body-file "HUs/HU-XXX.md"`
-3) Reportar el `TASK_ID` y URL resultantes.
+3) Reportar el `TASK_ID` y URL resultantes al usuario o coordinador.
 ```
 
 ---
