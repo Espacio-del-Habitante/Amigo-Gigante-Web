@@ -118,7 +118,7 @@ export function ProductForm() {
           name: values.name.trim(),
           description: values.description.trim(),
           price: parsedPrice,
-          imageUrl: imageDataUrl ?? values.imageUrl.trim() || null,
+          imageUrl: imageDataUrl ?? (values.imageUrl.trim() || null),
           imageFile,
           isPublished: values.isPublished,
         });
