@@ -1,5 +1,5 @@
 import { AdoptionRequestDetailPage } from "@/presentation/components/adoptions-admin/AdoptionRequestDetailPage";
 
-export default function AdminAdoptionRequestDetailPage() {
+export default function FoundationAdoptionRequestDetailPage() {
   return <AdoptionRequestDetailPage />;
 }

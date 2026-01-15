@@ -223,7 +223,7 @@ export function AdoptionRequestDetailPage() {
   return (
     <Box className="flex w-full flex-col gap-6">
       <Breadcrumbs separator={<NavigateNextRoundedIcon fontSize="small" />} aria-label={t("detail.breadcrumb.ariaLabel")}>
-        <Link href={`/${locale}/admin/adoptions`} className="text-sm font-semibold text-neutral-600 hover:text-neutral-900">
+        <Link href={`/${locale}/foundations/adoptions`} className="text-sm font-semibold text-neutral-600 hover:text-neutral-900">
           {t("detail.breadcrumb.list")}
         </Link>
         <Typography variant="body2" className="font-semibold text-neutral-900">

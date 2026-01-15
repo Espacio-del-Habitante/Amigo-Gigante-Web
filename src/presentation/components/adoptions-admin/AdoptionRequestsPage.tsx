@@ -231,7 +231,7 @@ export function AdoptionRequestsPage() {
         <AdoptionRequestsTable
           requests={requests}
           onViewDetail={(requestId) => {
-            router.push(`/${locale}/admin/adoptions/${requestId}`);
+            router.push(`/${locale}/foundations/adoptions/${requestId}`);
           }}
         />
       )}
