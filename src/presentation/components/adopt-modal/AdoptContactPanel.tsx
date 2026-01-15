@@ -118,8 +118,6 @@ export function AdoptContactPanel({ foundationId }: AdoptContactPanelProps) {
             startIcon={<ChatRoundedIcon fontSize="small" />}
             component={whatsappUrl ? "a" : "button"}
             href={whatsappUrl ?? undefined}
-            target={whatsappUrl ? "_blank" : undefined}
-            rel={whatsappUrl ? "noreferrer" : undefined}
             disabled={!whatsappUrl}
           >
             {t("contact.actions.whatsapp")}
