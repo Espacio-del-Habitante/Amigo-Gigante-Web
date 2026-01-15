@@ -14,6 +14,7 @@ const USE_CASE_TYPES = {
   UpdateFoundationProfileUseCase: Symbol.for("UpdateFoundationProfileUseCase"),
   GetShopCatalogUseCase: Symbol.for("GetShopCatalogUseCase"),
   GetProductsUseCase: Symbol.for("GetProductsUseCase"),
+  CreateProductUseCase: Symbol.for("CreateProductUseCase"),
   UpdateProductPublishStatusUseCase: Symbol.for("UpdateProductPublishStatusUseCase"),
 };
 

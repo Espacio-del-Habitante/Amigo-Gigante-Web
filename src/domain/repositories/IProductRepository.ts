@@ -50,10 +50,21 @@ export interface UpdateProductPublishStatusParams {
   isPublished: boolean;
 }
 
+export interface CreateProductParams {
+  foundationId: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string | null;
+  imageFile?: File | null;
+  isPublished: boolean;
+}
+
 export interface IProductRepository {
   getRecentProducts(foundationId: string, limit: number): Promise<RecentProduct[]>;
   getShopProducts(params: GetShopProductsParams): Promise<ShopProductsPage>;
   getProducts(params: GetProductsParams): Promise<GetProductsResult>;
+  createProduct(params: CreateProductParams): Promise<ShopProduct>;
   updatePublishStatus(params: UpdateProductPublishStatusParams): Promise<void>;
 }
 

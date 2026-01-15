@@ -9,7 +9,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = defaultLocale;
   }
 
-  const [common, home, register, dashboard, login, profile, foundation, navigation, animals, adopt, shop, products] = await Promise.all([
+  const [common, home, register, dashboard, login, profile, foundation, navigation, animals, adopt, shop, products, productForm] = await Promise.all([
     import(`../messages/${locale}/common.json`),
     import(`../messages/${locale}/home.json`),
     import(`../messages/${locale}/register.json`),
@@ -22,6 +22,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`../messages/${locale}/adopt.json`),
     import(`../messages/${locale}/shop.json`),
     import(`../messages/${locale}/products.json`),
+    import(`../messages/${locale}/product-form.json`),
   ]);
 
   return {
@@ -39,6 +40,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       adopt: adopt.default,
       shop: shop.default,
       products: products.default,
+      productForm: productForm.default,
     },
   };
 });

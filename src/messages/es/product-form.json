@@ -1,0 +1,77 @@
+{
+  "breadcrumb": {
+    "ariaLabel": "Breadcrumbs de creación de producto",
+    "dashboard": "Panel",
+    "products": "Productos",
+    "addNew": "Agregar producto"
+  },
+  "header": {
+    "title": "Agregar nuevo producto",
+    "subtitle": "Gestiona los productos de tu Tienda Solidaria para apoyar a la fundación."
+  },
+  "sections": {
+    "general": {
+      "title": "Información general"
+    },
+    "image": {
+      "title": "Imagen del producto",
+      "upload": {
+        "title": "Subir imagen",
+        "hint": "PNG, JPG hasta 5MB",
+        "ariaLabel": "Subir imagen del producto"
+      },
+      "url": {
+        "label": "URL de la imagen",
+        "placeholder": "https://example.com/producto.jpg"
+      },
+      "preview": {
+        "label": "Imagen seleccionada",
+        "fromUrl": "URL de la imagen",
+        "remove": "Quitar imagen"
+      },
+      "errors": {
+        "invalidType": "Solo se permiten archivos PNG o JPG.",
+        "tooLarge": "La imagen debe pesar 5MB o menos."
+      }
+    },
+    "visibility": {
+      "title": "Visibilidad",
+      "description": "Al publicar, este producto estará visible para el público en la Tienda Solidaria de inmediato.",
+      "toggleAria": "Cambiar visibilidad del producto"
+    }
+  },
+  "fields": {
+    "name": {
+      "label": "Nombre del producto",
+      "placeholder": "Ej. Camiseta de algodón orgánico Amigo Gigante"
+    },
+    "price": {
+      "label": "Precio (USD)",
+      "placeholder": "0.00"
+    },
+    "description": {
+      "label": "Descripción",
+      "placeholder": "Describe los materiales, tallas y cómo la compra ayuda a los animales..."
+    }
+  },
+  "actions": {
+    "cancel": "Cancelar",
+    "save": "Guardar producto"
+  },
+  "footer": {
+    "hint": "Todos los ingresos de esta tienda son deducibles de impuestos para el fondo del refugio."
+  },
+  "validation": {
+    "nameRequired": "El nombre del producto es obligatorio.",
+    "priceRequired": "El precio es obligatorio.",
+    "priceMin": "El precio debe ser 0 o mayor.",
+    "descriptionRequired": "La descripción es obligatoria.",
+    "imageRequired": "La imagen del producto es obligatoria.",
+    "imageUrlInvalid": "Ingresa una URL de imagen válida."
+  },
+  "errors": {
+    "generic": "Ocurrió un error al guardar el producto. Inténtalo nuevamente.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
+    "unauthorized": "No tienes permisos para crear productos."
+  }
+}

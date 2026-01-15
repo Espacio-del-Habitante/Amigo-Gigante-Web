@@ -6,6 +6,7 @@ import type {
   IProductRepository,
   RecentProduct,
   ShopProductsPage,
+  CreateProductParams,
   UpdateProductPublishStatusParams,
 } from "@/domain/repositories/IProductRepository";
 import { supabaseClient } from "@/infrastructure/config/supabase";
@@ -134,6 +135,41 @@ export class ProductRepository implements IProductRepository {
     };
   }
 
+  async createProduct({
+    foundationId,
+    name,
+    description,
+    price,
+    imageUrl,
+    imageFile,
+    isPublished,
+  }: CreateProductParams): Promise<ShopProduct> {
+    const resolvedImageUrl = imageFile ? await this.uploadProductImage(imageFile, foundationId) : imageUrl;
+
+    const { data, error } = await supabaseClient
+      .from("products")
+      .insert({
+        foundation_id: foundationId,
+        name,
+        description,
+        price,
+        image_url: resolvedImageUrl,
+        is_published: isPublished,
+      })
+      .select("id, foundation_id, name, description, price, image_url, is_published, created_at")
+      .single();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.generic");
+    }
+
+    return this.mapShopProduct(data);
+  }
+
   async updatePublishStatus({
     foundationId,
     productId,
@@ -168,6 +204,31 @@ export class ProductRepository implements IProductRepository {
       isPublished: row.is_published,
       createdAt: row.created_at,
     };
+  }
+
+  private async uploadProductImage(file: File, foundationId: string): Promise<string> {
+    const sanitizedName = this.sanitizeFileName(file.name);
+    const filePath = `${foundationId}/${Date.now()}-${sanitizedName}`;
+
+    const { data, error } = await supabaseClient.storage.from("products").upload(filePath, file, {
+      upsert: false,
+    });
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    const publicUrl = supabaseClient.storage.from("products").getPublicUrl(data?.path ?? "").data.publicUrl;
+
+    if (!publicUrl) {
+      throw new Error("errors.generic");
+    }
+
+    return publicUrl;
+  }
+
+  private sanitizeFileName(fileName: string): string {
+    return fileName.replace(/[^a-z0-9.\-_]/gi, "-").toLowerCase();
   }
 
   private translateProductsError(error: { message?: string }): string {
