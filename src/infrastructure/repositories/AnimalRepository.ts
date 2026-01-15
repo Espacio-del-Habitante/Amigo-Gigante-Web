@@ -97,6 +97,95 @@ export class AnimalRepository implements IAnimalRepository {
     };
   }
 
+  async getAdoptDetail({ id }: Parameters<IAnimalRepository["getAdoptDetail"]>[0]) {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select(
+        "id, name, species, breed, sex, age_months, size, status, description, cover_image_url, is_published",
+      )
+      .eq("id", id)
+      .eq("is_published", true)
+      .single();
+
+    if (error) {
+      if (this.isNotFoundError(error)) {
+        throw new Error("errors.notFound");
+      }
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+
+    const { data: photos, error: photosError } = await supabaseClient
+      .from("animal_photos")
+      .select("animal_id, url, sort_order")
+      .eq("animal_id", id)
+      .order("sort_order", { ascending: true });
+
+    if (photosError) {
+      throw new Error(this.translateAnimalsError(photosError));
+    }
+
+    const normalizedPhotos = (photos ?? [])
+      .map((row) => ({
+        url: row.url as string | undefined,
+        sortOrder: (row.sort_order as number | undefined) ?? 0,
+      }))
+      .filter((photo) => Boolean(photo.url))
+      .map((photo) => ({
+        url: photo.url as string,
+        sortOrder: photo.sortOrder,
+      }));
+
+    return {
+      id: data.id,
+      name: data.name ?? "",
+      species: data.species,
+      breed: data.breed ?? "",
+      sex: data.sex ?? "unknown",
+      ageMonths: data.age_months ?? null,
+      size: data.size ?? "unknown",
+      status: data.status,
+      description: data.description ?? "",
+      coverImageUrl: data.cover_image_url ?? null,
+      photos: normalizedPhotos,
+    };
+  }
+
+  async getRelatedAnimals({ id, limit }: Parameters<IAnimalRepository["getRelatedAnimals"]>[0]) {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select(
+        "id, name, species, breed, sex, age_months, size, description, cover_image_url, created_at",
+      )
+      .eq("status", "available")
+      .eq("is_published", true)
+      .neq("id", id)
+      .limit(limit ?? 4);
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    const items = (data ?? []).map((row) => ({
+      id: row.id,
+      name: row.name ?? "",
+      species: row.species,
+      breed: row.breed ?? "",
+      sex: row.sex ?? "unknown",
+      ageMonths: row.age_months ?? null,
+      size: row.size ?? "unknown",
+      description: row.description ?? "",
+      coverImageUrl: row.cover_image_url ?? null,
+      createdAt: row.created_at,
+      isUrgent: this.isUrgentNeed(row.created_at, row.age_months ?? null),
+    }));
+
+    return this.attachCoverPhotoFallback(items);
+  }
+
   async createAnimal({
     foundationId,
     name,
@@ -369,7 +458,7 @@ export class AnimalRepository implements IAnimalRepository {
     };
   }
 
-  private translateAnimalsError(error: { message?: string }): string {
+  private translateAnimalsError(error: { message?: string; code?: string }): string {
     const message = error.message?.toLowerCase?.() ?? "";
 
     if (message.includes("permission") || message.includes("row level")) {
@@ -381,5 +470,10 @@ export class AnimalRepository implements IAnimalRepository {
     }
 
     return "errors.generic";
+  }
+
+  private isNotFoundError(error: { message?: string; code?: string }): boolean {
+    const message = error.message?.toLowerCase?.() ?? "";
+    return error.code === "PGRST116" || message.includes("0 rows") || message.includes("not found");
   }
 }

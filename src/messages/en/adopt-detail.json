@@ -1,0 +1,73 @@
+{
+  "breadcrumbs": {
+    "species": {
+      "dog": "Dogs",
+      "cat": "Cats",
+      "other": "Other animals"
+    },
+    "adoptions": "Adoptions"
+  },
+  "gallery": {
+    "favorite": "Mark as favorite",
+    "thumbnail": "Thumbnail {index}"
+  },
+  "status": {
+    "available": "Available",
+    "adopted": "Adopted",
+    "pending": "Pending",
+    "in_treatment": "In treatment",
+    "inactive": "Inactive"
+  },
+  "labels": {
+    "age": "Age",
+    "ageUnknown": "Unknown age",
+    "locationPlaceholder": "Location not available",
+    "breedUnknown": "Mixed breed",
+    "descriptionEmpty": "No description available.",
+    "sizeUnknown": "Unknown size",
+    "sexUnknown": "Unknown sex",
+    "speciesUnknown": "Other"
+  },
+  "age": {
+    "months": "{count, plural, one {# month} other {# months}}",
+    "years": "{count, plural, one {# year} other {# years}}"
+  },
+  "sex": {
+    "male": "Male",
+    "female": "Female",
+    "unknown": "Unknown"
+  },
+  "size": {
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
+    "unknown": "Unknown"
+  },
+  "species": {
+    "dog": "Dog",
+    "cat": "Cat",
+    "other": "Other"
+  },
+  "buttons": {
+    "adopt": "Adopt",
+    "sponsor": "Sponsor"
+  },
+  "history": {
+    "title": "History",
+    "empty": "No information available."
+  },
+  "related": {
+    "title": "Other friends looking for a home",
+    "empty": "No recommendations available right now."
+  },
+  "states": {
+    "loading": "Loading details",
+    "loadingName": "Loading..."
+  },
+  "errors": {
+    "unauthorized": "Unauthorized.",
+    "connection": "We couldn't connect. Please try again.",
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "We couldn't find this animal."
+  }
+}
