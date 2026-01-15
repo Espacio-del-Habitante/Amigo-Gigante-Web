@@ -1,4 +1,5 @@
 export type { IDebugRepository } from "./IDebugRepository";
+export type { IAdoptionRequestRepository, CreateAdoptionRequestParams } from "./IAdoptionRequestRepository";
 export type { IAnimalRepository } from "./IAnimalRepository";
 export type {
   IAuthRepository,

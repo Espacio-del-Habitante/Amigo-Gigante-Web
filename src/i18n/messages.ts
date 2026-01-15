@@ -9,6 +9,7 @@ import register from "../messages/en/register.json";
 import animals from "../messages/en/animals.json";
 import adopt from "../messages/en/adopt.json";
 import adoptDetail from "../messages/en/adopt-detail.json";
+import adoptRequest from "../messages/en/adopt-request.json";
 import shop from "../messages/en/shop.json";
 import shopDetail from "../messages/en/shop-detail.json";
 import products from "../messages/en/products.json";
@@ -27,6 +28,7 @@ export const messages = {
   animals,
   adopt,
   adoptDetail,
+  adoptRequest,
   shop,
   shopDetail,
   products,

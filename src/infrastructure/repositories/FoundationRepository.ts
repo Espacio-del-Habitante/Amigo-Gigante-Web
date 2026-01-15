@@ -7,6 +7,7 @@ import type {
   IFoundationRepository,
 } from "@/domain/repositories/IFoundationRepository";
 import type { Foundation } from "@/domain/models/Foundation";
+import type { FoundationContact } from "@/domain/models/FoundationContact";
 import type { ShopFoundation } from "@/domain/models/ShopFoundation";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
@@ -142,6 +143,44 @@ class FoundationRepository implements IFoundationRepository {
     };
   }
 
+  async getFoundationContacts(foundationId: string): Promise<FoundationContact> {
+    type FoundationContactRow = {
+      foundation_id: string;
+      public_email: string | null;
+      public_phone: string | null;
+      instagram_url: string | null;
+      whatsapp_url: string | null;
+      address: string | null;
+      foundations: { name: string | null } | { name: string | null }[] | null;
+    };
+
+    const { data, error } = await supabaseClient
+      .from("foundation_contacts")
+      .select("foundation_id, public_email, public_phone, instagram_url, whatsapp_url, address, foundations(name)")
+      .eq("foundation_id", foundationId)
+      .single()
+      .returns<FoundationContactRow>();
+
+    if (error || !data) {
+      throw new Error(this.translateFoundationLookupError(error ?? new Error("not found")));
+    }
+
+    const foundationValue = data.foundations;
+    const foundationName = Array.isArray(foundationValue)
+      ? (foundationValue[0]?.name ?? "")
+      : (foundationValue?.name ?? "");
+
+    return {
+      foundationId: data.foundation_id,
+      foundationName,
+      publicEmail: data.public_email ?? null,
+      publicPhone: data.public_phone ?? null,
+      instagramUrl: data.instagram_url ?? null,
+      whatsappUrl: data.whatsapp_url ?? null,
+      address: data.address ?? null,
+    };
+  }
+
   async rollbackFoundation(foundationId: string): Promise<void> {
     await supabaseClient.from("foundations").delete().eq("id", foundationId);
   }
@@ -212,12 +251,13 @@ class FoundationRepository implements IFoundationRepository {
 
   private translateFoundationLookupError(error: PostgrestError | Error): string {
     const message = error.message?.toLowerCase?.() ?? "";
+    const code = (error as PostgrestError).code?.toLowerCase?.() ?? "";
 
     if (message.includes("permission") || message.includes("row level")) {
       return "errors.unauthorized";
     }
 
-    if (message.includes("not found")) {
+    if (code === "pgrst116" || message.includes("no rows") || message.includes("0 rows") || message.includes("not found")) {
       return "errors.notFound";
     }
 

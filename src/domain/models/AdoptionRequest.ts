@@ -4,7 +4,6 @@ import type {
   AnimalManagementSize,
   AnimalManagementSpecies,
 } from "@/domain/models/AnimalManagement";
-
 export type AdoptionRequestStatus =
   | "pending"
   | "in_review"
@@ -17,7 +16,43 @@ export type AdoptionRequestStatus =
 
 export type AdoptionRequestPriority = "low" | "medium" | "high";
 
-export type AdoptionRequestHousingType = "house" | "apartment" | "other";
+export type AdoptionHousingType = "house" | "apartment" | "other";
+export type AdoptionRequestHousingType = AdoptionHousingType;
+
+export interface AdoptionRequest {
+  id: number;
+  animalId: number;
+  foundationId: string;
+  adopterUserId: string;
+  status: AdoptionRequestStatus;
+}
+
+export interface AdoptionRequestDetails {
+  adopterDisplayName: string;
+  adopterEmail: string;
+  adopterPhone: string;
+  city: string;
+  neighborhood: string;
+  housingType: AdoptionHousingType | null;
+  isRent: boolean | null;
+  allowsPets: boolean | null;
+  householdPeopleCount: number | null;
+  hasChildren: boolean;
+  childrenAges: string | null;
+  hasOtherPets: boolean;
+  otherPetsDescription: string | null;
+  hoursAlonePerDay: number | null;
+  travelPlan: string | null;
+  experienceText: string | null;
+  motivationText: string | null;
+  acceptsVetCosts: boolean;
+  acceptsLifetimeCommitment: boolean;
+}
+
+export interface AdoptionRequestDocuments {
+  idDocument: File;
+  homePhotos: File[];
+}
 
 export interface AdoptionRequestSummary {
   id: number;

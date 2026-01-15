@@ -16,6 +16,7 @@ interface AdoptInfoPanelProps {
   speciesLabel: string;
   description: string;
   locationLabel: string;
+  onAdopt?: () => void;
 }
 
 export function AdoptInfoPanel({
@@ -26,6 +27,7 @@ export function AdoptInfoPanel({
   speciesLabel,
   description,
   locationLabel,
+  onAdopt,
 }: AdoptInfoPanelProps) {
   const theme = useTheme();
   const t = useTranslations("adoptDetail");
@@ -82,6 +84,8 @@ export function AdoptInfoPanel({
             fullWidth
             rounded="pill"
             startIcon={<VolunteerActivismRoundedIcon fontSize="small" />}
+            onClick={onAdopt}
+            disabled={!onAdopt}
           >
             {t("buttons.adopt")}
           </Button>

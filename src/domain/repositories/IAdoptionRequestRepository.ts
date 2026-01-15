@@ -1,9 +1,20 @@
 import type {
+  AdoptionRequest,
   AdoptionRequestDetail,
+  AdoptionRequestDetails,
+  AdoptionRequestDocuments,
   AdoptionRequestPriority,
   AdoptionRequestStatus,
   AdoptionRequestSummary,
 } from "@/domain/models/AdoptionRequest";
+
+export interface CreateAdoptionRequestParams {
+  animalId: number;
+  foundationId: string;
+  adopterUserId: string;
+  details: AdoptionRequestDetails;
+  documents: AdoptionRequestDocuments;
+}
 
 export interface GetAdoptionRequestsFilters {
   status?: AdoptionRequestStatus;
@@ -40,6 +51,7 @@ export interface UpdateAdoptionRequestStatusParams {
 }
 
 export interface IAdoptionRequestRepository {
+  createAdoptionRequest(params: CreateAdoptionRequestParams): Promise<AdoptionRequest>;
   getAdminRequests(params: GetAdoptionRequestsParams): Promise<GetAdoptionRequestsResult>;
   getRequestDetail(params: GetAdoptionRequestDetailParams): Promise<AdoptionRequestDetail>;
   updateStatus(params: UpdateAdoptionRequestStatusParams): Promise<void>;
