@@ -122,6 +122,27 @@ class FoundationRepository implements IFoundationRepository {
     }));
   }
 
+  async getShopFoundationById(foundationId: string): Promise<ShopFoundation> {
+    const { data, error } = await supabaseClient
+      .from("foundations")
+      .select("id, name, city, country, logo_url")
+      .eq("id", foundationId)
+      .single()
+      .returns<{ id: string; name: string | null; city: string | null; country: string | null; logo_url: string | null }>();
+
+    if (error || !data) {
+      throw new Error(this.translateFoundationLookupError(error ?? new Error("not found")));
+    }
+
+    return {
+      id: data.id,
+      name: data.name ?? "",
+      city: data.city ?? null,
+      country: data.country ?? null,
+      logoUrl: data.logo_url ?? null,
+    };
+  }
+
   async getFoundationContacts(foundationId: string): Promise<FoundationContact> {
     type FoundationContactRow = {
       foundation_id: string;

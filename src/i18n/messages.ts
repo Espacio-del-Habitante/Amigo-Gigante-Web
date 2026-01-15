@@ -11,6 +11,7 @@ import adopt from "../messages/en/adopt.json";
 import adoptDetail from "../messages/en/adopt-detail.json";
 import adoptRequest from "../messages/en/adopt-request.json";
 import shop from "../messages/en/shop.json";
+import shopDetail from "../messages/en/shop-detail.json";
 import products from "../messages/en/products.json";
 import productForm from "../messages/en/product-form.json";
 
@@ -28,6 +29,7 @@ export const messages = {
   adoptDetail,
   adoptRequest,
   shop,
+  shopDetail,
   products,
   productForm,
 };

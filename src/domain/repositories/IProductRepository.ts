@@ -14,6 +14,20 @@ export interface GetShopProductsParams {
   pageSize: number;
 }
 
+export interface GetProductDetailParams {
+  productId: number | string;
+}
+
+export interface GetRelatedProductsParams {
+  productId: number | string;
+  foundationId: string;
+  limit?: number;
+}
+
+export interface GetProductsByIdsParams {
+  productIds: number[];
+}
+
 export interface ShopProductsPage {
   items: ShopProduct[];
   total: number;
@@ -83,6 +97,9 @@ export interface UpdateProductParams {
 export interface IProductRepository {
   getRecentProducts(foundationId: string, limit: number): Promise<RecentProduct[]>;
   getShopProducts(params: GetShopProductsParams): Promise<ShopProductsPage>;
+  getProductDetail(params: GetProductDetailParams): Promise<ShopProduct>;
+  getRelatedProducts(params: GetRelatedProductsParams): Promise<ShopProduct[]>;
+  getProductsByIds(params: GetProductsByIdsParams): Promise<ShopProduct[]>;
   getProducts(params: GetProductsParams): Promise<GetProductsResult>;
   getProductById(params: GetProductByIdParams): Promise<ShopProduct>;
   createProduct(params: CreateProductParams): Promise<ShopProduct>;

@@ -3,6 +3,7 @@ import { ContainerModule, ContainerModuleLoadOptions } from "inversify";
 import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
+import type { ICartRepository } from "@/domain/repositories/ICartRepository";
 import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
 import type { IEventRepository } from "@/domain/repositories/IEventRepository";
 import type { IFoundationRepository } from "@/domain/repositories/IFoundationRepository";
@@ -11,6 +12,8 @@ import type { IFoundationProfileRepository } from "@/domain/repositories/IFounda
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseCase";
+import { GetProductDetailUseCase } from "@/domain/usecases/shop/GetProductDetailUseCase";
+import { GetRelatedProductsUseCase } from "@/domain/usecases/shop/GetRelatedProductsUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
 import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCase";
 import { GetAnimalByIdUseCase } from "@/domain/usecases/animals/GetAnimalByIdUseCase";
@@ -27,6 +30,10 @@ import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboar
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
 import { GetFoundationContactsUseCase } from "@/domain/usecases/foundation/GetFoundationContactsUseCase";
 import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
+import { AddToCartUseCase } from "@/domain/usecases/cart/AddToCartUseCase";
+import { GetCartItemsUseCase } from "@/domain/usecases/cart/GetCartItemsUseCase";
+import { GetCartProductsUseCase } from "@/domain/usecases/cart/GetCartProductsUseCase";
+import { UpdateCartItemQuantityUseCase } from "@/domain/usecases/cart/UpdateCartItemQuantityUseCase";
 import { CreateProductUseCase } from "@/domain/usecases/products/CreateProductUseCase";
 import { DeleteProductUseCase } from "@/domain/usecases/products/DeleteProductUseCase";
 import { GetProductsUseCase } from "@/domain/usecases/products/GetProductsUseCase";
@@ -228,6 +235,55 @@ const useCasesModule = new ContainerModule(
         const foundationRepository = context.get<IFoundationRepository>(REPOSITORY_TYPES.FoundationRepository);
 
         return new GetShopCatalogUseCase(productRepository, foundationRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetProductDetailUseCase>(USE_CASE_TYPES.GetProductDetailUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const foundationRepository = context.get<IFoundationRepository>(REPOSITORY_TYPES.FoundationRepository);
+
+        return new GetProductDetailUseCase(productRepository, foundationRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetRelatedProductsUseCase>(USE_CASE_TYPES.GetRelatedProductsUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+
+        return new GetRelatedProductsUseCase(productRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetCartItemsUseCase>(USE_CASE_TYPES.GetCartItemsUseCase)
+      .toDynamicValue((context) => {
+        const cartRepository = context.get<ICartRepository>(REPOSITORY_TYPES.CartRepository);
+
+        return new GetCartItemsUseCase(cartRepository);
+      })
+      .inSingletonScope();
+
+    bind<AddToCartUseCase>(USE_CASE_TYPES.AddToCartUseCase)
+      .toDynamicValue((context) => {
+        const cartRepository = context.get<ICartRepository>(REPOSITORY_TYPES.CartRepository);
+
+        return new AddToCartUseCase(cartRepository);
+      })
+      .inSingletonScope();
+
+    bind<UpdateCartItemQuantityUseCase>(USE_CASE_TYPES.UpdateCartItemQuantityUseCase)
+      .toDynamicValue((context) => {
+        const cartRepository = context.get<ICartRepository>(REPOSITORY_TYPES.CartRepository);
+
+        return new UpdateCartItemQuantityUseCase(cartRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetCartProductsUseCase>(USE_CASE_TYPES.GetCartProductsUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+
+        return new GetCartProductsUseCase(productRepository);
       })
       .inSingletonScope();
 
