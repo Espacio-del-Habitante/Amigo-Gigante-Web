@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { AnimalManagement } from "@/domain/models/AnimalManagement";
 import type { GetAnimalsFilters } from "@/domain/repositories/IAnimalRepository";
+import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
@@ -19,17 +20,23 @@ import {
   type AnimalsStatusFilter,
 } from "@/presentation/components/animals/AnimalsSearchBar";
 import { AnimalsTable } from "@/presentation/components/animals/AnimalsTable";
+import { ConfirmDeleteModal } from "@/presentation/components/common/ConfirmDeleteModal";
 
 const animalsErrorKeyList = ["errors.unauthorized", "errors.connection", "errors.generic"] as const;
 type AnimalsErrorKey = (typeof animalsErrorKeyList)[number];
 
 export function AnimalsManagementPage() {
   const t = useTranslations("animals");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const getAnimalsUseCase = useMemo(
     () => appContainer.get<GetAnimalsUseCase>(USE_CASE_TYPES.GetAnimalsUseCase),
+    [],
+  );
+  const deleteAnimalUseCase = useMemo(
+    () => appContainer.get<DeleteAnimalUseCase>(USE_CASE_TYPES.DeleteAnimalUseCase),
     [],
   );
   const animalsErrorKeys = useMemo(() => new Set<AnimalsErrorKey>(animalsErrorKeyList), []);
@@ -45,6 +52,10 @@ export function AnimalsManagementPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<AnimalsErrorKey | null>(null);
   const [showCreateSuccess, setShowCreateSuccess] = useState(true);
+  const [selectedAnimal, setSelectedAnimal] = useState<AnimalManagement | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteErrorKey, setDeleteErrorKey] = useState<AnimalsErrorKey | null>(null);
 
   const pageSize = 5;
   const createdParam = searchParams.get("created");
@@ -147,6 +158,51 @@ export function AnimalsManagementPage() {
     setPage(1);
   };
 
+  const handleDeleteRequest = (animal: AnimalManagement) => {
+    setSelectedAnimal(animal);
+    setDeleteErrorKey(null);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteClose = useCallback(() => {
+    if (isDeleting) return;
+    setIsDeleteModalOpen(false);
+    setSelectedAnimal(null);
+    setDeleteErrorKey(null);
+  }, [isDeleting]);
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (!selectedAnimal) return;
+    setIsDeleting(true);
+    setDeleteErrorKey(null);
+
+    try {
+      await deleteAnimalUseCase.execute({ animalId: selectedAnimal.id });
+      setIsDeleteModalOpen(false);
+      setSelectedAnimal(null);
+      await loadAnimals({ page, filters: effectiveFilters });
+    } catch (error) {
+      setDeleteErrorKey(resolveErrorMessage(error));
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [deleteAnimalUseCase, effectiveFilters, loadAnimals, page, resolveErrorMessage, selectedAnimal]);
+
+  const deleteItemLabel = tCommon("deleteModal.entity.animal");
+  const deleteModalTitle = tCommon("deleteModal.title", { item: deleteItemLabel });
+  const deleteModalDescription = tCommon("deleteModal.description", { item: deleteItemLabel });
+  const deleteErrorMessageKeyByError: Record<
+    AnimalsErrorKey,
+    "deleteModal.errors.generic" | "deleteModal.errors.connection" | "deleteModal.errors.unauthorized"
+  > = {
+    "errors.generic": "deleteModal.errors.generic",
+    "errors.connection": "deleteModal.errors.connection",
+    "errors.unauthorized": "deleteModal.errors.unauthorized",
+  };
+  const deleteErrorMessage = deleteErrorKey
+    ? tCommon(deleteErrorMessageKeyByError[deleteErrorKey], { item: deleteItemLabel })
+    : null;
+
   useEffect(() => {
     void loadAnimals({ page, filters: effectiveFilters });
   }, [effectiveFilters, loadAnimals, page]);
@@ -201,8 +257,21 @@ export function AnimalsManagementPage() {
           <CircularProgress aria-label={t("loading.label")} />
         </Box>
       ) : (
-        <AnimalsTable animals={animals} />
+        <AnimalsTable animals={animals} onDelete={handleDeleteRequest} />
       )}
+
+      <ConfirmDeleteModal
+        open={isDeleteModalOpen}
+        title={deleteModalTitle}
+        description={deleteModalDescription}
+        confirmLabel={tCommon("deleteModal.confirm")}
+        cancelLabel={tCommon("deleteModal.cancel")}
+        loadingLabel={tCommon("deleteModal.loading")}
+        isLoading={isDeleting}
+        errorMessage={deleteErrorMessage}
+        onConfirm={handleDeleteConfirm}
+        onClose={handleDeleteClose}
+      />
 
       <AnimalsPagination
         total={total}

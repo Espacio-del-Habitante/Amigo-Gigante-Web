@@ -82,7 +82,7 @@ function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
-function resolveAgeValues(ageMonths: number | null) {
+function resolveAgeValues(ageMonths: number | null): { age: number | ""; ageUnit: "years" | "months" } {
   if (!Number.isFinite(ageMonths ?? NaN)) {
     return { age: "", ageUnit: "years" as const };
   }

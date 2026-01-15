@@ -59,6 +59,11 @@ export interface CreateAnimalPhotoParams {
   sortOrder: number;
 }
 
+export interface DeleteAnimalParams {
+  animalId: number;
+  foundationId: string;
+}
+
 export interface GetAnimalByIdParams {
   animalId: number;
   foundationId: string;
@@ -83,7 +88,6 @@ export interface ReplaceAnimalPhotosParams {
   animalId: number;
   photoUrls: string[];
 }
-
 export type AdoptSortOption = "newest" | "oldest" | "urgent";
 
 export interface GetAdoptCatalogFilters {
@@ -118,6 +122,7 @@ export interface IAnimalRepository {
   getAnimalsInTreatment(foundationId: string): Promise<AnimalManagement[]>;
   createAnimal(params: CreateAnimalParams): Promise<AnimalManagement>;
   createAnimalPhotos(params: CreateAnimalPhotoParams[]): Promise<void>;
+  deleteAnimal(params: DeleteAnimalParams): Promise<void>;
   getAnimalById(params: GetAnimalByIdParams): Promise<AnimalDetail>;
   updateAnimal(params: UpdateAnimalParams): Promise<void>;
   replaceAnimalPhotos(params: ReplaceAnimalPhotosParams): Promise<void>;
