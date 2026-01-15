@@ -1,9 +1,12 @@
 import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type {
+  GetProductsParams,
+  GetProductsResult,
   GetShopProductsParams,
   IProductRepository,
   RecentProduct,
   ShopProductsPage,
+  UpdateProductPublishStatusParams,
 } from "@/domain/repositories/IProductRepository";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
@@ -74,7 +77,88 @@ export class ProductRepository implements IProductRepository {
       throw new Error(this.translateProductsError(error));
     }
 
-    const items: ShopProduct[] = (data ?? []).map((row) => ({
+    const items: ShopProduct[] = (data ?? []).map((row) => this.mapShopProduct(row));
+
+    return {
+      items,
+      total: count ?? 0,
+    };
+  }
+
+  async getProducts({ foundationId, filters, pagination }: GetProductsParams): Promise<GetProductsResult> {
+    const pageSize = pagination.pageSize;
+    const from = Math.max(0, (pagination.page - 1) * pageSize);
+    const to = Math.max(from, from + pageSize - 1);
+
+    let request = supabaseClient
+      .from("products")
+      .select("id, foundation_id, name, description, price, image_url, is_published, created_at", { count: "exact" })
+      .eq("foundation_id", foundationId)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    if (filters?.status === "published") {
+      request = request.eq("is_published", true);
+    }
+
+    if (filters?.status === "draft") {
+      request = request.eq("is_published", false);
+    }
+
+    if (filters?.priceRange === "under_10") {
+      request = request.lt("price", 10);
+    }
+
+    if (filters?.priceRange === "between_10_25") {
+      request = request.gte("price", 10).lte("price", 25);
+    }
+
+    if (filters?.priceRange === "over_25") {
+      request = request.gte("price", 25);
+    }
+
+    if (filters?.search?.trim()) {
+      const normalizedQuery = filters.search.trim();
+      request = request.or(`name.ilike.%${normalizedQuery}%,description.ilike.%${normalizedQuery}%`);
+    }
+
+    const { data, error, count } = await request.returns<ShopProductRow[]>();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    return {
+      products: (data ?? []).map((row) => this.mapShopProduct(row)),
+      total: count ?? 0,
+    };
+  }
+
+  async updatePublishStatus({
+    foundationId,
+    productId,
+    isPublished,
+  }: UpdateProductPublishStatusParams): Promise<void> {
+    const { error } = await supabaseClient
+      .from("products")
+      .update({ is_published: isPublished })
+      .eq("id", productId)
+      .eq("foundation_id", foundationId);
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+  }
+
+  private normalizePrice(price: ProductRow["price"]): number | null {
+    if (price === null || price === undefined) return null;
+    if (typeof price === "number") return Number.isFinite(price) ? price : null;
+    const parsed = Number.parseFloat(price);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  private mapShopProduct(row: ShopProductRow): ShopProduct {
+    return {
       id: row.id,
       foundationId: row.foundation_id,
       name: row.name ?? "",
@@ -83,19 +167,7 @@ export class ProductRepository implements IProductRepository {
       imageUrl: row.image_url ?? null,
       isPublished: row.is_published,
       createdAt: row.created_at,
-    }));
-
-    return {
-      items,
-      total: count ?? 0,
     };
-  }
-
-  private normalizePrice(price: ProductRow["price"]): number | null {
-    if (price === null || price === undefined) return null;
-    if (typeof price === "number") return Number.isFinite(price) ? price : null;
-    const parsed = Number.parseFloat(price);
-    return Number.isFinite(parsed) ? parsed : null;
   }
 
   private translateProductsError(error: { message?: string }): string {

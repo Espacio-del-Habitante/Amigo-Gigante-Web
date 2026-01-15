@@ -19,8 +19,41 @@ export interface ShopProductsPage {
   total: number;
 }
 
+export type ProductStatusFilter = "published" | "draft";
+export type ProductPriceRangeFilter = "under_10" | "between_10_25" | "over_25";
+
+export interface GetProductsFilters {
+  status?: ProductStatusFilter;
+  priceRange?: ProductPriceRangeFilter;
+  search?: string;
+}
+
+export interface GetProductsPagination {
+  page: number;
+  pageSize: number;
+}
+
+export interface GetProductsParams {
+  foundationId: string;
+  filters?: GetProductsFilters;
+  pagination: GetProductsPagination;
+}
+
+export interface GetProductsResult {
+  products: ShopProduct[];
+  total: number;
+}
+
+export interface UpdateProductPublishStatusParams {
+  foundationId: string;
+  productId: number;
+  isPublished: boolean;
+}
+
 export interface IProductRepository {
   getRecentProducts(foundationId: string, limit: number): Promise<RecentProduct[]>;
   getShopProducts(params: GetShopProductsParams): Promise<ShopProductsPage>;
+  getProducts(params: GetProductsParams): Promise<GetProductsResult>;
+  updatePublishStatus(params: UpdateProductPublishStatusParams): Promise<void>;
 }
 
