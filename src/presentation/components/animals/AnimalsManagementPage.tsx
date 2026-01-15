@@ -191,8 +191,16 @@ export function AnimalsManagementPage() {
   const deleteItemLabel = tCommon("deleteModal.entity.animal");
   const deleteModalTitle = tCommon("deleteModal.title", { item: deleteItemLabel });
   const deleteModalDescription = tCommon("deleteModal.description", { item: deleteItemLabel });
+  const deleteErrorMessageKeyByError: Record<
+    AnimalsErrorKey,
+    "deleteModal.errors.generic" | "deleteModal.errors.connection" | "deleteModal.errors.unauthorized"
+  > = {
+    "errors.generic": "deleteModal.errors.generic",
+    "errors.connection": "deleteModal.errors.connection",
+    "errors.unauthorized": "deleteModal.errors.unauthorized",
+  };
   const deleteErrorMessage = deleteErrorKey
-    ? tCommon(`deleteModal.errors.${deleteErrorKey.replace("errors.", "")}`, { item: deleteItemLabel })
+    ? tCommon(deleteErrorMessageKeyByError[deleteErrorKey], { item: deleteItemLabel })
     : null;
 
   useEffect(() => {
