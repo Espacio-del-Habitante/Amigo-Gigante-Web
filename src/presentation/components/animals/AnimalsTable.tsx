@@ -24,9 +24,10 @@ function formatAdmissionDate(dateIso: string, locale: string) {
 
 export interface AnimalsTableProps {
   animals: AnimalManagement[];
+  onDelete?: (animal: AnimalManagement) => void;
 }
 
-export function AnimalsTable({ animals }: AnimalsTableProps) {
+export function AnimalsTable({ animals, onDelete }: AnimalsTableProps) {
   const t = useTranslations("animals");
   const locale = useLocale();
 
@@ -119,6 +120,8 @@ export function AnimalsTable({ animals }: AnimalsTableProps) {
                         variant="text"
                         color="error"
                         aria-label={t("table.actions.delete")}
+                        disabled={!onDelete}
+                        onClick={() => onDelete?.(animal)}
                       >
                         {t("table.actions.delete")}
                       </Button>

@@ -168,6 +168,23 @@ export class AnimalRepository implements IAnimalRepository {
     }
   }
 
+  async deleteAnimal({ animalId, foundationId }: Parameters<IAnimalRepository["deleteAnimal"]>[0]) {
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .delete()
+      .eq("id", animalId)
+      .eq("foundation_id", foundationId)
+      .select("id");
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    if (!data || data.length === 0) {
+      throw new Error("errors.unauthorized");
+    }
+  }
+
   async getAnimals({ foundationId, filters, pagination }: Parameters<IAnimalRepository["getAnimals"]>[0]) {
     const pageSize = pagination.pageSize;
     const from = Math.max(0, (pagination.page - 1) * pageSize);

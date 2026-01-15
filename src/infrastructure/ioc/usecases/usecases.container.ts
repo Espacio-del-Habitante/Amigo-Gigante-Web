@@ -11,6 +11,7 @@ import type { IProductRepository } from "@/domain/repositories/IProductRepositor
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
+import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
 import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogUseCase";
@@ -74,6 +75,18 @@ const useCasesModule = new ContainerModule(
         );
 
         return new CreateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<DeleteAnimalUseCase>(USE_CASE_TYPES.DeleteAnimalUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new DeleteAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
       })
       .inSingletonScope();
 
