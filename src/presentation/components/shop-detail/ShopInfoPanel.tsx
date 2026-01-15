@@ -25,9 +25,12 @@ export function ShopInfoPanel({ product, foundation, formattedPrice, onAddToCart
   const priceLabel = product.price === null ? t("labels.priceUnavailable") : formattedPrice;
 
   return (
-    <Stack spacing={3} sx={{ backgroundColor: "background.paper", borderRadius: 4, p: { xs: 3, md: 4 } }}>
+    <Stack spacing={{ xs: 2.5, md: 3 }} sx={{ backgroundColor: "background.paper", borderRadius: 4, p: { xs: 2.5, md: 4 } }}>
       <Stack spacing={1.5}>
-        <Typography variant="h4" sx={{ fontWeight: 900, lineHeight: 1.1 }}>
+        <Typography
+          variant="h4"
+          sx={{ fontWeight: 900, lineHeight: 1.1, fontSize: { xs: 26, sm: 30, md: 34 } }}
+        >
           {product.name}
         </Typography>
         <Stack direction="row" spacing={1.5} alignItems="center">
@@ -35,8 +38,8 @@ export function ShopInfoPanel({ product, foundation, formattedPrice, onAddToCart
             src={foundation.logoUrl ?? undefined}
             alt={foundation.name}
             sx={{
-              width: 44,
-              height: 44,
+              width: { xs: 40, md: 44 },
+              height: { xs: 40, md: 44 },
               bgcolor: theme.palette.primary.main + "1A",
               color: "primary.main",
               fontWeight: 700,
@@ -56,7 +59,11 @@ export function ShopInfoPanel({ product, foundation, formattedPrice, onAddToCart
             </Typography>
           </Box>
         </Stack>
-        <Typography variant="h5" color={product.price === null ? "text.secondary" : "primary.main"} sx={{ fontWeight: 900 }}>
+        <Typography
+          variant="h5"
+          color={product.price === null ? "text.secondary" : "primary.main"}
+          sx={{ fontWeight: 900, fontSize: { xs: 22, sm: 24, md: 28 } }}
+        >
           {priceLabel}
         </Typography>
       </Stack>
@@ -70,7 +77,7 @@ export function ShopInfoPanel({ product, foundation, formattedPrice, onAddToCart
         rounded="default"
         onClick={onAddToCart}
         startIcon={<ShoppingBasketRoundedIcon />}
-        sx={{ py: 1.5, fontSize: 16 }}
+        sx={{ py: 1.4, fontSize: { xs: 14, sm: 16 } }}
       >
         {t("buttons.addToCart")}
       </Button>

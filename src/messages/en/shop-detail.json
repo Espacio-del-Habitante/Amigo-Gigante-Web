@@ -40,6 +40,10 @@
   "cart": {
     "title": "Your shopping cart",
     "backToShop": "Back to store",
+    "toast": {
+      "added": "Product added to cart.",
+      "viewCart": "View cart"
+    },
     "empty": {
       "title": "Your cart is empty",
       "description": "Explore the store and add charity products."

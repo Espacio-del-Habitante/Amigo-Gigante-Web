@@ -81,7 +81,12 @@ export function CartItemRow({
         </Typography>
       </Box>
 
-      <Stack direction="row" spacing={1.5} alignItems="center">
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={1.5}
+        alignItems={{ xs: "stretch", sm: "center" }}
+        sx={{ width: { xs: "100%", sm: "auto" } }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -91,6 +96,8 @@ export function CartItemRow({
             borderColor: "divider",
             backgroundColor: "background.default",
             px: 1,
+            width: { xs: "100%", sm: "auto" },
+            justifyContent: { xs: "space-between", sm: "center" },
           }}
         >
           <IconButton aria-label={t("cart.actions.decrease")} onClick={onDecrease} size="small">
@@ -101,7 +108,7 @@ export function CartItemRow({
             <AddRoundedIcon fontSize="small" />
           </IconButton>
         </Box>
-        <IconButton aria-label={t("cart.actions.remove")} onClick={onRemove}>
+        <IconButton aria-label={t("cart.actions.remove")} onClick={onRemove} sx={{ alignSelf: { xs: "flex-end", sm: "center" } }}>
           <DeleteRoundedIcon />
         </IconButton>
       </Stack>

@@ -1,6 +1,7 @@
 "use client";
 
-import { Alert, Box, CircularProgress, Container, Typography } from "@mui/material";
+import { Alert, Box, CircularProgress, Container, Snackbar, Typography, Button as MuiButton } from "@mui/material";
+import NextLink from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -50,6 +51,7 @@ export function ShopDetailPage({ productId }: ShopDetailPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<ShopDetailErrorKey | null>(null);
   const [relatedErrorKey, setRelatedErrorKey] = useState<ShopDetailErrorKey | null>(null);
+  const [showAddedToast, setShowAddedToast] = useState(false);
 
   const formatPrice = useMemo(() => {
     return (price: number) =>
@@ -130,7 +132,15 @@ export function ShopDetailPage({ productId }: ShopDetailPageProps) {
   const handleAddToCart = useCallback(async () => {
     if (!product) return;
     await addItem(product.id, 1);
+    setShowAddedToast(true);
   }, [addItem, product]);
+
+  const handleCloseToast = useCallback((_?: unknown, reason?: string) => {
+    if (reason === "clickaway") return;
+    setShowAddedToast(false);
+  }, []);
+
+  const cartHref = `/${locale}/shop/cart`;
 
   return (
     <Box className="bg-slate-50">
@@ -166,6 +176,26 @@ export function ShopDetailPage({ productId }: ShopDetailPageProps) {
           </Box>
         ) : null}
       </Container>
+
+      <Snackbar
+        open={showAddedToast}
+        autoHideDuration={3500}
+        onClose={handleCloseToast}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity="success"
+          onClose={handleCloseToast}
+          sx={{ width: "100%", alignItems: "center" }}
+          action={
+            <MuiButton color="inherit" size="small" component={NextLink} href={cartHref}>
+              {t("cart.toast.viewCart")}
+            </MuiButton>
+          }
+        >
+          {t("cart.toast.added")}
+        </Alert>
+      </Snackbar>
 
       <HomeFooter />
     </Box>

@@ -65,7 +65,7 @@ export function ShopRelatedGrid({ items, formatPrice, errorKey = null }: ShopRel
                   flexDirection: "column",
                 }}
               >
-                <Box sx={{ position: "relative", height: 220, backgroundColor: "action.hover" }}>
+                <Box sx={{ position: "relative", height: { xs: 180, sm: 200, md: 220 }, backgroundColor: "action.hover" }}>
                   {product.imageUrl ? (
                     <Box
                       component="img"

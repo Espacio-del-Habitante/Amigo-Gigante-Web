@@ -18,11 +18,12 @@ import {
   useTheme,
   Link,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import NextLink from "next/link";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { keyframes } from "@mui/system";
 
 import { Button, Logo } from "@/presentation/components/atoms";
 import {
@@ -39,6 +40,8 @@ export function HomeNavBar() {
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
   const { totalItems } = useCart();
+  const [isCartPulsing, setIsCartPulsing] = useState(false);
+  const previousCartCountRef = useRef<number | null>(null);
 
   const adoptHref = `/${locale}/adopt`;
   const foundationsHref = `/${locale}/foundations`;
@@ -46,6 +49,38 @@ export function HomeNavBar() {
   const cartHref = `/${locale}/shop/cart`;
 
   const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
+
+  const cartPulse = useMemo(
+    () =>
+      keyframes`
+        0% {
+          transform: scale(1);
+        }
+        40% {
+          transform: scale(1.08);
+        }
+        100% {
+          transform: scale(1);
+        }
+      `,
+    [],
+  );
+
+  useEffect(() => {
+    if (previousCartCountRef.current === null) {
+      previousCartCountRef.current = totalItems;
+      return;
+    }
+
+    if (previousCartCountRef.current !== totalItems) {
+      setIsCartPulsing(true);
+      const timeout = window.setTimeout(() => setIsCartPulsing(false), 600);
+      previousCartCountRef.current = totalItems;
+      return () => window.clearTimeout(timeout);
+    }
+
+    previousCartCountRef.current = totalItems;
+  }, [totalItems]);
 
   const navItems = useMemo(
     () => [
@@ -92,6 +127,7 @@ export function HomeNavBar() {
                 "&:hover": {
                   backgroundColor: alpha(theme.palette.primary.main, 0.16),
                 },
+                animation: isCartPulsing ? `${cartPulse} 0.6s ease` : "none",
               }}
             >
               <Badge color="error" badgeContent={totalItems} invisible={totalItems <= 0}>
@@ -152,6 +188,7 @@ export function HomeNavBar() {
                 "&:hover": {
                   backgroundColor: alpha(theme.palette.primary.main, 0.16),
                 },
+                animation: isCartPulsing ? `${cartPulse} 0.6s ease` : "none",
               }}
             >
               <Badge color="error" badgeContent={totalItems} invisible={totalItems <= 0}>

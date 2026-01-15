@@ -21,7 +21,8 @@ export function ShopGallery({ imageUrl, name }: ShopGalleryProps) {
         borderColor: "divider",
         backgroundColor: "background.paper",
         boxShadow: theme.shadows[1],
-        minHeight: 320,
+        minHeight: { xs: 240, md: 320 },
+        aspectRatio: "1 / 1",
       }}
     >
       {imageUrl ? (
@@ -37,7 +38,7 @@ export function ShopGallery({ imageUrl, name }: ShopGalleryProps) {
           }}
         />
       ) : (
-        <Stack alignItems="center" justifyContent="center" sx={{ minHeight: 320 }}>
+        <Stack alignItems="center" justifyContent="center" sx={{ minHeight: { xs: 240, md: 320 } }}>
           <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 700 }}>
             {t("labels.noImage")}
           </Typography>

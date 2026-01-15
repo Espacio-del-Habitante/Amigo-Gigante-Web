@@ -40,6 +40,10 @@
   "cart": {
     "title": "Tu carrito de compras",
     "backToShop": "Volver a la tienda",
+    "toast": {
+      "added": "Producto agregado al carrito.",
+      "viewCart": "Ver carrito"
+    },
     "empty": {
       "title": "Tu carrito está vacío",
       "description": "Explora la tienda y agrega productos solidarios."
