@@ -94,6 +94,99 @@ create table events (
   created_at timestamptz not null default now()
 );
 
+-- -- ADOPTION REQUESTS (solicitud principal)
+create table adoption_requests (
+  id bigint primary key generated always as identity,
+
+  animal_id bigint not null references animals(id) on delete cascade,
+  foundation_id uuid not null references foundations(id) on delete cascade,
+
+  adopter_user_id uuid not null references profiles(id) on delete cascade,
+
+  status text not null default 'pending'
+    check (status in (
+      'pending',           -- recién creada por el adoptante
+      'in_review',         -- la fundación la está revisando
+      'info_requested',    -- la fundación pidió más info
+      'preapproved',       -- pasa a entrevista/visita
+      'approved',          -- aprobada lista para entrega/firma
+      'rejected',          -- rechazada
+      'cancelled',         -- cancelada por alguna parte
+      'completed'          -- entrega realizada + cerrada
+    )),
+
+  -- Para controlar el "caos" y filtrar rápido
+  priority integer not null default 0,
+  rejection_reason text,
+
+  -- Auditoría básica
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+
+  -- Evita spam: un usuario no crea múltiples solicitudes para el mismo animal
+  unique (animal_id, adopter_user_id)
+);
+
+-- ADOPTION REQUEST DETAILS (1:1)
+create table adoption_request_details (
+  id bigint primary key generated always as identity,
+  request_id bigint not null references adoption_requests(id) on delete cascade,
+  -- snapshot del contexto (útil si luego el user cambia teléfono o ciudad)
+  adopter_display_name text,
+  adopter_phone text,
+  adopter_email text,
+
+  city text,
+  neighborhood text,
+
+  housing_type text check (housing_type in ('house','apartment','other')),
+  is_rent boolean,
+  allows_pets boolean,
+
+  household_people_count integer check (household_people_count is null or household_people_count >= 0),
+  has_children boolean,
+  children_ages text, -- simple: "3, 8" o "0-5"
+
+  has_other_pets boolean,
+  other_pets_description text,
+
+  hours_alone_per_day integer check (hours_alone_per_day is null or hours_alone_per_day >= 0),
+  travel_plan text,
+
+  experience_text text,
+  motivation_text text,
+
+  accepts_vet_costs boolean,
+  accepts_lifetime_commitment boolean not null default false,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+
+  unique (request_id)
+);
+
+
+-- REQUEST DOCUMENTS
+create table adoption_request_documents (
+  id bigint primary key generated always as identity,
+  request_id bigint not null references adoption_requests(id) on delete cascade,
+
+  doc_type text not null
+    check (doc_type in (
+      'id_document',
+      'home_photos',
+      'vaccination_card',
+      'other'
+    )),
+
+  file_url text not null,
+  notes text,
+
+  created_at timestamptz not null default now()
+);
+
+
+
 -- INDEXES
 create index animals_foundation_id_idx on animals(foundation_id);
 create index animals_published_idx on animals(is_published);
@@ -106,3 +199,31 @@ create index animal_photos_animal_sort_idx on animal_photos(animal_id, sort_orde
 
 create index foundation_members_user_idx on foundation_members(user_id);
 create index foundation_members_foundation_idx on foundation_members(foundation_id);
+
+create index adoption_requests_animal_idx on adoption_requests(animal_id);
+create index adoption_requests_foundation_status_idx on adoption_requests(foundation_id, status);
+create index adoption_requests_adopter_status_idx on adoption_requests(adopter_user_id, status);
+
+create index adoption_request_details_request_idx on adoption_request_details(request_id);
+
+
+create index adoption_request_documents_request_idx on adoption_request_documents(request_id);
+create index adoption_request_documents_type_idx on adoption_request_documents(doc_type);
+
+-- TRIGGERS
+create or replace function set_updated_at()
+returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger trg_adoption_requests_updated_at
+before update on adoption_requests
+for each row execute function set_updated_at();
+
+
+create trigger trg_adoption_request_details_updated_at
+before update on adoption_request_details
+for each row execute function set_updated_at();

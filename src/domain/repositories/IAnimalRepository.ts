@@ -1,4 +1,5 @@
 import type { HomeAnimals } from "../models/HomeAnimals";
+import type { AnimalDetail } from "@/domain/models/AnimalDetail";
 import type {
   AnimalManagement,
   AnimalManagementSex,
@@ -63,6 +64,30 @@ export interface DeleteAnimalParams {
   foundationId: string;
 }
 
+export interface GetAnimalByIdParams {
+  animalId: number;
+  foundationId: string;
+}
+
+export interface UpdateAnimalParams {
+  animalId: number;
+  foundationId: string;
+  name: string;
+  species: AnimalManagementSpecies;
+  breed?: string | null;
+  sex: AnimalManagementSex;
+  ageMonths: number;
+  size: AnimalManagementSize;
+  status: AnimalManagementStatus;
+  description: string;
+  coverImageUrl?: string | null;
+  isPublished: boolean;
+}
+
+export interface ReplaceAnimalPhotosParams {
+  animalId: number;
+  photoUrls: string[];
+}
 export type AdoptSortOption = "newest" | "oldest" | "urgent";
 
 export interface GetAdoptCatalogFilters {
@@ -98,5 +123,8 @@ export interface IAnimalRepository {
   createAnimal(params: CreateAnimalParams): Promise<AnimalManagement>;
   createAnimalPhotos(params: CreateAnimalPhotoParams[]): Promise<void>;
   deleteAnimal(params: DeleteAnimalParams): Promise<void>;
+  getAnimalById(params: GetAnimalByIdParams): Promise<AnimalDetail>;
+  updateAnimal(params: UpdateAnimalParams): Promise<void>;
+  replaceAnimalPhotos(params: ReplaceAnimalPhotosParams): Promise<void>;
   getAdoptCatalog(params: GetAdoptCatalogParams): Promise<GetAdoptCatalogResult>;
 }
