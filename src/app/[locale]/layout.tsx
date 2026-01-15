@@ -38,8 +38,8 @@ export default async function LocaleLayout({
     shopDetail,
     products,
     productForm,
-  ] =
-    await Promise.all([
+    adoptionsAdmin,
+  ] = await Promise.all([
     import(`@/messages/${locale}/common.json`),
     import(`@/messages/${locale}/home.json`),
     import(`@/messages/${locale}/register.json`),
@@ -54,6 +54,7 @@ export default async function LocaleLayout({
     import(`@/messages/${locale}/shop-detail.json`),
     import(`@/messages/${locale}/products.json`),
     import(`@/messages/${locale}/product-form.json`),
+    import(`@/messages/${locale}/adoptions-admin.json`),
   ]);
 
   const messages = {
@@ -71,6 +72,7 @@ export default async function LocaleLayout({
     shopDetail: shopDetail.default,
     products: products.default,
     productForm: productForm.default,
+    adoptionsAdmin: adoptionsAdmin.default,
   };
 
   // Debug: verificar que los mensajes se cargaron correctamente

@@ -13,6 +13,7 @@ import shop from "../messages/en/shop.json";
 import shopDetail from "../messages/en/shop-detail.json";
 import products from "../messages/en/products.json";
 import productForm from "../messages/en/product-form.json";
+import adoptionsAdmin from "../messages/en/adoptions-admin.json";
 
 export const messages = {
   common,
@@ -30,6 +31,7 @@ export const messages = {
   shopDetail,
   products,
   productForm,
+  adoptionsAdmin,
 };
 
 export type AppMessages = typeof messages;

@@ -1,0 +1,165 @@
+{
+  "title": "Adoption Requests Management",
+  "subtitle": "Review and manage requests for your animals.",
+  "actions": {
+    "exportCsv": "Export CSV",
+    "viewDetail": "View detail",
+    "requestInfo": "Request information",
+    "reject": "Reject",
+    "approve": "Approve request"
+  },
+  "filters": {
+    "search": {
+      "placeholder": "Search by animal or adopter..."
+    },
+    "status": {
+      "label": "Status",
+      "all": "All"
+    },
+    "priority": {
+      "label": "Priority",
+      "all": "All"
+    }
+  },
+  "table": {
+    "columns": {
+      "animal": "Animal",
+      "adopter": "Adopter",
+      "priority": "Priority",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "empty": "No requests found"
+  },
+  "pagination": {
+    "showing": "Showing {from} to {to} of {total} requests"
+  },
+  "states": {
+    "loadingList": "Loading requests...",
+    "loadingDetail": "Loading request..."
+  },
+  "labels": {
+    "notAvailable": "Not available",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "status": {
+    "pending": "Pending",
+    "in_review": "In review",
+    "info_requested": "Info requested",
+    "preapproved": "Preapproved",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled",
+    "completed": "Completed"
+  },
+  "priority": {
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+  },
+  "errors": {
+    "generic": "Something went wrong while loading the requests. Please try again.",
+    "connection": "We couldn't connect to the server. Check your connection and try again.",
+    "unauthorized": "You don't have permission to manage these requests.",
+    "notFound": "We couldn't find the requested adoption request."
+  },
+  "detail": {
+    "breadcrumb": {
+      "ariaLabel": "Requests navigation",
+      "list": "Requests",
+      "detail": "Detail"
+    },
+    "header": {
+      "title": "Request for \"{animal}\"",
+      "submittedAt": "Submitted on {date}",
+      "requestId": "Request #{id}"
+    },
+    "rejectionReason": "Rejection reason: {reason}",
+    "profile": {
+      "title": "Adopter profile",
+      "fields": {
+        "fullName": "Full name",
+        "email": "Email address",
+        "phone": "Phone number",
+        "city": "City",
+        "neighborhood": "Neighborhood",
+        "housingType": "Housing type",
+        "ownership": "Ownership",
+        "allowsPets": "Allows pets",
+        "householdPeople": "Household size",
+        "hasChildren": "Has children",
+        "childrenAges": "Children ages",
+        "hasOtherPets": "Has other pets",
+        "otherPets": "Other pets"
+      }
+    },
+    "experience": {
+      "title": "Lifestyle & experience",
+      "fields": {
+        "hoursAlone": "Hours alone per day",
+        "travelPlan": "Travel plan",
+        "vetCosts": "Accepts vet costs",
+        "lifetimeCommitment": "Lifetime commitment",
+        "experience": "Previous experience",
+        "motivation": "Motivation for adoption"
+      }
+    },
+    "documents": {
+      "title": "Supporting documents",
+      "empty": "No documents available.",
+      "previewUnavailable": "Preview unavailable",
+      "actions": {
+        "view": "View",
+        "download": "Download"
+      },
+      "types": {
+        "id_document": "ID document",
+        "home_photos": "Home photos",
+        "vaccination_card": "Vaccination card",
+        "other": "Other"
+      }
+    },
+    "housingType": {
+      "house": "House",
+      "apartment": "Apartment",
+      "other": "Other"
+    },
+    "ownership": {
+      "rent": "Rent",
+      "own": "Own"
+    },
+    "animal": {
+      "ageUnknown": "Age unavailable",
+      "ageMonths": "{count} months",
+      "ageYears": "{count} years",
+      "sex": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "size": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large",
+        "unknown": "Unknown"
+      },
+      "species": {
+        "dog": "Dog",
+        "cat": "Cat",
+        "bird": "Bird",
+        "other": "Other"
+      },
+      "breedUnknown": "Breed unavailable"
+    },
+    "rejectDialog": {
+      "title": "Reject request",
+      "description": "Provide a rejection reason to inform the adopter.",
+      "placeholder": "Write the rejection reason",
+      "required": "A reason is required",
+      "cancel": "Cancel",
+      "confirm": "Reject"
+    }
+  }
+}

@@ -3,6 +3,7 @@ const REPOSITORY_TYPES = {
   AnimalRepository: Symbol.for("AnimalRepository"),
   EventRepository: Symbol.for("EventRepository"),
   ProductRepository: Symbol.for("ProductRepository"),
+  AdoptionRequestRepository: Symbol.for("AdoptionRequestRepository"),
   CartRepository: Symbol.for("CartRepository"),
   AuthRepository: Symbol.for("AuthRepository"),
   FoundationRepository: Symbol.for("FoundationRepository"),
