@@ -25,7 +25,7 @@ type AdoptDetailErrorKey =
   | "errors.generic";
 
 interface AdoptDetailPageProps {
-  animalId: number | null;
+  animalId: number | string | null;
 }
 
 export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
@@ -64,7 +64,7 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
     setIsLoading(true);
     setErrorKey(null);
 
-    if (!animalId) {
+    if (animalId === null || animalId === undefined || animalId === "") {
       setDetail(null);
       setRelated([]);
       setIsLoading(false);

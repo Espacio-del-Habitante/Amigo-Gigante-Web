@@ -98,12 +98,13 @@ export class AnimalRepository implements IAnimalRepository {
   }
 
   async getAdoptDetail({ id }: Parameters<IAnimalRepository["getAdoptDetail"]>[0]) {
+    const normalizedId = String(id);
     const { data, error } = await supabaseClient
       .from("animals")
       .select(
         "id, name, species, breed, sex, age_months, size, status, description, cover_image_url, is_published",
       )
-      .eq("id", id)
+      .eq("id", normalizedId)
       .eq("is_published", true)
       .single();
 
@@ -121,7 +122,7 @@ export class AnimalRepository implements IAnimalRepository {
     const { data: photos, error: photosError } = await supabaseClient
       .from("animal_photos")
       .select("animal_id, url, sort_order")
-      .eq("animal_id", id)
+      .eq("animal_id", normalizedId)
       .order("sort_order", { ascending: true });
 
     if (photosError) {
@@ -155,6 +156,7 @@ export class AnimalRepository implements IAnimalRepository {
   }
 
   async getRelatedAnimals({ id, limit }: Parameters<IAnimalRepository["getRelatedAnimals"]>[0]) {
+    const normalizedId = String(id);
     const { data, error } = await supabaseClient
       .from("animals")
       .select(
@@ -162,7 +164,7 @@ export class AnimalRepository implements IAnimalRepository {
       )
       .eq("status", "available")
       .eq("is_published", true)
-      .neq("id", id)
+      .neq("id", normalizedId)
       .limit(limit ?? 4);
 
     if (error) {

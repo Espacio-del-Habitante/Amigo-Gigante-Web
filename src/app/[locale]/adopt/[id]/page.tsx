@@ -1,12 +1,12 @@
 import { AdoptDetailPage } from "@/presentation/components/adopt-detail/AdoptDetailPage";
 
-export default function AdoptDetailRoute({
+export default async function AdoptDetailRoute({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const parsedId = Number(params.id);
-  const animalId = Number.isFinite(parsedId) ? parsedId : null;
+  const { id } = await params;
+  const trimmedId = id?.trim?.() ?? "";
 
-  return <AdoptDetailPage animalId={animalId} />;
+  return <AdoptDetailPage animalId={trimmedId.length > 0 ? trimmedId : null} />;
 }

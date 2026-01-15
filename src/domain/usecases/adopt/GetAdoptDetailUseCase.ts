@@ -3,7 +3,7 @@ import type { AdoptDetail } from "@/domain/models/AdoptDetail";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 
 export interface GetAdoptDetailInput {
-  id: number;
+  id: number | string;
   relatedLimit?: number;
 }
 

@@ -112,11 +112,11 @@ export interface GetAdoptCatalogResult {
 }
 
 export interface GetAdoptDetailParams {
-  id: number;
+  id: number | string;
 }
 
 export interface GetRelatedAnimalsParams {
-  id: number;
+  id: number | string;
   limit?: number;
 }
 
