@@ -38,6 +38,7 @@ import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogU
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
 import { Button } from "@/presentation/components/atoms";
+import { AdoptStartModal } from "@/presentation/components/adopt-modal/AdoptStartModal";
 import { HomeFooter } from "@/presentation/components/home/HomeFooter";
 import { HomeNavBar } from "@/presentation/components/organisms";
 
@@ -79,6 +80,12 @@ export function AdoptCatalogPage() {
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<AdoptErrorKey | null>(null);
+  const [isAdoptModalOpen, setIsAdoptModalOpen] = useState(false);
+  const [adoptModalAnimal, setAdoptModalAnimal] = useState<{
+    id: number;
+    name: string;
+    foundationId: string;
+  } | null>(null);
 
   const pageSize = 9;
 
@@ -166,6 +173,21 @@ export function AdoptCatalogPage() {
     if (value === "male") return t("sex.male");
     if (value === "female") return t("sex.female");
     return t("sex.unknown");
+  };
+
+  const handleOpenAdoptModal = (animal: AdoptCatalogItem) => {
+    if (!animal.foundationId) return;
+    setAdoptModalAnimal({
+      id: animal.id,
+      name: animal.name,
+      foundationId: animal.foundationId,
+    });
+    setIsAdoptModalOpen(true);
+  };
+
+  const handleCloseAdoptModal = () => {
+    setIsAdoptModalOpen(false);
+    setAdoptModalAnimal(null);
   };
 
   return (
@@ -435,7 +457,13 @@ export function AdoptCatalogPage() {
                               </Typography>
 
                               <Stack direction="row" spacing={1.25} sx={{ pt: 0.75 }}>
-                                <Button fullWidth rounded="pill" sx={{ fontWeight: 900 }}>
+                                <Button
+                                  fullWidth
+                                  rounded="pill"
+                                  sx={{ fontWeight: 900 }}
+                                  onClick={() => handleOpenAdoptModal(animal)}
+                                  disabled={!animal.foundationId}
+                                >
                                   {t("buttons.adopt")}
                                 </Button>
                                 <Button
@@ -479,6 +507,12 @@ export function AdoptCatalogPage() {
           </Box>
         </Box>
       </Container>
+
+      <AdoptStartModal
+        open={isAdoptModalOpen}
+        onClose={handleCloseAdoptModal}
+        animal={adoptModalAnimal}
+      />
 
       <HomeFooter />
     </Box>

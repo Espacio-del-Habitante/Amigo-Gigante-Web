@@ -1,5 +1,6 @@
 import { ContainerModule, ContainerModuleLoadOptions } from "inversify";
 
+import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { ICartRepository } from "@/domain/repositories/ICartRepository";
@@ -21,11 +22,13 @@ import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsU
 import { UpdateAnimalUseCase } from "@/domain/usecases/animals/UpdateAnimalUseCase";
 import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogUseCase";
 import { GetAdoptDetailUseCase } from "@/domain/usecases/adopt/GetAdoptDetailUseCase";
+import { CreateAdoptionRequestUseCase } from "@/domain/usecases/adopt/CreateAdoptionRequestUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
 import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
+import { GetFoundationContactsUseCase } from "@/domain/usecases/foundation/GetFoundationContactsUseCase";
 import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
 import { AddToCartUseCase } from "@/domain/usecases/cart/AddToCartUseCase";
 import { GetCartItemsUseCase } from "@/domain/usecases/cart/GetCartItemsUseCase";
@@ -75,6 +78,17 @@ const useCasesModule = new ContainerModule(
         const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
 
         return new GetAdoptDetailUseCase(animalRepository);
+      })
+      .inSingletonScope();
+
+    bind<CreateAdoptionRequestUseCase>(USE_CASE_TYPES.CreateAdoptionRequestUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new CreateAdoptionRequestUseCase(adoptionRequestRepository, authRepository);
       })
       .inSingletonScope();
 
@@ -194,6 +208,14 @@ const useCasesModule = new ContainerModule(
         );
 
         return new GetFoundationProfileUseCase(foundationProfileRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetFoundationContactsUseCase>(USE_CASE_TYPES.GetFoundationContactsUseCase)
+      .toDynamicValue((context) => {
+        const foundationRepository = context.get<IFoundationRepository>(REPOSITORY_TYPES.FoundationRepository);
+
+        return new GetFoundationContactsUseCase(foundationRepository);
       })
       .inSingletonScope();
 

@@ -1,0 +1,165 @@
+{
+  "actions": {
+    "close": "Cerrar"
+  },
+  "modal": {
+    "heroAlt": "Mascota feliz",
+    "title": "¡Adopta un amigo!",
+    "subtitle": "Estás a un paso de cambiar una vida. Elige cómo quieres comenzar el proceso de adopción con Amigo Gigante.",
+    "actions": {
+      "contact": "Contactar fundación",
+      "or": "O también",
+      "form": "Diligenciar formulario"
+    },
+    "terms": "Al continuar, aceptas nuestros Términos y Condiciones de adopción responsable."
+  },
+  "contact": {
+    "heroAlt": "Mascota feliz",
+    "title": "¡Ponte en contacto!",
+    "foundationFallback": "la fundación",
+    "subtitle": "La fundación {foundation} está lista para resolver tus dudas sobre el proceso de adopción.",
+    "actions": {
+      "whatsapp": "Escríbenos por WhatsApp",
+      "call": "Llamar",
+      "instagram": "Instagram",
+      "email": "Correo electrónico",
+      "address": "Dirección de la fundación"
+    },
+    "emptyValue": "No disponible"
+  },
+  "form": {
+    "title": "Formulario de adopción",
+    "subtitle": "Estás aplicando para adoptar a {animal}. Por favor, completa todos los campos con sinceridad.",
+    "steps": {
+      "basic": "Básico",
+      "home": "Hogar",
+      "style": "Estilo",
+      "docs": "Docs"
+    },
+    "fields": {
+      "fullName": {
+        "label": "Nombre completo",
+        "placeholder": "Ej. Juan Pérez"
+      },
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "juan@ejemplo.com",
+        "hint": "Lo usaremos para notificarte el estado de tu solicitud."
+      },
+      "phone": {
+        "label": "Teléfono de contacto",
+        "placeholder": "+57 300 000 0000"
+      },
+      "city": {
+        "label": "Ciudad",
+        "placeholder": "Bogotá, Medellín..."
+      },
+      "neighborhood": {
+        "label": "Barrio",
+        "placeholder": "Ej. Chapinero"
+      },
+      "housingType": {
+        "label": "Tipo de vivienda",
+        "options": {
+          "house": "Casa",
+          "apartment": "Apartamento",
+          "other": "Otro"
+        }
+      },
+      "isRent": {
+        "label": "¿Es rentado?",
+        "hint": "Activa si vives en arriendo."
+      },
+      "allowsPets": {
+        "label": "¿Permiten mascotas?",
+        "hint": "¿Tienes el aval del propietario?"
+      },
+      "householdPeopleCount": {
+        "label": "Personas en el hogar",
+        "placeholder": "Ej. 3"
+      },
+      "childrenAges": {
+        "label": "Información de niños (si aplica)",
+        "placeholder": "Ej. 2 niños (5 y 8 años)",
+        "hint": "Especifica edades de los menores."
+      },
+      "otherPetsDescription": {
+        "label": "Descripción de otras mascotas",
+        "placeholder": "Cuéntanos si tienes otros animales en casa, su edad y comportamiento..."
+      },
+      "hoursAlonePerDay": {
+        "label": "Horas solo al día",
+        "placeholder": "Ej. 4",
+        "hint": "Aproximadamente cuánto tiempo pasará la mascota sin supervisión."
+      },
+      "travelPlan": {
+        "label": "Plan de viajes",
+        "placeholder": "¿Qué harás con tu mascota cuando viajes de vacaciones o trabajo?"
+      },
+      "experienceText": {
+        "label": "Experiencia previa",
+        "placeholder": "Describe tu experiencia previa cuidando animales o si es tu primera vez..."
+      },
+      "motivationText": {
+        "label": "Motivación para adoptar",
+        "placeholder": "Cuéntanos por qué quieres adoptar y qué esperas brindarle a tu nuevo amigo."
+      }
+    },
+    "docs": {
+      "idDocument": {
+        "label": "Documento de identidad (cédula)",
+        "action": "Subir documento",
+        "hint": "PDF, JPG o PNG (máx 5MB)",
+        "selected": "Archivo seleccionado: {name}"
+      },
+      "homePhotos": {
+        "label": "Fotos del hogar",
+        "action": "Subir fotos",
+        "hint": "Sube hasta 5 fotos del espacio",
+        "selectedCount": "{count, plural, one {# foto seleccionada} other {# fotos seleccionadas}}",
+        "remove": "Quitar foto {index}"
+      },
+      "errors": {
+        "invalidType": "El tipo de archivo no es válido.",
+        "tooLarge": "El archivo supera el tamaño máximo permitido.",
+        "tooMany": "Puedes subir máximo 5 fotos."
+      }
+    },
+    "consents": {
+      "vetCosts": {
+        "title": "Acepto costos veterinarios",
+        "description": "Entiendo que la mascota requiere gastos de alimentación, salud y bienestar general."
+      },
+      "lifetimeCommitment": {
+        "title": "Compromiso de por vida",
+        "description": "Me comprometo a cuidar de la mascota durante toda su vida."
+      }
+    },
+    "actions": {
+      "back": "Atrás",
+      "next": "Siguiente paso",
+      "submit": "Enviar solicitud",
+      "sending": "Enviando..."
+    },
+    "errors": {
+      "required": "Este campo es obligatorio.",
+      "email": "Ingresa un correo válido.",
+      "numeric": "Ingresa un número válido."
+    },
+    "helper": "Tus datos están seguros y serán usados únicamente para el proceso de adopción."
+  },
+  "states": {
+    "loading": "Cargando información",
+    "authRequired": "Debes iniciar sesión para enviar la solicitud."
+  },
+  "errors": {
+    "unauthenticated": "Debes iniciar sesión para continuar.",
+    "unauthorized": "No autorizado.",
+    "connection": "No pudimos conectar. Intenta nuevamente.",
+    "storageUnavailable": "No pudimos subir los documentos. Inténtalo más tarde.",
+    "documentsRequired": "Debes adjuntar los documentos requeridos.",
+    "duplicate": "Ya enviaste una solicitud para este animal.",
+    "notFound": "No encontramos la información solicitada.",
+    "generic": "Ocurrió un error. Intenta nuevamente."
+  }
+}
