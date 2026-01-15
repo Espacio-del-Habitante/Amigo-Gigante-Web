@@ -31,7 +31,8 @@
       },
       "errors": {
         "invalidType": "Only PNG or JPG files are allowed.",
-        "tooLarge": "The image must be 5MB or smaller."
+        "tooLarge": "The image must be 5MB or smaller.",
+        "readFailed": "We couldn't read the image. Please try again."
       }
     },
     "visibility": {
@@ -46,8 +47,8 @@
       "placeholder": "e.g., Amigo Gigante organic cotton t-shirt"
     },
     "price": {
-      "label": "Price (USD)",
-      "placeholder": "0.00"
+      "label": "Price (COP)",
+      "placeholder": "20,000"
     },
     "description": {
       "label": "Description",
@@ -72,6 +73,7 @@
   "errors": {
     "generic": "Something went wrong while saving the product. Please try again.",
     "connection": "We couldn't connect to the server. Please check your connection and try again.",
-    "unauthorized": "You don't have permission to create products."
+    "unauthorized": "You don't have permission to create products.",
+    "storageUnavailable": "We couldn't upload the image. Use a direct URL or configure storage."
   }
 }

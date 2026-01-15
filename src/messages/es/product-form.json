@@ -31,7 +31,8 @@
       },
       "errors": {
         "invalidType": "Solo se permiten archivos PNG o JPG.",
-        "tooLarge": "La imagen debe pesar 5MB o menos."
+        "tooLarge": "La imagen debe pesar 5MB o menos.",
+        "readFailed": "No pudimos leer la imagen. Inténtalo nuevamente."
       }
     },
     "visibility": {
@@ -46,8 +47,8 @@
       "placeholder": "Ej. Camiseta de algodón orgánico Amigo Gigante"
     },
     "price": {
-      "label": "Precio (USD)",
-      "placeholder": "0.00"
+      "label": "Precio (COP)",
+      "placeholder": "20.000"
     },
     "description": {
       "label": "Descripción",
@@ -72,6 +73,7 @@
   "errors": {
     "generic": "Ocurrió un error al guardar el producto. Inténtalo nuevamente.",
     "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
-    "unauthorized": "No tienes permisos para crear productos."
+    "unauthorized": "No tienes permisos para crear productos.",
+    "storageUnavailable": "No se pudo subir la imagen. Usa una URL directa o configura el almacenamiento."
   }
 }

@@ -3,7 +3,7 @@ import * as Yup from "yup";
 
 export interface ProductFormValues {
   name: string;
-  price: number | "";
+  price: string;
   description: string;
   imageUrl: string;
   isPublished: boolean;
@@ -11,13 +11,25 @@ export interface ProductFormValues {
 
 type ProductFormTranslator = ReturnType<typeof useTranslations>;
 
+export const parsePriceInput = (value?: string | null): number | null => {
+  if (!value) return null;
+  const digits = value.replace(/[^\d]/g, "");
+  if (!digits) return null;
+  const parsed = Number(digits);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
 export const createProductFormValidationSchema = (t: ProductFormTranslator, hasImageFile: () => boolean) =>
   Yup.object().shape({
     name: Yup.string().trim().required(t("validation.nameRequired")),
-    price: Yup.number()
-      .typeError(t("validation.priceRequired"))
+    price: Yup.string()
+      .trim()
       .required(t("validation.priceRequired"))
-      .min(0, t("validation.priceMin")),
+      .test("price-number", t("validation.priceRequired"), (value) => parsePriceInput(value) !== null)
+      .test("price-min", t("validation.priceMin"), (value) => {
+        const parsed = parsePriceInput(value);
+        return parsed !== null && parsed >= 0;
+      }),
     description: Yup.string().trim().required(t("validation.descriptionRequired")),
     imageUrl: Yup.string()
       .trim()

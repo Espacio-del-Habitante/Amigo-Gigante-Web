@@ -27,14 +27,35 @@ import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
 import {
   createProductFormValidationSchema,
+  parsePriceInput,
   type ProductFormValues,
 } from "@/presentation/components/products/productFormValidation";
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/jpg"]);
 
-const productErrorKeyList = ["errors.unauthorized", "errors.connection", "errors.generic"] as const;
+const productErrorKeyList = [
+  "errors.unauthorized",
+  "errors.connection",
+  "errors.storageUnavailable",
+  "errors.generic",
+] as const;
 type ProductErrorKey = (typeof productErrorKeyList)[number];
+
+const formatPriceValue = (value: string, locale: string) => {
+  const digits = value.replace(/[^\d]/g, "");
+  if (!digits) return "";
+  const formatter = new Intl.NumberFormat(locale);
+  return formatter.format(Number(digits));
+};
+
+const fileToDataUrl = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = () => reject(new Error("read_failed"));
+    reader.readAsDataURL(file);
+  });
 
 export function ProductForm() {
   const theme = useTheme();
@@ -49,6 +70,8 @@ export function ProductForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFilePreview, setImageFilePreview] = useState<string | null>(null);
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+  const [isReadingFile, setIsReadingFile] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -86,13 +109,16 @@ export function ProductForm() {
       setSubmitError(null);
 
       try {
-        const parsedPrice = typeof values.price === "number" ? values.price : Number(values.price);
+        const parsedPrice = parsePriceInput(values.price);
+        if (parsedPrice === null) {
+          throw new Error("errors.generic");
+        }
 
         await createProductUseCase.execute({
           name: values.name.trim(),
           description: values.description.trim(),
           price: parsedPrice,
-          imageUrl: values.imageUrl.trim() || null,
+          imageUrl: imageDataUrl ?? values.imageUrl.trim() || null,
           imageFile,
           isPublished: values.isPublished,
         });
@@ -118,19 +144,20 @@ export function ProductForm() {
     return undefined;
   };
 
-  const canInteract = !formik.isSubmitting;
+  const canInteract = !(formik.isSubmitting || isReadingFile);
 
-  const previewUrl = imageFilePreview ?? formik.values.imageUrl.trim();
+  const previewUrl = imageFilePreview ?? imageDataUrl ?? formik.values.imageUrl.trim();
   const previewLabel = imageFile ? imageFile.name : t("sections.image.preview.fromUrl");
   const previewSize = imageFile ? `${(imageFile.size / (1024 * 1024)).toFixed(1)} MB` : null;
 
   const handleRemoveImage = () => {
     setImageFile(null);
+    setImageDataUrl(null);
     setFileError(null);
     void formik.setFieldValue("imageUrl", "", true);
   };
 
-  const handleImageFileChange = (file: File | null) => {
+  const handleImageFileChange = async (file: File | null) => {
     setFileError(null);
     if (!file) return;
 
@@ -144,8 +171,19 @@ export function ProductForm() {
       return;
     }
 
-    setImageFile(file);
-    void formik.setFieldValue("imageUrl", "", false);
+    setIsReadingFile(true);
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      setImageFile(file);
+      setImageDataUrl(dataUrl);
+      void formik.setFieldValue("imageUrl", "", false);
+    } catch {
+      setFileError(t("sections.image.errors.readFailed"));
+      setImageFile(null);
+      setImageDataUrl(null);
+    } finally {
+      setIsReadingFile(false);
+    }
   };
 
   return (
@@ -185,8 +223,15 @@ export function ProductForm() {
                 fullWidth
                 required
                 disabled={!canInteract}
-                {...formik.getFieldProps("price")}
-                type="number"
+                value={formik.values.price}
+                name="price"
+                onChange={(event) => {
+                  const formatterLocale = locale === "es" ? "es-CO" : "en-US";
+                  const formatted = formatPriceValue(event.target.value, formatterLocale);
+                  void formik.setFieldValue("price", formatted, false);
+                }}
+                onBlur={formik.handleBlur}
+                inputMode="numeric"
                 label={t("fields.price.label")}
                 placeholder={t("fields.price.placeholder")}
                 error={Boolean(fieldError("price"))}
@@ -194,7 +239,7 @@ export function ProductForm() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start" className="font-semibold text-neutral-500">
-                      $
+                      COP
                     </InputAdornment>
                   ),
                 }}
@@ -284,8 +329,9 @@ export function ProductForm() {
                 helperText={fieldError("imageUrl")}
                 onChange={(event) => {
                   formik.handleChange(event);
-                  if (event.target.value.trim().length > 0 && imageFile) {
+                  if (event.target.value.trim().length > 0) {
                     setImageFile(null);
+                    setImageDataUrl(null);
                   }
                 }}
               />

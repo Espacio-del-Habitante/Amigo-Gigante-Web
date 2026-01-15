@@ -144,7 +144,19 @@ export class ProductRepository implements IProductRepository {
     imageFile,
     isPublished,
   }: CreateProductParams): Promise<ShopProduct> {
-    const resolvedImageUrl = imageFile ? await this.uploadProductImage(imageFile, foundationId) : imageUrl;
+    let resolvedImageUrl = imageUrl;
+
+    if (imageFile) {
+      try {
+        resolvedImageUrl = await this.uploadProductImage(imageFile, foundationId);
+      } catch (error) {
+        if (this.isStorageUnavailableError(error) && imageUrl) {
+          resolvedImageUrl = imageUrl;
+        } else {
+          throw error;
+        }
+      }
+    }
 
     const { data, error } = await supabaseClient
       .from("products")
@@ -231,6 +243,10 @@ export class ProductRepository implements IProductRepository {
     return fileName.replace(/[^a-z0-9.\-_]/gi, "-").toLowerCase();
   }
 
+  private isStorageUnavailableError(error: unknown): boolean {
+    return error instanceof Error && error.message === "errors.storageUnavailable";
+  }
+
   private translateProductsError(error: { message?: string }): string {
     const message = error.message?.toLowerCase?.() ?? "";
 
@@ -240,6 +256,10 @@ export class ProductRepository implements IProductRepository {
 
     if (message.includes("connection") || message.includes("network")) {
       return "errors.connection";
+    }
+
+    if (message.includes("bucket") || message.includes("not found") || message.includes("resource")) {
+      return "errors.storageUnavailable";
     }
 
     return "errors.generic";
