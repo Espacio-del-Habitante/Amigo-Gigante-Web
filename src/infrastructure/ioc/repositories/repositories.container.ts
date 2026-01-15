@@ -2,6 +2,7 @@ import { ContainerModule, ContainerModuleLoadOptions } from "inversify";
 
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
+import type { ICartRepository } from "@/domain/repositories/ICartRepository";
 import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
 import type { IEventRepository } from "@/domain/repositories/IEventRepository";
 import type { IFoundationRepository } from "@/domain/repositories/IFoundationRepository";
@@ -12,6 +13,7 @@ import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoption
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
 import { AuthRepository } from "@/infrastructure/repositories/AuthRepository";
 import { AdoptionRequestRepository } from "@/infrastructure/repositories/AdoptionRequestRepository";
+import { CartRepository } from "@/infrastructure/repositories/CartRepository";
 import { DebugRepository } from "@/infrastructure/repositories/DebugRepository";
 import { EventRepository } from "@/infrastructure/repositories/EventRepository";
 import { FoundationMembershipRepository } from "@/infrastructure/repositories/FoundationMembershipRepository";
@@ -40,6 +42,10 @@ const repositoriesModule = new ContainerModule(
 
     bind<IAdoptionRequestRepository>(REPOSITORY_TYPES.AdoptionRequestRepository)
       .to(AdoptionRequestRepository)
+      .inSingletonScope();
+
+    bind<ICartRepository>(REPOSITORY_TYPES.CartRepository)
+      .to(CartRepository)
       .inSingletonScope();
 
     bind<IAuthRepository>(REPOSITORY_TYPES.AuthRepository)

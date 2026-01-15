@@ -3,7 +3,8 @@
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import ShoppingBagRoundedIcon from "@mui/icons-material/ShoppingBagRounded";
 import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
-import { useTranslations } from "next-intl";
+import NextLink from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { ShopProduct } from "@/domain/models/ShopProduct";
 import { Button, Chip } from "@/presentation/components/atoms";
@@ -17,6 +18,8 @@ export function ShopProductCard({ product, formattedPrice }: ShopProductCardProp
   const theme = useTheme();
   const t = useTranslations("shop");
   const common = useTranslations("common");
+  const locale = useLocale();
+  const productHref = `/${locale}/shop/${product.id}`;
 
   return (
     <Box
@@ -38,25 +41,35 @@ export function ShopProductCard({ product, formattedPrice }: ShopProductCardProp
       }}
     >
       <Box sx={{ position: "relative", height: 220, backgroundColor: "action.hover" }}>
-        {product.imageUrl ? (
-          <Box
-            component="img"
-            src={product.imageUrl}
-            alt={product.name}
-            sx={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
-          />
-        ) : (
-          <Stack alignItems="center" justifyContent="center" sx={{ height: "100%" }}>
-            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
-              {t("product.noImage")}
-            </Typography>
-          </Stack>
-        )}
+        <Box
+          component={NextLink}
+          href={productHref}
+          sx={{
+            display: "block",
+            height: "100%",
+            width: "100%",
+          }}
+        >
+          {product.imageUrl ? (
+            <Box
+              component="img"
+              src={product.imageUrl}
+              alt={product.name}
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+          ) : (
+            <Stack alignItems="center" justifyContent="center" sx={{ height: "100%" }}>
+              <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
+                {t("product.noImage")}
+              </Typography>
+            </Stack>
+          )}
+        </Box>
 
         <IconButton
           aria-label={common("labels.favorite")}
@@ -75,7 +88,9 @@ export function ShopProductCard({ product, formattedPrice }: ShopProductCardProp
 
       <Box sx={{ p: 2.25, display: "flex", flexDirection: "column", gap: 1.25, flex: 1 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 900, lineHeight: 1.2 }}>
-          {product.name}
+          <Box component={NextLink} href={productHref} sx={{ textDecoration: "none", color: "inherit" }}>
+            {product.name}
+          </Box>
         </Typography>
         {product.description ? (
           <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
@@ -95,6 +110,8 @@ export function ShopProductCard({ product, formattedPrice }: ShopProductCardProp
           )}
           <Button
             tone="primary"
+            component={NextLink}
+            href={productHref}
             startIcon={<ShoppingBagRoundedIcon />}
             rounded="default"
             sx={{ px: 2.25, py: 1, minWidth: 0 }}
