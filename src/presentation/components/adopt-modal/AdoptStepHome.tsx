@@ -16,15 +16,15 @@ interface AdoptStepHomeProps {
   onChange: (field: keyof AdoptFormValues, value: AdoptFormValues[keyof AdoptFormValues]) => void;
 }
 
-const housingOptions: Array<{
-  value: Exclude<HousingTypeOption, "">;
-  icon: typeof HomeRoundedIcon;
-  labelKey: string;
-}> = [
+const housingOptions = [
   { value: "house", icon: HomeRoundedIcon, labelKey: "form.fields.housingType.options.house" },
   { value: "apartment", icon: ApartmentRoundedIcon, labelKey: "form.fields.housingType.options.apartment" },
   { value: "other", icon: LocationCityRoundedIcon, labelKey: "form.fields.housingType.options.other" },
-];
+] as const satisfies ReadonlyArray<{
+  value: Exclude<HousingTypeOption, "">;
+  icon: typeof HomeRoundedIcon;
+  labelKey: "form.fields.housingType.options.house" | "form.fields.housingType.options.apartment" | "form.fields.housingType.options.other";
+}>;
 
 export function AdoptStepHome({ values, errors, disabled = false, onChange }: AdoptStepHomeProps) {
   const t = useTranslations("adoptRequest");
