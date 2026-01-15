@@ -11,11 +11,13 @@ import type { IProductRepository } from "@/domain/repositories/IProductRepositor
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
+import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCase";
 import { GetAnimalByIdUseCase } from "@/domain/usecases/animals/GetAnimalByIdUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
 import { UpdateAnimalUseCase } from "@/domain/usecases/animals/UpdateAnimalUseCase";
 import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogUseCase";
+import { GetAdoptDetailUseCase } from "@/domain/usecases/adopt/GetAdoptDetailUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
@@ -55,6 +57,14 @@ const useCasesModule = new ContainerModule(
         const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
 
         return new GetAdoptCatalogUseCase(animalRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetAdoptDetailUseCase>(USE_CASE_TYPES.GetAdoptDetailUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+
+        return new GetAdoptDetailUseCase(animalRepository);
       })
       .inSingletonScope();
 
@@ -103,6 +113,18 @@ const useCasesModule = new ContainerModule(
         );
 
         return new UpdateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<DeleteAnimalUseCase>(USE_CASE_TYPES.DeleteAnimalUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new DeleteAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
       })
       .inSingletonScope();
 

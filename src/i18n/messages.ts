@@ -8,6 +8,7 @@ import profile from "../messages/en/profile.json";
 import register from "../messages/en/register.json";
 import animals from "../messages/en/animals.json";
 import adopt from "../messages/en/adopt.json";
+import adoptDetail from "../messages/en/adopt-detail.json";
 import shop from "../messages/en/shop.json";
 import products from "../messages/en/products.json";
 import productForm from "../messages/en/product-form.json";
@@ -23,6 +24,7 @@ export const messages = {
   register,
   animals,
   adopt,
+  adoptDetail,
   shop,
   products,
   productForm,
