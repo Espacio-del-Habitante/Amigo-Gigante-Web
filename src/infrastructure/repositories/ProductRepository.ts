@@ -2,9 +2,12 @@ import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type {
   CreateProductParams,
   DeleteProductParams,
+  GetProductDetailParams,
   GetProductByIdParams,
+  GetProductsByIdsParams,
   GetProductsParams,
   GetProductsResult,
+  GetRelatedProductsParams,
   GetShopProductsParams,
   IProductRepository,
   RecentProduct,
@@ -87,6 +90,66 @@ export class ProductRepository implements IProductRepository {
       items,
       total: count ?? 0,
     };
+  }
+
+  async getProductDetail({ productId }: GetProductDetailParams): Promise<ShopProduct> {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("id, foundation_id, name, description, price, image_url, is_published, created_at")
+      .eq("id", productId)
+      .eq("is_published", true)
+      .single()
+      .returns<ShopProductRow>();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+
+    return this.mapShopProduct(data);
+  }
+
+  async getRelatedProducts({
+    productId,
+    foundationId,
+    limit = 4,
+  }: GetRelatedProductsParams): Promise<ShopProduct[]> {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("id, foundation_id, name, description, price, image_url, is_published, created_at")
+      .eq("foundation_id", foundationId)
+      .eq("is_published", true)
+      .neq("id", productId)
+      .order("created_at", { ascending: false })
+      .limit(limit)
+      .returns<ShopProductRow[]>();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    return (data ?? []).map((row) => this.mapShopProduct(row));
+  }
+
+  async getProductsByIds({ productIds }: GetProductsByIdsParams): Promise<ShopProduct[]> {
+    if (productIds.length === 0) {
+      return [];
+    }
+
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("id, foundation_id, name, description, price, image_url, is_published, created_at")
+      .in("id", productIds)
+      .returns<ShopProductRow[]>();
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    return (data ?? []).map((row) => this.mapShopProduct(row));
   }
 
   async getProducts({ foundationId, filters, pagination }: GetProductsParams): Promise<GetProductsResult> {

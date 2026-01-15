@@ -1,7 +1,9 @@
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import {
   alpha,
   AppBar,
+  Badge,
   Box,
   Container,
   Divider,
@@ -16,11 +18,12 @@ import {
   useTheme,
   Link,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NextLink from "next/link";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { keyframes } from "@mui/system";
 
 import { Button, Logo } from "@/presentation/components/atoms";
 import {
@@ -28,6 +31,19 @@ import {
   NavLink,
   SearchButton,
 } from "@/presentation/components/molecules";
+import { useCart } from "@/presentation/hooks/useCart";
+
+const cartPulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
 
 export function HomeNavBar() {
   const theme = useTheme();
@@ -35,12 +51,41 @@ export function HomeNavBar() {
   const pathname = usePathname();
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
+  const { totalItems } = useCart();
+  const [isCartPulsing, setIsCartPulsing] = useState(false);
+  const pulseTimeoutRef = useRef<number | null>(null);
 
   const adoptHref = `/${locale}/adopt`;
   const foundationsHref = `/${locale}/foundations`;
   const shopHref = `/${locale}/shop`;
+  const cartHref = `/${locale}/shop/cart`;
 
   const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
+
+  const handleCartPulse = useCallback(() => {
+    if (pulseTimeoutRef.current) {
+      window.clearTimeout(pulseTimeoutRef.current);
+    }
+    setIsCartPulsing(true);
+    pulseTimeoutRef.current = window.setTimeout(() => setIsCartPulsing(false), 600);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const handler = () => handleCartPulse();
+
+    window.addEventListener("cart:updated", handler);
+
+    return () => {
+      window.removeEventListener("cart:updated", handler);
+      if (pulseTimeoutRef.current) {
+        window.clearTimeout(pulseTimeoutRef.current);
+      }
+    };
+  }, [handleCartPulse]);
 
   const navItems = useMemo(
     () => [
@@ -74,8 +119,26 @@ export function HomeNavBar() {
               flex: 1,
               display: { xs: "flex", md: "none" },
               justifyContent: "flex-end",
+              gap: 1,
             }}
           >
+            <MuiIconButton
+              component={NextLink}
+              href={cartHref}
+              aria-label={t("navigation.cart")}
+              sx={{
+                borderRadius: 2,
+                backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                "&:hover": {
+                  backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                },
+                animation: isCartPulsing ? `${cartPulse} 0.6s ease` : "none",
+              }}
+            >
+              <Badge color="error" badgeContent={totalItems} invisible={totalItems <= 0}>
+                <ShoppingCartRoundedIcon />
+              </Badge>
+            </MuiIconButton>
             <MuiIconButton
               aria-label={t("navigation.openMenu")}
               onClick={() => setOpen(true)}
@@ -120,6 +183,23 @@ export function HomeNavBar() {
           >
             <SearchButton tone="neutral" variant="ghost" />
             <LanguageSelector />
+            <MuiIconButton
+              component={NextLink}
+              href={cartHref}
+              aria-label={t("navigation.cart")}
+              sx={{
+                borderRadius: 2,
+                backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                "&:hover": {
+                  backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                },
+                animation: isCartPulsing ? `${cartPulse} 0.6s ease` : "none",
+              }}
+            >
+              <Badge color="error" badgeContent={totalItems} invisible={totalItems <= 0}>
+                <ShoppingCartRoundedIcon />
+              </Badge>
+            </MuiIconButton>
 
             <Link href={`/${locale}/login`}>
               <Button

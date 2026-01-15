@@ -25,6 +25,7 @@ export interface IFoundationRepository {
   createFoundationContact(params: CreateFoundationContactParams): Promise<void>;
   createFoundationMember(params: CreateFoundationMemberParams): Promise<void>;
   getFoundationById(foundationId: string): Promise<Foundation>;
+  getShopFoundationById(foundationId: string): Promise<ShopFoundation>;
   getFoundationsList(): Promise<ShopFoundation[]>;
   rollbackFoundation(foundationId: string): Promise<void>;
 }
