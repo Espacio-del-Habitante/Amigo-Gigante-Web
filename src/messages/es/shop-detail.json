@@ -1,0 +1,61 @@
+{
+  "states": {
+    "loading": "Cargando..."
+  },
+  "errors": {
+    "unauthorized": "No tienes permisos para ver este producto.",
+    "notFound": "No pudimos encontrar el producto solicitado.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo de nuevo.",
+    "generic": "Ocurrió un error inesperado. Inténtalo nuevamente."
+  },
+  "breadcrumbs": {
+    "navigation": "Detalle del producto",
+    "backToShop": "Volver a la tienda"
+  },
+  "labels": {
+    "noImage": "Sin imagen",
+    "noDescription": "Sin descripción",
+    "priceUnavailable": "Precio no disponible",
+    "soldBy": "Vendido por",
+    "locationUnavailable": "Ubicación no disponible",
+    "favorite": "Marcar como favorito"
+  },
+  "buttons": {
+    "addToCart": "Agregar al carrito"
+  },
+  "highlights": {
+    "shipping": {
+      "title": "Envío solidario",
+      "description": "Por coordinar con la fundación"
+    },
+    "secure": {
+      "title": "Pago seguro",
+      "description": "Coordinado directamente"
+    }
+  },
+  "related": {
+    "title": "Productos relacionados",
+    "empty": "Aún no hay productos relacionados."
+  },
+  "cart": {
+    "title": "Tu carrito de compras",
+    "backToShop": "Volver a la tienda",
+    "empty": {
+      "title": "Tu carrito está vacío",
+      "description": "Explora la tienda y agrega productos solidarios."
+    },
+    "summary": {
+      "title": "Resumen de compra",
+      "subtotal": "Subtotal ({count, plural, one {# producto} other {# productos}})",
+      "shipping": "Envío",
+      "shippingValue": "Por acordar",
+      "total": "Total",
+      "currency": "Pesos Colombianos (COP)"
+    },
+    "actions": {
+      "increase": "Aumentar cantidad",
+      "decrease": "Disminuir cantidad",
+      "remove": "Eliminar producto"
+    }
+  }
+}

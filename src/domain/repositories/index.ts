@@ -16,3 +16,4 @@ export type {
   FoundationMemberRole,
 } from "./IFoundationRepository";
 export type { IFoundationProfileRepository } from "./IFoundationProfileRepository";
+export type { ICartRepository } from "./ICartRepository";

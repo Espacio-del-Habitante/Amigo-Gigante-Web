@@ -1,7 +1,9 @@
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import {
   alpha,
   AppBar,
+  Badge,
   Box,
   Container,
   Divider,
@@ -28,6 +30,7 @@ import {
   NavLink,
   SearchButton,
 } from "@/presentation/components/molecules";
+import { useCart } from "@/presentation/hooks/useCart";
 
 export function HomeNavBar() {
   const theme = useTheme();
@@ -35,10 +38,12 @@ export function HomeNavBar() {
   const pathname = usePathname();
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
+  const { totalItems } = useCart();
 
   const adoptHref = `/${locale}/adopt`;
   const foundationsHref = `/${locale}/foundations`;
   const shopHref = `/${locale}/shop`;
+  const cartHref = `/${locale}/shop/cart`;
 
   const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
 
@@ -74,8 +79,25 @@ export function HomeNavBar() {
               flex: 1,
               display: { xs: "flex", md: "none" },
               justifyContent: "flex-end",
+              gap: 1,
             }}
           >
+            <MuiIconButton
+              component={NextLink}
+              href={cartHref}
+              aria-label={t("navigation.cart")}
+              sx={{
+                borderRadius: 2,
+                backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                "&:hover": {
+                  backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                },
+              }}
+            >
+              <Badge color="error" badgeContent={totalItems} invisible={totalItems <= 0}>
+                <ShoppingCartRoundedIcon />
+              </Badge>
+            </MuiIconButton>
             <MuiIconButton
               aria-label={t("navigation.openMenu")}
               onClick={() => setOpen(true)}
@@ -120,6 +142,22 @@ export function HomeNavBar() {
           >
             <SearchButton tone="neutral" variant="ghost" />
             <LanguageSelector />
+            <MuiIconButton
+              component={NextLink}
+              href={cartHref}
+              aria-label={t("navigation.cart")}
+              sx={{
+                borderRadius: 2,
+                backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                "&:hover": {
+                  backgroundColor: alpha(theme.palette.primary.main, 0.16),
+                },
+              }}
+            >
+              <Badge color="error" badgeContent={totalItems} invisible={totalItems <= 0}>
+                <ShoppingCartRoundedIcon />
+              </Badge>
+            </MuiIconButton>
 
             <Link href={`/${locale}/login`}>
               <Button
