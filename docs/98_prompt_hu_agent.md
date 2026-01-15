@@ -50,11 +50,19 @@ NOTA SOBRE EJECUCIÓN:
 - En su lugar, entrega el comando exacto que el usuario debe ejecutar localmente.
 - El usuario ejecutará el comando en su terminal local (donde sí tiene acceso a variables de entorno).
 
-PASO POSTERIOR:
+PASO POSTERIOR (AUTOMÁTICO VIA WORKER):
 1) Guardar la HU en `HUs/HU-XXX.md`.
-2) Ejecutar localmente (en tu terminal, no desde el agente web):
-   `node scripts/clickup/flow.mjs --title "HU-XXX — <Título>" --body-file "HUs/HU-XXX.md"`
-3) Reportar el `TASK_ID` y URL resultantes al usuario o coordinador.
+2) Escribir en `agent_queue.json` (en la raíz del proyecto):
+[
+  {
+    "id": "create-hu-xxx",
+    "type": "create_hu",
+    "title": "HU-XXX — <Título>",
+    "bodyFile": "HUs/HU-XXX.md"
+  }
+]
+3) El worker local procesará esto automáticamente y creará la tarea en ClickUp.
+4) Revisar `agent_worker.log` para obtener el TASK_ID resultante.
 ```
 
 ---

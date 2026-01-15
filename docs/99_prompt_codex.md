@@ -44,11 +44,25 @@ TAREA:
 - Crea, modifica o mueve archivos SOLO si la HU lo pide.
 - Mantén el proyecto en estado funcional.
 
-CLICKUP (obligatorio si el entorno tiene variables de ClickUp):
-- Al iniciar: actualizar la tarea a “En curso”.
-  `node scripts/clickup/update_status.mjs <TASK_ID> --in-progress`
-- Al finalizar: actualizar la tarea a “Finalizado”.
-  `node scripts/clickup/update_status.mjs <TASK_ID> --done`
+CLICKUP (obligatorio - AUTOMÁTICO VIA WORKER):
+- Al iniciar: escribir en `agent_queue.json`:
+[
+  {
+    "id": "start-hu-xxx",
+    "type": "update_status",
+    "taskId": "<TASK_ID>",
+    "status": "--in-progress"
+  }
+]
+
+- Al finalizar: agregar a `agent_queue.json`:
+{
+  "id": "finish-hu-xxx",
+  "type": "finish_task",
+  "taskId": "<TASK_ID>"
+}
+
+El worker local procesará estas instrucciones automáticamente.
 
 ENTREGA (obligatoria):
 1) Resumen breve de lo realizado.

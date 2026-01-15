@@ -1,49 +1,74 @@
-# Agents — Prompts rápidos
+# 🤖 Agents — Flujo Automatizado
 
-Estos prompts están listos para pegar en https://cursor.com/agents.
+Sistema automatizado para que los agentes trabajen **completamente solos** sin tu intervención.
 
-## ⚙️ Setup inicial (solo una vez)
+---
 
-Asegúrate de tener configuradas las variables de entorno:
+## 🚀 Inicio Rápido
+
+### 1. Setup (una sola vez)
 
 ```bash
-export CLICKUP_API_TOKEN="pk_..."
-export CLICKUP_LIST_ID="901324355532"
-export CLICKUP_STATUS_IN_PROGRESS="En curso"
-export CLICKUP_STATUS_DONE="Finalizado"
-export CLICKUP_ASSIGNEE_ID="123456"  # Opcional
+# Inicia el worker en background
+node scripts/clickup/setup_env.sh  # Verifica variables
+node scripts/agent_worker.mjs &
+
+# O con PM2 (recomendado)
+pm2 start scripts/agent_worker.mjs --name agent-worker
+pm2 save
 ```
 
-Verifica que funcionan:
+### 2. Usa el agente
+
+En Cursor (local o web):
+1. Pega `docs/agents/unified_agent_prompt.md`
+2. Escribe: "Necesito implementar: [tu feature]"
+3. **Listo** - el agente hace TODO automáticamente
+
+---
+
+## 📚 Archivos
+
+| Archivo | Descripción |
+|---------|-------------|
+| `unified_agent_prompt.md` | **Prompt principal** - úsalo para todo |
+| `AUTOMATED_FLOW.md` | Guía detallada del flujo automatizado |
+| `../98_prompt_hu_agent.md` | Prompt base para crear HUs (si necesitas) |
+| `../99_prompt_codex.md` | Prompt base para implementar (si necesitas) |
+
+---
+
+## 🔄 Cómo Funciona
+
+1. **Tú** describes la feature al agente
+2. **Agente** crea HU y escribe instrucciones en `agent_queue.json`
+3. **Worker local** ejecuta comandos automáticamente (ClickUp, etc.)
+4. **Agente** implementa código
+5. **Agente** finaliza la tarea
+6. **Tú** trabajas en otras cosas sin intervenir
+
+---
+
+## 📖 Documentación Completa
+
+Ver `AUTOMATED_FLOW.md` para detalles completos.
+
+---
+
+## 🐛 Troubleshooting
+
 ```bash
-source scripts/clickup/setup_env.sh
+# Ver logs del worker
+tail -f agent_worker.log
+
+# Ver estado (con PM2)
+pm2 status
+pm2 logs agent-worker
+
+# Ver cola actual
+cat agent_queue.json
 ```
 
 ---
 
-## 🚀 Flujo de trabajo
-
-### 1) Agente Coordinador
-Pega `coordinator_prompt.md` y dale la idea de la HU.
-
-### 2) Agente HU (creador)
-Pega `creator_hu_prompt.md` cuando el Coordinador lo pida.
-- Genera la HU completa
-- Te da un comando para ejecutar localmente
-- **Ejecuta ese comando en tu terminal local** para crear la tarea en ClickUp
-- Comparte el TASK_ID y URL con el Coordinador
-
-### 3) Agente Dev (implementador)
-Pega `dev_hu_prompt.md` cuando el Coordinador lo pida.
-- Implementa la HU
-- **Ejecuta los comandos localmente** para actualizar estados
-
----
-
-## 📝 Nota importante
-
-Los agentes en cursor.com/agents/ **no pueden ejecutar scripts locales**. Por eso:
-- Los agentes generan contenido e instrucciones
-- Tú ejecutas los comandos en tu terminal local (donde sí tienes acceso a variables de entorno)
-
-
+**Todo funciona automáticamente. Solo describe la feature y los agentes trabajan solos.** 🎉
