@@ -1,5 +1,6 @@
 import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type {
+  DeleteProductParams,
   GetProductsParams,
   GetProductsResult,
   GetShopProductsParams,
@@ -195,6 +196,23 @@ export class ProductRepository implements IProductRepository {
 
     if (error) {
       throw new Error(this.translateProductsError(error));
+    }
+  }
+
+  async deleteProduct({ productId, foundationId }: DeleteProductParams): Promise<void> {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .delete()
+      .eq("id", productId)
+      .eq("foundation_id", foundationId)
+      .select("id");
+
+    if (error) {
+      throw new Error(this.translateProductsError(error));
+    }
+
+    if (!data || data.length === 0) {
+      throw new Error("errors.unauthorized");
     }
   }
 

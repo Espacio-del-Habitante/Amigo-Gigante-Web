@@ -60,11 +60,17 @@ export interface CreateProductParams {
   isPublished: boolean;
 }
 
+export interface DeleteProductParams {
+  foundationId: string;
+  productId: number;
+}
+
 export interface IProductRepository {
   getRecentProducts(foundationId: string, limit: number): Promise<RecentProduct[]>;
   getShopProducts(params: GetShopProductsParams): Promise<ShopProductsPage>;
   getProducts(params: GetProductsParams): Promise<GetProductsResult>;
   createProduct(params: CreateProductParams): Promise<ShopProduct>;
   updatePublishStatus(params: UpdateProductPublishStatusParams): Promise<void>;
+  deleteProduct(params: DeleteProductParams): Promise<void>;
 }
 

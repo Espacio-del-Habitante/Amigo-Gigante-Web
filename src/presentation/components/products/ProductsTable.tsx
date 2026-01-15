@@ -13,9 +13,10 @@ export interface ProductsTableProps {
   updatingIds: Set<number>;
   formatPrice: (price: number) => string;
   onTogglePublish: (productId: number, nextValue: boolean) => void;
+  onDelete?: (product: ShopProduct) => void;
 }
 
-export function ProductsTable({ products, updatingIds, formatPrice, onTogglePublish }: ProductsTableProps) {
+export function ProductsTable({ products, updatingIds, formatPrice, onTogglePublish, onDelete }: ProductsTableProps) {
   const t = useTranslations("products");
 
   return (
@@ -110,6 +111,8 @@ export function ProductsTable({ products, updatingIds, formatPrice, onTogglePubl
                         aria-label={t("table.actions.delete")}
                         title={t("table.actions.delete")}
                         sx={{ color: "text.secondary" }}
+                        disabled={!onDelete}
+                        onClick={() => onDelete?.(product)}
                       >
                         <DeleteOutlineRoundedIcon fontSize="small" />
                       </IconButton>
