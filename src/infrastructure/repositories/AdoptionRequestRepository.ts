@@ -103,27 +103,18 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
   }
 
   private async ensureAdopterProfile(adopterUserId: string): Promise<void> {
-    const { data, error } = await supabaseClient
+    const { error } = await supabaseClient
       .from("profiles")
-      .select("id")
-      .eq("id", adopterUserId)
-      .maybeSingle<{ id: string }>();
+      .upsert(
+        {
+          id: adopterUserId,
+          role: "external",
+        },
+        { onConflict: "id" },
+      );
 
     if (error) {
       throw new Error(this.translateAdoptionError(error));
-    }
-
-    if (data?.id) {
-      return;
-    }
-
-    const { error: insertError } = await supabaseClient.from("profiles").insert({
-      id: adopterUserId,
-      role: "external",
-    });
-
-    if (insertError) {
-      throw new Error(this.translateAdoptionError(insertError));
     }
   }
 
@@ -207,11 +198,28 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     const message = error.message?.toLowerCase?.() ?? "";
     const code = error.code?.toLowerCase?.() ?? "";
 
+    if (code === "23505") {
+      return "errors.duplicate";
+    }
+
+    if (code === "23503") {
+      return "errors.notFound";
+    }
+
+    if (code === "42501") {
+      return "errors.unauthorized";
+    }
+
     if (code === "pgrst116" || message.includes("no rows") || message.includes("0 rows")) {
       return "errors.notFound";
     }
 
-    if (message.includes("permission") || message.includes("row level")) {
+    if (
+      message.includes("permission") ||
+      message.includes("row level") ||
+      message.includes("row-level") ||
+      message.includes("rls")
+    ) {
       return "errors.unauthorized";
     }
 
@@ -219,7 +227,7 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       return "errors.duplicate";
     }
 
-    if (message.includes("connection") || message.includes("network")) {
+    if (message.includes("connection") || message.includes("network") || message.includes("failed to fetch")) {
       return "errors.connection";
     }
 
