@@ -1,5 +1,3 @@
-import type { StorageError } from "@supabase/supabase-js";
-
 import type {
   AdoptionRequest,
   AdoptionRequestDocuments,
@@ -205,7 +203,7 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     return "errors.generic";
   }
 
-  private translateStorageError(error: StorageError | Error): string {
+  private translateStorageError(error: { message?: string }): string {
     const message = error.message?.toLowerCase?.() ?? "";
 
     if (message.includes("bucket") || message.includes("not found") || message.includes("storage")) {
