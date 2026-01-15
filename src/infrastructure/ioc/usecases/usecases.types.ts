@@ -18,6 +18,7 @@ const USE_CASE_TYPES = {
   GetProductsUseCase: Symbol.for("GetProductsUseCase"),
   CreateProductUseCase: Symbol.for("CreateProductUseCase"),
   UpdateProductPublishStatusUseCase: Symbol.for("UpdateProductPublishStatusUseCase"),
+  DeleteProductUseCase: Symbol.for("DeleteProductUseCase"),
 };
 
 export { USE_CASE_TYPES };
