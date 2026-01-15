@@ -1,5 +1,6 @@
 import { ContainerModule, ContainerModuleLoadOptions } from "inversify";
 
+import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IDebugRepository } from "@/domain/repositories/IDebugRepository";
@@ -9,6 +10,7 @@ import type { IFoundationMembershipRepository } from "@/domain/repositories/IFou
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
+import { AdoptionRequestRepository } from "@/infrastructure/repositories/AdoptionRequestRepository";
 import { AuthRepository } from "@/infrastructure/repositories/AuthRepository";
 import { DebugRepository } from "@/infrastructure/repositories/DebugRepository";
 import { EventRepository } from "@/infrastructure/repositories/EventRepository";
@@ -26,6 +28,10 @@ const repositoriesModule = new ContainerModule(
 
     bind<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository)
       .to(AnimalRepository)
+      .inSingletonScope();
+
+    bind<IAdoptionRequestRepository>(REPOSITORY_TYPES.AdoptionRequestRepository)
+      .to(AdoptionRequestRepository)
       .inSingletonScope();
 
     bind<IEventRepository>(REPOSITORY_TYPES.EventRepository)

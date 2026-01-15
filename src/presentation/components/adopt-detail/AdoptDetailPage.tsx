@@ -16,6 +16,7 @@ import { AdoptBreadcrumbs } from "./AdoptBreadcrumbs";
 import { AdoptGallery } from "./AdoptGallery";
 import { AdoptHistory } from "./AdoptHistory";
 import { AdoptInfoPanel } from "./AdoptInfoPanel";
+import { AdoptStartModal } from "@/presentation/components/adopt-modal/AdoptStartModal";
 import { AdoptRelatedGrid } from "./AdoptRelatedGrid";
 
 type AdoptDetailErrorKey =
@@ -43,6 +44,7 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<AdoptDetailErrorKey | null>(null);
+  const [isAdoptModalOpen, setIsAdoptModalOpen] = useState(false);
 
   const resolveErrorKey = useCallback((error: unknown): AdoptDetailErrorKey => {
     if (error instanceof Error) {
@@ -156,6 +158,10 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
   const mainImage = selectedImage ?? galleryImages[0] ?? "/file.svg";
   const thumbnails = galleryImages;
 
+  const modalAnimal = detail
+    ? { id: detail.id, name: detail.name, foundationId: detail.foundationId }
+    : null;
+
   return (
     <Box className="bg-slate-50">
       <HomeNavBar />
@@ -197,6 +203,7 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
                   speciesLabel={renderSpeciesLabel(detail.species)}
                   description={detail.description}
                   locationLabel={t("labels.locationPlaceholder")}
+                  onAdopt={() => setIsAdoptModalOpen(true)}
                 />
               </Box>
             </Box>
@@ -208,6 +215,12 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
       </Container>
 
       <HomeFooter />
+
+      <AdoptStartModal
+        open={isAdoptModalOpen}
+        onClose={() => setIsAdoptModalOpen(false)}
+        animal={modalAnimal}
+      />
     </Box>
   );
 }

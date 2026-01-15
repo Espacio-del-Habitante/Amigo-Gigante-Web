@@ -8,6 +8,7 @@ export interface AdoptPhoto {
 
 export interface AdoptDetail {
   id: number;
+  foundationId: string;
   name: string;
   species: AdoptSpeciesFilter;
   breed: string;

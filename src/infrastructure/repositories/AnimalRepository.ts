@@ -102,7 +102,7 @@ export class AnimalRepository implements IAnimalRepository {
     const { data, error } = await supabaseClient
       .from("animals")
       .select(
-        "id, name, species, breed, sex, age_months, size, status, description, cover_image_url, is_published",
+        "id, foundation_id, name, species, breed, sex, age_months, size, status, description, cover_image_url, is_published",
       )
       .eq("id", normalizedId)
       .eq("is_published", true)
@@ -142,6 +142,7 @@ export class AnimalRepository implements IAnimalRepository {
 
     return {
       id: data.id,
+      foundationId: data.foundation_id,
       name: data.name ?? "",
       species: data.species,
       breed: data.breed ?? "",

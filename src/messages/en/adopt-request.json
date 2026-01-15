@@ -1,0 +1,165 @@
+{
+  "actions": {
+    "close": "Close"
+  },
+  "modal": {
+    "heroAlt": "Happy pet",
+    "title": "Adopt a friend!",
+    "subtitle": "You are one step away from changing a life. Choose how you want to start the adoption process with Amigo Gigante.",
+    "actions": {
+      "contact": "Contact foundation",
+      "or": "Or",
+      "form": "Fill out the form"
+    },
+    "terms": "By continuing, you agree to our responsible adoption terms and conditions."
+  },
+  "contact": {
+    "heroAlt": "Happy pet",
+    "title": "Get in touch!",
+    "foundationFallback": "the foundation",
+    "subtitle": "{foundation} is ready to answer your questions about the adoption process.",
+    "actions": {
+      "whatsapp": "Message us on WhatsApp",
+      "call": "Call",
+      "instagram": "Instagram",
+      "email": "Email",
+      "address": "Foundation address"
+    },
+    "emptyValue": "Not available"
+  },
+  "form": {
+    "title": "Adoption form",
+    "subtitle": "You are applying to adopt {animal}. Please complete all fields honestly.",
+    "steps": {
+      "basic": "Basics",
+      "home": "Home",
+      "style": "Lifestyle",
+      "docs": "Docs"
+    },
+    "fields": {
+      "fullName": {
+        "label": "Full name",
+        "placeholder": "e.g. Jane Doe"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "jane@example.com",
+        "hint": "We will use it to update you about your request."
+      },
+      "phone": {
+        "label": "Contact phone",
+        "placeholder": "+1 555 000 0000"
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "New York, Austin..."
+      },
+      "neighborhood": {
+        "label": "Neighborhood",
+        "placeholder": "e.g. Downtown"
+      },
+      "housingType": {
+        "label": "Housing type",
+        "options": {
+          "house": "House",
+          "apartment": "Apartment",
+          "other": "Other"
+        }
+      },
+      "isRent": {
+        "label": "Is it rented?",
+        "hint": "Enable if you live in a rental."
+      },
+      "allowsPets": {
+        "label": "Pets allowed?",
+        "hint": "Do you have the landlord approval?"
+      },
+      "householdPeopleCount": {
+        "label": "People at home",
+        "placeholder": "e.g. 3"
+      },
+      "childrenAges": {
+        "label": "Children information (if applicable)",
+        "placeholder": "e.g. 2 kids (5 and 8 years old)",
+        "hint": "Specify ages of minors."
+      },
+      "otherPetsDescription": {
+        "label": "Other pets description",
+        "placeholder": "Tell us if you have other pets, their age, and behavior..."
+      },
+      "hoursAlonePerDay": {
+        "label": "Hours alone per day",
+        "placeholder": "e.g. 4",
+        "hint": "Approximate time the pet will be unsupervised."
+      },
+      "travelPlan": {
+        "label": "Travel plan",
+        "placeholder": "What will you do with your pet when you travel?"
+      },
+      "experienceText": {
+        "label": "Previous experience",
+        "placeholder": "Describe your previous experience caring for pets..."
+      },
+      "motivationText": {
+        "label": "Motivation to adopt",
+        "placeholder": "Tell us why you want to adopt and what you will offer your new friend."
+      }
+    },
+    "docs": {
+      "idDocument": {
+        "label": "ID document",
+        "action": "Upload document",
+        "hint": "PDF, JPG or PNG (max 5MB)",
+        "selected": "Selected file: {name}"
+      },
+      "homePhotos": {
+        "label": "Home photos",
+        "action": "Upload photos",
+        "hint": "Upload up to 5 photos of the space",
+        "selectedCount": "{count, plural, one {# photo selected} other {# photos selected}}",
+        "remove": "Remove photo {index}"
+      },
+      "errors": {
+        "invalidType": "Invalid file type.",
+        "tooLarge": "The file exceeds the maximum size.",
+        "tooMany": "You can upload up to 5 photos."
+      }
+    },
+    "consents": {
+      "vetCosts": {
+        "title": "I accept veterinary costs",
+        "description": "I understand the pet requires food, health, and general care expenses."
+      },
+      "lifetimeCommitment": {
+        "title": "Lifetime commitment",
+        "description": "I commit to caring for the pet throughout its life."
+      }
+    },
+    "actions": {
+      "back": "Back",
+      "next": "Next step",
+      "submit": "Submit request",
+      "sending": "Sending..."
+    },
+    "errors": {
+      "required": "This field is required.",
+      "email": "Enter a valid email.",
+      "numeric": "Enter a valid number."
+    },
+    "helper": "Your data is safe and will be used only for the adoption process."
+  },
+  "states": {
+    "loading": "Loading information",
+    "authRequired": "You must sign in to submit the request."
+  },
+  "errors": {
+    "unauthenticated": "You must sign in to continue.",
+    "unauthorized": "Unauthorized.",
+    "connection": "We could not connect. Please try again.",
+    "storageUnavailable": "We could not upload the documents. Try again later.",
+    "documentsRequired": "You must attach the required documents.",
+    "duplicate": "You already submitted a request for this animal.",
+    "notFound": "We could not find the requested information.",
+    "generic": "Something went wrong. Please try again."
+  }
+}

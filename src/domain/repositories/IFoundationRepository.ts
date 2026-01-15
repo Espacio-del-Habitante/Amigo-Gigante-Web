@@ -1,4 +1,5 @@
 import type { Foundation } from "@/domain/models/Foundation";
+import type { FoundationContact } from "@/domain/models/FoundationContact";
 import type { ShopFoundation } from "@/domain/models/ShopFoundation";
 
 export type FoundationMemberRole = "owner" | "editor";
@@ -26,5 +27,6 @@ export interface IFoundationRepository {
   createFoundationMember(params: CreateFoundationMemberParams): Promise<void>;
   getFoundationById(foundationId: string): Promise<Foundation>;
   getFoundationsList(): Promise<ShopFoundation[]>;
+  getFoundationContacts(foundationId: string): Promise<FoundationContact>;
   rollbackFoundation(foundationId: string): Promise<void>;
 }
