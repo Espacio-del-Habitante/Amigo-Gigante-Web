@@ -8,8 +8,10 @@ import type { IFoundationRepository } from "@/domain/repositories/IFoundationRep
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
+import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
 import { AuthRepository } from "@/infrastructure/repositories/AuthRepository";
+import { AdoptionRequestRepository } from "@/infrastructure/repositories/AdoptionRequestRepository";
 import { DebugRepository } from "@/infrastructure/repositories/DebugRepository";
 import { EventRepository } from "@/infrastructure/repositories/EventRepository";
 import { FoundationMembershipRepository } from "@/infrastructure/repositories/FoundationMembershipRepository";
@@ -34,6 +36,10 @@ const repositoriesModule = new ContainerModule(
 
     bind<IProductRepository>(REPOSITORY_TYPES.ProductRepository)
       .to(ProductRepository)
+      .inSingletonScope();
+
+    bind<IAdoptionRequestRepository>(REPOSITORY_TYPES.AdoptionRequestRepository)
+      .to(AdoptionRequestRepository)
       .inSingletonScope();
 
     bind<IAuthRepository>(REPOSITORY_TYPES.AuthRepository)

@@ -8,6 +8,7 @@ import type { IFoundationRepository } from "@/domain/repositories/IFoundationRep
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
+import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
@@ -18,6 +19,9 @@ import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsU
 import { UpdateAnimalUseCase } from "@/domain/usecases/animals/UpdateAnimalUseCase";
 import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogUseCase";
 import { GetAdoptDetailUseCase } from "@/domain/usecases/adopt/GetAdoptDetailUseCase";
+import { GetAdminAdoptionRequestsUseCase } from "@/domain/usecases/adopt/GetAdminAdoptionRequestsUseCase";
+import { GetAdoptionRequestDetailUseCase } from "@/domain/usecases/adopt/GetAdoptionRequestDetailUseCase";
+import { UpdateAdoptionRequestStatusUseCase } from "@/domain/usecases/adopt/UpdateAdoptionRequestStatusUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
@@ -68,6 +72,60 @@ const useCasesModule = new ContainerModule(
         const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
 
         return new GetAdoptDetailUseCase(animalRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetAdminAdoptionRequestsUseCase>(USE_CASE_TYPES.GetAdminAdoptionRequestsUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetAdminAdoptionRequestsUseCase(
+          adoptionRequestRepository,
+          authRepository,
+          foundationMembershipRepository,
+        );
+      })
+      .inSingletonScope();
+
+    bind<GetAdoptionRequestDetailUseCase>(USE_CASE_TYPES.GetAdoptionRequestDetailUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetAdoptionRequestDetailUseCase(
+          adoptionRequestRepository,
+          authRepository,
+          foundationMembershipRepository,
+        );
+      })
+      .inSingletonScope();
+
+    bind<UpdateAdoptionRequestStatusUseCase>(USE_CASE_TYPES.UpdateAdoptionRequestStatusUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new UpdateAdoptionRequestStatusUseCase(
+          adoptionRequestRepository,
+          authRepository,
+          foundationMembershipRepository,
+        );
       })
       .inSingletonScope();
 
