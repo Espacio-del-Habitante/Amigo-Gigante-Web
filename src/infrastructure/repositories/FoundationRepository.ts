@@ -123,11 +123,22 @@ class FoundationRepository implements IFoundationRepository {
   }
 
   async getFoundationContacts(foundationId: string): Promise<FoundationContact> {
+    type FoundationContactRow = {
+      foundation_id: string;
+      public_email: string | null;
+      public_phone: string | null;
+      instagram_url: string | null;
+      whatsapp_url: string | null;
+      address: string | null;
+      foundations: { name: string | null } | { name: string | null }[] | null;
+    };
+
     const { data, error } = await supabaseClient
       .from("foundation_contacts")
       .select("foundation_id, public_email, public_phone, instagram_url, whatsapp_url, address, foundations(name)")
       .eq("foundation_id", foundationId)
-      .single();
+      .single()
+      .returns<FoundationContactRow>();
 
     if (error || !data) {
       throw new Error(this.translateFoundationLookupError(error ?? new Error("not found")));
