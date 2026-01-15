@@ -1,4 +1,5 @@
 import type { HomeAnimals } from "../models/HomeAnimals";
+import type { AnimalDetail } from "@/domain/models/AnimalDetail";
 import type {
   AnimalManagement,
   AnimalManagementSex,
@@ -59,6 +60,31 @@ export interface CreateAnimalPhotoParams {
   sortOrder: number;
 }
 
+export interface GetAnimalByIdParams {
+  animalId: number;
+  foundationId: string;
+}
+
+export interface UpdateAnimalParams {
+  animalId: number;
+  foundationId: string;
+  name: string;
+  species: AnimalManagementSpecies;
+  breed?: string | null;
+  sex: AnimalManagementSex;
+  ageMonths: number;
+  size: AnimalManagementSize;
+  status: AnimalManagementStatus;
+  description: string;
+  coverImageUrl?: string | null;
+  isPublished: boolean;
+}
+
+export interface ReplaceAnimalPhotosParams {
+  animalId: number;
+  photoUrls: string[];
+}
+
 export type AdoptSortOption = "newest" | "oldest" | "urgent";
 
 export interface GetAdoptCatalogFilters {
@@ -102,6 +128,9 @@ export interface IAnimalRepository {
   getAnimalsInTreatment(foundationId: string): Promise<AnimalManagement[]>;
   createAnimal(params: CreateAnimalParams): Promise<AnimalManagement>;
   createAnimalPhotos(params: CreateAnimalPhotoParams[]): Promise<void>;
+  getAnimalById(params: GetAnimalByIdParams): Promise<AnimalDetail>;
+  updateAnimal(params: UpdateAnimalParams): Promise<void>;
+  replaceAnimalPhotos(params: ReplaceAnimalPhotosParams): Promise<void>;
   getAdoptCatalog(params: GetAdoptCatalogParams): Promise<GetAdoptCatalogResult>;
   getAdoptDetail(params: GetAdoptDetailParams): Promise<AdoptDetail>;
   getRelatedAnimals(params: GetRelatedAnimalsParams): Promise<AdoptCatalogItem[]>;

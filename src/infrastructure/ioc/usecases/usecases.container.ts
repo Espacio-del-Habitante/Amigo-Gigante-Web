@@ -11,8 +11,10 @@ import type { IProductRepository } from "@/domain/repositories/IProductRepositor
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
+import { GetAnimalByIdUseCase } from "@/domain/usecases/animals/GetAnimalByIdUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
+import { UpdateAnimalUseCase } from "@/domain/usecases/animals/UpdateAnimalUseCase";
 import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogUseCase";
 import { GetAdoptDetailUseCase } from "@/domain/usecases/adopt/GetAdoptDetailUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
@@ -21,6 +23,8 @@ import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFounda
 import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
 import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
+import { GetProductsUseCase } from "@/domain/usecases/products/GetProductsUseCase";
+import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/UpdateProductPublishStatusUseCase";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
 
@@ -74,6 +78,18 @@ const useCasesModule = new ContainerModule(
       })
       .inSingletonScope();
 
+    bind<GetAnimalByIdUseCase>(USE_CASE_TYPES.GetAnimalByIdUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetAnimalByIdUseCase(animalRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
     bind<CreateAnimalUseCase>(USE_CASE_TYPES.CreateAnimalUseCase)
       .toDynamicValue((context) => {
         const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
@@ -83,6 +99,18 @@ const useCasesModule = new ContainerModule(
         );
 
         return new CreateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<UpdateAnimalUseCase>(USE_CASE_TYPES.UpdateAnimalUseCase)
+      .toDynamicValue((context) => {
+        const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new UpdateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
       })
       .inSingletonScope();
 
@@ -161,6 +189,34 @@ const useCasesModule = new ContainerModule(
         const foundationRepository = context.get<IFoundationRepository>(REPOSITORY_TYPES.FoundationRepository);
 
         return new GetShopCatalogUseCase(productRepository, foundationRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetProductsUseCase>(USE_CASE_TYPES.GetProductsUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetProductsUseCase(productRepository, authRepository, foundationMembershipRepository);
+      })
+      .inSingletonScope();
+
+    bind<UpdateProductPublishStatusUseCase>(USE_CASE_TYPES.UpdateProductPublishStatusUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(REPOSITORY_TYPES.ProductRepository);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new UpdateProductPublishStatusUseCase(
+          productRepository,
+          authRepository,
+          foundationMembershipRepository,
+        );
       })
       .inSingletonScope();
   },
