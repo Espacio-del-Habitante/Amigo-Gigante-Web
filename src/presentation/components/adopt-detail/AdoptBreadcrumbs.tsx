@@ -1,4 +1,4 @@
-\"use client\";
+"use client";
 
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
