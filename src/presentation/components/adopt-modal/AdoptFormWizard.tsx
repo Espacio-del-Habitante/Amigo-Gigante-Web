@@ -147,11 +147,11 @@ export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }:
       setErrors(nextErrors);
       return;
     }
-    setStep((prev) => Math.min(4, (prev + 1) as AdoptWizardStep));
+    setStep((prev) => (prev < 4 ? ((prev + 1) as AdoptWizardStep) : prev));
   };
 
   const handleBack = () => {
-    setStep((prev) => Math.max(1, (prev - 1) as AdoptWizardStep));
+    setStep((prev) => (prev > 1 ? ((prev - 1) as AdoptWizardStep) : prev));
   };
 
   const handleIdDocumentChange = (file: File | null) => {
