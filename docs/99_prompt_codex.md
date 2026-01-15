@@ -44,6 +44,12 @@ TAREA:
 - Crea, modifica o mueve archivos SOLO si la HU lo pide.
 - Mantén el proyecto en estado funcional.
 
+CLICKUP (obligatorio si el entorno tiene variables de ClickUp):
+- Al iniciar: actualizar la tarea a “En curso”.
+  `node scripts/clickup/update_status.mjs <TASK_ID> --in-progress`
+- Al finalizar: actualizar la tarea a “Finalizado”.
+  `node scripts/clickup/update_status.mjs <TASK_ID> --done`
+
 ENTREGA (obligatoria):
 1) Resumen breve de lo realizado.
 2) Lista de archivos creados/modificados.
