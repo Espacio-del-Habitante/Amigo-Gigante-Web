@@ -1,0 +1,79 @@
+{
+  "breadcrumb": {
+    "ariaLabel": "Product creation breadcrumbs",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "addNew": "Add product"
+  },
+  "header": {
+    "title": "Add New Product",
+    "subtitle": "Manage items in your solidarity shop to support the foundation."
+  },
+  "sections": {
+    "general": {
+      "title": "General Information"
+    },
+    "image": {
+      "title": "Product Image",
+      "upload": {
+        "title": "Upload image",
+        "hint": "PNG, JPG up to 5MB",
+        "ariaLabel": "Upload product image"
+      },
+      "url": {
+        "label": "Image URL",
+        "placeholder": "https://example.com/product.jpg"
+      },
+      "preview": {
+        "label": "Selected image",
+        "fromUrl": "Image URL",
+        "remove": "Remove image"
+      },
+      "errors": {
+        "invalidType": "Only PNG or JPG files are allowed.",
+        "tooLarge": "The image must be 5MB or smaller.",
+        "readFailed": "We couldn't read the image. Please try again."
+      }
+    },
+    "visibility": {
+      "title": "Visibility",
+      "description": "When published, this product will be visible to the public in the solidarity shop immediately.",
+      "toggleAria": "Toggle product visibility"
+    }
+  },
+  "fields": {
+    "name": {
+      "label": "Product Name",
+      "placeholder": "e.g., Amigo Gigante organic cotton t-shirt"
+    },
+    "price": {
+      "label": "Price (COP)",
+      "placeholder": "20,000"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Describe the product materials, sizes, and how purchases help the animals..."
+    }
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "save": "Save Product"
+  },
+  "footer": {
+    "hint": "All proceeds from this shop are tax-deductible for the animal shelter fund."
+  },
+  "validation": {
+    "nameRequired": "Product name is required.",
+    "priceRequired": "Price is required.",
+    "priceMin": "Price must be 0 or higher.",
+    "descriptionRequired": "Description is required.",
+    "imageRequired": "A product image is required.",
+    "imageUrlInvalid": "Enter a valid image URL."
+  },
+  "errors": {
+    "generic": "Something went wrong while saving the product. Please try again.",
+    "connection": "We couldn't connect to the server. Please check your connection and try again.",
+    "unauthorized": "You don't have permission to create products.",
+    "storageUnavailable": "We couldn't upload the image. Use a direct URL or configure storage."
+  }
+}
