@@ -10,9 +10,11 @@ import type { IFoundationRepository } from "@/domain/repositories/IFoundationRep
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
+
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
-import { AdoptionRequestRepository } from "@/infrastructure/repositories/AdoptionRequestRepository";
+
 import { AuthRepository } from "@/infrastructure/repositories/AuthRepository";
+import { AdoptionRequestRepository } from "@/infrastructure/repositories/AdoptionRequestRepository";
 import { CartRepository } from "@/infrastructure/repositories/CartRepository";
 import { DebugRepository } from "@/infrastructure/repositories/DebugRepository";
 import { EventRepository } from "@/infrastructure/repositories/EventRepository";
@@ -32,16 +34,16 @@ const repositoriesModule = new ContainerModule(
       .to(AnimalRepository)
       .inSingletonScope();
 
-    bind<IAdoptionRequestRepository>(REPOSITORY_TYPES.AdoptionRequestRepository)
-      .to(AdoptionRequestRepository)
-      .inSingletonScope();
-
     bind<IEventRepository>(REPOSITORY_TYPES.EventRepository)
       .to(EventRepository)
       .inSingletonScope();
 
     bind<IProductRepository>(REPOSITORY_TYPES.ProductRepository)
       .to(ProductRepository)
+      .inSingletonScope();
+
+    bind<IAdoptionRequestRepository>(REPOSITORY_TYPES.AdoptionRequestRepository)
+      .to(AdoptionRequestRepository)
       .inSingletonScope();
 
     bind<ICartRepository>(REPOSITORY_TYPES.CartRepository)

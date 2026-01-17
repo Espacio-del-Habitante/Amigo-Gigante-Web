@@ -315,15 +315,15 @@ export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }:
         </Typography>
       </Box>
 
-      <Box className="flex items-center justify-between text-xs md:text-sm">
+      <Box className="flex items-center justify-center px-2 text-xs md:text-sm">
         {steps.map((item, index) => {
           const isCompleted = step > item.step;
           const isActive = step === item.step;
           return (
-            <Box key={item.step} className="flex flex-1 items-center">
-              <Box className="flex flex-col items-center gap-2">
+            <Box key={item.step} className="flex items-center">
+              <Box className="flex flex-col items-center gap-1 md:gap-2 min-w-0">
                 <Box
-                  className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+                  className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full text-xs font-bold shrink-0 ${
                     isActive || isCompleted ? "bg-brand-500 text-neutral-50" : "bg-neutral-100 text-neutral-400"
                   }`}
                 >
@@ -331,14 +331,14 @@ export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }:
                 </Box>
                 <Typography
                   variant="caption"
-                  className={isActive ? "text-brand-500 font-bold" : "text-neutral-400"}
+                  className={`hidden md:block text-center whitespace-nowrap ${isActive ? "text-brand-500 font-bold" : "text-neutral-400"}`}
                 >
                   {item.label}
                 </Typography>
               </Box>
               {index < steps.length - 1 ? (
                 <Box
-                  className={`mx-2 h-1 flex-1 rounded-full ${
+                  className={`mx-1 md:mx-2 h-1 w-8 md:w-12 lg:w-16 rounded-full shrink-0 ${
                     step > item.step ? "bg-brand-500" : "bg-neutral-100"
                   }`}
                 />
