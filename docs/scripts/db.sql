@@ -184,6 +184,43 @@ create table adoption_request_documents (
 
   created_at timestamptz not null default now()
 );
+-- NOTIFICATIONS (in-app)
+create table notifications (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id) on delete cascade,
+
+  -- quién/qué originó el evento (opcional pero útil)
+  actor_user_id uuid references profiles(id) on delete set null,
+
+  title text not null,
+  body text,
+  type text not null, -- ej: 'adoption_request_created', 'adoption_status_changed'
+  data jsonb not null default '{}'::jsonb, -- { request_id, animal_id, foundation_id, new_status }
+
+  read_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+
+-- EMAIL QUEUE
+create table email_queue (
+  id bigint primary key generated always as identity,
+
+  user_id uuid references profiles(id) on delete set null,
+  to_email text not null,
+
+  template text not null,  -- ej: 'adoption_request_created', 'adoption_status_changed'
+  payload jsonb not null default '{}'::jsonb,
+
+  status text not null default 'pending'
+    check (status in ('pending','sending','sent','failed')),
+
+  attempts int not null default 0,
+  last_error text,
+
+  created_at timestamptz not null default now(),
+  sent_at timestamptz
+);
 
 
 
@@ -210,6 +247,12 @@ create index adoption_request_details_request_idx on adoption_request_details(re
 create index adoption_request_documents_request_idx on adoption_request_documents(request_id);
 create index adoption_request_documents_type_idx on adoption_request_documents(doc_type);
 
+create index notifications_user_created_idx on notifications(user_id, created_at desc);
+create index notifications_user_read_idx on notifications(user_id, read_at);
+
+create index email_queue_status_created_idx on email_queue(status, created_at);
+
+
 -- TRIGGERS
 create or replace function set_updated_at()
 returns trigger as $$
@@ -227,3 +270,171 @@ for each row execute function set_updated_at();
 create trigger trg_adoption_request_details_updated_at
 before update on adoption_request_details
 for each row execute function set_updated_at();
+
+
+create or replace function notify_foundation_members(
+  p_foundation_id uuid,
+  p_actor_user_id uuid,
+  p_title text,
+  p_body text,
+  p_type text,
+  p_data jsonb
+)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  insert into notifications(user_id, actor_user_id, title, body, type, data)
+  select fm.user_id, p_actor_user_id, p_title, p_body, p_type, p_data
+  from foundation_members fm
+  where fm.foundation_id = p_foundation_id;
+end;
+$$;
+
+
+create or replace function trg_adoption_request_created()
+returns trigger
+language plpgsql
+security definer
+as $$
+declare
+  v_animal_name text;
+begin
+  select a.name into v_animal_name
+  from animals a
+  where a.id = new.animal_id;
+
+  -- 1) Notificación al adoptante
+  insert into notifications(user_id, actor_user_id, title, body, type, data)
+  values (
+    new.adopter_user_id,
+    new.adopter_user_id,
+    'Solicitud enviada',
+    'Tu solicitud para ' || coalesce(v_animal_name,'la mascota') || ' fue creada y está en estado: ' || new.status,
+    'adoption_request_created',
+    jsonb_build_object(
+      'request_id', new.id,
+      'animal_id', new.animal_id,
+      'foundation_id', new.foundation_id,
+      'status', new.status
+    )
+  );
+
+  -- 2) Notificar a miembros de la fundación
+  perform notify_foundation_members(
+    new.foundation_id,
+    new.adopter_user_id,
+    'Nueva solicitud de adopción',
+    'Tienes una nueva solicitud para ' || coalesce(v_animal_name,'una mascota') || '.',
+    'adoption_request_created',
+    jsonb_build_object(
+      'request_id', new.id,
+      'animal_id', new.animal_id,
+      'foundation_id', new.foundation_id,
+      'status', new.status
+    )
+  );
+
+  -- 3) Encolar emails (si tienes email del adoptante en details, úsalo; si no, luego lo decides desde profiles)
+  -- Si estás guardando adopter_email en adoption_request_details, puedes encolar desde un trigger en details.
+  -- Aquí lo dejo opcional y simple: solo encola si existe adopter_email en details.
+  insert into email_queue(user_id, to_email, template, payload)
+  select
+    new.adopter_user_id,
+    d.adopter_email,
+    'adoption_request_created',
+    jsonb_build_object(
+      'request_id', new.id,
+      'animal_id', new.animal_id,
+      'foundation_id', new.foundation_id,
+      'status', new.status
+    )
+  from adoption_request_details d
+  where d.request_id = new.id
+    and d.adopter_email is not null
+    and length(d.adopter_email) > 3;
+
+  return new;
+end;
+$$;
+
+create trigger trg_adoption_request_created
+after insert on adoption_requests
+for each row execute function trg_adoption_request_created();
+
+
+create or replace function trg_adoption_request_status_changed()
+returns trigger
+language plpgsql
+security definer
+as $$
+declare
+  v_animal_name text;
+begin
+  if new.status = old.status then
+    return new;
+  end if;
+
+  select a.name into v_animal_name
+  from animals a
+  where a.id = new.animal_id;
+
+  -- Notificación al adoptante
+  insert into notifications(user_id, actor_user_id, title, body, type, data)
+  values (
+    new.adopter_user_id,
+    null, -- si quieres, luego pasas el actor desde tu backend (RPC) para saber quién cambió el estado
+    'Actualización de tu solicitud',
+    'La solicitud para ' || coalesce(v_animal_name,'la mascota') || ' cambió a: ' || new.status,
+    'adoption_status_changed',
+    jsonb_build_object(
+      'request_id', new.id,
+      'animal_id', new.animal_id,
+      'foundation_id', new.foundation_id,
+      'old_status', old.status,
+      'new_status', new.status
+    )
+  );
+
+  -- Notificar a miembros de fundación (opcional: solo si el cambio lo hizo el adoptante o si quieres que siempre llegue)
+  perform notify_foundation_members(
+    new.foundation_id,
+    null,
+    'Solicitud actualizada',
+    'La solicitud para ' || coalesce(v_animal_name,'una mascota') || ' cambió a: ' || new.status,
+    'adoption_status_changed',
+    jsonb_build_object(
+      'request_id', new.id,
+      'animal_id', new.animal_id,
+      'foundation_id', new.foundation_id,
+      'old_status', old.status,
+      'new_status', new.status
+    )
+  );
+
+  -- Encolar email al adoptante (si existe el email en details)
+  insert into email_queue(user_id, to_email, template, payload)
+  select
+    new.adopter_user_id,
+    d.adopter_email,
+    'adoption_status_changed',
+    jsonb_build_object(
+      'request_id', new.id,
+      'animal_id', new.animal_id,
+      'foundation_id', new.foundation_id,
+      'old_status', old.status,
+      'new_status', new.status
+    )
+  from adoption_request_details d
+  where d.request_id = new.id
+    and d.adopter_email is not null
+    and length(d.adopter_email) > 3;
+
+  return new;
+end;
+$$;
+
+create trigger trg_adoption_request_status_changed
+after update of status on adoption_requests
+for each row execute function trg_adoption_request_status_changed();

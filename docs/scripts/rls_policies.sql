@@ -457,6 +457,31 @@ with check (
   )
 );
 
+
+
+-- RLS
+alter table notifications enable row level security;
+
+-- El usuario solo ve sus notificaciones
+create policy "notifications_select_own"
+on notifications for select
+using (user_id = auth.uid());
+
+-- El usuario solo puede marcar como leída la suya
+create policy "notifications_update_own"
+on notifications for update
+using (user_id = auth.uid())
+with check (user_id = auth.uid());
+
+-- Nadie inserta desde el cliente (solo funciones/servicio)
+-- (No crees policy de insert)
+
+
+alter table email_queue enable row level security;
+
+-- No exposición al cliente
+-- (No crees policies, o solo service role si quieres)
+
 -- ============================================
 -- NOTAS IMPORTANTES
 -- ============================================
