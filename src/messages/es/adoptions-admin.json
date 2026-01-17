@@ -1,0 +1,165 @@
+{
+  "title": "Gestión de Solicitudes de Adopción",
+  "subtitle": "Revisa y gestiona las solicitudes para tus animales.",
+  "actions": {
+    "exportCsv": "Exportar CSV",
+    "viewDetail": "Ver detalle",
+    "requestInfo": "Solicitar información",
+    "reject": "Rechazar",
+    "approve": "Aprobar solicitud"
+  },
+  "filters": {
+    "search": {
+      "placeholder": "Buscar por animal o adoptante..."
+    },
+    "status": {
+      "label": "Estado",
+      "all": "Todos"
+    },
+    "priority": {
+      "label": "Prioridad",
+      "all": "Todas"
+    }
+  },
+  "table": {
+    "columns": {
+      "animal": "Animal",
+      "adopter": "Adoptante",
+      "priority": "Prioridad",
+      "status": "Estado",
+      "date": "Fecha",
+      "actions": "Acciones"
+    },
+    "empty": "No se encontraron solicitudes"
+  },
+  "pagination": {
+    "showing": "Mostrando {from} a {to} de {total} solicitudes"
+  },
+  "states": {
+    "loadingList": "Cargando solicitudes...",
+    "loadingDetail": "Cargando solicitud..."
+  },
+  "labels": {
+    "notAvailable": "No disponible",
+    "yes": "Sí",
+    "no": "No"
+  },
+  "status": {
+    "pending": "Pendiente",
+    "in_review": "En revisión",
+    "info_requested": "Info solicitada",
+    "preapproved": "Preaprobada",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "cancelled": "Cancelada",
+    "completed": "Completada"
+  },
+  "priority": {
+    "high": "Alta",
+    "medium": "Media",
+    "low": "Baja"
+  },
+  "errors": {
+    "generic": "Ocurrió un error al cargar las solicitudes. Inténtalo nuevamente.",
+    "connection": "No pudimos conectarnos al servidor. Revisa tu conexión e inténtalo nuevamente.",
+    "unauthorized": "No tienes permisos para gestionar estas solicitudes.",
+    "notFound": "No pudimos encontrar la solicitud solicitada."
+  },
+  "detail": {
+    "breadcrumb": {
+      "ariaLabel": "Navegación de solicitudes",
+      "list": "Solicitudes",
+      "detail": "Detalle"
+    },
+    "header": {
+      "title": "Solicitud para \"{animal}\"",
+      "submittedAt": "Enviada el {date}",
+      "requestId": "Solicitud #{id}"
+    },
+    "rejectionReason": "Motivo de rechazo: {reason}",
+    "profile": {
+      "title": "Perfil del adoptante",
+      "fields": {
+        "fullName": "Nombre completo",
+        "email": "Correo electrónico",
+        "phone": "Teléfono",
+        "city": "Ciudad",
+        "neighborhood": "Barrio",
+        "housingType": "Tipo de vivienda",
+        "ownership": "Propiedad",
+        "allowsPets": "Permite mascotas",
+        "householdPeople": "Personas en el hogar",
+        "hasChildren": "Tiene hijos",
+        "childrenAges": "Edades de los hijos",
+        "hasOtherPets": "Tiene otras mascotas",
+        "otherPets": "Otras mascotas"
+      }
+    },
+    "experience": {
+      "title": "Estilo de vida y experiencia",
+      "fields": {
+        "hoursAlone": "Horas solo por día",
+        "travelPlan": "Plan de viajes",
+        "vetCosts": "Acepta costos veterinarios",
+        "lifetimeCommitment": "Compromiso de por vida",
+        "experience": "Experiencia previa",
+        "motivation": "Motivación para adoptar"
+      }
+    },
+    "documents": {
+      "title": "Documentos de soporte",
+      "empty": "No hay documentos disponibles.",
+      "previewUnavailable": "Vista previa no disponible",
+      "actions": {
+        "view": "Ver",
+        "download": "Descargar"
+      },
+      "types": {
+        "id_document": "Documento de identidad",
+        "home_photos": "Fotos del hogar",
+        "vaccination_card": "Cartilla de vacunas",
+        "other": "Otro"
+      }
+    },
+    "housingType": {
+      "house": "Casa",
+      "apartment": "Departamento",
+      "other": "Otro"
+    },
+    "ownership": {
+      "rent": "Alquiler",
+      "own": "Propia"
+    },
+    "animal": {
+      "ageUnknown": "Edad no disponible",
+      "ageMonths": "{count} meses",
+      "ageYears": "{count} años",
+      "sex": {
+        "male": "Macho",
+        "female": "Hembra",
+        "unknown": "Desconocido"
+      },
+      "size": {
+        "small": "Pequeño",
+        "medium": "Mediano",
+        "large": "Grande",
+        "unknown": "Desconocido"
+      },
+      "species": {
+        "dog": "Perro",
+        "cat": "Gato",
+        "bird": "Ave",
+        "other": "Otro"
+      },
+      "breedUnknown": "Raza no disponible"
+    },
+    "rejectDialog": {
+      "title": "Rechazar solicitud",
+      "description": "Indica el motivo de rechazo para informar al adoptante.",
+      "placeholder": "Escribe el motivo de rechazo",
+      "required": "El motivo es obligatorio",
+      "cancel": "Cancelar",
+      "confirm": "Rechazar"
+    }
+  }
+}
