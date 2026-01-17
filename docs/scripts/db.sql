@@ -300,10 +300,16 @@ security definer
 as $$
 declare
   v_animal_name text;
+  v_adopter_email text;
 begin
   select a.name into v_animal_name
   from animals a
   where a.id = new.animal_id;
+
+  -- Obtener el email del adoptante desde auth.users
+  select email into v_adopter_email
+  from auth.users
+  where id = new.adopter_user_id;
 
   -- 1) Notificación al adoptante
   insert into notifications(user_id, actor_user_id, title, body, type, data)
@@ -325,9 +331,9 @@ begin
   perform notify_foundation_members(
     new.foundation_id,
     new.adopter_user_id,
-    'Nueva solicitud de adopción',
-    'Tienes una nueva solicitud para ' || coalesce(v_animal_name,'una mascota') || '.',
-    'adoption_request_created',
+    'Nueva solicitud de adopción'::text,
+    ('Tienes una nueva solicitud para ' || coalesce(v_animal_name,'una mascota') || '.')::text,
+    'adoption_request_created'::text,
     jsonb_build_object(
       'request_id', new.id,
       'animal_id', new.animal_id,
@@ -336,24 +342,21 @@ begin
     )
   );
 
-  -- 3) Encolar emails (si tienes email del adoptante en details, úsalo; si no, luego lo decides desde profiles)
-  -- Si estás guardando adopter_email en adoption_request_details, puedes encolar desde un trigger en details.
-  -- Aquí lo dejo opcional y simple: solo encola si existe adopter_email en details.
-  insert into email_queue(user_id, to_email, template, payload)
-  select
-    new.adopter_user_id,
-    d.adopter_email,
-    'adoption_request_created',
-    jsonb_build_object(
-      'request_id', new.id,
-      'animal_id', new.animal_id,
-      'foundation_id', new.foundation_id,
-      'status', new.status
-    )
-  from adoption_request_details d
-  where d.request_id = new.id
-    and d.adopter_email is not null
-    and length(d.adopter_email) > 3;
+  -- 3) Encolar email al adoptante (usando email de auth.users)
+  if v_adopter_email is not null and length(v_adopter_email) > 3 then
+    insert into email_queue(user_id, to_email, template, payload)
+    values (
+      new.adopter_user_id,
+      v_adopter_email,
+      'adoption_request_created',
+      jsonb_build_object(
+        'request_id', new.id,
+        'animal_id', new.animal_id,
+        'foundation_id', new.foundation_id,
+        'status', new.status
+      )
+    );
+  end if;
 
   return new;
 end;
@@ -371,6 +374,7 @@ security definer
 as $$
 declare
   v_animal_name text;
+  v_adopter_email text;
 begin
   if new.status = old.status then
     return new;
@@ -379,6 +383,11 @@ begin
   select a.name into v_animal_name
   from animals a
   where a.id = new.animal_id;
+
+  -- Obtener el email del adoptante desde auth.users
+  select email into v_adopter_email
+  from auth.users
+  where id = new.adopter_user_id;
 
   -- Notificación al adoptante
   insert into notifications(user_id, actor_user_id, title, body, type, data)
@@ -401,9 +410,9 @@ begin
   perform notify_foundation_members(
     new.foundation_id,
     null,
-    'Solicitud actualizada',
-    'La solicitud para ' || coalesce(v_animal_name,'una mascota') || ' cambió a: ' || new.status,
-    'adoption_status_changed',
+    'Solicitud actualizada'::text,
+    ('La solicitud para ' || coalesce(v_animal_name,'una mascota') || ' cambió a: ' || new.status)::text,
+    'adoption_status_changed'::text,
     jsonb_build_object(
       'request_id', new.id,
       'animal_id', new.animal_id,
@@ -413,23 +422,22 @@ begin
     )
   );
 
-  -- Encolar email al adoptante (si existe el email en details)
-  insert into email_queue(user_id, to_email, template, payload)
-  select
-    new.adopter_user_id,
-    d.adopter_email,
-    'adoption_status_changed',
-    jsonb_build_object(
-      'request_id', new.id,
-      'animal_id', new.animal_id,
-      'foundation_id', new.foundation_id,
-      'old_status', old.status,
-      'new_status', new.status
-    )
-  from adoption_request_details d
-  where d.request_id = new.id
-    and d.adopter_email is not null
-    and length(d.adopter_email) > 3;
+  -- Encolar email al adoptante (usando email de auth.users)
+  if v_adopter_email is not null and length(v_adopter_email) > 3 then
+    insert into email_queue(user_id, to_email, template, payload)
+    values (
+      new.adopter_user_id,
+      v_adopter_email,
+      'adoption_status_changed',
+      jsonb_build_object(
+        'request_id', new.id,
+        'animal_id', new.animal_id,
+        'foundation_id', new.foundation_id,
+        'old_status', old.status,
+        'new_status', new.status
+      )
+    );
+  end if;
 
   return new;
 end;
