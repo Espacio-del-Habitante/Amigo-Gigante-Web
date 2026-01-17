@@ -310,18 +310,31 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
   }
 
   private async ensureAdopterProfile(adopterUserId: string): Promise<void> {
-    const { error } = await supabaseClient
+    // Primero verificar si el perfil ya existe
+    const { data: existingProfile, error: selectError } = await supabaseClient
       .from("profiles")
-      .upsert(
-        {
-          id: adopterUserId,
-          role: "external",
-        },
-        { onConflict: "id" },
-      );
+      .select("id, role")
+      .eq("id", adopterUserId)
+      .single();
 
-    if (error) {
-      throw new Error(this.translateAdoptionError(error));
+    // Si hay un error que no sea "no encontrado", lanzar error
+    if (selectError && selectError.code !== "PGRST116") {
+      throw new Error(this.translateAdoptionError(selectError));
+    }
+
+    // Si el perfil ya existe, no hacer nada (preservar el rol existente)
+    if (existingProfile) {
+      return;
+    }
+
+    // Si el perfil no existe, crearlo con rol "external"
+    const { error: insertError } = await supabaseClient.from("profiles").insert({
+      id: adopterUserId,
+      role: "external",
+    });
+
+    if (insertError) {
+      throw new Error(this.translateAdoptionError(insertError));
     }
   }
 

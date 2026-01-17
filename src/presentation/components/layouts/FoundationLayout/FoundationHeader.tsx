@@ -4,8 +4,11 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
 import { AppBar, Avatar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 import { Logo } from "@/presentation/components/atoms";
+import { useAuth } from "@/presentation/hooks/useAuth";
+import { getInitialsFromEmail, getNameFromEmail } from "@/presentation/utils/userUtils";
 
 export interface FoundationHeaderProps {
   onOpenMenu: () => void;
@@ -13,6 +16,21 @@ export interface FoundationHeaderProps {
 
 export function FoundationHeader({ onOpenMenu }: FoundationHeaderProps) {
   const t = useTranslations("dashboard");
+  const { user, loading } = useAuth();
+
+  const displayName = useMemo(() => {
+    if (!user?.email) return t("header.user.name");
+    return getNameFromEmail(user.email);
+  }, [user?.email, t]);
+
+  const displayEmail = useMemo(() => {
+    return user?.email || t("header.user.email");
+  }, [user?.email, t]);
+
+  const initials = useMemo(() => {
+    if (!user?.email) return t("header.user.initials");
+    return getInitialsFromEmail(user.email);
+  }, [user?.email, t]);
 
   return (
     <AppBar
@@ -42,19 +60,21 @@ export function FoundationHeader({ onOpenMenu }: FoundationHeaderProps) {
           <IconButton aria-label={t("header.notifications")}>
             <NotificationsNoneRoundedIcon />
           </IconButton>
-          <Box className="flex items-center gap-3">
-            <Box className="hidden text-right sm:block">
-              <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                {t("header.user.name")}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {t("header.user.email")}
-              </Typography>
+          {!loading && (
+            <Box className="flex items-center gap-3">
+              <Box className="hidden text-right sm:block">
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                  {displayName}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {displayEmail}
+                </Typography>
+              </Box>
+              <Avatar sx={{ width: 40, height: 40, bgcolor: "primary.main" }}>
+                {initials}
+              </Avatar>
             </Box>
-            <Avatar sx={{ width: 40, height: 40, bgcolor: "primary.main" }}>
-              {t("header.user.initials")}
-            </Avatar>
-          </Box>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

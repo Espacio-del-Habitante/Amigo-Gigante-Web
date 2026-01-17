@@ -97,7 +97,7 @@ export function ShopInfoPanel({ product, foundation, formattedPrice, onAddToCart
           }}
         >
           <LocalShippingRoundedIcon color="primary" />
-          <Box>
+          <Box className="flex flex-col items-start">
             <Typography variant="caption" sx={{ fontWeight: 800, textTransform: "uppercase" }}>
               {t("highlights.shipping.title")}
             </Typography>
@@ -120,7 +120,7 @@ export function ShopInfoPanel({ product, foundation, formattedPrice, onAddToCart
           }}
         >
           <VerifiedUserRoundedIcon color="primary" />
-          <Box>
+          <Box className="flex flex-col items-start">
             <Typography variant="caption" sx={{ fontWeight: 800, textTransform: "uppercase" }}>
               {t("highlights.secure.title")}
             </Typography>

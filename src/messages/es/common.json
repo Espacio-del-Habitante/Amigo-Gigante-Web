@@ -11,6 +11,7 @@
   "buttons": {
     "search": "Buscar",
     "login": "Iniciar sesión",
+    "goToDashboard": "Admin. Panel",
     "register": "Registrarse",
     "cancel": "Cancelar",
     "applyFilters": "Aplicar filtros",

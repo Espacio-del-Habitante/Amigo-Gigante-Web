@@ -17,10 +17,10 @@ export function CartSummary({ subtotalLabel, totalLabel, itemCount }: CartSummar
     <Box
       sx={{
         backgroundColor: "background.paper",
-        borderRadius: 4,
-        border: "1px solid",
+        borderRadius: 2,
+
         borderColor: "divider",
-        boxShadow: theme.shadows[2],
+
         p: 4,
         position: { lg: "sticky" },
         top: { lg: 112 },

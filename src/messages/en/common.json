@@ -11,6 +11,7 @@
   "buttons": {
     "search": "Search",
     "login": "Log in",
+    "goToDashboard": "dashboard",
     "register": "Sign up",
     "cancel": "Cancel",
     "applyFilters": "Apply filters",

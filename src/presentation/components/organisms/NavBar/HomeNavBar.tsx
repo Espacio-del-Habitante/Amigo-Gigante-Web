@@ -12,6 +12,7 @@ import {
   List,
   ListItem,
   ListItemButton,
+  Skeleton,
   Stack,
   Toolbar,
   Typography,
@@ -32,6 +33,7 @@ import {
   SearchButton,
 } from "@/presentation/components/molecules";
 import { useCart } from "@/presentation/hooks/useCart";
+import { useAuth } from "@/presentation/hooks/useAuth";
 
 const cartPulse = keyframes`
   0% {
@@ -54,11 +56,27 @@ export function HomeNavBar() {
   const { totalItems } = useCart();
   const [isCartPulsing, setIsCartPulsing] = useState(false);
   const pulseTimeoutRef = useRef<number | null>(null);
+  const { isAuthenticated, role, loading: authLoading } = useAuth();
 
   const adoptHref = `/${locale}/adopt`;
   const foundationsHref = `/${locale}/foundations`;
   const shopHref = `/${locale}/shop`;
   const cartHref = `/${locale}/shop/cart`;
+
+  // Determinar la ruta del dashboard según el rol
+  const getDashboardHref = () => {
+    if (role === "admin") {
+      return `/${locale}/admin`;
+    } else if (role === "foundation_user") {
+      return `/${locale}/foundations`;
+    } else if (role === "external") {
+      return `/${locale}/external`;
+    }
+    return `/${locale}/foundations`; // Default
+  };
+
+  const loginButtonHref = isAuthenticated ? getDashboardHref() : `/${locale}/login`;
+  const loginButtonText = isAuthenticated ? t("buttons.goToDashboard") : t("buttons.login");
 
   const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
 
@@ -201,16 +219,28 @@ export function HomeNavBar() {
               </Badge>
             </MuiIconButton>
 
-            <Link href={`/${locale}/login`}>
-              <Button
-                tone="primary"
-                variant="solid"
-                rounded="pill"
-                sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}
-              >
-                {t("buttons.login")}
-              </Button>
-            </Link>
+            {authLoading ? (
+              <Skeleton
+                variant="rounded"
+                width={120}
+                height={36}
+                sx={{
+                  borderRadius: "999px",
+                  boxShadow: theme.shadows[2],
+                }}
+              />
+            ) : (
+              <Link href={loginButtonHref}>
+                <Button
+                  tone="primary"
+                  variant="solid"
+                  rounded="pill"
+                  sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}
+                >
+                  {loginButtonText}
+                </Button>
+              </Link>
+            )}
           </Stack>
         </Toolbar>
       </Container>
@@ -260,9 +290,26 @@ export function HomeNavBar() {
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <LanguageSelector fullWidth />
           </Box>
-          <Button fullWidth variant="solid" rounded="pill">
-            {t("buttons.login")}
-          </Button>
+          {authLoading ? (
+            <Skeleton
+              variant="rounded"
+              width="100%"
+              height={40}
+              sx={{
+                borderRadius: "999px",
+              }}
+            />
+          ) : (
+            <Button
+              fullWidth
+              variant="solid"
+              rounded="pill"
+              component={NextLink}
+              href={loginButtonHref}
+            >
+              {loginButtonText}
+            </Button>
+          )}
         </Stack>
       </Drawer>
     </AppBar>
