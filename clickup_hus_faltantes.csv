@@ -1,0 +1,2085 @@
+Task Name,Description,Status,Priority,Tags
+HU-029 — Gestión de Productos (Fundación) con Supabase,"# HU-029 — Gestión de Productos (Fundación) con Supabase
+
+**Como** usuario de una fundación  
+**Quiero** gestionar los productos de mi Tienda Solidaria  
+**Para** publicar, filtrar y administrar mi catálogo
+
+---
+
+## Dependencias
+
+- HU-005 (MUI configurado)
+- HU-007 (Tailwind configurado)
+- HU-010 (Atomic Design - componentes reutilizables)
+- HU-011 (Conexión a Supabase configurada)
+- HU-016 (Sistema de traducciones configurado)
+- HU-018 (Layout del dashboard de fundaciones con sidebar) - **REQUERIDO**
+
+---
+
+## Contexto / Notas
+
+- Esta HU implementa la **pantalla de gestión de productos** para fundaciones.
+- La UI debe seguir `docs/design/products_screen.png` y `docs/design/products_code.html`.
+- La ruta debe ser `/foundations/products`.
+- La data proviene de Supabase (`products`) filtrada por `foundation_id` del usuario.
+- **No existe categoría en BD** → el filtro “Category” del diseño se reemplaza por **rango de precio**.
+- El estado publicado se maneja con `is_published`.
+
+Modelo de datos (según `docs/scripts/db.sql`):
+- `products`:
+  - `id`, `foundation_id`, `name`, `description`, `price`, `image_url`, `is_published`, `created_at`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Diseño: `docs/design/products_code.html`
+- Imagen: `docs/design/products_screen.png`
+- Design System: `docs/design/system.md`
+- Esquema BD: `docs/scripts/db.sql`
+
+Estructura de la página:
+- Sidebar (layout de fundaciones)
+- Header con:
+  - Título “Product Management”
+  - Subtítulo
+  - Botón “Add New Product”
+- Barra de búsqueda y filtros:
+  - Search input (name/description)
+  - Filtro de Status (All / Published / Draft)
+  - Filtro de Price (All / <$10 / $10–$25 / $25+)
+- Tabla:
+  - Image
+  - Product Details (name + description)
+  - Price
+  - Published (toggle)
+  - Actions (Edit/Delete en hover)
+- Paginación
+
+Reglas:
+- Respetar jerarquía visual del diseño.
+- Usar tokens del Design System.
+- Tabla responsive con scroll horizontal.
+
+---
+
+## Alcance
+
+Incluye:
+- Crear página `/foundations/products`
+- Renderizar tabla con productos de la fundación
+- Búsqueda por nombre/descripcion
+- Filtro por status (is_published)
+- Filtro por rango de precio (derivado de `price`)
+- Paginación server-side
+- Toggle de publicado (actualiza `is_published`)
+- Botón “Add New Product” navega a `/foundations/products/new` (HU-030)
+- Estados de loading y error
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Categorías (no existen en BD)
+- Carrito o checkout
+- Edición completa (HU futura o HU-030 si se extiende)
+- Eliminación definitiva (solo UI si no se define flujo)
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Página creada y accesible
+
+- **Dado** que soy usuario de fundación
+- **Cuando** navego a `/foundations/products`
+- **Entonces** veo la gestión de productos
+- **Y** el layout usa el sidebar de fundaciones
+
+---
+
+### 2) Lista de productos por fundación
+
+- **Dado** productos en Supabase
+- **Cuando** carga la página
+- **Entonces** se consultan productos con `foundation_id` del usuario
+- **Y** se muestran en la tabla
+
+---
+
+### 3) Búsqueda funcional
+
+- **Dado** que escribo en el buscador
+- **Cuando** busco por nombre o descripción
+- **Entonces** la tabla se filtra correctamente
+
+---
+
+### 4) Filtro de status
+
+- **Dado** el filtro de status
+- **Cuando** selecciono Published/Draft
+- **Entonces** se filtra por `is_published = true/false`
+
+---
+
+### 5) Filtro de precio
+
+- **Dado** el filtro de precio
+- **Cuando** selecciono un rango
+- **Entonces** se filtran productos por `price` en ese rango
+
+---
+
+### 6) Toggle de publicado
+
+- **Dado** un producto en la tabla
+- **Cuando** cambio el toggle de Published
+- **Entonces** se actualiza `is_published` en Supabase
+- **Y** el estado visual se actualiza
+
+---
+
+### 7) Paginación server-side
+
+- **Dado** muchos productos
+- **Cuando** cambio de página
+- **Entonces** se consulta Supabase con `range()`
+- **Y** se actualiza la tabla
+
+---
+
+### 8) Botón Add New Product
+
+- **Dado** el botón “Add New Product”
+- **Cuando** hago clic
+- **Entonces** navego a `/foundations/products/new`
+
+---
+
+### 9) Estados de loading y error
+
+- **Dado** que se consulta Supabase
+- **Cuando** se carga la tabla
+- **Entonces** se muestra loading
+- **Y** se manejan errores con mensaje traducido
+
+---
+
+### 10) Traducciones
+
+- **Dado** que se implementa la UI
+- **Cuando** se revisa el código
+- **Entonces** todos los textos usan `useTranslations`
+- **Y** existen traducciones en `src/messages/es/products.json` y `src/messages/en/products.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Queries
+- Productos:
+  - `SELECT * FROM products WHERE foundation_id = :foundationId`
+- Filtros:
+  - status: `is_published = true/false`
+  - price range: `price >= min AND price <= max`
+  - search: `name ILIKE %q% OR description ILIKE %q%`
+- Paginación:
+  - `range(from, to)` con `count: 'exact'`
+
+### Traducciones
+- Usar `useTranslations('products')`.
+- No hardcodear textos.
+
+---
+
+## Implementación sugerida
+
+```
+src/app/[locale]/foundations/products/page.tsx
+
+src/presentation/components/products/
+├── ProductsManagementPage.tsx
+├── ProductsFilters.tsx
+├── ProductsTable.tsx
+├── ProductsPagination.tsx
+└── ProductPublishToggle.tsx
+
+src/domain/
+├── repositories/
+│   └── IProductRepository.ts (getProducts, updatePublishStatus)
+└── usecases/
+    └── products/
+        └── GetProductsUseCase.ts
+
+src/infrastructure/
+├── repositories/
+│   └── ProductRepository.ts (implementación Supabase)
+└── ioc/
+    └── bindings actualizados
+
+src/messages/
+├── es/
+│   └── products.json
+└── en/
+    └── products.json
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Lista correcta desde Supabase
+- Filtros y búsqueda funcionan
+- Toggle publicado actualiza BD
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Página de gestión creada
+- [ ] Filtros y búsqueda funcionales
+- [ ] Toggle de publicación funcional
+- [ ] Paginación server-side
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add products management page with supabase data`
+
+",Backlog,Normal,HU
+HU-030 — Crear Producto (Fundación) con Supabase,"# HU-030 — Crear Producto (Fundación) con Supabase
+
+**Como** usuario de una fundación  
+**Quiero** agregar un nuevo producto a mi Tienda Solidaria  
+**Para** publicarlo y recaudar fondos
+
+---
+
+## Dependencias
+
+- HU-014 (Formik y Yup configurados)
+- HU-016 (Sistema de traducciones configurado)
+- HU-018 (Layout del dashboard de fundaciones con sidebar) - **REQUERIDO**
+- HU-029 (Gestión de productos) - **REQUERIDO**
+- HU-011 (Conexión a Supabase configurada)
+
+---
+
+## Contexto / Notas
+
+- Esta HU implementa la **pantalla de creación de producto** desde la gestión de tienda.
+- La UI debe seguir `docs/design/add_product.png` y `docs/design/add_product_code.html`.
+- La ruta debe ser `/foundations/products/new`.
+- Los datos se guardan en `products`.
+- **No existe categoría ni stock en BD** → no se incluyen campos de categoría/stock.
+- El campo de imagen se mapea a `image_url`.
+
+Modelo de datos (según `docs/scripts/db.sql`):
+- `products`: `id`, `foundation_id`, `name`, `description`, `price`, `image_url`, `is_published`, `created_at`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Diseño: `docs/design/add_product_code.html`
+- Imagen: `docs/design/add_product.png`
+- Design System: `docs/design/system.md`
+- Esquema BD: `docs/scripts/db.sql`
+
+Estructura del formulario:
+- Breadcrumbs
+- Header (título + subtítulo)
+- Form Card:
+  - Product Name
+  - Price (USD)
+  - Description
+  - Product Image (upload)
+  - Visibility (toggle)
+  - Botones: Cancel / Save Product
+- Footer hint
+
+Reglas:
+- Respetar jerarquía visual del diseño.
+- Usar tokens del Design System.
+- Validaciones visibles con Formik/Yup.
+- Responsive.
+
+---
+
+## Alcance
+
+Incluye:
+- Crear página `/foundations/products/new`
+- Formulario completo con Formik y Yup
+- Validación de campos
+- Guardar producto en Supabase
+- Asociar `foundation_id` automáticamente
+- Guardar `image_url` (subida a Storage o URL directa)
+- Manejar `is_published`
+- Estados de loading y error
+- Redirección a `/foundations/products` tras crear
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Edición de productos (HU futura)
+- Upload avanzado (redimensionado, múltiples imágenes)
+- Categorías o stock
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Página de creación accesible
+
+- **Dado** la gestión de productos
+- **Cuando** hago clic en “Add New Product”
+- **Entonces** navego a `/foundations/products/new`
+- **Y** veo el formulario completo
+
+---
+
+### 2) Validaciones del formulario
+
+- **Dado** el formulario vacío
+- **Cuando** intento guardar
+- **Entonces** se muestran errores:
+  - Product Name requerido
+  - Price requerido y >= 0
+  - Description requerida
+  - Image requerida
+
+---
+
+### 3) Creación en Supabase
+
+- **Dado** datos válidos
+- **Cuando** envío el formulario
+- **Entonces** se crea un registro en `products`
+- **Y** `foundation_id` corresponde a la fundación del usuario
+- **Y** `is_published` se guarda según toggle
+
+---
+
+### 4) Imagen del producto
+
+- **Dado** que subo una imagen
+- **Cuando** guardo el producto
+- **Entonces** se guarda `image_url` en la BD
+- **Y** se ve en la tabla de HU-029
+
+---
+
+### 5) Estados de loading y error
+
+- **Dado** que se envía el formulario
+- **Cuando** Supabase procesa la solicitud
+- **Entonces** se muestra loading
+- **Y** si hay error se muestra mensaje traducido
+
+---
+
+### 6) Redirección
+
+- **Dado** creación exitosa
+- **Cuando** finaliza el proceso
+- **Entonces** se redirige a `/foundations/products`
+- **Y** el producto aparece en la lista
+
+---
+
+### 7) Traducciones
+
+- **Dado** la UI implementada
+- **Cuando** se revisa el código
+- **Entonces** todos los textos usan `useTranslations`
+- **Y** existen traducciones en `src/messages/es/product-form.json` y `src/messages/en/product-form.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Inserción
+- Insert:
+  - `INSERT INTO products (foundation_id, name, description, price, image_url, is_published)`
+- Obtener `foundation_id` desde `foundation_members`.
+
+### Imagen
+- Si existe Storage configurado:
+  - Subir archivo a bucket (ej: `products`)
+  - Generar URL pública y guardar en `image_url`
+- Si no hay Storage:
+  - Permitir input de URL directa
+- No inventar campos adicionales.
+
+### Traducciones
+- Usar `useTranslations('productForm')`.
+- No hardcodear textos.
+
+---
+
+## Implementación sugerida
+
+```
+src/app/[locale]/foundations/products/new/page.tsx
+
+src/presentation/components/products/
+├── ProductFormPage.tsx
+├── ProductForm.tsx
+└── productFormValidation.ts
+
+src/domain/
+├── repositories/
+│   └── IProductRepository.ts (createProduct)
+└── usecases/
+    └── products/
+        └── CreateProductUseCase.ts
+
+src/infrastructure/
+├── repositories/
+│   └── ProductRepository.ts (createProduct + upload)
+└── ioc/
+    └── bindings actualizados
+
+src/messages/
+├── es/
+│   └── product-form.json
+└── en/
+    └── product-form.json
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Formulario funciona y valida
+- Producto se crea en Supabase
+- Redirección correcta
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Página de creación creada
+- [ ] Producto creado en Supabase
+- [ ] `foundation_id` asignado correctamente
+- [ ] `image_url` guardado
+- [ ] Redirección a lista
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add product creation form with supabase`
+
+",Backlog,Normal,HU
+HU-031 — Editar Animal (Fundación) con Supabase,"# HU-031 — Editar Animal (Fundación) con Supabase
+
+**Como** usuario de una fundación  
+**Quiero** editar los datos de un animal existente  
+**Para** mantener actualizado su perfil en el catálogo
+
+---
+
+## Dependencias
+
+- HU-011 (Conexión a Supabase configurada)
+- HU-013 (Estrategia de roles y protección de rutas definida)
+- HU-014 (Formik y Yup configurados)
+- HU-016 (Sistema de traducciones configurado)
+- HU-018 (Layout del dashboard de fundaciones con sidebar) - **REQUERIDO**
+- HU-023 (Gestión de animales con Supabase) - **REQUERIDO**
+- HU-024 (Agregar animal) - **REQUERIDO**
+
+---
+
+## Contexto / Notas
+
+- Esta HU permite **editar un animal existente** usando el mismo formulario de HU-024.
+- La ruta debe ser `/foundations/animals/[id]/edit`.
+- Los datos se cargan desde `animals` y `animal_photos`.
+- El usuario solo puede editar animales de su propia fundación.
+- La edición debe permitir actualizar:
+  - Campos básicos del animal
+  - Descripción
+  - Estado y publicación
+  - Imágenes (agregar/eliminar/reordenar si aplica)
+- El modelo de datos es el de `docs/scripts/db.sql`.
+
+Modelo de datos:
+- `animals`: `id`, `foundation_id`, `name`, `species`, `breed`, `sex`, `age_months`, `size`, `status`, `description`, `cover_image_url`, `is_published`, `created_at`
+- `animal_photos`: `animal_id`, `url`, `sort_order`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Diseño: `docs/design/add_animals_code.html`
+- Imagen: `docs/design/add_animals_screen.png`
+- Design System: `docs/design/system.md`
+- Esquema BD: `docs/scripts/db.sql`
+
+Reglas:
+- Reutilizar el diseño del formulario de HU-024.
+- El título y breadcrumbs deben indicar **edición**.
+- Los campos deben estar prellenados con los datos actuales.
+- Debe mantener validaciones y UI de HU-024.
+
+---
+
+## Alcance
+
+Incluye:
+- Crear página `/foundations/animals/[id]/edit`
+- Cargar datos del animal desde Supabase
+- Prellenar el formulario con datos existentes
+- Actualizar campos en `animals`
+- Manejar imágenes:
+  - Mantener imágenes actuales
+  - Agregar nuevas imágenes
+  - Eliminar imágenes existentes
+  - Actualizar `cover_image_url`
+- Guardar cambios como borrador o publicado
+- Redirección a `/foundations/animals` al guardar
+- Estados de loading y error
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Crear animales nuevos (HU-024)
+- Eliminar animales (HU-032)
+- Historial de cambios
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Ruta de edición creada
+
+- **Dado** un animal existente
+- **Cuando** navego a `/foundations/animals/[id]/edit`
+- **Entonces** veo el formulario de edición
+- **Y** el layout usa el dashboard de fundaciones
+
+---
+
+### 2) Datos prellenados
+
+- **Dado** un animal con datos en BD
+- **Cuando** se carga la página
+- **Entonces** los campos se prellenan con los valores actuales
+
+---
+
+### 3) Actualización de datos básicos
+
+- **Dado** cambios en nombre, raza, edad, género, tamaño
+- **Cuando** guardo
+- **Entonces** se actualizan en `animals`
+
+---
+
+### 4) Actualización de descripción y estado
+
+- **Dado** cambios en descripción o status
+- **Cuando** guardo
+- **Entonces** se actualizan en `animals`
+
+---
+
+### 5) Manejo de imágenes
+
+- **Dado** imágenes actuales del animal
+- **Cuando** agrego o elimino imágenes
+- **Entonces** se actualizan los registros en `animal_photos`
+- **Y** `cover_image_url` se ajusta a la primera imagen
+
+---
+
+### 6) Guardar como borrador o publicar
+
+- **Dado** el toggle de publicación
+- **Cuando** guardo cambios
+- **Entonces** `is_published` se actualiza según selección
+
+---
+
+### 7) Validaciones
+
+- **Dado** campos requeridos vacíos
+- **Cuando** intento guardar
+- **Entonces** se muestran errores validados por Yup
+
+---
+
+### 8) Estados de loading y error
+
+- **Dado** que se guarda el formulario
+- **Cuando** Supabase procesa la solicitud
+- **Entonces** se muestra loading
+- **Y** se maneja error con mensaje traducido
+
+---
+
+### 9) Traducciones
+
+- **Dado** que se implementa la UI
+- **Cuando** se revisa el código
+- **Entonces** todos los textos usan `useTranslations`
+- **Y** existen traducciones en `src/messages/es/animals.json` y `src/messages/en/animals.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Queries
+- Obtener animal:
+  - `SELECT * FROM animals WHERE id = :id AND foundation_id = :foundationId`
+- Actualizar:
+  - `UPDATE animals SET ... WHERE id = :id AND foundation_id = :foundationId`
+- Fotos:
+  - `SELECT * FROM animal_photos WHERE animal_id = :id ORDER BY sort_order`
+  - Insertar nuevas fotos
+  - Eliminar fotos removidas
+
+### Traducciones
+- Usar `useTranslations('animals')`.
+- No hardcodear textos.
+
+---
+
+## Implementación sugerida
+
+```
+src/app/[locale]/foundations/animals/[id]/edit/page.tsx
+
+src/presentation/components/animals/
+├── EditAnimalForm.tsx
+└── addAnimalValidation.ts (reutilizable)
+
+src/domain/
+├── repositories/
+│   └── IAnimalRepository.ts (add getAnimalById, updateAnimal)
+└── usecases/
+    └── animals/
+        └── UpdateAnimalUseCase.ts
+
+src/infrastructure/
+└── repositories/
+    └── AnimalRepository.ts (implementación Supabase)
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Datos prellenados
+- Actualización exitosa
+- Imágenes actualizadas
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Página de edición creada
+- [ ] Actualización en Supabase funcionando
+- [ ] Manejo de imágenes funcionando
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add edit animal form with supabase`
+
+",Backlog,Normal,HU
+HU-032 — Modal Genérico de Eliminación + Eliminar Animal,"# HU-032 — Modal Genérico de Eliminación + Eliminar Animal
+
+**Como** usuario de una fundación  
+**Quiero** eliminar un animal con confirmación  
+**Para** evitar eliminaciones accidentales
+
+---
+
+## Dependencias
+
+- HU-011 (Conexión a Supabase configurada)
+- HU-016 (Sistema de traducciones configurado)
+- HU-018 (Layout del dashboard de fundaciones con sidebar) - **REQUERIDO**
+- HU-023 (Gestión de animales con Supabase) - **REQUERIDO**
+- HU-031 (Editar animal) - **REQUERIDO**
+
+---
+
+## Contexto / Notas
+
+- Esta HU implementa un **modal genérico de eliminación** reutilizable para otras entidades.
+- Se usa para eliminar animales en la gestión de animales.
+- El diseño está en `docs/design/delete_generic_screen.png` y `docs/design/delete_generic_.html`.
+- El modal debe recibir props de configuración (título, mensaje, confirmación, callback).
+- La eliminación real se realiza en Supabase (`animals`).
+
+Modelo de datos:
+- `animals`: `id`, `foundation_id`, `name`, `status`, `is_published`
+- `animal_photos`: `animal_id`, `url`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Diseño: `docs/design/delete_generic_.html`
+- Imagen: `docs/design/delete_generic_screen.png`
+- Design System: `docs/design/system.md`
+
+Estructura del modal:
+- Ícono de advertencia
+- Título: “¿Estás seguro de eliminar este producto?” (adaptable)
+- Texto descriptivo
+- Botón “Cancelar”
+- Botón “Sí, eliminar” (primario rojo)
+- Fondo con overlay y blur
+
+Reglas:
+- Modal centrado
+- Overlay oscurecido
+- Acciones visibles
+- Responsive
+
+---
+
+## Alcance
+
+Incluye:
+- Crear componente `ConfirmDeleteModal` reutilizable
+- Propiedades configurables: title, description, confirmLabel, cancelLabel
+- Hook o handler de confirmación
+- Integración en gestión de animales:
+  - Botón eliminar abre modal
+  - Confirmación elimina en Supabase
+  - Refresca tabla
+- Estados de loading y error
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Eliminación de otras entidades (se habilitará en HUs futuras)
+- Undo de eliminación
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Modal genérico creado
+
+- **Dado** que necesito confirmar eliminación
+- **Cuando** se abre el modal
+- **Entonces** se muestra con el diseño definido
+- **Y** los textos son configurables
+
+---
+
+### 2) Modal reutilizable
+
+- **Dado** que el modal es genérico
+- **Cuando** lo reutilizo para otras entidades
+- **Entonces** puedo cambiar título y mensaje sin reescribir el componente
+
+---
+
+### 3) Eliminación de animal
+
+- **Dado** un animal en la tabla
+- **Cuando** hago clic en eliminar y confirmo
+- **Entonces** se elimina en Supabase
+- **Y** desaparece de la tabla
+
+---
+
+### 4) Restricción por fundación
+
+- **Dado** un usuario de fundación
+- **Cuando** intenta eliminar un animal
+- **Entonces** solo puede eliminar animales de su propia fundación
+
+---
+
+### 5) Estados de loading y error
+
+- **Dado** que se elimina un animal
+- **Cuando** Supabase procesa la solicitud
+- **Entonces** se muestra loading
+- **Y** si hay error se muestra mensaje traducido
+
+---
+
+### 6) Traducciones
+
+- **Dado** la UI implementada
+- **Cuando** se revisa el código
+- **Entonces** todos los textos usan `useTranslations`
+- **Y** existen traducciones en `src/messages/es/common.json` y `src/messages/en/common.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Eliminación
+- `DELETE FROM animals WHERE id = :id AND foundation_id = :foundationId`
+- Si hay `animal_photos`, se eliminan en cascada (FK con `ON DELETE CASCADE`).
+
+### Traducciones
+- Usar namespace `common` para textos de modal genérico.
+- No hardcodear textos.
+
+---
+
+## Implementación sugerida
+
+```
+src/presentation/components/common/
+└── ConfirmDeleteModal.tsx
+
+src/domain/
+└── usecases/animals/
+    └── DeleteAnimalUseCase.ts
+
+src/infrastructure/
+└── repositories/
+    └── AnimalRepository.ts (deleteAnimal)
+
+src/messages/
+├── es/
+│   └── common.json
+└── en/
+    └── common.json
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Modal se ve igual al diseño
+- Eliminación funciona
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Modal genérico creado y reutilizable
+- [ ] Eliminación de animales funciona
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add generic delete modal and delete animal flow`
+
+",Backlog,Normal,HU
+HU-033 — Editar Producto (Fundación) con Supabase,"# HU-033 — Editar Producto (Fundación) con Supabase
+
+**Como** usuario de una fundación  
+**Quiero** editar los datos de un producto existente  
+**Para** mantener actualizado mi catálogo en la Tienda Solidaria
+
+---
+
+## Dependencias
+
+- HU-014 (Formik y Yup configurados)
+- HU-016 (Sistema de traducciones configurado)
+- HU-018 (Layout del dashboard de fundaciones con sidebar) - **REQUERIDO**
+- HU-029 (Gestión de productos) - **REQUERIDO**
+- HU-030 (Crear producto) - **REQUERIDO**
+- HU-011 (Conexión a Supabase configurada)
+
+---
+
+## Contexto / Notas
+
+- Esta HU implementa la **edición de productos** usando el mismo formulario de HU-030.
+- La ruta debe ser `/foundations/products/[id]/edit`.
+- Los datos se cargan desde `products`.
+- El usuario solo puede editar productos de su propia fundación.
+- El formulario debe estar prellenado con los valores actuales.
+- El modelo de datos es el de `docs/scripts/db.sql`.
+
+Modelo de datos:
+- `products`: `id`, `foundation_id`, `name`, `description`, `price`, `image_url`, `is_published`, `created_at`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Diseño: `docs/design/add_product_code.html`
+- Imagen: `docs/design/add_product.png`
+- Design System: `docs/design/system.md`
+- Esquema BD: `docs/scripts/db.sql`
+
+Reglas:
+- Reutilizar el diseño del formulario de HU-030.
+- El título y breadcrumbs deben indicar **edición**.
+- Campos prellenados con datos actuales.
+- Mantener validaciones y estados visuales.
+
+---
+
+## Alcance
+
+Incluye:
+- Crear página `/foundations/products/[id]/edit`
+- Cargar datos del producto desde Supabase
+- Prellenar el formulario
+- Actualizar `products` en Supabase
+- Actualizar `image_url` si cambia la imagen
+- Manejar `is_published`
+- Estados de loading y error
+- Redirección a `/foundations/products` al guardar
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Creación de productos (HU-030)
+- Eliminación de productos (HU-034)
+- Historial de cambios
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Ruta de edición creada
+
+- **Dado** un producto existente
+- **Cuando** navego a `/foundations/products/[id]/edit`
+- **Entonces** veo el formulario de edición
+- **Y** el layout usa el dashboard de fundaciones
+
+---
+
+### 2) Datos prellenados
+
+- **Dado** un producto con datos en BD
+- **Cuando** se carga la página
+- **Entonces** los campos se prellenan con los valores actuales
+
+---
+
+### 3) Actualización de datos básicos
+
+- **Dado** cambios en nombre, precio o descripción
+- **Cuando** guardo
+- **Entonces** se actualizan en `products`
+
+---
+
+### 4) Actualización de imagen
+
+- **Dado** una nueva imagen seleccionada
+- **Cuando** guardo
+- **Entonces** se actualiza `image_url` en BD
+- **Y** se muestra la nueva imagen en la lista
+
+---
+
+### 5) Publicación
+
+- **Dado** el toggle de visibilidad
+- **Cuando** guardo cambios
+- **Entonces** `is_published` se actualiza según selección
+
+---
+
+### 6) Validaciones
+
+- **Dado** campos requeridos vacíos
+- **Cuando** intento guardar
+- **Entonces** se muestran errores de validación (Formik/Yup)
+
+---
+
+### 7) Estados de loading y error
+
+- **Dado** que se guarda el formulario
+- **Cuando** Supabase procesa la solicitud
+- **Entonces** se muestra loading
+- **Y** se muestra error traducido si falla
+
+---
+
+### 8) Traducciones
+
+- **Dado** la UI implementada
+- **Cuando** se revisa el código
+- **Entonces** todos los textos usan `useTranslations`
+- **Y** existen traducciones en `src/messages/es/product-form.json` y `src/messages/en/product-form.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Queries
+- Obtener producto:
+  - `SELECT * FROM products WHERE id = :id AND foundation_id = :foundationId`
+- Actualizar:
+  - `UPDATE products SET ... WHERE id = :id AND foundation_id = :foundationId`
+
+### Imagen
+- Si existe Storage:
+  - Subir archivo y guardar URL pública
+- Si no hay Storage:
+  - Permitir URL directa
+
+### Traducciones
+- Usar `useTranslations('productForm')`.
+- No hardcodear textos.
+
+---
+
+## Implementación sugerida
+
+```
+src/app/[locale]/foundations/products/[id]/edit/page.tsx
+
+src/presentation/components/products/
+├── ProductForm.tsx (reutilizable)
+└── productFormValidation.ts
+
+src/domain/
+├── repositories/
+│   └── IProductRepository.ts (getProductById, updateProduct)
+└── usecases/
+    └── products/
+        └── UpdateProductUseCase.ts
+
+src/infrastructure/
+└── repositories/
+    └── ProductRepository.ts (implementación Supabase)
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Formulario prellenado
+- Actualización en Supabase
+- Redirección correcta
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Página de edición creada
+- [ ] Actualización en Supabase funcionando
+- [ ] Imagen actualizada correctamente
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add edit product form with supabase`
+
+",Backlog,Normal,HU
+HU-034 — Modal Genérico de Eliminación + Eliminar Producto,"# HU-034 — Modal Genérico de Eliminación + Eliminar Producto
+
+**Como** usuario de una fundación  
+**Quiero** eliminar un producto con confirmación  
+**Para** evitar eliminaciones accidentales en la Tienda Solidaria
+
+---
+
+## Dependencias
+
+- HU-011 (Conexión a Supabase configurada)
+- HU-016 (Sistema de traducciones configurado)
+- HU-018 (Layout del dashboard de fundaciones con sidebar) - **REQUERIDO**
+- HU-029 (Gestión de productos) - **REQUERIDO**
+- HU-032 (Modal genérico de eliminación) - **REQUERIDO**
+
+---
+
+## Contexto / Notas
+
+- Esta HU reutiliza el **modal genérico de eliminación** (HU-032) para productos.
+- El diseño del modal está en `docs/design/delete_generic_screen.png` y `docs/design/delete_generic_.html`.
+- La eliminación real se realiza en Supabase (`products`).
+- El usuario solo puede eliminar productos de su propia fundación.
+
+Modelo de datos:
+- `products`: `id`, `foundation_id`, `name`, `is_published`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Diseño: `docs/design/delete_generic_.html`
+- Imagen: `docs/design/delete_generic_screen.png`
+- Design System: `docs/design/system.md`
+
+Reglas:
+- Reutilizar el modal genérico.
+- Textos específicos para producto.
+- Botón primario rojo para confirmar.
+
+---
+
+## Alcance
+
+Incluye:
+- Integrar modal genérico en gestión de productos
+- Abrir modal al hacer clic en “Delete”
+- Eliminar producto en Supabase
+- Refrescar la tabla
+- Estados de loading y error
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Undo de eliminación
+- Eliminación de otras entidades
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Modal de confirmación para producto
+
+- **Dado** un producto en la tabla
+- **Cuando** hago clic en eliminar
+- **Entonces** se abre el modal genérico con texto de producto
+
+---
+
+### 2) Eliminación en Supabase
+
+- **Dado** confirmación del usuario
+- **Cuando** confirmo “Sí, eliminar”
+- **Entonces** el producto se elimina en Supabase
+- **Y** desaparece de la tabla
+
+---
+
+### 3) Restricción por fundación
+
+- **Dado** un usuario de fundación
+- **Cuando** elimina un producto
+- **Entonces** solo puede eliminar productos de su propia fundación
+
+---
+
+### 4) Estados de loading y error
+
+- **Dado** que se elimina un producto
+- **Cuando** Supabase procesa la solicitud
+- **Entonces** se muestra loading
+- **Y** si hay error se muestra mensaje traducido
+
+---
+
+### 5) Traducciones
+
+- **Dado** la UI implementada
+- **Cuando** se revisa el código
+- **Entonces** los textos usan `useTranslations`
+- **Y** existen traducciones en `src/messages/es/common.json` y `src/messages/en/common.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Eliminación
+- `DELETE FROM products WHERE id = :id AND foundation_id = :foundationId`
+
+### Traducciones
+- Usar namespace `common` (modal genérico).
+
+---
+
+## Implementación sugerida
+
+```
+src/presentation/components/common/ConfirmDeleteModal.tsx (reutilizado)
+
+src/domain/
+└── usecases/products/
+    └── DeleteProductUseCase.ts
+
+src/infrastructure/
+└── repositories/
+    └── ProductRepository.ts (deleteProduct)
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Modal se ve igual al diseño
+- Eliminación funciona
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Eliminación de productos funciona
+- [ ] Modal genérico reutilizado
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add delete product flow using generic modal`
+
+",Backlog,Normal,HU
+HU-035 — Detalle de Producto + Carrito de Compras (UI + Supabase),"# HU-035 — Detalle de Producto + Carrito de Compras (UI + Supabase)
+
+**Como** usuario externo  
+**Quiero** ver el detalle de un producto y gestionar un carrito de compras  
+**Para** comprar productos de fundaciones con una experiencia completa
+
+---
+
+## Dependencias
+
+- HU-001 (Next.js App Router)
+- HU-007 (Tailwind configurado)
+- HU-010 (Atomic Design - componentes reutilizables)
+- HU-011 (Conexión a Supabase configurada)
+- HU-016 (Sistema de traducciones configurado)
+- HU-028 (Tienda Solidaria implementada)
+
+---
+
+## Contexto / Notas
+
+- Esta HU implementa el **detalle de producto** y el **carrito de compras**.
+- La UI debe seguir los diseños:
+  - `docs/design/info_shop_screen.png` + `docs/design/info_shop_code.html`
+  - `docs/design/car_shop_screen.png` + `docs/design/car_shop_code.html`
+- Las rutas sugeridas:
+  - Detalle: `/shop/[id]` (o `app/[locale]/shop/[id]/page.tsx`)
+  - Carrito: `/shop/cart` (o `app/[locale]/shop/cart/page.tsx`)
+- La data proviene de Supabase según `docs/scripts/db.sql`:
+  - `products` + `foundations`
+- **No existen** categorías, stock, variantes, reseñas, descuentos ni tamaños en BD.
+  - Esos elementos del diseño se **ocultan o muestran como UI estática sin datos** cuando corresponda.
+  - **No se inventan datos**.
+- El carrito **no tiene tabla en BD**:
+  - Se implementa como estado persistente en cliente (ej. localStorage).
+  - El **detalle y precios** siempre se consultan desde Supabase usando los `product_id` del carrito.
+
+Modelo de datos disponible:
+- `products`: `id`, `foundation_id`, `name`, `description`, `price`, `image_url`, `is_published`, `created_at`
+- `foundations`: `id`, `name`, `logo_url`, `city`, `country`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Detalle: `docs/design/info_shop_code.html`
+- Carrito: `docs/design/car_shop_code.html`
+- Imágenes: `docs/design/info_shop_screen.png`, `docs/design/car_shop_screen.png`
+- Design System: `docs/design/system.md`
+- Esquema BD: `docs/scripts/db.sql`
+
+Reglas de UI:
+- Respetar jerarquía visual y estilos (sombras, bordes, badges).
+- Layout responsive.
+- Navbar con indicador de carrito (cantidad de ítems).
+- No mostrar reseñas/ratings ni descuento si no existen en BD.
+
+---
+
+## Alcance
+
+Incluye:
+- Crear ruta de detalle `/shop/[id]`
+- Crear ruta de carrito `/shop/cart`
+- Obtener producto por `id` desde Supabase
+- Obtener información de fundación del producto
+- Mostrar imagen, nombre, descripción y precio formateado
+- CTA “Agregar al carrito” funcional
+- Carrito persistente en cliente con:
+  - Lista de ítems (producto + cantidad)
+  - Cambiar cantidad y eliminar ítems
+  - Subtotal y total
+  - Resumen de compra (diseño)
+- Indicador de cantidad de items en navbar
+- Productos relacionados (misma fundación, publicados)
+- Estados de loading y error
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Pago real
+- Stock / inventario
+- Variantes (talla/color)
+- Cupones/descuentos reales
+- Favoritos reales
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Ruta de detalle creada
+- **Dado** un producto publicado
+- **Cuando** navego a `/shop/[id]`
+- **Entonces** veo la página de detalle con diseño correcto
+
+### 2) Datos del producto
+- **Dado** un producto en Supabase
+- **Cuando** carga el detalle
+- **Entonces** se muestran nombre, descripción, precio e imagen
+- **Y** solo si `is_published = true`
+
+### 3) Fundación visible
+- **Dado** el producto con `foundation_id`
+- **Cuando** se renderiza el detalle
+- **Entonces** se muestra nombre, logo y ubicación de la fundación
+
+### 4) Agregar al carrito
+- **Dado** un producto en detalle
+- **Cuando** hago clic en “Agregar al carrito”
+- **Entonces** se agrega al carrito con cantidad 1 o se incrementa
+
+### 5) Carrito persistente
+- **Dado** items en el carrito
+- **Cuando** recargo la página
+- **Entonces** el carrito mantiene los productos y cantidades
+
+### 6) Cantidades y eliminación
+- **Dado** el carrito con items
+- **Cuando** incremento o decremento cantidades
+- **Entonces** el subtotal y total se actualizan
+- **Y** si la cantidad llega a 0, el item se elimina
+
+### 7) Resumen de compra
+- **Dado** items en el carrito
+- **Cuando** se muestra el resumen
+- **Entonces** el total corresponde a la suma de `price * quantity`
+- **Y** el texto de envío muestra “Por acordar”
+
+### 8) Productos relacionados
+- **Dado** un producto de una fundación
+- **Cuando** carga el detalle
+- **Entonces** se muestran productos publicados de la misma fundación
+- **Y** no se incluye el producto actual
+
+### 9) Estado de loading
+- **Dado** que se consulta Supabase
+- **Cuando** carga detalle o carrito
+- **Entonces** se muestra un estado de loading
+
+### 10) Manejo de errores
+- **Dado** un error de Supabase
+- **Cuando** falla la consulta
+- **Entonces** se muestra un mensaje traducido
+- **Y** la UI no se rompe
+
+### 11) Traducciones
+- **Dado** la implementación
+- **Cuando** se revisa la UI
+- **Entonces** no hay textos hardcodeados
+- **Y** existen traducciones en `src/messages/es/shop-detail.json` y `src/messages/en/shop-detail.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Queries
+- Detalle de producto:
+  - `SELECT * FROM products WHERE id = :id AND is_published = true`
+- Fundación:
+  - `SELECT id, name, city, country, logo_url FROM foundations WHERE id = :foundation_id`
+- Relacionados:
+  - `SELECT * FROM products WHERE foundation_id = :foundation_id AND is_published = true AND id != :id LIMIT 4`
+
+### Carrito
+- Persistencia en cliente (localStorage).
+- El render del carrito **siempre** consulta detalles en Supabase usando los `product_id`.
+
+### Traducciones
+- Usar `useTranslations('shopDetail')`.
+- No hardcodear textos.
+
+### Dependencias / Paquetes
+- No agregar dependencias nuevas.
+
+---
+
+## Implementación sugerida
+
+### Estructura de archivos sugerida:
+```
+src/app/[locale]/shop/[id]/page.tsx
+src/app/[locale]/shop/cart/page.tsx
+
+src/presentation/components/shop-detail/
+├── ShopDetailPage.tsx
+├── ShopBreadcrumbs.tsx
+├── ShopGallery.tsx
+├── ShopInfoPanel.tsx
+├── ShopRelatedGrid.tsx
+
+src/presentation/components/cart/
+├── CartPage.tsx
+├── CartItemRow.tsx
+├── CartSummary.tsx
+
+src/domain/
+├── models/
+│   ├── ShopProduct.ts
+│   └── CartItem.ts
+├── repositories/
+│   ├── IProductRepository.ts (extender con getProductDetail y getRelatedProducts)
+│   └── IFoundationRepository.ts (extender con getFoundationById)
+└── usecases/
+    └── shop/
+        ├── GetProductDetailUseCase.ts
+        └── GetRelatedProductsUseCase.ts
+
+src/infrastructure/
+├── repositories/
+│   ├── ProductRepository.ts
+│   └── FoundationRepository.ts
+└── ioc/
+    └── bindings actualizados
+
+src/messages/
+├── es/
+│   └── shop-detail.json
+└── en/
+    └── shop-detail.json
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Detalle y carrito se ven como el diseño
+- Datos reales desde Supabase
+- Carrito mantiene items y cantidades
+- Total calculado correctamente
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Detalle y carrito funcionales
+- [ ] Datos reales desde Supabase
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add shop product detail and cart`
+
+",Backlog,Normal,HU
+HU-036 — Modal de Adopción + Formulario Multi‑paso + Contacto (UI + Supabase),"# HU-036 — Modal de Adopción + Formulario Multi‑paso + Contacto (UI + Supabase)
+
+**Como** usuario externo  
+**Quiero** iniciar el proceso de adopción desde un modal  
+**Para** contactar la fundación o diligenciar la solicitud de adopción
+
+---
+
+## Dependencias
+
+- HU-001 (Next.js App Router)
+- HU-007 (Tailwind configurado)
+- HU-010 (Atomic Design - componentes reutilizables)
+- HU-011 (Conexión a Supabase configurada)
+- HU-016 (Sistema de traducciones configurado)
+- HU-026 (Catálogo de adopción implementado)
+- HU-027 (Detalle de animal implementado)
+
+---
+
+## Contexto / Notas
+
+- Esta HU agrega un **modal de adopción** desde el detalle del animal.
+- El modal ofrece dos flujos:
+  1) **Contactar fundación** (pantalla de contacto)
+  2) **Diligenciar formulario** (formulario multi‑paso)
+- Diseños:
+  - Modal: `docs/design/modal_adopt_code.html` + `docs/design/modal_adopt_screen.png`
+  - Formulario: `docs/design/form_adopt_code1.html`, `form_adopt_code2.html`,
+    `form_adopt_code3.html`, `form_adopt_code4.html` + screens
+  - Contacto: `docs/design/contact_us_code.html` + `docs/design/contact_us_screen.png`
+- La funcionalidad debe usar el modelo relacional de `docs/scripts/db.sql`.
+
+Modelo de datos disponible:
+- `adoption_requests`
+- `adoption_request_details`
+- `adoption_request_documents`
+- `foundation_contacts`
+- `animals`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Modal: `docs/design/modal_adopt_code.html`
+- Contacto: `docs/design/contact_us_code.html`
+- Formulario pasos 1–4:
+  - `docs/design/form_adopt_code1.html`
+  - `docs/design/form_adopt_code2.html`
+  - `docs/design/form_adopt_code3.html`
+  - `docs/design/form_adopt_code4.html`
+- Imágenes: `docs/design/modal_adopt_screen.png`, `form_adopt_screen1.png`,
+  `form_adopt_screen2.png`, `form_adopt_screen3.png`, `form_adopt_screen4.png`,
+  `contact_us_screen.png`
+- Design System: `docs/design/system.md`
+- Esquema BD: `docs/scripts/db.sql`
+
+Reglas:
+- Respetar jerarquía visual y estilos del diseño.
+- Layout responsive.
+- No inventar datos que no existan en BD.
+
+---
+
+## Alcance
+
+Incluye:
+- Modal de adopción desde el detalle del animal (HU-027)
+- Dos flujos desde el modal:
+  - Contactar fundación (info desde `foundation_contacts`)
+  - Diligenciar formulario multi‑paso
+- Formulario multi‑paso con guardado en BD:
+  - Paso 1: datos básicos (detalle)
+  - Paso 2: hogar
+  - Paso 3: estilo/experiencia
+  - Paso 4: documentos + consentimientos
+- Crear solicitud en `adoption_requests`
+- Guardar detalle en `adoption_request_details`
+- Subir documentos y guardar en `adoption_request_documents`
+- Estados de loading y error
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Flujo de aprobación/revisión por fundación
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Modal desde el detalle
+- **Dado** el detalle de un animal
+- **Cuando** hago clic en “Adoptar”
+- **Entonces** se abre el modal con opciones de flujo
+
+### 2) Flujo de contacto
+- **Dado** que selecciono “Contactar fundación”
+- **Cuando** se abre el panel de contacto
+- **Entonces** se muestran los datos de `foundation_contacts`
+
+### 3) Flujo de formulario
+- **Dado** que selecciono “Diligenciar formulario”
+- **Cuando** se muestra el formulario
+- **Entonces** veo los 4 pasos según diseño
+
+### 4) Guardado de solicitud
+- **Dado** un usuario autenticado y un animal válido
+- **Cuando** finalizo el formulario
+- **Entonces** se crea un registro en `adoption_requests`
+- **Y** se crea `adoption_request_details` asociado
+- **Y** el estado inicial es `pending`
+
+### 5) Documentos
+- **Dado** que subo documento de identidad y fotos del hogar
+- **Cuando** envío la solicitud
+- **Entonces** se suben archivos y se guardan en `adoption_request_documents`
+
+### 6) Validaciones mínimas
+- **Dado** campos obligatorios
+- **Cuando** faltan datos requeridos
+- **Entonces** el usuario no puede avanzar de paso
+
+### 7) Manejo de errores
+- **Dado** un error de Supabase
+- **Cuando** ocurre al guardar
+- **Entonces** se muestra un mensaje traducido
+- **Y** la UI no se rompe
+
+### 8) Traducciones
+- **Dado** la implementación
+- **Cuando** se revisa la UI
+- **Entonces** no hay textos hardcodeados
+- **Y** existen traducciones en `src/messages/es/adopt-request.json` y `src/messages/en/adopt-request.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Queries
+- Crear solicitud:
+  - Insert en `adoption_requests` con:
+    - `animal_id`, `foundation_id`, `adopter_user_id`
+  - Estado por defecto: `pending`
+- Detalle:
+  - Insert en `adoption_request_details` con campos del formulario.
+- Contacto:
+  - `SELECT * FROM foundation_contacts WHERE foundation_id = :foundation_id`
+- Documentos:
+  - Subir archivos a Storage y guardar `file_url` en
+    `adoption_request_documents` con `doc_type`:
+    - `id_document`
+    - `home_photos`
+
+### Mapeo de campos (formulario → BD)
+- Paso 1 (Básico):
+  - `adopter_display_name`, `adopter_email`, `adopter_phone`, `city`, `neighborhood`
+- Paso 2 (Hogar):
+  - `housing_type`, `is_rent`, `allows_pets`, `household_people_count`,
+    `has_children`, `children_ages`
+- Paso 3 (Estilo):
+  - `has_other_pets`, `other_pets_description`, `hours_alone_per_day`,
+    `travel_plan`, `experience_text`, `motivation_text`
+- Paso 4 (Docs):
+  - `accepts_vet_costs`, `accepts_lifetime_commitment`
+
+### Autenticación
+- La solicitud requiere `adopter_user_id` desde sesión actual.
+- Si el usuario no está autenticado, mostrar mensaje y bloquear envío.
+
+### Traducciones
+- Usar `useTranslations('adoptRequest')`.
+- No hardcodear textos.
+
+### Dependencias / Paquetes
+- No agregar dependencias nuevas.
+
+---
+
+## Implementación sugerida
+
+### Estructura de archivos sugerida:
+```
+src/presentation/components/adopt-modal/
+├── AdoptStartModal.tsx
+├── AdoptContactPanel.tsx
+├── AdoptFormWizard.tsx
+├── AdoptStepBasic.tsx
+├── AdoptStepHome.tsx
+├── AdoptStepStyle.tsx
+└── AdoptStepDocs.tsx
+
+src/domain/
+├── models/
+│   └── AdoptionRequest.ts
+├── repositories/
+│   ├── IAdoptionRequestRepository.ts
+│   └── IFoundationRepository.ts (extender con getFoundationContacts)
+└── usecases/
+    └── adopt/
+        └── CreateAdoptionRequestUseCase.ts
+
+src/infrastructure/
+├── repositories/
+│   ├── AdoptionRequestRepository.ts
+│   └── FoundationRepository.ts
+└── ioc/
+    └── bindings actualizados
+
+src/messages/
+├── es/
+│   └── adopt-request.json
+└── en/
+    └── adopt-request.json
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Modal coincide con diseño
+- Flujo de contacto muestra datos reales
+- Formulario guarda solicitud en BD
+- Documentos guardados y relacionados
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Modal y formularios funcionales
+- [ ] Datos reales desde Supabase
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add adopt modal and request flow`
+
+",Backlog,Normal,HU
+HU-037 — Gestión de Solicitudes de Adopción (Admin Panel + Supabase),"# HU-037 — Gestión de Solicitudes de Adopción (Admin Panel + Supabase)
+
+**Como** usuario administrador de fundación  
+**Quiero** visualizar y gestionar las solicitudes de adopción  
+**Para** aprobar, rechazar o solicitar más información de cada solicitud
+
+---
+
+## Dependencias
+
+- HU-001 (Next.js App Router)
+- HU-007 (Tailwind configurado)
+- HU-010 (Atomic Design - componentes reutilizables)
+- HU-011 (Conexión a Supabase configurada)
+- HU-016 (Sistema de traducciones configurado)
+- HU-036 (Flujo de solicitud de adopción)
+
+---
+
+## Contexto / Notas
+
+- Esta HU implementa el **panel de administración** para solicitudes de adopción.
+- Las solicitudes creadas en HU-036 deben aparecer aquí.
+- Diseños:
+  - Lista de solicitudes: `docs/design/request_info_code.html` + `request_info_screen.png`
+  - Detalle de solicitud: `docs/design/requests_adopt_code.html` + `requests_adopt_screen.png`
+- La data proviene de Supabase según `docs/scripts/db.sql`.
+- Debe respetar la jerarquía visual del diseño (sidebar, tablas, cards, badges).
+
+Modelo de datos disponible:
+- `adoption_requests`
+- `adoption_request_details`
+- `adoption_request_documents`
+- `animals`
+- `foundations`
+- `profiles`
+
+---
+
+## Diseño (OBLIGATORIO)
+
+Referencias:
+- Lista: `docs/design/request_info_code.html`
+- Detalle: `docs/design/requests_adopt_code.html`
+- Imágenes: `docs/design/request_info_screen.png`, `docs/design/requests_adopt_screen.png`
+- Design System: `docs/design/system.md`
+- Esquema BD: `docs/scripts/db.sql`
+
+Reglas:
+- Respetar jerarquía visual y estilos del diseño.
+- Layout responsive (sidebar fijo en desktop, topbar en mobile).
+- Los textos deben estar traducidos (ES/EN).
+- No inventar datos que no existan en BD.
+
+---
+
+## Alcance
+
+Incluye:
+- Crear ruta admin de lista: `/admin/adoptions` (o `app/[locale]/admin/adoptions/page.tsx`)
+- Crear ruta admin de detalle: `/admin/adoptions/[id]`
+- Listado con búsqueda, filtros por estado y prioridad, y paginación
+- Visualización de datos reales de solicitudes
+- Vista detalle con:
+  - Perfil del adoptante (datos del snapshot)
+  - Información del animal
+  - Experiencia / motivación
+  - Documentos de soporte
+- Acciones:
+  - **Aprobar** → status `approved`
+  - **Rechazar** → status `rejected` + `rejection_reason`
+  - **Solicitar más información** → status `info_requested`
+- Exportar CSV (UI + acción real)
+- Estados de loading y error
+- Traducciones completas (ES/EN)
+
+No incluye:
+- Mensajería directa con el adoptante
+- Notificaciones por email
+- Tests automatizados
+
+---
+
+## Criterios de aceptación (Given / When / Then)
+
+### 1) Listado de solicitudes
+- **Dado** solicitudes creadas en HU-036
+- **Cuando** ingreso a `/admin/adoptions`
+- **Entonces** veo el listado con diseño correcto
+- **Y** se muestran solo solicitudes de la fundación del admin
+
+### 2) Búsqueda y filtros
+- **Dado** el buscador y los filtros
+- **Cuando** busco por nombre de animal o adoptante
+- **Entonces** se filtran resultados (case-insensitive)
+- **Y** los filtros de estado y prioridad se aplican correctamente
+
+### 3) Detalle de solicitud
+- **Dado** una solicitud en la lista
+- **Cuando** hago clic en “View Detail”
+- **Entonces** navego al detalle y veo toda la información de la solicitud
+
+### 4) Aprobar solicitud
+- **Dado** una solicitud en estado `pending` o `in_review`
+- **Cuando** hago clic en “Approve Request”
+- **Entonces** el status cambia a `approved`
+
+### 5) Rechazar solicitud
+- **Dado** una solicitud activa
+- **Cuando** hago clic en “Reject”
+- **Entonces** el status cambia a `rejected`
+- **Y** se guarda el motivo en `rejection_reason`
+
+### 6) Solicitar más información
+- **Dado** una solicitud activa
+- **Cuando** hago clic en “Request Information”
+- **Entonces** el status cambia a `info_requested`
+
+### 7) Documentos visibles
+- **Dado** archivos en `adoption_request_documents`
+- **Cuando** se muestra el detalle
+- **Entonces** se ven como cards con preview y acciones (ver/descargar)
+
+### 8) Exportar CSV
+- **Dado** el listado de solicitudes
+- **Cuando** hago clic en “Export CSV”
+- **Entonces** se descarga un CSV con los datos visibles
+
+### 9) Estados de loading y error
+- **Dado** consultas a Supabase
+- **Cuando** carga la lista o el detalle
+- **Entonces** se muestra loading y luego los datos
+- **Y** si hay error se muestra mensaje traducido
+
+### 10) Traducciones
+- **Dado** la implementación
+- **Cuando** se revisa la UI
+- **Entonces** no hay textos hardcodeados
+- **Y** existen traducciones en `src/messages/es/adoptions-admin.json` y `src/messages/en/adoptions-admin.json`
+
+---
+
+## Reglas técnicas
+
+### Arquitectura
+- Presentation solo consume UseCases vía IoC.
+- Domain no importa React/Next/MUI/Tailwind/Inversify/Supabase.
+- Infrastructure contiene implementaciones y wiring IoC.
+- Supabase solo vive en Infrastructure.
+
+### Supabase / Queries
+- Listado:
+  - `SELECT * FROM adoption_requests`
+  - Filtros: `status`, `priority`
+  - Búsqueda: por `animals.name` o `adoption_request_details.adopter_display_name`
+  - Paginación: `range(from, to)` con `count: 'exact'`
+  - Solo solicitudes de fundaciones donde el admin es miembro (`foundation_members`)
+- Detalle:
+  - `adoption_requests` + `adoption_request_details`
+  - `adoption_request_documents` por `request_id`
+  - `animals` por `animal_id`
+- Acciones:
+  - `update adoption_requests set status = 'approved'`
+  - `update adoption_requests set status = 'rejected', rejection_reason = :reason`
+  - `update adoption_requests set status = 'info_requested'`
+
+### Permisos
+- El admin solo puede ver/gestionar solicitudes de su fundación.
+
+### Traducciones
+- Usar `useTranslations('adoptionsAdmin')`.
+- No hardcodear textos.
+
+### Dependencias / Paquetes
+- No agregar dependencias nuevas.
+
+---
+
+## Implementación sugerida
+
+### Estructura de archivos sugerida:
+```
+src/app/[locale]/admin/adoptions/page.tsx
+src/app/[locale]/admin/adoptions/[id]/page.tsx
+
+src/presentation/components/adoptions-admin/
+├── AdoptionRequestsPage.tsx
+├── AdoptionRequestsTable.tsx
+├── AdoptionRequestsFilters.tsx
+├── AdoptionRequestsPagination.tsx
+├── AdoptionRequestDetailPage.tsx
+├── AdoptionRequestProfile.tsx
+├── AdoptionRequestDocuments.tsx
+└── AdoptionRequestActions.tsx
+
+src/domain/
+├── models/
+│   ├── AdoptionRequest.ts
+│   └── AdoptionRequestDocument.ts
+├── repositories/
+│   └── IAdoptionRequestRepository.ts (extender con getAdminRequests, getRequestDetail, updateStatus)
+└── usecases/
+    └── adopt/
+        ├── GetAdminAdoptionRequestsUseCase.ts
+        ├── GetAdoptionRequestDetailUseCase.ts
+        └── UpdateAdoptionRequestStatusUseCase.ts
+
+src/infrastructure/
+├── repositories/
+│   └── AdoptionRequestRepository.ts
+└── ioc/
+    └── bindings actualizados
+
+src/messages/
+├── es/
+│   └── adoptions-admin.json
+└── en/
+    └── adoptions-admin.json
+```
+
+---
+
+## Validación
+
+Comandos mínimos:
+- `npm run dev`
+- `npm run build`
+
+Verificaciones:
+- Listado y detalle coinciden con diseño
+- Solicitudes reales desde Supabase
+- Acciones de aprobar/rechazar/solicitar info funcionan
+- CSV exporta datos correctos
+- Traducciones completas
+
+---
+
+## Definición de Hecho
+
+- [ ] Criterios de aceptación cumplidos
+- [ ] `npm run dev` OK
+- [ ] `npm run build` OK
+- [ ] Listado y detalle funcionales
+- [ ] Acciones sobre solicitudes funcionando
+- [ ] Traducciones incluidas (ES/EN)
+- [ ] Sin violaciones de capas
+- [ ] Sin cambios fuera del alcance
+- Commit sugerido:
+  `feat: add admin adoption requests management`
+
+",Backlog,Normal,HU
