@@ -32,6 +32,8 @@ const USE_CASE_TYPES = {
   UpdateProductPublishStatusUseCase: Symbol.for("UpdateProductPublishStatusUseCase"),
   DeleteProductUseCase: Symbol.for("DeleteProductUseCase"),
   UpdateProductUseCase: Symbol.for("UpdateProductUseCase"),
+  GetNotificationsUseCase: Symbol.for("GetNotificationsUseCase"),
+  MarkNotificationAsReadUseCase: Symbol.for("MarkNotificationAsReadUseCase"),
 };
 
 export { USE_CASE_TYPES };

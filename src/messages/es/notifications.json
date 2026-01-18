@@ -1,0 +1,27 @@
+{
+  "bell": {
+    "ariaLabel": "Notificaciones"
+  },
+  "menu": {
+    "title": "Notificaciones",
+    "empty": "No tienes notificaciones nuevas.",
+    "unread": "{count, plural, =0 {Sin leer} one {# sin leer} other {# sin leer}}"
+  },
+  "time": {
+    "justNow": "Hace un momento"
+  },
+  "types": {
+    "adoption_request_created": {
+      "title": "Nueva solicitud de adopción",
+      "body": "Se recibió una nueva solicitud de adopción que requiere revisión."
+    },
+    "adoption_status_changed": {
+      "title": "Estado de adopción actualizado",
+      "body": "Una solicitud de adopción cambió de estado."
+    },
+    "unknown": {
+      "title": "Nueva notificación",
+      "body": "Tienes una actualización pendiente."
+    }
+  }
+}

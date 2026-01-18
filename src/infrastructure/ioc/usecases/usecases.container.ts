@@ -43,6 +43,9 @@ import { GetProductsUseCase } from "@/domain/usecases/products/GetProductsUseCas
 import { GetProductByIdUseCase } from "@/domain/usecases/products/GetProductByIdUseCase";
 import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/UpdateProductPublishStatusUseCase";
 import { UpdateProductUseCase } from "@/domain/usecases/products/UpdateProductUseCase";
+import { GetNotificationsUseCase } from "@/domain/usecases/notifications/GetNotificationsUseCase";
+import { MarkNotificationAsReadUseCase } from "@/domain/usecases/notifications/MarkNotificationAsReadUseCase";
+import type { INotificationRepository } from "@/domain/repositories/INotificationRepository";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
 
@@ -421,6 +424,28 @@ const useCasesModule = new ContainerModule(
           authRepository,
           foundationMembershipRepository,
         );
+      })
+      .inSingletonScope();
+
+    bind<GetNotificationsUseCase>(USE_CASE_TYPES.GetNotificationsUseCase)
+      .toDynamicValue((context) => {
+        const notificationRepository = context.get<INotificationRepository>(
+          REPOSITORY_TYPES.NotificationRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new GetNotificationsUseCase(notificationRepository, authRepository);
+      })
+      .inSingletonScope();
+
+    bind<MarkNotificationAsReadUseCase>(USE_CASE_TYPES.MarkNotificationAsReadUseCase)
+      .toDynamicValue((context) => {
+        const notificationRepository = context.get<INotificationRepository>(
+          REPOSITORY_TYPES.NotificationRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new MarkNotificationAsReadUseCase(notificationRepository, authRepository);
       })
       .inSingletonScope();
   },

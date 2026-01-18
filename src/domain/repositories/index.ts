@@ -18,3 +18,4 @@ export type {
 } from "./IFoundationRepository";
 export type { IFoundationProfileRepository } from "./IFoundationProfileRepository";
 export type { ICartRepository } from "./ICartRepository";
+export type { INotificationRepository } from "./INotificationRepository";

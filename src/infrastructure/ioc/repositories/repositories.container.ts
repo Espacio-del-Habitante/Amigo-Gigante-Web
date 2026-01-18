@@ -10,6 +10,7 @@ import type { IFoundationRepository } from "@/domain/repositories/IFoundationRep
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
+import type { INotificationRepository } from "@/domain/repositories/INotificationRepository";
 
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
 
@@ -22,6 +23,7 @@ import { FoundationMembershipRepository } from "@/infrastructure/repositories/Fo
 import { FoundationRepository } from "@/infrastructure/repositories/FoundationRepository";
 import { FoundationProfileRepository } from "@/infrastructure/repositories/FoundationProfileRepository";
 import { ProductRepository } from "@/infrastructure/repositories/ProductRepository";
+import { NotificationRepository } from "@/infrastructure/repositories/NotificationRepository";
 import { REPOSITORY_TYPES } from "./repositories.types";
 
 const repositoriesModule = new ContainerModule(
@@ -64,6 +66,10 @@ const repositoriesModule = new ContainerModule(
 
     bind<IFoundationMembershipRepository>(REPOSITORY_TYPES.FoundationMembershipRepository)
       .to(FoundationMembershipRepository)
+      .inSingletonScope();
+
+    bind<INotificationRepository>(REPOSITORY_TYPES.NotificationRepository)
+      .to(NotificationRepository)
       .inSingletonScope();
   },
 );
