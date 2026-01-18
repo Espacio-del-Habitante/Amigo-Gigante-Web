@@ -1,0 +1,27 @@
+{
+  "bell": {
+    "ariaLabel": "Notifications"
+  },
+  "menu": {
+    "title": "Notifications",
+    "empty": "You're all caught up.",
+    "unread": "{count, plural, =0 {No unread} one {# unread} other {# unread}}"
+  },
+  "time": {
+    "justNow": "Just now"
+  },
+  "types": {
+    "adoption_request_created": {
+      "title": "New adoption request",
+      "body": "A new adoption request requires your review."
+    },
+    "adoption_status_changed": {
+      "title": "Adoption status updated",
+      "body": "An adoption request has changed status."
+    },
+    "unknown": {
+      "title": "New notification",
+      "body": "You have a new update."
+    }
+  }
+}

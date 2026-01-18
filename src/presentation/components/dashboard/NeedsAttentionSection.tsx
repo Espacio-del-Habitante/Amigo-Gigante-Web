@@ -3,19 +3,77 @@
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
 import MedicalServicesRoundedIcon from "@mui/icons-material/MedicalServicesRounded";
 import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 import type { DashboardAttentionAlert } from "@/domain/models/DashboardData";
+import type { Notification } from "@/domain/models/Notification";
+import { useNotifications } from "@/presentation/hooks/useNotifications";
+import { buildNotificationLink } from "@/presentation/utils/notificationUtils";
 
 export interface NeedsAttentionSectionProps {
   alerts: DashboardAttentionAlert[];
   locale: string;
 }
 
+const relevantNotificationTypes = new Set(["adoption_request_created", "adoption_status_changed"]);
+
+const resolveNotificationCopy = (notification: Notification, translate: (key: string) => string) => {
+  switch (notification.type) {
+    case "adoption_request_created":
+      return {
+        title: translate("types.adoption_request_created.title"),
+        body: translate("types.adoption_request_created.body"),
+      };
+    case "adoption_status_changed":
+      return {
+        title: translate("types.adoption_status_changed.title"),
+        body: translate("types.adoption_status_changed.body"),
+      };
+    default:
+      return {
+        title: translate("types.unknown.title"),
+        body: translate("types.unknown.body"),
+      };
+  }
+};
+
+const buildRelativeTime = (value: string, locale: string, fallbackLabel: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallbackLabel;
+
+  const now = Date.now();
+  const diffInSeconds = Math.round((date.getTime() - now) / 1000);
+  const absSeconds = Math.abs(diffInSeconds);
+
+  if (absSeconds < 60) return fallbackLabel;
+
+  const minutes = Math.round(diffInSeconds / 60);
+  if (Math.abs(minutes) < 60) {
+    return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(minutes, "minute");
+  }
+
+  const hours = Math.round(minutes / 60);
+  if (Math.abs(hours) < 24) {
+    return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(hours, "hour");
+  }
+
+  const days = Math.round(hours / 24);
+  return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(days, "day");
+};
+
 export function NeedsAttentionSection({ alerts, locale }: NeedsAttentionSectionProps) {
   const t = useTranslations("dashboard");
+  const tNotifications = useTranslations("notifications");
+  const router = useRouter();
+  const { notifications, markAsRead } = useNotifications({ limit: 10 });
+  const currentLocale = useLocale();
 
-  const badge = String(alerts.length);
+  const relevantNotifications = notifications.filter(
+    (notification) => !notification.readAt && relevantNotificationTypes.has(notification.type),
+  );
+
+  const badge = String(alerts.length + relevantNotifications.length);
   const translate = (key: string, values?: Record<string, unknown>): string => {
     return (t as unknown as (k: string, v?: Record<string, unknown>) => string)(key, values);
   };
@@ -53,6 +111,17 @@ export function NeedsAttentionSection({ alerts, locale }: NeedsAttentionSectionP
     return new Intl.DateTimeFormat(locale, { weekday: "long" }).format(date);
   };
 
+  const handleNotificationClick = async (notification: Notification) => {
+    if (!notification.readAt) {
+      await markAsRead(notification.id);
+    }
+
+    const link = buildNotificationLink(currentLocale, notification);
+    if (link) {
+      router.push(link);
+    }
+  };
+
   return (
     <section className="flex flex-1 flex-col overflow-hidden rounded-xl border border-neutral-100 bg-neutral-white shadow-soft">
       <div className="flex items-center justify-between border-b border-neutral-100 p-6">
@@ -62,6 +131,28 @@ export function NeedsAttentionSection({ alerts, locale }: NeedsAttentionSectionP
         </span>
       </div>
       <div className="flex flex-col gap-3 p-4">
+        {relevantNotifications.map((notification) => {
+          const { title, body } = resolveNotificationCopy(notification, (key) =>
+            tNotifications(key as never),
+          );
+          const relativeTime = buildRelativeTime(notification.createdAt, currentLocale, tNotifications("time.justNow"));
+
+          return (
+            <button
+              key={notification.id}
+              type="button"
+              onClick={() => void handleNotificationClick(notification)}
+              className="flex w-full items-start gap-3 rounded-xl border border-brand-100 bg-brand-50/40 p-3 text-left transition hover:border-brand-200 hover:bg-brand-50"
+            >
+              <span className="mt-2 h-2 w-2 min-w-[8px] rounded-full bg-brand-500" />
+              <div className="flex flex-1 flex-col gap-1">
+                <p className="text-sm font-extrabold text-neutral-800">{title}</p>
+                <p className="text-xs text-neutral-600">{body}</p>
+                <p className="text-xs text-neutral-400">{relativeTime}</p>
+              </div>
+            </button>
+          );
+        })}
         {alerts.map((alert, idx) => {
           const styles = getAlertStyles(alert.variant);
           const title = translate(`needsAttention.alerts.${alert.key}.title`);
@@ -98,4 +189,3 @@ export function NeedsAttentionSection({ alerts, locale }: NeedsAttentionSectionP
     </section>
   );
 }
-

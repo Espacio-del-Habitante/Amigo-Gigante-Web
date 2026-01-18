@@ -1,12 +1,12 @@
 "use client";
 
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
 import { AppBar, Avatar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import { Logo } from "@/presentation/components/atoms";
+import { NotificationBell } from "@/presentation/components/molecules";
 import { useAuth } from "@/presentation/hooks/useAuth";
 import { getInitialsFromEmail, getNameFromEmail } from "@/presentation/utils/userUtils";
 
@@ -57,9 +57,7 @@ export function FoundationHeader({ onOpenMenu }: FoundationHeaderProps) {
         </Box>
         <Box className="hidden flex-1 md:block" />
         <Box className="flex items-center gap-4">
-          <IconButton aria-label={t("header.notifications")}>
-            <NotificationsNoneRoundedIcon />
-          </IconButton>
+          <NotificationBell />
           {!loading && (
             <Box className="flex items-center gap-3">
               <Box className="hidden text-right sm:block">
