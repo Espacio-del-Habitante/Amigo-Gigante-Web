@@ -5,12 +5,14 @@ import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository"
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
 import { UpdateAnimalUseCase } from "@/domain/usecases/animals/UpdateAnimalUseCase";
+import type { DeletePublicImageUseCase } from "@/domain/usecases/storage/DeletePublicImageUseCase";
 import type { UploadPublicImageUseCase } from "@/domain/usecases/storage/UploadPublicImageUseCase";
 
 test("UpdateAnimalUseCase uploads new files and replaces photo URLs", async () => {
   let updatedAnimalParams: Parameters<IAnimalRepository["updateAnimal"]>[0] | null = null;
   let replacedPhotos: Parameters<IAnimalRepository["replaceAnimalPhotos"]>[0] | null = null;
   let uploadParams: Parameters<UploadPublicImageUseCase["execute"]>[0] | null = null;
+  const deletedUrls: string[] = [];
 
   const animalRepository: IAnimalRepository = {
     getHomeAnimals: async () => ({ urgent: [], sponsored: [], recent: [] }),
@@ -23,9 +25,24 @@ test("UpdateAnimalUseCase uploads new files and replaces photo URLs", async () =
     },
     createAnimalPhotos: async () => {},
     deleteAnimal: async () => {},
-    getAnimalById: async () => {
-      throw new Error("not-used");
-    },
+    deleteAnimalPhotos: async () => {},
+    getAnimalById: async () => ({
+      id: 123,
+      name: "Luna",
+      species: "cat",
+      breed: "Siamese",
+      sex: "female",
+      ageMonths: 24,
+      size: "small",
+      status: "available",
+      description: "Friendly cat ready for adoption.",
+      coverImageUrl: "https://cdn.test/animals/legacy.png",
+      isPublished: true,
+      photos: [
+        { url: "https://cdn.test/animals/legacy.png", sortOrder: 0 },
+        { url: "https://cdn.test/animals/old.png", sortOrder: 1 },
+      ],
+    }),
     updateAnimal: async (params) => {
       updatedAnimalParams = params;
     },
@@ -64,10 +81,17 @@ test("UpdateAnimalUseCase uploads new files and replaces photo URLs", async () =
     },
   } as UploadPublicImageUseCase;
 
+  const deletePublicImageUseCase: DeletePublicImageUseCase = {
+    execute: async ({ url }) => {
+      deletedUrls.push(url);
+    },
+  } as DeletePublicImageUseCase;
+
   const useCase = new UpdateAnimalUseCase(
     animalRepository,
     authRepository,
     foundationMembershipRepository,
+    deletePublicImageUseCase,
     uploadPublicImageUseCase,
   );
 
@@ -95,6 +119,7 @@ test("UpdateAnimalUseCase uploads new files and replaces photo URLs", async () =
     entityId: "123",
   });
   assert.equal(updatedAnimalParams?.coverImageUrl, "https://cdn.test/animals/123/photo.png");
+  assert.deepEqual(deletedUrls, ["https://cdn.test/animals/old.png"]);
   assert.deepEqual(replacedPhotos, {
     animalId: 123,
     photoUrls: ["https://cdn.test/animals/123/photo.png", "https://cdn.test/animals/legacy.png"],

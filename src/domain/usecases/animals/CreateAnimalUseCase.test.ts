@@ -39,6 +39,7 @@ test("CreateAnimalUseCase uploads file photos and persists photo URLs", async ()
       createdPhotos = params;
     },
     deleteAnimal: async () => {},
+    deleteAnimalPhotos: async () => {},
     getAnimalById: async () => {
       throw new Error("not-used");
     },

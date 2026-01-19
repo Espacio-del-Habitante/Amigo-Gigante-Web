@@ -133,6 +133,7 @@ export interface IAnimalRepository {
   createAnimal(params: CreateAnimalParams): Promise<AnimalManagement>;
   createAnimalPhotos(params: CreateAnimalPhotoParams[]): Promise<void>;
   deleteAnimal(params: DeleteAnimalParams): Promise<void>;
+  deleteAnimalPhotos(params: { animalId: number }): Promise<void>;
   getAnimalById(params: GetAnimalByIdParams): Promise<AnimalDetail>;
   updateAnimal(params: UpdateAnimalParams): Promise<void>;
   replaceAnimalPhotos(params: ReplaceAnimalPhotosParams): Promise<void>;

@@ -36,10 +36,18 @@ class PrivateFileStorage implements IPrivateFileStorage {
     const { data, error } = await supabaseClient.storage.from(bucketName).createSignedUrl(filePath, expiresIn);
 
     if (error) {
+      console.error("Error creating signed URL:", {
+        error,
+        bucketName,
+        filePath,
+        message: error.message,
+        statusCode: error.statusCode,
+      });
       throw new Error(this.translateStorageError(error, "url"));
     }
 
     if (!data?.signedUrl) {
+      console.error("Signed URL data is missing:", { data, bucketName, filePath });
       throw new Error("storage.private.url.error.generating");
     }
 
@@ -71,10 +79,16 @@ class PrivateFileStorage implements IPrivateFileStorage {
     return fileName.replace(/[^a-z0-9.\-_]/gi, "-").toLowerCase();
   }
 
-  private translateStorageError(error: { message?: string }, context: "upload" | "url"): string {
+  private translateStorageError(error: { message?: string; statusCode?: string }, context: "upload" | "url"): string {
     const message = error.message?.toLowerCase?.() ?? "";
+    const statusCode = error.statusCode;
 
-    if (message.includes("permission") || message.includes("row level")) {
+    // Error 404: Object not found - puede ser por RLS o path incorrecto
+    if (statusCode === "404" || message.includes("not found") || message.includes("object not found")) {
+      return "storage.private.url.error.notFound";
+    }
+
+    if (message.includes("permission") || message.includes("row level") || message.includes("access denied")) {
       return "storage.private.upload.error.accessDenied";
     }
 

@@ -10,7 +10,8 @@
     "url": {
       "expired": "The link has expired, reloading...",
       "error": {
-        "generating": "We could not generate the file link."
+        "generating": "We could not generate the file link.",
+        "notFound": "File not found. Please check access permissions."
       }
     },
     "validation": {
@@ -29,6 +30,14 @@
       "permissionDenied": "You don't have permission to upload images.",
       "generic": "We couldn't upload the image. Please try again."
     }
+  },
+  "delete": {
+    "error": {
+      "generic": "Error deleting image",
+      "notFound": "Image not found",
+      "permissionDenied": "Permission denied to delete image"
+    },
+    "success": "Image deleted successfully"
   },
   "validation": {
     "maxSize": "The file exceeds the maximum allowed size (5MB).",

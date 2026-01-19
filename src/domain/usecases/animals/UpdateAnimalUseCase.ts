@@ -2,6 +2,7 @@ import type { AnimalManagement, AnimalManagementSize } from "@/domain/models/Ani
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
+import { DeletePublicImageUseCase } from "@/domain/usecases/storage/DeletePublicImageUseCase";
 import { UploadPublicImageUseCase } from "@/domain/usecases/storage/UploadPublicImageUseCase";
 
 export type UpdateAnimalAgeUnit = "years" | "months";
@@ -27,10 +28,12 @@ export class UpdateAnimalUseCase {
     private readonly animalRepository: IAnimalRepository,
     private readonly authRepository: IAuthRepository,
     private readonly foundationMembershipRepository: IFoundationMembershipRepository,
+    private readonly deletePublicImageUseCase: DeletePublicImageUseCase,
     private readonly uploadPublicImageUseCase: UploadPublicImageUseCase,
   ) {}
 
   async execute(input: UpdateAnimalInput): Promise<void> {
+
     const session = await this.authRepository.getSession();
 
     if (!session?.user?.id) {
@@ -38,12 +41,22 @@ export class UpdateAnimalUseCase {
     }
 
     const foundationId = await this.foundationMembershipRepository.getFoundationIdForUser(session.user.id);
+    const currentAnimal = await this.animalRepository.getAnimalById({
+      animalId: input.animalId,
+      foundationId,
+    });
+    const currentPhotoUrls = currentAnimal.photos.map((photo) => photo.url).filter(Boolean);
     const ageMonths = this.toAgeMonths(input.age, input.ageUnit);
     const resolvedPhotoUrls = await this.resolvePhotoUrls({
       photos: input.photos,
       foundationId,
       animalId: String(input.animalId),
     });
+    const deletedPhotoUrls = currentPhotoUrls.filter((url) => !resolvedPhotoUrls.includes(url));
+
+    await Promise.allSettled(
+      deletedPhotoUrls.map((url) => this.deletePublicImageUseCase.execute({ url })),
+    );
     const coverImageUrl = resolvedPhotoUrls[0] ?? null;
 
     await this.animalRepository.updateAnimal({
