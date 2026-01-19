@@ -307,10 +307,13 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
       }
 
       if (acceptedFiles.length > 0) {
+        // Agregar archivos File objects (NO base64) al array de photos
         const updatedPhotos = [...formik.values.photos, ...acceptedFiles];
+        // Agregar blob URLs para preview (solo para visualización, no se guardan)
         const updatedPreviews = [...photoPreviewsRef.current, ...nextPreviews];
         photoPreviewsRef.current = updatedPreviews;
         setPhotoPreviews(updatedPreviews);
+        // Los File objects se subirán a Supabase Storage en el use case
         await formik.setFieldValue("photos", updatedPhotos, true);
       }
     } finally {
@@ -595,43 +598,56 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
           ) : null}
 
           <Box className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {photoPreviews.map((src, index) => (
-              <Box
-                key={`${src.slice(0, 24)}-${index}`}
-                className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
-                sx={{ aspectRatio: "1 / 1" }}
-              >
-                <img src={src} alt={t("add.media.preview.alt", { index: index + 1 })} className="h-full w-full object-cover" />
-                <IconButton
-                  aria-label={t("add.media.preview.remove", { index: index + 1 })}
-                  size="small"
-                  disabled={!canInteract}
-                  onClick={() => {
-                    const previewToRemove = photoPreviewsRef.current[index];
-                    if (previewToRemove?.startsWith("blob:")) {
-                      URL.revokeObjectURL(previewToRemove);
-                    }
-                    const nextPreviews = photoPreviewsRef.current.filter((_, idx) => idx !== index);
-                    const nextPhotos = formik.values.photos.filter((_, idx) => idx !== index);
-                    photoPreviewsRef.current = nextPreviews;
-                    setPhotoPreviews(nextPreviews);
-                    void formik.setFieldValue("photos", nextPhotos, true);
-                  }}
-                  sx={{
-                    position: "absolute",
-                    top: 8,
-                    right: 8,
-                    backgroundColor: alpha(theme.palette.common.black, 0.5),
-                    color: theme.palette.common.white,
-                    "&:hover": {
-                      backgroundColor: alpha(theme.palette.common.black, 0.65),
-                    },
-                  }}
+            {formik.values.photos.map((photo, index) => {
+              // Obtener la preview correcta: si es File, usar blob URL de photoPreviews; si es string (URL existente), usar directamente
+              // Los File objects se subirán a Supabase Storage en UpdateAnimalUseCase, NO se guardan como base64
+              const previewSrc =
+                typeof photo === "string"
+                  ? photo
+                  : photoPreviewsRef.current[index] || (typeof photo === "object" && "name" in photo ? URL.createObjectURL(photo) : "");
+              
+              return (
+                <Box
+                  key={`${typeof photo === "string" ? photo.slice(0, 24) : photo.name}-${index}`}
+                  className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
+                  sx={{ aspectRatio: "1 / 1" }}
                 >
-                  <DeleteRoundedIcon fontSize="small" />
-                </IconButton>
-              </Box>
-            ))}
+                  <img src={previewSrc} alt={t("add.media.preview.alt", { index: index + 1 })} className="h-full w-full object-cover" />
+                  <IconButton
+                    aria-label={t("add.media.preview.remove", { index: index + 1 })}
+                    size="small"
+                    disabled={!canInteract}
+                    onClick={() => {
+                      // Revocar blob URL si es necesario (solo para preview, no afecta el archivo)
+                      const previewToRemove = photoPreviewsRef.current[index];
+                      if (previewToRemove?.startsWith("blob:")) {
+                        URL.revokeObjectURL(previewToRemove);
+                      }
+                      
+                      // Eliminar del mismo índice en ambos arrays para mantener sincronización
+                      const nextPhotos = formik.values.photos.filter((_, idx) => idx !== index);
+                      const nextPreviews = photoPreviewsRef.current.filter((_, idx) => idx !== index);
+                      
+                      photoPreviewsRef.current = nextPreviews;
+                      setPhotoPreviews(nextPreviews);
+                      void formik.setFieldValue("photos", nextPhotos, true);
+                    }}
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      backgroundColor: alpha(theme.palette.common.black, 0.5),
+                      color: theme.palette.common.white,
+                      "&:hover": {
+                        backgroundColor: alpha(theme.palette.common.black, 0.65),
+                      },
+                    }}
+                  >
+                    <DeleteRoundedIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              );
+            })}
           </Box>
         </Stack>
       </Box>

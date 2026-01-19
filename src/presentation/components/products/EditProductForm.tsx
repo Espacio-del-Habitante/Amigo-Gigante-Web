@@ -54,13 +54,6 @@ const formatPriceValue = (value: string, locale: string) => {
   return formatter.format(Number(digits));
 };
 
-const fileToDataUrl = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(new Error("read_failed"));
-    reader.readAsDataURL(file);
-  });
 
 const emptyValues: ProductFormValues = {
   name: "",
@@ -110,7 +103,6 @@ export function EditProductForm({ productId }: EditProductFormProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFilePreview, setImageFilePreview] = useState<string | null>(null);
-  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [isReadingFile, setIsReadingFile] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -157,7 +149,7 @@ export function EditProductForm({ productId }: EditProductFormProps) {
           name: values.name.trim(),
           description: values.description.trim(),
           price: parsedPrice,
-          imageUrl: imageDataUrl ?? (values.imageUrl.trim() || null),
+          imageUrl: values.imageUrl.trim() || null,
           imageFile,
           isPublished: values.isPublished,
         });
@@ -191,7 +183,6 @@ export function EditProductForm({ productId }: EditProductFormProps) {
       const formattedPrice = product.price === null ? "" : formatPriceValue(String(product.price), formatterLocale);
 
       setImageFile(null);
-      setImageDataUrl(null);
       setFileError(null);
 
       setInitialValues({
@@ -230,13 +221,12 @@ export function EditProductForm({ productId }: EditProductFormProps) {
 
   const canInteract = !(formik.isSubmitting || isReadingFile || isLoading || Boolean(loadError));
 
-  const previewUrl = imageFilePreview ?? imageDataUrl ?? formik.values.imageUrl.trim();
+  const previewUrl = imageFilePreview ?? formik.values.imageUrl.trim();
   const previewLabel = imageFile ? imageFile.name : t("sections.image.preview.fromUrl");
   const previewSize = imageFile ? `${(imageFile.size / (1024 * 1024)).toFixed(1)} MB` : null;
 
   const handleRemoveImage = () => {
     setImageFile(null);
-    setImageDataUrl(null);
     setFileError(null);
     void formik.setFieldValue("imageUrl", "", true);
   };
@@ -257,14 +247,11 @@ export function EditProductForm({ productId }: EditProductFormProps) {
 
     setIsReadingFile(true);
     try {
-      const dataUrl = await fileToDataUrl(file);
       setImageFile(file);
-      setImageDataUrl(dataUrl);
       void formik.setFieldValue("imageUrl", "", false);
     } catch {
       setFileError(t("sections.image.errors.readFailed"));
       setImageFile(null);
-      setImageDataUrl(null);
     } finally {
       setIsReadingFile(false);
     }
@@ -424,7 +411,6 @@ export function EditProductForm({ productId }: EditProductFormProps) {
                   formik.handleChange(event);
                   if (event.target.value.trim().length > 0) {
                     setImageFile(null);
-                    setImageDataUrl(null);
                   }
                 }}
               />
