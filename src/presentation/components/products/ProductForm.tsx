@@ -41,6 +41,16 @@ const productErrorKeyList = [
   "errors.generic",
 ] as const;
 type ProductErrorKey = (typeof productErrorKeyList)[number];
+const storageErrorKeyList = [
+  "storage.upload.error.connection",
+  "storage.upload.error.fileTooLarge",
+  "storage.upload.error.invalidFormat",
+  "storage.upload.error.permissionDenied",
+  "storage.upload.error.generic",
+  "storage.validation.maxSize",
+  "storage.validation.allowedFormats",
+] as const;
+type StorageErrorKey = (typeof storageErrorKeyList)[number];
 
 const formatPriceValue = (value: string, locale: string) => {
   const digits = value.replace(/[^\d]/g, "");
@@ -49,17 +59,10 @@ const formatPriceValue = (value: string, locale: string) => {
   return formatter.format(Number(digits));
 };
 
-const fileToDataUrl = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(new Error("read_failed"));
-    reader.readAsDataURL(file);
-  });
-
 export function ProductForm() {
   const theme = useTheme();
   const t = useTranslations("productForm");
+  const tStorage = useTranslations("storage");
   const locale = useLocale();
   const router = useRouter();
   const createProductUseCase = useMemo(
@@ -70,7 +73,6 @@ export function ProductForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFilePreview, setImageFilePreview] = useState<string | null>(null);
-  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [isReadingFile, setIsReadingFile] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -118,7 +120,7 @@ export function ProductForm() {
           name: values.name.trim(),
           description: values.description.trim(),
           price: parsedPrice,
-          imageUrl: imageDataUrl ?? (values.imageUrl.trim() || null),
+          imageUrl: values.imageUrl.trim() || null,
           imageFile,
           isPublished: values.isPublished,
         });
@@ -126,8 +128,14 @@ export function ProductForm() {
         router.push(`/${locale}/foundations/products`);
       } catch (error) {
         if (error instanceof Error && error.message) {
-          const candidate = error.message as ProductErrorKey;
-          setSubmitError(productErrorKeyList.includes(candidate) ? t(candidate) : candidate);
+          const candidate = error.message;
+          if (productErrorKeyList.includes(candidate as ProductErrorKey)) {
+            setSubmitError(t(candidate as ProductErrorKey));
+          } else if (storageErrorKeyList.includes(candidate as StorageErrorKey)) {
+            setSubmitError(tStorage(candidate.replace("storage.", "")));
+          } else {
+            setSubmitError(candidate);
+          }
         } else {
           setSubmitError(t("errors.generic"));
         }
@@ -146,13 +154,12 @@ export function ProductForm() {
 
   const canInteract = !(formik.isSubmitting || isReadingFile);
 
-  const previewUrl = imageFilePreview ?? imageDataUrl ?? formik.values.imageUrl.trim();
+  const previewUrl = imageFilePreview ?? formik.values.imageUrl.trim();
   const previewLabel = imageFile ? imageFile.name : t("sections.image.preview.fromUrl");
   const previewSize = imageFile ? `${(imageFile.size / (1024 * 1024)).toFixed(1)} MB` : null;
 
   const handleRemoveImage = () => {
     setImageFile(null);
-    setImageDataUrl(null);
     setFileError(null);
     void formik.setFieldValue("imageUrl", "", true);
   };
@@ -173,14 +180,11 @@ export function ProductForm() {
 
     setIsReadingFile(true);
     try {
-      const dataUrl = await fileToDataUrl(file);
       setImageFile(file);
-      setImageDataUrl(dataUrl);
       void formik.setFieldValue("imageUrl", "", false);
     } catch {
       setFileError(t("sections.image.errors.readFailed"));
       setImageFile(null);
-      setImageDataUrl(null);
     } finally {
       setIsReadingFile(false);
     }

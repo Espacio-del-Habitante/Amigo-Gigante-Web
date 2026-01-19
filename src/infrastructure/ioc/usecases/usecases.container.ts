@@ -10,11 +10,13 @@ import type { IFoundationMembershipRepository } from "@/domain/repositories/IFou
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
+import type { IPublicImageStorage } from "@/domain/repositories/IPublicImageStorage";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseCase";
 import { GetProductDetailUseCase } from "@/domain/usecases/shop/GetProductDetailUseCase";
 import { GetRelatedProductsUseCase } from "@/domain/usecases/shop/GetRelatedProductsUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
+import { UploadPublicImageUseCase } from "@/domain/usecases/storage/UploadPublicImageUseCase";
 import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCase";
 import { GetAnimalByIdUseCase } from "@/domain/usecases/animals/GetAnimalByIdUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
@@ -178,6 +180,14 @@ const useCasesModule = new ContainerModule(
       })
       .inSingletonScope();
 
+    bind<UploadPublicImageUseCase>(USE_CASE_TYPES.UploadPublicImageUseCase)
+      .toDynamicValue((context) => {
+        const publicImageStorage = context.get<IPublicImageStorage>(REPOSITORY_TYPES.PublicImageStorage);
+
+        return new UploadPublicImageUseCase(publicImageStorage);
+      })
+      .inSingletonScope();
+
     bind<CreateAnimalUseCase>(USE_CASE_TYPES.CreateAnimalUseCase)
       .toDynamicValue((context) => {
         const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
@@ -185,8 +195,16 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const uploadPublicImageUseCase = context.get<UploadPublicImageUseCase>(
+          USE_CASE_TYPES.UploadPublicImageUseCase,
+        );
 
-        return new CreateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+        return new CreateAnimalUseCase(
+          animalRepository,
+          authRepository,
+          foundationMembershipRepository,
+          uploadPublicImageUseCase,
+        );
       })
       .inSingletonScope();
 
@@ -197,8 +215,16 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const uploadPublicImageUseCase = context.get<UploadPublicImageUseCase>(
+          USE_CASE_TYPES.UploadPublicImageUseCase,
+        );
 
-        return new UpdateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+        return new UpdateAnimalUseCase(
+          animalRepository,
+          authRepository,
+          foundationMembershipRepository,
+          uploadPublicImageUseCase,
+        );
       })
       .inSingletonScope();
 

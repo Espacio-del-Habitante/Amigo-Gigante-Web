@@ -25,7 +25,7 @@ import {
 import { useFormik } from "formik";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { AnimalManagementSex } from "@/domain/models/AnimalManagement";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
@@ -39,25 +39,17 @@ import {
 
 const MAX_PHOTOS = 10;
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = new Set(["image/svg+xml", "image/png", "image/jpeg", "image/gif"]);
+const ALLOWED_MIME_TYPES = new Set(["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"]);
 
 function hasAllowedExtension(fileName: string): boolean {
   const lower = fileName.toLowerCase();
-  return lower.endsWith(".svg") || lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".gif");
-}
-
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(new Error("read_failed"));
-    reader.readAsDataURL(file);
-  });
+  return lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".gif") || lower.endsWith(".webp");
 }
 
 export function AddAnimalForm() {
   const theme = useTheme();
   const t = useTranslations("animals");
+  const tStorage = useTranslations("storage");
   const locale = useLocale();
   const router = useRouter();
   const createAnimalUseCase = useMemo(
@@ -71,13 +63,33 @@ export function AddAnimalForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isReadingFiles, setIsReadingFiles] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const photoPreviewsRef = useRef<string[]>([]);
 
   const addErrorKeyList = ["errors.unauthorized", "errors.connection", "errors.generic", "add.errors.generic"] as const;
   type AddErrorKey = (typeof addErrorKeyList)[number];
   const isAddErrorKey = (value: string): value is AddErrorKey =>
     (addErrorKeyList as readonly string[]).includes(value);
+  const storageErrorKeyList = [
+    "storage.upload.error.connection",
+    "storage.upload.error.fileTooLarge",
+    "storage.upload.error.invalidFormat",
+    "storage.upload.error.permissionDenied",
+    "storage.upload.error.generic",
+    "storage.validation.maxSize",
+    "storage.validation.allowedFormats",
+  ] as const;
+  type StorageErrorKey = (typeof storageErrorKeyList)[number];
+  const isStorageErrorKey = (value: string): value is StorageErrorKey =>
+    (storageErrorKeyList as readonly string[]).includes(value);
 
   const validationSchema = useMemo(() => createAddAnimalValidationSchema(t), [t]);
+
+  useEffect(() => {
+    return () => {
+      photoPreviewsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   const formik = useFormik<AddAnimalFormValues>({
     initialValues: {
@@ -127,7 +139,7 @@ export function AddAnimalForm() {
           size: values.size === "unknown" ? "unknown" : values.size,
           status,
           description,
-          photoUrls: values.photos,
+          photos: values.photos,
           isPublished,
         });
 
@@ -137,7 +149,13 @@ export function AddAnimalForm() {
       } catch (error) {
         if (error instanceof Error && error.message) {
           const candidate = error.message;
-          setSubmitError(isAddErrorKey(candidate) ? t(candidate) : candidate);
+          if (isAddErrorKey(candidate)) {
+            setSubmitError(t(candidate));
+          } else if (isStorageErrorKey(candidate)) {
+            setSubmitError(tStorage(candidate.replace("storage.", "")));
+          } else {
+            setSubmitError(candidate);
+          }
         } else {
           setSubmitError(t("add.errors.generic"));
         }
@@ -169,38 +187,39 @@ export function AddAnimalForm() {
       return;
     }
 
-    const nextFiles = files.slice(0, Math.max(0, MAX_PHOTOS - currentCount));
-    if (nextFiles.length < files.length) {
+    const selectedFiles = files.slice(0, Math.max(0, MAX_PHOTOS - currentCount));
+    if (selectedFiles.length < files.length) {
       setMediaError(t("add.media.errors.tooMany"));
     }
 
     setIsReadingFiles(true);
     try {
-      const nextDataUrls: string[] = [];
+      const acceptedFiles: File[] = [];
+      const nextPreviews: string[] = [];
 
-      for (const file of nextFiles) {
+      for (const file of selectedFiles) {
         const mimeOk = ALLOWED_MIME_TYPES.has(file.type);
         const extOk = hasAllowedExtension(file.name);
         if (!mimeOk && !extOk) {
-          setMediaError(t("add.media.errors.invalidType"));
+          setMediaError(tStorage("validation.allowedFormats"));
           continue;
         }
 
         if (file.size > MAX_SIZE_BYTES) {
-          setMediaError(t("add.media.errors.tooLarge"));
+          setMediaError(tStorage("validation.maxSize"));
           continue;
         }
 
-        try {
-          const dataUrl = await fileToDataUrl(file);
-          nextDataUrls.push(dataUrl);
-        } catch {
-          setMediaError(t("add.media.errors.readFailed"));
-        }
+        acceptedFiles.push(file);
+        nextPreviews.push(URL.createObjectURL(file));
       }
 
-      if (nextDataUrls.length > 0) {
-        await formik.setFieldValue("photos", [...formik.values.photos, ...nextDataUrls], true);
+      if (acceptedFiles.length > 0) {
+        const updatedPhotos = [...formik.values.photos, ...acceptedFiles];
+        const updatedPreviews = [...photoPreviewsRef.current, ...nextPreviews];
+        photoPreviewsRef.current = updatedPreviews;
+        setPhotoPreviews(updatedPreviews);
+        await formik.setFieldValue("photos", updatedPhotos, true);
       }
     } finally {
       setIsReadingFiles(false);
@@ -383,7 +402,7 @@ export function AddAnimalForm() {
           <input
             ref={fileInputRef}
             type="file"
-            accept=".svg,.png,.jpg,.jpeg,.gif,image/svg+xml,image/png,image/jpeg,image/gif"
+            accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/jpg,image/gif,image/webp"
             multiple
             className="hidden"
             disabled={!canInteract}
@@ -471,7 +490,7 @@ export function AddAnimalForm() {
           ) : null}
 
           <Box className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {formik.values.photos.map((src, index) => (
+            {photoPreviews.map((src, index) => (
               <Box
                 key={`${src.slice(0, 24)}-${index}`}
                 className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
@@ -483,8 +502,15 @@ export function AddAnimalForm() {
                   size="small"
                   disabled={!canInteract}
                   onClick={() => {
-                    const next = formik.values.photos.filter((_, idx) => idx !== index);
-                    void formik.setFieldValue("photos", next, true);
+                    const previewToRemove = photoPreviewsRef.current[index];
+                    if (previewToRemove) {
+                      URL.revokeObjectURL(previewToRemove);
+                    }
+                    const nextPreviews = photoPreviewsRef.current.filter((_, idx) => idx !== index);
+                    const nextPhotos = formik.values.photos.filter((_, idx) => idx !== index);
+                    photoPreviewsRef.current = nextPreviews;
+                    setPhotoPreviews(nextPreviews);
+                    void formik.setFieldValue("photos", nextPhotos, true);
                   }}
                   sx={{
                     position: "absolute",
@@ -624,4 +650,3 @@ export function AddAnimalForm() {
     </Box>
   );
 }
-

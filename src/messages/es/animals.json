@@ -156,7 +156,7 @@
       "upload": {
         "ariaLabel": "Subir fotos",
         "title": "Haz clic para subir o arrastra y suelta",
-        "hint": "SVG, PNG, JPG o GIF (MÁX. 5MB)",
+        "hint": "PNG, JPG, JPEG, GIF o WEBP (MÁX. 5MB)",
         "limit": "MÁX. 5MB por imagen"
       },
       "preview": {
@@ -166,7 +166,7 @@
       "errors": {
         "tooMany": "Puedes subir hasta 10 imágenes.",
         "tooLarge": "Una de las imágenes supera los 5MB.",
-        "invalidType": "Formato de imagen inválido. Permitidos: SVG, PNG, JPG, GIF.",
+        "invalidType": "Formato de imagen inválido. Permitidos: PNG, JPG, JPEG, GIF, WEBP.",
         "readFailed": "No pudimos leer una de las imágenes. Inténtalo nuevamente."
       }
     },
