@@ -31,6 +31,15 @@ export class PublicImageStorage implements IPublicImageStorage {
     return publicUrl;
   }
 
+  async deleteImage(path: string): Promise<void> {
+    const bucketName = getPublicImageBucket();
+    const { error } = await supabaseClient.storage.from(bucketName).remove([path]);
+
+    if (error) {
+      throw new Error(this.translateStorageError(error));
+    }
+  }
+
   private generatePath(
     type: PublicImageType,
     foundationId: string,

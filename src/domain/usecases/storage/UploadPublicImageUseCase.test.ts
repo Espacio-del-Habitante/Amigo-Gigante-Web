@@ -12,6 +12,7 @@ test("UploadPublicImageUseCase uploads images and returns the public URL", async
       capturedParams = params;
       return "https://cdn.test/images/photo.png";
     },
+    deleteImage: async () => {},
   };
 
   const useCase = new UploadPublicImageUseCase(publicImageStorage);
@@ -39,6 +40,7 @@ test("UploadPublicImageUseCase validates image format", async () => {
       uploadCalled = true;
       return "https://cdn.test/images/photo.png";
     },
+    deleteImage: async () => {},
   };
 
   const useCase = new UploadPublicImageUseCase(publicImageStorage);
