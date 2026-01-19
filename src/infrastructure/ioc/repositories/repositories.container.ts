@@ -11,6 +11,7 @@ import type { IFoundationMembershipRepository } from "@/domain/repositories/IFou
 import type { IFoundationProfileRepository } from "@/domain/repositories/IFoundationProfileRepository";
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import type { INotificationRepository } from "@/domain/repositories/INotificationRepository";
+import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
 
 import { AnimalRepository } from "@/infrastructure/repositories/AnimalRepository";
 
@@ -24,6 +25,7 @@ import { FoundationRepository } from "@/infrastructure/repositories/FoundationRe
 import { FoundationProfileRepository } from "@/infrastructure/repositories/FoundationProfileRepository";
 import { ProductRepository } from "@/infrastructure/repositories/ProductRepository";
 import { NotificationRepository } from "@/infrastructure/repositories/NotificationRepository";
+import { PrivateFileStorage } from "@/infrastructure/repositories/PrivateFileStorage";
 import { REPOSITORY_TYPES } from "./repositories.types";
 
 const repositoriesModule = new ContainerModule(
@@ -70,6 +72,10 @@ const repositoriesModule = new ContainerModule(
 
     bind<INotificationRepository>(REPOSITORY_TYPES.NotificationRepository)
       .to(NotificationRepository)
+      .inSingletonScope();
+
+    bind<IPrivateFileStorage>(REPOSITORY_TYPES.PrivateFileStorage)
+      .to(PrivateFileStorage)
       .inSingletonScope();
   },
 );

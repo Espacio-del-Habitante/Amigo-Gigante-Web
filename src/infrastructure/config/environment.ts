@@ -17,3 +17,7 @@ export function getSupabaseAnonKey(): string {
 
   return supabaseAnonKey;
 }
+
+export function getPrivateFilesBucket(): string {
+  return process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_FILES_BUCKET || "amg-private-files";
+}

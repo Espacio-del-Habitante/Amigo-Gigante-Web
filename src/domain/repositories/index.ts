@@ -19,3 +19,4 @@ export type {
 export type { IFoundationProfileRepository } from "./IFoundationProfileRepository";
 export type { ICartRepository } from "./ICartRepository";
 export type { INotificationRepository } from "./INotificationRepository";
+export type { IPrivateFileStorage, UploadPrivateFileParams, GetPrivateFileUrlParams } from "./IPrivateFileStorage";

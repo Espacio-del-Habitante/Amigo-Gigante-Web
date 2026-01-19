@@ -109,7 +109,7 @@
       "idDocument": {
         "label": "Documento de identidad (cédula)",
         "action": "Subir documento",
-        "hint": "PDF, JPG o PNG (máx 5MB)",
+        "hint": "PDF, JPG, PNG, GIF o WEBP (máx 10MB)",
         "selected": "Archivo seleccionado: {name}"
       },
       "homePhotos": {

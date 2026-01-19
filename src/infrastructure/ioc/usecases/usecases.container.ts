@@ -46,7 +46,10 @@ import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/Up
 import { UpdateProductUseCase } from "@/domain/usecases/products/UpdateProductUseCase";
 import { GetNotificationsUseCase } from "@/domain/usecases/notifications/GetNotificationsUseCase";
 import { MarkNotificationAsReadUseCase } from "@/domain/usecases/notifications/MarkNotificationAsReadUseCase";
+import { GetPrivateFileUrlUseCase } from "@/domain/usecases/storage/GetPrivateFileUrlUseCase";
+import { UploadPrivateFileUseCase } from "@/domain/usecases/storage/UploadPrivateFileUseCase";
 import type { INotificationRepository } from "@/domain/repositories/INotificationRepository";
+import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
 
@@ -455,6 +458,34 @@ const useCasesModule = new ContainerModule(
         const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
 
         return new MarkNotificationAsReadUseCase(notificationRepository, authRepository);
+      })
+      .inSingletonScope();
+
+    bind<UploadPrivateFileUseCase>(USE_CASE_TYPES.UploadPrivateFileUseCase)
+      .toDynamicValue((context) => {
+        const privateFileStorage = context.get<IPrivateFileStorage>(REPOSITORY_TYPES.PrivateFileStorage);
+
+        return new UploadPrivateFileUseCase(privateFileStorage);
+      })
+      .inSingletonScope();
+
+    bind<GetPrivateFileUrlUseCase>(USE_CASE_TYPES.GetPrivateFileUrlUseCase)
+      .toDynamicValue((context) => {
+        const privateFileStorage = context.get<IPrivateFileStorage>(REPOSITORY_TYPES.PrivateFileStorage);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetPrivateFileUrlUseCase(
+          privateFileStorage,
+          authRepository,
+          adoptionRequestRepository,
+          foundationMembershipRepository,
+        );
       })
       .inSingletonScope();
   },
