@@ -1,4 +1,25 @@
 {
+  "private": {
+    "upload": {
+      "success": "File uploaded successfully.",
+      "error": {
+        "accessDenied": "You do not have permission to access this file.",
+        "generic": "We could not upload the file. Please try again."
+      }
+    },
+    "url": {
+      "expired": "The link has expired, reloading...",
+      "error": {
+        "generating": "We could not generate the file link."
+      }
+    },
+    "validation": {
+      "maxSize": "The file exceeds the maximum size (10MB).",
+      "invalidType": "The file format is not valid.",
+      "empty": "The file is empty."
+    },
+    "connection": "We could not connect to the storage server."
+  },
   "upload": {
     "success": "Image uploaded successfully.",
     "error": {

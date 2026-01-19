@@ -37,6 +37,8 @@ const USE_CASE_TYPES = {
   UpdateProductUseCase: Symbol.for("UpdateProductUseCase"),
   GetNotificationsUseCase: Symbol.for("GetNotificationsUseCase"),
   MarkNotificationAsReadUseCase: Symbol.for("MarkNotificationAsReadUseCase"),
+  UploadPrivateFileUseCase: Symbol.for("UploadPrivateFileUseCase"),
+  GetPrivateFileUrlUseCase: Symbol.for("GetPrivateFileUrlUseCase"),
 };
 
 export { USE_CASE_TYPES };

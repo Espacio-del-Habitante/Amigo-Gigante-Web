@@ -21,3 +21,7 @@ export function getSupabaseAnonKey(): string {
 export function getPublicImageBucket(): string {
   return process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_IMAGE_BUCKET || "amg-public-image";
 }
+
+export function getPrivateFilesBucket(): string {
+  return process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_FILES_BUCKET || "amg-private-files";
+}

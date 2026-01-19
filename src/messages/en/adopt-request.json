@@ -109,7 +109,7 @@
       "idDocument": {
         "label": "ID document",
         "action": "Upload document",
-        "hint": "PDF, JPG or PNG (max 5MB)",
+        "hint": "PDF, JPG, PNG, GIF, or WEBP (max 10MB)",
         "selected": "Selected file: {name}"
       },
       "homePhotos": {
