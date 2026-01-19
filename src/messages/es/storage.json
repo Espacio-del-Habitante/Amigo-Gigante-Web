@@ -30,6 +30,14 @@
       "generic": "No se pudo subir la imagen. Inténtalo nuevamente."
     }
   },
+  "delete": {
+    "error": {
+      "generic": "Error al eliminar la imagen",
+      "notFound": "La imagen no se encontró",
+      "permissionDenied": "No se tienen permisos para eliminar la imagen"
+    },
+    "success": "Imagen eliminada correctamente"
+  },
   "validation": {
     "maxSize": "El archivo excede el tamaño máximo permitido (5MB).",
     "allowedFormats": "El formato de imagen no es válido. Permitidos: PNG, JPG, JPEG, GIF, WEBP."

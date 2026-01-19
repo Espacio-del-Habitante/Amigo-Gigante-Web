@@ -31,6 +31,29 @@ export class PublicImageStorage implements IPublicImageStorage {
     return publicUrl;
   }
 
+  async deleteImage(url: string): Promise<void> {
+    try {
+      if (!this.isStorageUrl(url)) {
+        return;
+      }
+
+      const bucketName = getPublicImageBucket();
+      const path = this.extractPathFromUrl(url);
+
+      if (!path) {
+        return;
+      }
+
+      const { error } = await supabaseClient.storage.from(bucketName).remove([path]);
+
+      if (error) {
+        console.error("Error deleting image from storage:", this.translateDeleteError(error), error);
+      }
+    } catch (error) {
+      console.error("Unexpected error deleting image from storage:", error);
+    }
+  }
+
   private generatePath(
     type: PublicImageType,
     foundationId: string,
@@ -57,6 +80,21 @@ export class PublicImageStorage implements IPublicImageStorage {
       .replace(/-+/g, "-")
       .replace(/^-|-$|^_+|_+$/g, "")
       .toLowerCase();
+  }
+
+  private isStorageUrl(url: string): boolean {
+    const bucketName = getPublicImageBucket();
+    return url.includes(`/storage/v1/object/public/${bucketName}/`);
+  }
+
+  private extractPathFromUrl(url: string): string {
+    const bucketName = getPublicImageBucket();
+    const prefix = `/storage/v1/object/public/${bucketName}/`;
+    const index = url.indexOf(prefix);
+
+    if (index === -1) return "";
+
+    return url.substring(index + prefix.length);
   }
 
   private translateStorageError(error: { message?: string; code?: string }): string {
@@ -94,5 +132,20 @@ export class PublicImageStorage implements IPublicImageStorage {
     }
 
     return "storage.upload.error.generic";
+  }
+
+  private translateDeleteError(error: { message?: string; code?: string }): string {
+    const message = error.message?.toLowerCase?.() ?? "";
+    const code = error.code?.toLowerCase?.() ?? "";
+
+    if (code === "object_not_found" || message.includes("not found") || message.includes("missing")) {
+      return "storage.delete.error.notFound";
+    }
+
+    if (message.includes("permission") || message.includes("unauthorized") || message.includes("forbidden")) {
+      return "storage.delete.error.permissionDenied";
+    }
+
+    return "storage.delete.error.generic";
   }
 }

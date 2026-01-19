@@ -278,6 +278,14 @@ export class AnimalRepository implements IAnimalRepository {
     }
   }
 
+  async deleteAnimalPhotos({ animalId }: Parameters<IAnimalRepository["deleteAnimalPhotos"]>[0]) {
+    const { error } = await supabaseClient.from("animal_photos").delete().eq("animal_id", animalId);
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+  }
+
   async getAnimalById({ animalId, foundationId }: Parameters<IAnimalRepository["getAnimalById"]>[0]) {
     const { data, error } = await supabaseClient
       .from("animals")

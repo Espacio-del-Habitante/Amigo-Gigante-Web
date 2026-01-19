@@ -16,6 +16,7 @@ import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseC
 import { GetProductDetailUseCase } from "@/domain/usecases/shop/GetProductDetailUseCase";
 import { GetRelatedProductsUseCase } from "@/domain/usecases/shop/GetRelatedProductsUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
+import { DeletePublicImageUseCase } from "@/domain/usecases/storage/DeletePublicImageUseCase";
 import { UploadPublicImageUseCase } from "@/domain/usecases/storage/UploadPublicImageUseCase";
 import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCase";
 import { GetAnimalByIdUseCase } from "@/domain/usecases/animals/GetAnimalByIdUseCase";
@@ -191,6 +192,14 @@ const useCasesModule = new ContainerModule(
       })
       .inSingletonScope();
 
+    bind<DeletePublicImageUseCase>(USE_CASE_TYPES.DeletePublicImageUseCase)
+      .toDynamicValue((context) => {
+        const publicImageStorage = context.get<IPublicImageStorage>(REPOSITORY_TYPES.PublicImageStorage);
+
+        return new DeletePublicImageUseCase(publicImageStorage);
+      })
+      .inSingletonScope();
+
     bind<CreateAnimalUseCase>(USE_CASE_TYPES.CreateAnimalUseCase)
       .toDynamicValue((context) => {
         const animalRepository = context.get<IAnimalRepository>(REPOSITORY_TYPES.AnimalRepository);
@@ -218,6 +227,9 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const deletePublicImageUseCase = context.get<DeletePublicImageUseCase>(
+          USE_CASE_TYPES.DeletePublicImageUseCase,
+        );
         const uploadPublicImageUseCase = context.get<UploadPublicImageUseCase>(
           USE_CASE_TYPES.UploadPublicImageUseCase,
         );
@@ -226,6 +238,7 @@ const useCasesModule = new ContainerModule(
           animalRepository,
           authRepository,
           foundationMembershipRepository,
+          deletePublicImageUseCase,
           uploadPublicImageUseCase,
         );
       })
@@ -238,8 +251,16 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const deletePublicImageUseCase = context.get<DeletePublicImageUseCase>(
+          USE_CASE_TYPES.DeletePublicImageUseCase,
+        );
 
-        return new DeleteAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+        return new DeleteAnimalUseCase(
+          animalRepository,
+          authRepository,
+          foundationMembershipRepository,
+          deletePublicImageUseCase,
+        );
       })
       .inSingletonScope();
 

@@ -30,6 +30,14 @@
       "generic": "We couldn't upload the image. Please try again."
     }
   },
+  "delete": {
+    "error": {
+      "generic": "Error deleting image",
+      "notFound": "Image not found",
+      "permissionDenied": "Permission denied to delete image"
+    },
+    "success": "Image deleted successfully"
+  },
   "validation": {
     "maxSize": "The file exceeds the maximum allowed size (5MB).",
     "allowedFormats": "Invalid image format. Allowed: PNG, JPG, JPEG, GIF, WEBP."
