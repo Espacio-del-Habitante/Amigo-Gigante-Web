@@ -41,6 +41,16 @@ const productErrorKeyList = [
   "errors.generic",
 ] as const;
 type ProductErrorKey = (typeof productErrorKeyList)[number];
+const storageErrorKeyList = [
+  "storage.upload.error.connection",
+  "storage.upload.error.fileTooLarge",
+  "storage.upload.error.invalidFormat",
+  "storage.upload.error.permissionDenied",
+  "storage.upload.error.generic",
+  "storage.validation.maxSize",
+  "storage.validation.allowedFormats",
+] as const;
+type StorageErrorKey = (typeof storageErrorKeyList)[number];
 
 const formatPriceValue = (value: string, locale: string) => {
   const digits = value.replace(/[^\d]/g, "");
@@ -60,6 +70,7 @@ const fileToDataUrl = (file: File): Promise<string> =>
 export function ProductForm() {
   const theme = useTheme();
   const t = useTranslations("productForm");
+  const tStorage = useTranslations("storage");
   const locale = useLocale();
   const router = useRouter();
   const createProductUseCase = useMemo(
@@ -126,8 +137,14 @@ export function ProductForm() {
         router.push(`/${locale}/foundations/products`);
       } catch (error) {
         if (error instanceof Error && error.message) {
-          const candidate = error.message as ProductErrorKey;
-          setSubmitError(productErrorKeyList.includes(candidate) ? t(candidate) : candidate);
+          const candidate = error.message;
+          if (productErrorKeyList.includes(candidate as ProductErrorKey)) {
+            setSubmitError(t(candidate as ProductErrorKey));
+          } else if (storageErrorKeyList.includes(candidate as StorageErrorKey)) {
+            setSubmitError(tStorage(candidate.replace("storage.", "")));
+          } else {
+            setSubmitError(candidate);
+          }
         } else {
           setSubmitError(t("errors.generic"));
         }

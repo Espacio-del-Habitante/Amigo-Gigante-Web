@@ -1,0 +1,16 @@
+{
+  "upload": {
+    "success": "Image uploaded successfully.",
+    "error": {
+      "connection": "We couldn't connect to the storage server.",
+      "fileTooLarge": "The file exceeds the maximum allowed size.",
+      "invalidFormat": "The image format is not valid.",
+      "permissionDenied": "You don't have permission to upload images.",
+      "generic": "We couldn't upload the image. Please try again."
+    }
+  },
+  "validation": {
+    "maxSize": "The file exceeds the maximum allowed size (5MB).",
+    "allowedFormats": "Invalid image format. Allowed: PNG, JPG, JPEG, GIF, WEBP."
+  }
+}

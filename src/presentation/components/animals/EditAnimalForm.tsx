@@ -563,36 +563,45 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
           ) : null}
 
           <Box className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {formik.values.photos.map((src, index) => (
-              <Box
-                key={`${src.slice(0, 24)}-${index}`}
-                className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
-                sx={{ aspectRatio: "1 / 1" }}
-              >
-                <img src={src} alt={t("add.media.preview.alt", { index: index + 1 })} className="h-full w-full object-cover" />
-                <IconButton
-                  aria-label={t("add.media.preview.remove", { index: index + 1 })}
-                  size="small"
-                  disabled={!canInteract}
-                  onClick={() => {
-                    const next = formik.values.photos.filter((_, idx) => idx !== index);
-                    void formik.setFieldValue("photos", next, true);
-                  }}
-                  sx={{
-                    position: "absolute",
-                    top: 8,
-                    right: 8,
-                    backgroundColor: alpha(theme.palette.common.black, 0.5),
-                    color: theme.palette.common.white,
-                    "&:hover": {
-                      backgroundColor: alpha(theme.palette.common.black, 0.65),
-                    },
-                  }}
+            {formik.values.photos.map((photo, index) => {
+              const previewSrc = typeof photo === "string" ? photo : "";
+              const previewKey = typeof photo === "string" ? photo.slice(0, 24) : photo.name;
+
+              return (
+                <Box
+                  key={`${previewKey}-${index}`}
+                  className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
+                  sx={{ aspectRatio: "1 / 1" }}
                 >
-                  <DeleteRoundedIcon fontSize="small" />
-                </IconButton>
+                  <img
+                    src={previewSrc}
+                    alt={t("add.media.preview.alt", { index: index + 1 })}
+                    className="h-full w-full object-cover"
+                  />
+                  <IconButton
+                    aria-label={t("add.media.preview.remove", { index: index + 1 })}
+                    size="small"
+                    disabled={!canInteract}
+                    onClick={() => {
+                      const next = formik.values.photos.filter((_, idx) => idx !== index);
+                      void formik.setFieldValue("photos", next, true);
+                    }}
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      backgroundColor: alpha(theme.palette.common.black, 0.5),
+                      color: theme.palette.common.white,
+                      "&:hover": {
+                        backgroundColor: alpha(theme.palette.common.black, 0.65),
+                      },
+                    }}
+                  >
+                    <DeleteRoundedIcon fontSize="small" />
+                  </IconButton>
               </Box>
-            ))}
+              );
+            })}
           </Box>
         </Stack>
       </Box>

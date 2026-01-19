@@ -4,6 +4,7 @@ const REPOSITORY_TYPES = {
   AdoptionRequestRepository: Symbol.for("AdoptionRequestRepository"),
   EventRepository: Symbol.for("EventRepository"),
   ProductRepository: Symbol.for("ProductRepository"),
+  PublicImageStorage: Symbol.for("PublicImageStorage"),
   AdoptionRequestRepository: Symbol.for("AdoptionRequestRepository"),
   CartRepository: Symbol.for("CartRepository"),
   AuthRepository: Symbol.for("AuthRepository"),

@@ -156,7 +156,7 @@
       "upload": {
         "ariaLabel": "Upload photos",
         "title": "Click to upload or drag and drop",
-        "hint": "SVG, PNG, JPG or GIF (MAX. 5MB)",
+        "hint": "PNG, JPG, JPEG, GIF, or WEBP (MAX. 5MB)",
         "limit": "MAX. 5MB per image"
       },
       "preview": {
@@ -166,7 +166,7 @@
       "errors": {
         "tooMany": "You can upload up to 10 images.",
         "tooLarge": "One of the images exceeds 5MB.",
-        "invalidType": "Invalid image format. Allowed: SVG, PNG, JPG, GIF.",
+        "invalidType": "Invalid image format. Allowed: PNG, JPG, JPEG, GIF, WEBP.",
         "readFailed": "We couldn't read one of the images. Please try again."
       }
     },
