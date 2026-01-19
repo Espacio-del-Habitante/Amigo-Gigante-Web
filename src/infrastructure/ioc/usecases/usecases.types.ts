@@ -16,6 +16,7 @@ const USE_CASE_TYPES = {
   RegisterFoundationUseCase: Symbol.for("RegisterFoundationUseCase"),
   RegisterExternalUserUseCase: Symbol.for("RegisterExternalUserUseCase"),
   LoginUseCase: Symbol.for("LoginUseCase"),
+  LogoutUseCase: Symbol.for("LogoutUseCase"),
   GetSessionUseCase: Symbol.for("GetSessionUseCase"),
   GetFoundationProfileUseCase: Symbol.for("GetFoundationProfileUseCase"),
   GetFoundationContactsUseCase: Symbol.for("GetFoundationContactsUseCase"),
