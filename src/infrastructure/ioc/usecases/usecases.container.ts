@@ -56,6 +56,8 @@ import type { INotificationRepository } from "@/domain/repositories/INotificatio
 import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
+import { getPublicImageBucket } from "@/infrastructure/config/environment";
+import { DeletePublicImageUseCase } from "@/domain/usecases/storage/DeletePublicImageUseCase";
 
 const useCasesModule = new ContainerModule(
   ({ bind }: ContainerModuleLoadOptions) => {
@@ -474,8 +476,16 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const deletePublicImageUseCase = context.get<DeletePublicImageUseCase>(
+          USE_CASE_TYPES.DeletePublicImageUseCase,
+        );
 
-        return new UpdateProductUseCase(productRepository, authRepository, foundationMembershipRepository);
+        return new UpdateProductUseCase(
+          productRepository,
+          authRepository,
+          foundationMembershipRepository,
+          deletePublicImageUseCase,
+        );
       })
       .inSingletonScope();
 
@@ -486,11 +496,15 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const deletePublicImageUseCase = context.get<DeletePublicImageUseCase>(
+          USE_CASE_TYPES.DeletePublicImageUseCase,
+        );
 
         return new DeleteProductUseCase(
           productRepository,
           authRepository,
           foundationMembershipRepository,
+          deletePublicImageUseCase,
         );
       })
       .inSingletonScope();
