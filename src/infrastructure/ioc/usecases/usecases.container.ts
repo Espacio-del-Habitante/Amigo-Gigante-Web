@@ -214,8 +214,16 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const uploadPublicImageUseCase = context.get<UploadPublicImageUseCase>(
+          USE_CASE_TYPES.UploadPublicImageUseCase,
+        );
 
-        return new UpdateAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+        return new UpdateAnimalUseCase(
+          animalRepository,
+          authRepository,
+          foundationMembershipRepository,
+          uploadPublicImageUseCase,
+        );
       })
       .inSingletonScope();
 
