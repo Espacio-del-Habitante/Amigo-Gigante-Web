@@ -144,7 +144,7 @@ export function FoundationHeader({ onOpenMenu }: FoundationHeaderProps) {
         <Divider />
         <MenuItem
           component={Link}
-          href={`/${locale}/foundations/profile/edit`}
+          href={`/${locale}/foundations/profile`}
           onClick={handleMenuClose}
         >
           {t("header.user.menu.editProfile")}
