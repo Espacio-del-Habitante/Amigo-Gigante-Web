@@ -114,6 +114,22 @@ class AuthRepository implements IAuthRepository {
     };
   }
 
+  async signOut(): Promise<void> {
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+
+      if (error) {
+        throw new Error(this.translateAuthError(error));
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(this.translateAuthError(error));
+      }
+
+      throw new Error("Ocurrió un error desconocido al cerrar sesión.");
+    }
+  }
+
   async createProfile(params: CreateProfileParams): Promise<void> {
     const { userId, role, displayName, phone } = params;
 
