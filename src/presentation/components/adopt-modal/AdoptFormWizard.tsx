@@ -27,10 +27,17 @@ import { AdoptStepHome } from "./AdoptStepHome";
 import { AdoptStepStyle } from "./AdoptStepStyle";
 import type { AdoptFormErrors, AdoptFormValues, AdoptWizardStep } from "./adoptFormTypes";
 
-const MAX_DOC_SIZE_BYTES = 5 * 1024 * 1024;
+const MAX_DOC_SIZE_BYTES = 10 * 1024 * 1024;
 const MAX_HOME_PHOTOS = 5;
-const ALLOWED_ID_TYPES = new Set(["application/pdf", "image/png", "image/jpeg"]);
-const ALLOWED_PHOTO_TYPES = new Set(["image/png", "image/jpeg"]);
+const ALLOWED_ID_TYPES = new Set([
+  "application/pdf",
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+  "image/gif",
+  "image/webp",
+]);
+const ALLOWED_PHOTO_TYPES = new Set(["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"]);
 
 interface AdoptFormWizardProps {
   animalId: number;
@@ -41,6 +48,7 @@ interface AdoptFormWizardProps {
 
 export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }: AdoptFormWizardProps) {
   const t = useTranslations("adoptRequest");
+  const tStorage = useTranslations("storage");
   const { isAuthenticated, loading: isAuthLoading } = useAuth();
 
   const createAdoptionRequestUseCase = useMemo(
@@ -161,12 +169,18 @@ export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }:
     }
 
     if (file.size > MAX_DOC_SIZE_BYTES) {
-      setErrors((prev) => ({ ...prev, idDocument: t("form.docs.errors.tooLarge") }));
+      setErrors((prev) => ({
+        ...prev,
+        idDocument: tStorage("private.validation.maxSize"),
+      }));
       return;
     }
 
     if (!ALLOWED_ID_TYPES.has(file.type)) {
-      setErrors((prev) => ({ ...prev, idDocument: t("form.docs.errors.invalidType") }));
+      setErrors((prev) => ({
+        ...prev,
+        idDocument: tStorage("private.validation.invalidType"),
+      }));
       return;
     }
 
@@ -198,9 +212,9 @@ export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }:
     });
 
     if (hasTooLarge) {
-      setErrors((prev) => ({ ...prev, homePhotos: t("form.docs.errors.tooLarge") }));
+      setErrors((prev) => ({ ...prev, homePhotos: tStorage("private.validation.maxSize") }));
     } else if (hasInvalidType) {
-      setErrors((prev) => ({ ...prev, homePhotos: t("form.docs.errors.invalidType") }));
+      setErrors((prev) => ({ ...prev, homePhotos: tStorage("private.validation.invalidType") }));
     }
 
     const remaining = Math.max(0, MAX_HOME_PHOTOS - currentCount);
@@ -281,6 +295,10 @@ export function AdoptFormWizard({ animalId, foundationId, animalName, onClose }:
     } catch (error) {
       if (error instanceof Error && error.message) {
         const key = error.message;
+        if (key.startsWith("storage.")) {
+          setSubmitError(tStorage(key.replace(/^storage\./, "")));
+          return;
+        }
         const errorKeys = [
           "errors.unauthenticated",
           "errors.unauthorized",

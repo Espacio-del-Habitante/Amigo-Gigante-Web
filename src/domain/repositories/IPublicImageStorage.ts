@@ -9,5 +9,5 @@ export interface UploadPublicImageParams {
 
 export interface IPublicImageStorage {
   uploadImage(params: UploadPublicImageParams): Promise<string>;
-  deleteImage(path: string): Promise<void>;
+  deleteImage(url: string): Promise<void>;
 }

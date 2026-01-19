@@ -43,6 +43,16 @@ export interface GetAdoptionRequestDetailParams {
   requestId: number;
 }
 
+export interface GetAdoptionRequestAccessInfoParams {
+  requestId: number;
+}
+
+export interface AdoptionRequestAccessInfo {
+  requestId: number;
+  foundationId: string;
+  adopterUserId: string;
+}
+
 export interface UpdateAdoptionRequestStatusParams {
   foundationId: string;
   requestId: number;
@@ -54,5 +64,6 @@ export interface IAdoptionRequestRepository {
   createAdoptionRequest(params: CreateAdoptionRequestParams): Promise<AdoptionRequest>;
   getAdminRequests(params: GetAdoptionRequestsParams): Promise<GetAdoptionRequestsResult>;
   getRequestDetail(params: GetAdoptionRequestDetailParams): Promise<AdoptionRequestDetail>;
+  getRequestAccessInfo(params: GetAdoptionRequestAccessInfoParams): Promise<AdoptionRequestAccessInfo>;
   updateStatus(params: UpdateAdoptionRequestStatusParams): Promise<void>;
 }

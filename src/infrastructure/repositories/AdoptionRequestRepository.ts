@@ -16,9 +16,9 @@ import type {
   IAdoptionRequestRepository,
   UpdateAdoptionRequestStatusParams,
 } from "@/domain/repositories/IAdoptionRequestRepository";
+import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
 import { supabaseClient } from "@/infrastructure/config/supabase";
-
-const DOCUMENTS_BUCKET = "adoption_request_documents";
+import { PrivateFileStorage } from "@/infrastructure/repositories/PrivateFileStorage";
 
 interface AdoptionRequestDetailsRow {
   adopter_display_name: string | null;
@@ -79,6 +79,8 @@ const PRIORITY_VALUE_MAP: Record<AdoptionRequestPriority, number> = {
 };
 
 export class AdoptionRequestRepository implements IAdoptionRequestRepository {
+  private readonly privateFileStorage: IPrivateFileStorage = new PrivateFileStorage();
+
   async createAdoptionRequest(params: CreateAdoptionRequestParams): Promise<AdoptionRequest> {
     const { animalId, foundationId, adopterUserId, details, documents } = params;
 
@@ -225,6 +227,31 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     return this.mapDetail(data, documents ?? []);
   }
 
+  async getRequestAccessInfo(
+    params: Parameters<IAdoptionRequestRepository["getRequestAccessInfo"]>[0],
+  ) {
+    const { requestId } = params;
+    const { data, error } = await supabaseClient
+      .from("adoption_requests")
+      .select("id, foundation_id, adopter_user_id")
+      .eq("id", requestId)
+      .single();
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+
+    return {
+      requestId: data.id,
+      foundationId: data.foundation_id,
+      adopterUserId: data.adopter_user_id,
+    };
+  }
+
   async updateStatus({ foundationId, requestId, status, rejectionReason }: UpdateAdoptionRequestStatusParams): Promise<void> {
     const { data, error } = await supabaseClient
       .from("adoption_requests")
@@ -345,20 +372,22 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
   }): Promise<void> {
     const { requestId, foundationId, documents } = params;
 
-    const idDocumentUrl = await this.uploadFile({
+    const idDocumentPath = await this.privateFileStorage.uploadFile({
       foundationId,
       requestId,
       file: documents.idDocument,
-      label: "id-document",
+      type: "adoption-request",
+      docType: "id-document",
     });
 
-    const homePhotoUrls = await Promise.all(
+    const homePhotoPaths = await Promise.all(
       documents.homePhotos.map((file, index) =>
-        this.uploadFile({
+        this.privateFileStorage.uploadFile({
           foundationId,
           requestId,
           file,
-          label: `home-${index + 1}`,
+          type: "adoption-request",
+          docType: `home-${index + 1}`,
         }),
       ),
     );
@@ -367,12 +396,12 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       {
         request_id: requestId,
         doc_type: "id_document",
-        file_url: idDocumentUrl,
+        file_url: idDocumentPath,
       },
-      ...homePhotoUrls.map((url) => ({
+      ...homePhotoPaths.map((path) => ({
         request_id: requestId,
         doc_type: "home_photos",
-        file_url: url,
+        file_url: path,
       })),
     ];
 
@@ -381,37 +410,6 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     if (error) {
       throw new Error(this.translateAdoptionError(error));
     }
-  }
-
-  private async uploadFile(params: {
-    foundationId: string;
-    requestId: number;
-    file: File;
-    label: string;
-  }): Promise<string> {
-    const { foundationId, requestId, file, label } = params;
-    const sanitizedName = this.sanitizeFileName(file.name);
-    const filePath = `${foundationId}/${requestId}/${label}-${Date.now()}-${sanitizedName}`;
-
-    const { data, error } = await supabaseClient.storage.from(DOCUMENTS_BUCKET).upload(filePath, file, {
-      upsert: false,
-    });
-
-    if (error) {
-      throw new Error(this.translateStorageError(error));
-    }
-
-    const publicUrl = supabaseClient.storage.from(DOCUMENTS_BUCKET).getPublicUrl(data?.path ?? "").data.publicUrl;
-
-    if (!publicUrl) {
-      throw new Error("errors.storageUnavailable");
-    }
-
-    return publicUrl;
-  }
-
-  private sanitizeFileName(fileName: string): string {
-    return fileName.replace(/[^a-z0-9.\-_]/gi, "-").toLowerCase();
   }
 
   private mapSummary(row: AdoptionRequestRow): AdoptionRequestSummary {
@@ -566,20 +564,6 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
 
     if (message.includes("storage") || message.includes("bucket")) {
       return "errors.storageUnavailable";
-    }
-
-    return "errors.generic";
-  }
-
-  private translateStorageError(error: { message?: string }): string {
-    const message = error.message?.toLowerCase?.() ?? "";
-
-    if (message.includes("bucket") || message.includes("not found") || message.includes("storage")) {
-      return "errors.storageUnavailable";
-    }
-
-    if (message.includes("permission")) {
-      return "errors.unauthorized";
     }
 
     return "errors.generic";

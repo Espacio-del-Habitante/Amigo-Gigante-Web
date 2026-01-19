@@ -1,3 +1,8 @@
 curl -i \
   -H "x-cron-secret: <String ENV>" \
   https://gvckjvnuqulazmhlhcpu.supabase.co/functions/v1/send-email-queue
+
+npx supabase login   
+npx supabase start    
+npx supabase secrets set --env-file ./supabase/.env 
+npx supabase functions deploy send-email-queue

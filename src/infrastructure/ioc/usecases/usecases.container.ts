@@ -16,6 +16,7 @@ import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseC
 import { GetProductDetailUseCase } from "@/domain/usecases/shop/GetProductDetailUseCase";
 import { GetRelatedProductsUseCase } from "@/domain/usecases/shop/GetRelatedProductsUseCase";
 import { CreateAnimalUseCase } from "@/domain/usecases/animals/CreateAnimalUseCase";
+import { DeletePublicImageUseCase } from "@/domain/usecases/storage/DeletePublicImageUseCase";
 import { UploadPublicImageUseCase } from "@/domain/usecases/storage/UploadPublicImageUseCase";
 import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCase";
 import { GetAnimalByIdUseCase } from "@/domain/usecases/animals/GetAnimalByIdUseCase";
@@ -49,7 +50,10 @@ import { UpdateProductPublishStatusUseCase } from "@/domain/usecases/products/Up
 import { UpdateProductUseCase } from "@/domain/usecases/products/UpdateProductUseCase";
 import { GetNotificationsUseCase } from "@/domain/usecases/notifications/GetNotificationsUseCase";
 import { MarkNotificationAsReadUseCase } from "@/domain/usecases/notifications/MarkNotificationAsReadUseCase";
+import { GetPrivateFileUrlUseCase } from "@/domain/usecases/storage/GetPrivateFileUrlUseCase";
+import { UploadPrivateFileUseCase } from "@/domain/usecases/storage/UploadPrivateFileUseCase";
 import type { INotificationRepository } from "@/domain/repositories/INotificationRepository";
+import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
 import { USE_CASE_TYPES } from "./usecases.types";
 import { getPublicImageBucket } from "@/infrastructure/config/environment";
@@ -194,7 +198,7 @@ const useCasesModule = new ContainerModule(
       .toDynamicValue((context) => {
         const publicImageStorage = context.get<IPublicImageStorage>(REPOSITORY_TYPES.PublicImageStorage);
 
-        return new DeletePublicImageUseCase(publicImageStorage, getPublicImageBucket());
+        return new DeletePublicImageUseCase(publicImageStorage);
       })
       .inSingletonScope();
 
@@ -225,6 +229,9 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const deletePublicImageUseCase = context.get<DeletePublicImageUseCase>(
+          USE_CASE_TYPES.DeletePublicImageUseCase,
+        );
         const uploadPublicImageUseCase = context.get<UploadPublicImageUseCase>(
           USE_CASE_TYPES.UploadPublicImageUseCase,
         );
@@ -233,6 +240,7 @@ const useCasesModule = new ContainerModule(
           animalRepository,
           authRepository,
           foundationMembershipRepository,
+          deletePublicImageUseCase,
           uploadPublicImageUseCase,
         );
       })
@@ -245,8 +253,16 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const deletePublicImageUseCase = context.get<DeletePublicImageUseCase>(
+          USE_CASE_TYPES.DeletePublicImageUseCase,
+        );
 
-        return new DeleteAnimalUseCase(animalRepository, authRepository, foundationMembershipRepository);
+        return new DeleteAnimalUseCase(
+          animalRepository,
+          authRepository,
+          foundationMembershipRepository,
+          deletePublicImageUseCase,
+        );
       })
       .inSingletonScope();
 
@@ -512,6 +528,34 @@ const useCasesModule = new ContainerModule(
         const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
 
         return new MarkNotificationAsReadUseCase(notificationRepository, authRepository);
+      })
+      .inSingletonScope();
+
+    bind<UploadPrivateFileUseCase>(USE_CASE_TYPES.UploadPrivateFileUseCase)
+      .toDynamicValue((context) => {
+        const privateFileStorage = context.get<IPrivateFileStorage>(REPOSITORY_TYPES.PrivateFileStorage);
+
+        return new UploadPrivateFileUseCase(privateFileStorage);
+      })
+      .inSingletonScope();
+
+    bind<GetPrivateFileUrlUseCase>(USE_CASE_TYPES.GetPrivateFileUrlUseCase)
+      .toDynamicValue((context) => {
+        const privateFileStorage = context.get<IPrivateFileStorage>(REPOSITORY_TYPES.PrivateFileStorage);
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new GetPrivateFileUrlUseCase(
+          privateFileStorage,
+          authRepository,
+          adoptionRequestRepository,
+          foundationMembershipRepository,
+        );
       })
       .inSingletonScope();
   },

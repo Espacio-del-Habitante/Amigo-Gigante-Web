@@ -1,4 +1,26 @@
 {
+  "private": {
+    "upload": {
+      "success": "Archivo subido correctamente.",
+      "error": {
+        "accessDenied": "No tienes permisos para acceder a este archivo.",
+        "generic": "No se pudo subir el archivo. Inténtalo nuevamente."
+      }
+    },
+    "url": {
+      "expired": "El enlace ha expirado, recargando...",
+      "error": {
+        "generating": "No se pudo generar el enlace del archivo.",
+        "notFound": "El archivo no fue encontrado. Verifica los permisos de acceso."
+      }
+    },
+    "validation": {
+      "maxSize": "El archivo excede el tamaño máximo permitido (10MB).",
+      "invalidType": "El formato de archivo no es válido.",
+      "empty": "El archivo está vacío."
+    },
+    "connection": "No se pudo conectar al servidor de almacenamiento."
+  },
   "upload": {
     "success": "Imagen subida correctamente.",
     "error": {
@@ -8,6 +30,14 @@
       "permissionDenied": "No tienes permisos para subir imágenes.",
       "generic": "No se pudo subir la imagen. Inténtalo nuevamente."
     }
+  },
+  "delete": {
+    "error": {
+      "generic": "Error al eliminar la imagen",
+      "notFound": "La imagen no se encontró",
+      "permissionDenied": "No se tienen permisos para eliminar la imagen"
+    },
+    "success": "Imagen eliminada correctamente"
   },
   "validation": {
     "maxSize": "El archivo excede el tamaño máximo permitido (5MB).",
