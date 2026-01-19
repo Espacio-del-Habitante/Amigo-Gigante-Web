@@ -5,7 +5,12 @@
     "title": "Foundation Logo",
     "help": "Recommended size 400x400px. Supported formats: JPG, PNG.",
     "upload": "Upload New",
-    "remove": "Remove"
+    "remove": "Remove",
+    "errors": {
+      "invalidFormat": "Invalid format. Only JPG and PNG are allowed.",
+      "tooLarge": "The file is too large. Maximum size: 5MB.",
+      "uploadFailed": "Error uploading the logo. Please try again."
+    }
   },
   "fields": {
     "name": {

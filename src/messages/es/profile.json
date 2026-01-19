@@ -5,7 +5,12 @@
     "title": "Logo de la Fundación",
     "help": "Tamaño recomendado 400x400px. Formatos soportados: JPG, PNG.",
     "upload": "Subir Nuevo",
-    "remove": "Eliminar"
+    "remove": "Eliminar",
+    "errors": {
+      "invalidFormat": "Formato no válido. Solo se permiten JPG y PNG.",
+      "tooLarge": "El archivo es demasiado grande. Tamaño máximo: 5MB.",
+      "uploadFailed": "Error al subir el logo. Por favor, intenta de nuevo."
+    }
   },
   "fields": {
     "name": {
