@@ -28,6 +28,7 @@ import { GetAdoptionRequestDetailUseCase } from "@/domain/usecases/adopt/GetAdop
 import { UpdateAdoptionRequestStatusUseCase } from "@/domain/usecases/adopt/UpdateAdoptionRequestStatusUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
+import { RegisterExternalUserUseCase } from "@/domain/usecases/auth/RegisterExternalUserUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
 import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
@@ -242,6 +243,14 @@ const useCasesModule = new ContainerModule(
         );
 
         return new RegisterFoundationUseCase(authRepository, foundationRepository);
+      })
+      .inSingletonScope();
+
+    bind<RegisterExternalUserUseCase>(USE_CASE_TYPES.RegisterExternalUserUseCase)
+      .toDynamicValue((context) => {
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new RegisterExternalUserUseCase(authRepository);
       })
       .inSingletonScope();
 

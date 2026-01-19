@@ -14,6 +14,7 @@ const USE_CASE_TYPES = {
   DeleteAnimalUseCase: Symbol.for("DeleteAnimalUseCase"),
   UpdateAnimalUseCase: Symbol.for("UpdateAnimalUseCase"),
   RegisterFoundationUseCase: Symbol.for("RegisterFoundationUseCase"),
+  RegisterExternalUserUseCase: Symbol.for("RegisterExternalUserUseCase"),
   LoginUseCase: Symbol.for("LoginUseCase"),
   GetSessionUseCase: Symbol.for("GetSessionUseCase"),
   GetFoundationProfileUseCase: Symbol.for("GetFoundationProfileUseCase"),

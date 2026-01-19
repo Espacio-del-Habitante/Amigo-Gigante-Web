@@ -39,10 +39,89 @@
     "submit": "Register foundation",
     "submitting": "Submitting...",
     "submitError": "There was an error registering the foundation. Please try again.",
+    "errors": {
+      "emailExists": "This email is already registered.",
+      "passwordMinLength": "Password must be at least 8 characters.",
+      "connectionError": "We couldn't connect to the server. Please check your connection.",
+      "rateLimit": "Too many attempts in a short time. Please try again later.",
+      "generic": "We couldn't complete the registration. Please try again."
+    },
     "securityBadge": "Secure registration",
     "securityNote": "Data encrypted and protected",
     "alreadyHaveAccount": "Already have an account?",
     "login": "Log in"
+  },
+  "external": {
+    "header": {
+      "subtitle": "Adopter registration",
+      "back": "Back to home",
+      "backAria": "Back to home"
+    },
+    "title": "Create your account",
+    "subtitle": "Join our community of animal lovers and start your journey to find a new best friend.",
+    "form": {
+      "fullName": {
+        "label": "Full name",
+        "placeholder": "Enter your full name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@email.com"
+      },
+      "phone": {
+        "label": "Phone",
+        "placeholder": "+1 (555) 000-0000"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Create a secure password"
+      },
+      "confirmPassword": {
+        "label": "Confirm password",
+        "placeholder": "Repeat your password"
+      },
+      "passwordToggle": {
+        "show": "Show",
+        "hide": "Hide",
+        "aria": "{action} {label}"
+      },
+      "terms": {
+        "label": "I agree to the <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+      },
+      "submit": "Create account",
+      "submitting": "Creating...",
+      "alreadyHaveAccount": "Already have an account?",
+      "login": "Log in"
+    },
+    "validation": {
+      "fullNameRequired": "Full name is required",
+      "fullNameMin": "Name must be at least 2 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email must be a valid format",
+      "phoneInvalid": "Phone number must be valid",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsMismatch": "Passwords do not match",
+      "termsRequired": "You must accept the terms and conditions"
+    },
+    "errors": {
+      "emailExists": "This email is already registered",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "connectionError": "We couldn't connect to the server. Please check your connection",
+      "validationError": "Please complete all required fields",
+      "rateLimit": "Too many attempts in a short time. Please try again later",
+      "generic": "We couldn't complete the registration. Please try again"
+    },
+    "image": {
+      "alt": "Person hugging a dog",
+      "badge": "Love is just an adoption away",
+      "quote": "“I found my best friend here! The process was simple and now our lives are full of wagging tails.”",
+      "attribution": "— Sarah Jenkins, Proud adopter",
+      "statsValue": "12,000+",
+      "statsLabel": "Successful adoptions",
+      "avatarAlt": "Adopter"
+    }
   },
   "image": {
     "alt": "Dogs enjoying the outdoors",

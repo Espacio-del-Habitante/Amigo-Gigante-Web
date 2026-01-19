@@ -39,10 +39,89 @@
     "submit": "Registrar fundación",
     "submitting": "Enviando...",
     "submitError": "Ocurrió un error al registrar la fundación. Inténtalo nuevamente.",
+    "errors": {
+      "emailExists": "Este email ya está registrado.",
+      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres.",
+      "connectionError": "No pudimos conectarnos al servidor. Revisa tu conexión.",
+      "rateLimit": "Se han hecho demasiados intentos en poco tiempo. Inténtalo más tarde.",
+      "generic": "No se pudo completar el registro. Inténtalo nuevamente."
+    },
     "securityBadge": "Registro seguro",
     "securityNote": "Datos encriptados y protegidos",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "login": "Inicia sesión"
+  },
+  "external": {
+    "header": {
+      "subtitle": "Registro de adoptantes",
+      "back": "Volver al inicio",
+      "backAria": "Volver al inicio"
+    },
+    "title": "Crea tu cuenta",
+    "subtitle": "Únete a nuestra comunidad de amantes de los animales y encuentra a tu nuevo mejor amigo.",
+    "form": {
+      "fullName": {
+        "label": "Nombre completo",
+        "placeholder": "Ingresa tu nombre completo"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "tu@email.com"
+      },
+      "phone": {
+        "label": "Teléfono",
+        "placeholder": "+57 300 000 0000"
+      },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Crea una contraseña segura"
+      },
+      "confirmPassword": {
+        "label": "Confirmar contraseña",
+        "placeholder": "Repite tu contraseña"
+      },
+      "passwordToggle": {
+        "show": "Mostrar",
+        "hide": "Ocultar",
+        "aria": "{action} {label}"
+      },
+      "terms": {
+        "label": "Acepto los <terms>Términos de servicio</terms> y la <privacy>Política de privacidad</privacy>."
+      },
+      "submit": "Crear cuenta",
+      "submitting": "Creando...",
+      "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+      "login": "Inicia sesión"
+    },
+    "validation": {
+      "fullNameRequired": "El nombre completo es requerido",
+      "fullNameMin": "El nombre debe tener al menos 2 caracteres",
+      "emailRequired": "El email es requerido",
+      "emailInvalid": "El email debe tener un formato válido",
+      "phoneInvalid": "El teléfono debe tener un formato válido",
+      "passwordRequired": "La contraseña es requerida",
+      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+      "confirmPasswordRequired": "Debes confirmar la contraseña",
+      "passwordsMismatch": "Las contraseñas no coinciden",
+      "termsRequired": "Debes aceptar los términos y condiciones"
+    },
+    "errors": {
+      "emailExists": "Este email ya está registrado",
+      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+      "connectionError": "No pudimos conectarnos al servidor. Revisa tu conexión",
+      "validationError": "Por favor completa todos los campos requeridos",
+      "rateLimit": "Se han hecho demasiados intentos en poco tiempo. Inténtalo más tarde",
+      "generic": "No se pudo completar el registro. Inténtalo nuevamente"
+    },
+    "image": {
+      "alt": "Persona abrazando a su perro",
+      "badge": "El amor está a un paso de adopción",
+      "quote": "“Encontré a mi mejor amigo aquí. El proceso fue simple y ahora nuestra casa está llena de colitas felices.”",
+      "attribution": "— Sarah Jenkins, Adoptante orgullosa",
+      "statsValue": "12,000+",
+      "statsLabel": "Adopciones exitosas",
+      "avatarAlt": "Adoptante"
+    }
   },
   "image": {
     "alt": "Perros disfrutando al aire libre",

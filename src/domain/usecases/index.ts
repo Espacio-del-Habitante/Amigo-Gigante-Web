@@ -1,6 +1,7 @@
 export { DebugUseCase } from "./debug/DebugUseCase";
 export { GetHomeAnimalsUseCase } from "./animals/GetHomeAnimalsUseCase";
 export { RegisterFoundationUseCase } from "./auth/RegisterFoundationUseCase";
+export { RegisterExternalUserUseCase } from "./auth/RegisterExternalUserUseCase";
 export { LoginUseCase } from "./auth/LoginUseCase";
 export { GetSessionUseCase } from "./auth/GetSessionUseCase";
 export { GetFoundationProfileUseCase } from "./foundation/GetFoundationProfileUseCase";
