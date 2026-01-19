@@ -48,9 +48,11 @@ export class PublicImageStorage implements IPublicImageStorage {
 
       if (error) {
         console.error("Error deleting image from storage:", this.translateDeleteError(error), error);
+        throw new Error(this.translateDeleteError(error));
       }
     } catch (error) {
       console.error("Unexpected error deleting image from storage:", error);
+      throw error;
     }
   }
 

@@ -10,7 +10,8 @@
     "url": {
       "expired": "The link has expired, reloading...",
       "error": {
-        "generating": "We could not generate the file link."
+        "generating": "We could not generate the file link.",
+        "notFound": "File not found. Please check access permissions."
       }
     },
     "validation": {

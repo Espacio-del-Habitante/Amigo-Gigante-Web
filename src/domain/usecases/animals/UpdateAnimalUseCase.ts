@@ -33,6 +33,7 @@ export class UpdateAnimalUseCase {
   ) {}
 
   async execute(input: UpdateAnimalInput): Promise<void> {
+
     const session = await this.authRepository.getSession();
 
     if (!session?.user?.id) {
