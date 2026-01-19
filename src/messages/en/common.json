@@ -11,12 +11,19 @@
   "buttons": {
     "search": "Search",
     "login": "Log in",
+    "account": "Account",
     "goToDashboard": "dashboard",
     "register": "Sign up",
     "cancel": "Cancel",
     "applyFilters": "Apply filters",
     "ok": "OK",
     "visitStore": "Visit store"
+  },
+  "account": {
+    "menu": {
+      "editAccount": "Edit account",
+      "logout": "Log out"
+    }
   },
   "deleteModal": {
     "title": "Are you sure you want to delete this {item}?",

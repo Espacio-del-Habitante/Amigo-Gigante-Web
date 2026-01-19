@@ -6,6 +6,7 @@ import type {
   UserRole,
 } from "@/domain/types/auth.types";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
+import { LogoutUseCase } from "@/domain/usecases/auth/LogoutUseCase";
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
 
@@ -15,6 +16,7 @@ interface UseAuthResult {
   isAuthenticated: boolean;
   role: UserRole | null;
   loading: boolean;
+  logout: () => Promise<void>;
 }
 
 /**
@@ -27,6 +29,10 @@ export const useAuth = (): UseAuthResult => {
   const [loading, setLoading] = useState<boolean>(true);
   const getSessionUseCase = useMemo(
     () => appContainer.get<GetSessionUseCase>(USE_CASE_TYPES.GetSessionUseCase),
+    [],
+  );
+  const logoutUseCase = useMemo(
+    () => appContainer.get<LogoutUseCase>(USE_CASE_TYPES.LogoutUseCase),
     [],
   );
 
@@ -65,11 +71,19 @@ export const useAuth = (): UseAuthResult => {
     return Boolean(session?.accessToken) && Boolean(user);
   }, [session?.accessToken, user]);
 
+  const logout = useMemo(() => {
+    return async () => {
+      await logoutUseCase.execute();
+      setSession(null);
+    };
+  }, [logoutUseCase]);
+
   return {
     user,
     session,
     isAuthenticated,
     role,
     loading,
+    logout,
   };
 };

@@ -3,6 +3,7 @@ export { GetHomeAnimalsUseCase } from "./animals/GetHomeAnimalsUseCase";
 export { RegisterFoundationUseCase } from "./auth/RegisterFoundationUseCase";
 export { RegisterExternalUserUseCase } from "./auth/RegisterExternalUserUseCase";
 export { LoginUseCase } from "./auth/LoginUseCase";
+export { LogoutUseCase } from "./auth/LogoutUseCase";
 export { GetSessionUseCase } from "./auth/GetSessionUseCase";
 export { GetFoundationProfileUseCase } from "./foundation/GetFoundationProfileUseCase";
 export { GetFoundationContactsUseCase } from "./foundation/GetFoundationContactsUseCase";

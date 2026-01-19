@@ -15,7 +15,11 @@
     "user": {
       "name": "Shelter Admin",
       "email": "admin@amigo.org",
-      "initials": "SA"
+      "initials": "SA",
+      "menu": {
+        "editProfile": "Editar perfil",
+        "logout": "Cerrar sesión"
+      }
     }
   },
   "dashboardHeader": {

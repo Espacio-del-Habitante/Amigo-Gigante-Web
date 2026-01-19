@@ -12,6 +12,8 @@ import {
   List,
   ListItem,
   ListItemButton,
+  Menu,
+  MenuItem,
   Skeleton,
   Stack,
   Toolbar,
@@ -19,10 +21,12 @@ import {
   useTheme,
   Link,
 } from "@mui/material";
+import type { MouseEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NextLink from "next/link";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { keyframes } from "@mui/system";
 
@@ -56,7 +60,9 @@ export function HomeNavBar() {
   const { totalItems } = useCart();
   const [isCartPulsing, setIsCartPulsing] = useState(false);
   const pulseTimeoutRef = useRef<number | null>(null);
-  const { isAuthenticated, role, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const { isAuthenticated, role, user, loading: authLoading, logout } = useAuth();
+  const [accountMenuAnchor, setAccountMenuAnchor] = useState<null | HTMLElement>(null);
 
   const adoptHref = `/${locale}/adopt`;
   const foundationsHref = `/${locale}/foundations`;
@@ -75,8 +81,13 @@ export function HomeNavBar() {
     return `/${locale}/foundations`; // Default
   };
 
+  const isExternalUser = isAuthenticated && role === "external";
   const loginButtonHref = isAuthenticated ? getDashboardHref() : `/${locale}/login`;
-  const loginButtonText = isAuthenticated ? t("buttons.goToDashboard") : t("buttons.login");
+  const loginButtonText = isAuthenticated
+    ? isExternalUser
+      ? t("buttons.account")
+      : t("buttons.goToDashboard")
+    : t("buttons.login");
 
   const isHrefActive = (href: string) => Boolean(pathname) && href !== "#" && pathname === href;
 
@@ -104,6 +115,20 @@ export function HomeNavBar() {
       }
     };
   }, [handleCartPulse]);
+
+  const handleAccountMenuOpen = useCallback((event: MouseEvent<HTMLElement>) => {
+    setAccountMenuAnchor(event.currentTarget);
+  }, []);
+
+  const handleAccountMenuClose = useCallback(() => {
+    setAccountMenuAnchor(null);
+  }, []);
+
+  const handleLogout = useCallback(async () => {
+    await logout();
+    handleAccountMenuClose();
+    router.push(`/${locale}`);
+  }, [handleAccountMenuClose, locale, logout, router]);
 
   const navItems = useMemo(
     () => [
@@ -219,29 +244,76 @@ export function HomeNavBar() {
               </Badge>
             </MuiIconButton>
 
-            {authLoading ? (
-              <Skeleton
-                variant="rounded"
-                width={120}
-                height={36}
-                sx={{
-                  borderRadius: "999px",
-                  boxShadow: theme.shadows[2],
+          {authLoading ? (
+            <Skeleton
+              variant="rounded"
+              width={120}
+              height={36}
+              sx={{
+                borderRadius: "999px",
+                boxShadow: theme.shadows[2],
+              }}
+            />
+          ) : isExternalUser ? (
+            <>
+              <Button
+                tone="primary"
+                variant="solid"
+                rounded="pill"
+                onClick={handleAccountMenuOpen}
+                sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}
+              >
+                {loginButtonText}
+              </Button>
+              <Menu
+                anchorEl={accountMenuAnchor}
+                open={Boolean(accountMenuAnchor)}
+                onClose={handleAccountMenuClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                slotProps={{
+                  paper: {
+                    sx: {
+                      minWidth: 200,
+                      borderRadius: 2,
+                      mt: 1,
+                    },
+                  },
                 }}
-              />
-            ) : (
-              <Link href={loginButtonHref}>
-                <Button
-                  tone="primary"
-                  variant="solid"
-                  rounded="pill"
-                  sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}
+              >
+                {user?.email ? (
+                  <Box sx={{ px: 2, py: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      {user.email}
+                    </Typography>
+                  </Box>
+                ) : null}
+                <Divider />
+                <MenuItem
+                  component={NextLink}
+                  href={`/${locale}/account/edit`}
+                  onClick={handleAccountMenuClose}
                 >
-                  {loginButtonText}
-                </Button>
-              </Link>
-            )}
-          </Stack>
+                  {t("account.menu.editAccount")}
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  {t("account.menu.logout")}
+                </MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <Link href={loginButtonHref}>
+              <Button
+                tone="primary"
+                variant="solid"
+                rounded="pill"
+                sx={{ boxShadow: theme.shadows[2], px: 3.5, minWidth: 0 }}
+              >
+                {loginButtonText}
+              </Button>
+            </Link>
+          )}
+        </Stack>
         </Toolbar>
       </Container>
       <Drawer
@@ -299,6 +371,60 @@ export function HomeNavBar() {
                 borderRadius: "999px",
               }}
             />
+          ) : isExternalUser ? (
+            <>
+              <Button
+                fullWidth
+                variant="solid"
+                rounded="pill"
+                onClick={handleAccountMenuOpen}
+              >
+                {loginButtonText}
+              </Button>
+              <Menu
+                anchorEl={accountMenuAnchor}
+                open={Boolean(accountMenuAnchor)}
+                onClose={handleAccountMenuClose}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                slotProps={{
+                  paper: {
+                    sx: {
+                      minWidth: 200,
+                      borderRadius: 2,
+                      mt: 1,
+                    },
+                  },
+                }}
+              >
+                {user?.email ? (
+                  <Box sx={{ px: 2, py: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      {user.email}
+                    </Typography>
+                  </Box>
+                ) : null}
+                <Divider />
+                <MenuItem
+                  component={NextLink}
+                  href={`/${locale}/account/edit`}
+                  onClick={() => {
+                    handleAccountMenuClose();
+                    setOpen(false);
+                  }}
+                >
+                  {t("account.menu.editAccount")}
+                </MenuItem>
+                <MenuItem
+                  onClick={async () => {
+                    await handleLogout();
+                    setOpen(false);
+                  }}
+                >
+                  {t("account.menu.logout")}
+                </MenuItem>
+              </Menu>
+            </>
           ) : (
             <Button
               fullWidth
