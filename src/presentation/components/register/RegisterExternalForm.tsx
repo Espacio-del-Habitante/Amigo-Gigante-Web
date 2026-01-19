@@ -1,8 +1,6 @@
 "use client";
 
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import MailRoundedIcon from "@mui/icons-material/MailRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import {
@@ -21,31 +19,22 @@ import {
 } from "@mui/material";
 import { type FieldInputProps, useFormik } from "formik";
 import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactElement, useMemo, useState } from "react";
 
-import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
+import { RegisterExternalUserUseCase } from "@/domain/usecases/auth/RegisterExternalUserUseCase";
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
-import { Button, Chip } from "@/presentation/components/atoms";
-import { createRegisterValidationSchema, type RegisterFormValues } from "@/presentation/components/register/registerValidation";
+import { Button } from "@/presentation/components/atoms";
+import {
+  createRegisterExternalValidationSchema,
+  type RegisterExternalFormValues,
+} from "@/presentation/components/register/registerExternalValidation";
 
-interface RegisterFormProps {
+interface RegisterExternalFormProps {
   ctaIcon?: ReactElement;
-  badgeIcon?: ReactElement;
 }
-
-const errorMessageKeyList = [
-  "form.errors.emailExists",
-  "form.errors.passwordMinLength",
-  "form.errors.connectionError",
-  "form.errors.rateLimit",
-  "form.errors.generic",
-] as const;
-
-type RegisterErrorMessageKey = (typeof errorMessageKeyList)[number];
-
-const errorMessageKeys = new Set<RegisterErrorMessageKey>(errorMessageKeyList);
 
 interface PasswordFieldProps {
   label: string;
@@ -58,6 +47,19 @@ interface PasswordFieldProps {
   hideLabel: string;
   getToggleAriaLabel: (action: string, label: string) => string;
 }
+
+const errorMessageKeyList = [
+  "external.errors.emailExists",
+  "external.errors.passwordMinLength",
+  "external.errors.connectionError",
+  "external.errors.validationError",
+  "external.errors.rateLimit",
+  "external.errors.generic",
+] as const;
+
+type RegisterExternalErrorMessageKey = (typeof errorMessageKeyList)[number];
+
+const errorMessageKeys = new Set<RegisterExternalErrorMessageKey>(errorMessageKeyList);
 
 function PasswordField({
   label,
@@ -112,13 +114,13 @@ function PasswordField({
   );
 }
 
-export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
+export function RegisterExternalForm({ ctaIcon }: RegisterExternalFormProps) {
   const theme = useTheme();
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("register");
-  const registerFoundationUseCase = useMemo(
-    () => appContainer.get<RegisterFoundationUseCase>(USE_CASE_TYPES.RegisterFoundationUseCase),
+  const registerExternalUserUseCase = useMemo(
+    () => appContainer.get<RegisterExternalUserUseCase>(USE_CASE_TYPES.RegisterExternalUserUseCase),
     [],
   );
 
@@ -145,11 +147,12 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
     }),
     [theme],
   );
-  const validationSchema = useMemo(() => createRegisterValidationSchema(t), [t]);
+
+  const validationSchema = useMemo(() => createRegisterExternalValidationSchema(t), [t]);
 
   const resolveErrorMessage = (error: unknown) => {
     if (error instanceof Error) {
-      const key = error.message as RegisterErrorMessageKey;
+      const key = error.message as RegisterExternalErrorMessageKey;
       if (errorMessageKeys.has(key)) {
         return t(key);
       }
@@ -157,14 +160,14 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
       return error.message;
     }
 
-    return t("form.submitError");
+    return t("external.errors.generic");
   };
 
-  const formik = useFormik<RegisterFormValues>({
+  const formik = useFormik<RegisterExternalFormValues>({
     initialValues: {
-      foundationName: "",
-      officialEmail: "",
-      taxId: "",
+      fullName: "",
+      email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
       acceptTerms: false,
@@ -176,14 +179,15 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
       setSubmitError(null);
 
       try {
-        await registerFoundationUseCase.execute({
-          foundationName: values.foundationName.trim(),
-          officialEmail: values.officialEmail.trim(),
+        await registerExternalUserUseCase.execute({
+          email: values.email.trim(),
           password: values.password,
-          taxId: values.taxId.trim() || undefined,
+          displayName: values.fullName.trim(),
+          phone: values.phone.trim() || undefined,
         });
 
-        router.push(`/${locale}/foundations`);
+        helpers.resetForm();
+        router.push(`/${locale}`);
       } catch (error) {
         setSubmitError(resolveErrorMessage(error));
       } finally {
@@ -192,7 +196,7 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
     },
   });
 
-  const fieldError = (field: keyof RegisterFormValues) => {
+  const fieldError = (field: keyof RegisterExternalFormValues) => {
     if (formik.touched[field] || formik.submitCount > 0) {
       return formik.errors[field];
     }
@@ -221,78 +225,78 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
         gap: 3,
       }}
     >
-      <Stack spacing={2}>
-        <Chip
-          tone="neutral"
-          variant="soft"
-          icon={<MailRoundedIcon fontSize="small" />}
-          label={t("form.badge")}
-          sx={{ alignSelf: "flex-start" }}
-        />
-        <Stack spacing={1}>
-          <Typography variant="h4" sx={{ fontWeight: 900 }}>
-            {t("form.title")}
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, maxWidth: 640 }}>
-            {t("form.subtitle")}
-          </Typography>
-        </Stack>
+      <Stack spacing={1.5}>
+        <Typography variant="h4" sx={{ fontWeight: 900 }}>
+          {t("external.title")}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, maxWidth: 520 }}>
+          {t("external.subtitle")}
+        </Typography>
       </Stack>
 
       <Stack spacing={2.5}>
         <TextField
-          {...formik.getFieldProps("foundationName")}
-          label={t("form.fields.foundationName.label")}
-          placeholder={t("form.fields.foundationName.placeholder")}
+          {...formik.getFieldProps("fullName")}
+          label={t("external.form.fullName.label")}
+          placeholder={t("external.form.fullName.placeholder")}
           fullWidth
           disabled={formik.isSubmitting}
-          error={Boolean(fieldError("foundationName"))}
-          helperText={fieldError("foundationName")}
+          error={Boolean(fieldError("fullName"))}
+          helperText={fieldError("fullName")}
           sx={textFieldStyles}
         />
-        <TextField
-          {...formik.getFieldProps("officialEmail")}
-          label={t("form.fields.officialEmail.label")}
-          placeholder={t("form.fields.officialEmail.placeholder")}
-          type="email"
-          fullWidth
-          disabled={formik.isSubmitting}
-          error={Boolean(fieldError("officialEmail"))}
-          helperText={fieldError("officialEmail")}
-          sx={textFieldStyles}
-        />
-        <TextField
-          {...formik.getFieldProps("taxId")}
-          label={t("form.fields.taxId.label")}
-          placeholder={t("form.fields.taxId.placeholder")}
-          fullWidth
-          disabled={formik.isSubmitting}
-          error={Boolean(fieldError("taxId"))}
-          helperText={fieldError("taxId") ?? ""}
-          sx={textFieldStyles}
-        />
-        <PasswordField
-          label={t("form.fields.password.label")}
-          placeholder={t("form.fields.password.placeholder")}
-          fieldProps={formik.getFieldProps("password")}
-          error={fieldError("password")}
-          disabled={formik.isSubmitting}
-          textFieldStyles={textFieldStyles}
-          showLabel={t("form.passwordToggle.show")}
-          hideLabel={t("form.passwordToggle.hide")}
-          getToggleAriaLabel={(action, label) => t("form.passwordToggle.aria", { action, label })}
-        />
-        <PasswordField
-          label={t("form.fields.confirmPassword.label")}
-          placeholder={t("form.fields.confirmPassword.placeholder")}
-          fieldProps={formik.getFieldProps("confirmPassword")}
-          error={fieldError("confirmPassword")}
-          disabled={formik.isSubmitting}
-          textFieldStyles={textFieldStyles}
-          showLabel={t("form.passwordToggle.show")}
-          hideLabel={t("form.passwordToggle.hide")}
-          getToggleAriaLabel={(action, label) => t("form.passwordToggle.aria", { action, label })}
-        />
+        <Box className="grid gap-4 md:grid-cols-2">
+          <TextField
+            {...formik.getFieldProps("email")}
+            label={t("external.form.email.label")}
+            placeholder={t("external.form.email.placeholder")}
+            type="email"
+            fullWidth
+            disabled={formik.isSubmitting}
+            error={Boolean(fieldError("email"))}
+            helperText={fieldError("email")}
+            sx={textFieldStyles}
+          />
+          <TextField
+            {...formik.getFieldProps("phone")}
+            label={t("external.form.phone.label")}
+            placeholder={t("external.form.phone.placeholder")}
+            type="tel"
+            fullWidth
+            disabled={formik.isSubmitting}
+            error={Boolean(fieldError("phone"))}
+            helperText={fieldError("phone")}
+            sx={textFieldStyles}
+          />
+        </Box>
+        <Box className="grid gap-4 md:grid-cols-2">
+          <PasswordField
+            label={t("external.form.password.label")}
+            placeholder={t("external.form.password.placeholder")}
+            fieldProps={formik.getFieldProps("password")}
+            error={fieldError("password")}
+            disabled={formik.isSubmitting}
+            textFieldStyles={textFieldStyles}
+            showLabel={t("external.form.passwordToggle.show")}
+            hideLabel={t("external.form.passwordToggle.hide")}
+            getToggleAriaLabel={(action, label) =>
+              t("external.form.passwordToggle.aria", { action, label })
+            }
+          />
+          <PasswordField
+            label={t("external.form.confirmPassword.label")}
+            placeholder={t("external.form.confirmPassword.placeholder")}
+            fieldProps={formik.getFieldProps("confirmPassword")}
+            error={fieldError("confirmPassword")}
+            disabled={formik.isSubmitting}
+            textFieldStyles={textFieldStyles}
+            showLabel={t("external.form.passwordToggle.show")}
+            hideLabel={t("external.form.passwordToggle.hide")}
+            getToggleAriaLabel={(action, label) =>
+              t("external.form.passwordToggle.aria", { action, label })
+            }
+          />
+        </Box>
         <Stack spacing={0.5}>
           <FormControlLabel
             control={
@@ -307,7 +311,24 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
             }
             label={
               <Typography variant="body2" color="text.secondary">
-                {t("form.terms")}
+                {t.rich("external.form.terms.label", {
+                  terms: (chunks) => (
+                    <Link
+                      href="/terms"
+                      className="font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-2 hover:decoration-brand-500"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                  privacy: (chunks) => (
+                    <Link
+                      href="/privacy"
+                      className="font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-2 hover:decoration-brand-500"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </Typography>
             }
             sx={{
@@ -331,7 +352,7 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
           disabled={isSubmitDisabled}
           sx={{ height: 54, fontSize: 16, fontWeight: 800, boxShadow: theme.shadows[3] }}
         >
-          {formik.isSubmitting ? t("form.submitting") : t("form.submit")}
+          {formik.isSubmitting ? t("external.form.submitting") : t("external.form.submit")}
         </Button>
 
         {submitError && (
@@ -352,19 +373,6 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
             {submitError}
           </Box>
         )}
-
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Chip
-            tone="brand"
-            variant="soft"
-            icon={badgeIcon ?? <CheckRoundedIcon fontSize="small" />}
-            label={t("form.securityBadge")}
-            sx={{ fontWeight: 700 }}
-          />
-          <Typography variant="body2" color="text.secondary">
-            {t("form.securityNote")}
-          </Typography>
-        </Stack>
       </Stack>
 
       <Box
@@ -377,14 +385,14 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
           fontSize: 14,
         }}
       >
-        <Typography variant="body2">{t("form.alreadyHaveAccount")}</Typography>
-        <a
-          href="/login"
+        <Typography variant="body2">{t("external.form.alreadyHaveAccount")}</Typography>
+        <Link
+          href={`/${locale}/login`}
           className="font-semibold text-brand-600 transition-colors hover:text-brand-700"
-          aria-label={t("form.login")}
+          aria-label={t("external.form.login")}
         >
-          {t("form.login")}
-        </a>
+          {t("external.form.login")}
+        </Link>
       </Box>
     </Box>
   );

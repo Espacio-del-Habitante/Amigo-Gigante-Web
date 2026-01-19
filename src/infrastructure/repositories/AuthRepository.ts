@@ -115,13 +115,23 @@ class AuthRepository implements IAuthRepository {
   }
 
   async createProfile(params: CreateProfileParams): Promise<void> {
-    const { userId, role } = params;
+    const { userId, role, displayName, phone } = params;
 
     try {
-      const { error } = await supabaseClient.from("profiles").insert({
+      const payload: Record<string, string> = {
         id: userId,
         role,
-      });
+      };
+
+      if (displayName) {
+        payload.display_name = displayName;
+      }
+
+      if (phone) {
+        payload.phone = phone;
+      }
+
+      const { error } = await supabaseClient.from("profiles").insert(payload);
 
       if (error) {
         throw new Error(this.translateProfileError(error));
@@ -208,19 +218,27 @@ class AuthRepository implements IAuthRepository {
   private translateAuthError(error: Error): string {
     const message = error.message?.toLowerCase?.() ?? "";
 
+    if (error.message?.startsWith("form.errors.")) {
+      return error.message;
+    }
+
     if (error instanceof AuthApiError && error.status === 0) {
-      return "No pudimos conectarnos al servidor de autenticación. Revisa tu conexión e inténtalo nuevamente.";
+      return "form.errors.connectionError";
     }
 
     if (message.includes("registered") || message.includes("already")) {
-      return "El correo ya está registrado. Intenta iniciar sesión o utiliza otro email.";
+      return "form.errors.emailExists";
+    }
+
+    if (message.includes("password") && message.includes("8")) {
+      return "form.errors.passwordMinLength";
     }
 
     if (message.includes("rate limit")) {
-      return "Se han hecho demasiados intentos en poco tiempo. Espera unos minutos y vuelve a intentarlo.";
+      return "form.errors.rateLimit";
     }
 
-    return "No se pudo registrar tu cuenta. Inténtalo nuevamente en unos instantes.";
+    return "form.errors.generic";
   }
 
   private translateSignInError(error: Error): string {
@@ -265,10 +283,10 @@ class AuthRepository implements IAuthRepository {
     const message = error.message?.toLowerCase?.() ?? "";
 
     if (message.includes("connection")) {
-      return "No se pudo conectar con la base de datos para crear el perfil.";
+      return "form.errors.connectionError";
     }
 
-    return "No se pudo crear el perfil del usuario. Inténtalo nuevamente.";
+    return "form.errors.generic";
   }
 }
 

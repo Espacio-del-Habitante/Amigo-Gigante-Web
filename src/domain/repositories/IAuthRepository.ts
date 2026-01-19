@@ -13,6 +13,8 @@ export interface SignUpResult {
 export interface CreateProfileParams {
   userId: string;
   role: UserRole;
+  displayName?: string;
+  phone?: string;
 }
 
 export interface SignInParams {

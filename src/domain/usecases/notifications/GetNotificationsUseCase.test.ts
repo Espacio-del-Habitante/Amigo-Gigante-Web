@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import type { Notification } from "@/domain/models/Notification";
-import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
+import type { CreateProfileParams, IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { INotificationRepository } from "@/domain/repositories/INotificationRepository";
 import { GetNotificationsUseCase } from "@/domain/usecases/notifications/GetNotificationsUseCase";
 
@@ -26,7 +26,7 @@ test("GetNotificationsUseCase returns notifications for authenticated user", asy
       accessToken: "token",
       user: { id: "user-1", email: "test@example.com", role: "foundation_user" },
     }),
-    createProfile: async () => {},
+    createProfile: async (_params: CreateProfileParams) => {},
   };
 
   const notificationRepository: INotificationRepository = {
