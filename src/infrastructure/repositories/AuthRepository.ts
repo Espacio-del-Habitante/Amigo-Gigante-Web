@@ -145,6 +145,14 @@ class AuthRepository implements IAuthRepository {
     }
   }
 
+  async signOut(): Promise<void> {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      throw new Error(this.translateSignOutError(error));
+    }
+  }
+
   private mapUser(user: User): AuthUser {
     return {
       id: user.id,
@@ -284,6 +292,20 @@ class AuthRepository implements IAuthRepository {
 
     if (message.includes("connection")) {
       return "form.errors.connectionError";
+    }
+
+    return "form.errors.generic";
+  }
+
+  private translateSignOutError(error: AuthApiError | Error): string {
+    const message = error.message?.toLowerCase?.() ?? "";
+
+    if (error instanceof AuthApiError && error.status === 0) {
+      return "form.errors.connectionError";
+    }
+
+    if (message.includes("rate limit")) {
+      return "form.errors.rateLimit";
     }
 
     return "form.errors.generic";

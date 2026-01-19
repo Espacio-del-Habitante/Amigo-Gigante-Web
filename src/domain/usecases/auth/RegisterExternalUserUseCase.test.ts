@@ -29,6 +29,7 @@ test("RegisterExternalUserUseCase registers external users with profile data", a
     createProfile: async (params) => {
       createProfileCalledWith = params;
     },
+    signOut: async () => {},
   };
 
   const useCase = new RegisterExternalUserUseCase(authRepository);
@@ -61,6 +62,7 @@ test("RegisterExternalUserUseCase maps repository errors to external errors", as
     }),
     getSession: async () => null,
     createProfile: async () => {},
+    signOut: async () => {},
   };
 
   const useCase = new RegisterExternalUserUseCase(authRepository);

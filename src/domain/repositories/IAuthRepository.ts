@@ -32,4 +32,5 @@ export interface IAuthRepository {
   signIn(params: SignInParams): Promise<SignInResult>;
   getSession(): Promise<AuthSession | null>;
   createProfile(params: CreateProfileParams): Promise<void>;
+  signOut(): Promise<void>;
 }

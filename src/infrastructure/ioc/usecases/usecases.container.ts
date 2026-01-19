@@ -28,6 +28,7 @@ import { GetAdoptionRequestDetailUseCase } from "@/domain/usecases/adopt/GetAdop
 import { UpdateAdoptionRequestStatusUseCase } from "@/domain/usecases/adopt/UpdateAdoptionRequestStatusUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
+import { LogoutUseCase } from "@/domain/usecases/auth/LogoutUseCase";
 import { RegisterExternalUserUseCase } from "@/domain/usecases/auth/RegisterExternalUserUseCase";
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
 import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
@@ -259,6 +260,14 @@ const useCasesModule = new ContainerModule(
         const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
 
         return new LoginUseCase(authRepository);
+      })
+      .inSingletonScope();
+
+    bind<LogoutUseCase>(USE_CASE_TYPES.LogoutUseCase)
+      .toDynamicValue((context) => {
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new LogoutUseCase(authRepository);
       })
       .inSingletonScope();
 

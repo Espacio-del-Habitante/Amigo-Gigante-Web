@@ -11,12 +11,19 @@
   "buttons": {
     "search": "Buscar",
     "login": "Iniciar sesión",
+    "account": "Cuenta",
     "goToDashboard": "Admin. Panel",
     "register": "Registrarse",
     "cancel": "Cancelar",
     "applyFilters": "Aplicar filtros",
     "ok": "OK",
     "visitStore": "Visitar tienda"
+  },
+  "account": {
+    "menu": {
+      "editAccount": "Editar cuenta",
+      "logout": "Cerrar sesión"
+    }
   },
   "deleteModal": {
     "title": "¿Estás seguro de eliminar este {item}?",
