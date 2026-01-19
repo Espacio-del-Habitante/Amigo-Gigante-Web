@@ -22,7 +22,7 @@ export interface AddAnimalFormValues {
     spayedNeutered: boolean;
     wormed: boolean;
   };
-  photos: string[];
+  photos: Array<string | File>;
   submissionType: AddAnimalSubmissionType;
 }
 
@@ -61,7 +61,7 @@ export const createAddAnimalValidationSchema = (t: AnimalsTranslator) =>
       wormed: Yup.boolean().notRequired(),
     }),
     photos: Yup.array()
-      .of(Yup.string().trim().required())
+      .of(Yup.mixed<string | File>().required())
       .max(10, t("add.validation.photosMax"))
       .when("submissionType", {
         is: "publish",
@@ -70,4 +70,3 @@ export const createAddAnimalValidationSchema = (t: AnimalsTranslator) =>
       }),
     submissionType: Yup.string().oneOf(["draft", "publish"]).required(),
   });
-

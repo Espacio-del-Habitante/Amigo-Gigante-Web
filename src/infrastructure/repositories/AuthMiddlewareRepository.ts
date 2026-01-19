@@ -70,6 +70,9 @@ export class AuthMiddlewareRepository implements IAuthRepository {
   async createProfile(_: CreateProfileParams): Promise<void> {
     throw new Error("AuthMiddlewareRepository.createProfile is not supported in middleware.");
   }
-}
 
+  async signOut(): Promise<void> {
+    throw new Error("AuthMiddlewareRepository.signOut is not supported in middleware.");
+  }
+}
 

@@ -2,6 +2,7 @@ import type { AnimalManagement, AnimalManagementSize } from "@/domain/models/Ani
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
+import { UploadPublicImageUseCase } from "@/domain/usecases/storage/UploadPublicImageUseCase";
 
 export type UpdateAnimalAgeUnit = "years" | "months";
 export type UpdateAnimalSize = AnimalManagementSize | "giant";
@@ -17,7 +18,7 @@ export interface UpdateAnimalInput {
   size: UpdateAnimalSize;
   status: AnimalManagement["status"];
   description: string;
-  photoUrls: string[];
+  photos: Array<string | File>;
   isPublished: boolean;
 }
 
@@ -26,6 +27,7 @@ export class UpdateAnimalUseCase {
     private readonly animalRepository: IAnimalRepository,
     private readonly authRepository: IAuthRepository,
     private readonly foundationMembershipRepository: IFoundationMembershipRepository,
+    private readonly uploadPublicImageUseCase: UploadPublicImageUseCase,
   ) {}
 
   async execute(input: UpdateAnimalInput): Promise<void> {
@@ -37,7 +39,12 @@ export class UpdateAnimalUseCase {
 
     const foundationId = await this.foundationMembershipRepository.getFoundationIdForUser(session.user.id);
     const ageMonths = this.toAgeMonths(input.age, input.ageUnit);
-    const coverImageUrl = input.photoUrls[0] ?? null;
+    const resolvedPhotoUrls = await this.resolvePhotoUrls({
+      photos: input.photos,
+      foundationId,
+      animalId: String(input.animalId),
+    });
+    const coverImageUrl = resolvedPhotoUrls[0] ?? null;
 
     await this.animalRepository.updateAnimal({
       animalId: input.animalId,
@@ -56,7 +63,7 @@ export class UpdateAnimalUseCase {
 
     await this.animalRepository.replaceAnimalPhotos({
       animalId: input.animalId,
-      photoUrls: input.photoUrls,
+      photoUrls: resolvedPhotoUrls,
     });
   }
 
@@ -69,5 +76,28 @@ export class UpdateAnimalUseCase {
   private toDbSize(size: UpdateAnimalSize): AnimalManagementSize {
     if (size === "giant") return "large";
     return size;
+  }
+
+  private async resolvePhotoUrls({
+    photos,
+    foundationId,
+    animalId,
+  }: {
+    photos: Array<string | File>;
+    foundationId: string;
+    animalId: string;
+  }): Promise<string[]> {
+    const normalized = photos.filter((photo) => (typeof photo === "string" ? photo.trim() : true));
+    const uploads = normalized.map(async (photo) => {
+      if (typeof photo === "string") return photo;
+      return this.uploadPublicImageUseCase.execute({
+        file: photo,
+        type: "animal",
+        foundationId,
+        entityId: animalId,
+      });
+    });
+
+    return Promise.all(uploads);
   }
 }

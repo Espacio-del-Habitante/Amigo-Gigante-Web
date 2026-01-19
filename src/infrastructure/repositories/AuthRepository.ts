@@ -114,6 +114,22 @@ class AuthRepository implements IAuthRepository {
     };
   }
 
+  async signOut(): Promise<void> {
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+
+      if (error) {
+        throw new Error(this.translateAuthError(error));
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(this.translateAuthError(error));
+      }
+
+      throw new Error("Ocurrió un error desconocido al cerrar sesión.");
+    }
+  }
+
   async createProfile(params: CreateProfileParams): Promise<void> {
     const { userId, role, displayName, phone } = params;
 
@@ -142,6 +158,14 @@ class AuthRepository implements IAuthRepository {
       }
 
       throw new Error("No se pudo crear el perfil del usuario.");
+    }
+  }
+
+  async signOut(): Promise<void> {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      throw new Error(this.translateSignOutError(error));
     }
   }
 
@@ -284,6 +308,20 @@ class AuthRepository implements IAuthRepository {
 
     if (message.includes("connection")) {
       return "form.errors.connectionError";
+    }
+
+    return "form.errors.generic";
+  }
+
+  private translateSignOutError(error: AuthApiError | Error): string {
+    const message = error.message?.toLowerCase?.() ?? "";
+
+    if (error instanceof AuthApiError && error.status === 0) {
+      return "form.errors.connectionError";
+    }
+
+    if (message.includes("rate limit")) {
+      return "form.errors.rateLimit";
     }
 
     return "form.errors.generic";

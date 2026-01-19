@@ -1,3 +1,5 @@
+import { inject, injectable } from "inversify";
+
 import type { ShopProduct } from "@/domain/models/ShopProduct";
 import type {
   CreateProductParams,
@@ -15,7 +17,9 @@ import type {
   UpdateProductParams,
   UpdateProductPublishStatusParams,
 } from "@/domain/repositories/IProductRepository";
+import type { IPublicImageStorage } from "@/domain/repositories/IPublicImageStorage";
 import { supabaseClient } from "@/infrastructure/config/supabase";
+import { REPOSITORY_TYPES } from "@/infrastructure/ioc/repositories/repositories.types";
 
 interface ProductRow {
   id: number;
@@ -35,7 +39,12 @@ interface ShopProductRow {
   created_at: string;
 }
 
+@injectable()
 export class ProductRepository implements IProductRepository {
+  constructor(
+    @inject(REPOSITORY_TYPES.PublicImageStorage)
+    private readonly publicImageStorage: IPublicImageStorage,
+  ) {}
   async getRecentProducts(foundationId: string, limit: number): Promise<RecentProduct[]> {
     const { data, error } = await supabaseClient
       .from("products")
@@ -369,32 +378,15 @@ export class ProductRepository implements IProductRepository {
   }
 
   private async uploadProductImage(file: File, foundationId: string): Promise<string> {
-    const sanitizedName = this.sanitizeFileName(file.name);
-    const filePath = `${foundationId}/${Date.now()}-${sanitizedName}`;
-
-    const { data, error } = await supabaseClient.storage.from("products").upload(filePath, file, {
-      upsert: false,
+    return this.publicImageStorage.uploadImage({
+      file,
+      type: "product",
+      foundationId,
     });
-
-    if (error) {
-      throw new Error(this.translateProductsError(error));
-    }
-
-    const publicUrl = supabaseClient.storage.from("products").getPublicUrl(data?.path ?? "").data.publicUrl;
-
-    if (!publicUrl) {
-      throw new Error("errors.generic");
-    }
-
-    return publicUrl;
-  }
-
-  private sanitizeFileName(fileName: string): string {
-    return fileName.replace(/[^a-z0-9.\-_]/gi, "-").toLowerCase();
   }
 
   private isStorageUnavailableError(error: unknown): boolean {
-    return error instanceof Error && error.message === "errors.storageUnavailable";
+    return error instanceof Error && error.message === "storage.upload.error.connection";
   }
 
   private translateProductsError(error: { message?: string; code?: string }): string {
@@ -425,4 +417,3 @@ export class ProductRepository implements IProductRepository {
     return "errors.generic";
   }
 }
-

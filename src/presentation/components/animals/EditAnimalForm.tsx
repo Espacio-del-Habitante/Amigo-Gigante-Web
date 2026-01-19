@@ -40,7 +40,7 @@ import {
 
 const MAX_PHOTOS = 10;
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = new Set(["image/svg+xml", "image/png", "image/jpeg", "image/gif"]);
+const ALLOWED_MIME_TYPES = new Set(["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"]);
 
 const emptyValues: AddAnimalFormValues = {
   name: "",
@@ -70,16 +70,7 @@ type SubmitErrorKey = (typeof submitErrorKeyList)[number];
 
 function hasAllowedExtension(fileName: string): boolean {
   const lower = fileName.toLowerCase();
-  return lower.endsWith(".svg") || lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".gif");
-}
-
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(new Error("read_failed"));
-    reader.readAsDataURL(file);
-  });
+  return lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".gif") || lower.endsWith(".webp");
 }
 
 type AgeValue = AddAnimalFormValues["age"];
@@ -105,6 +96,7 @@ export interface EditAnimalFormProps {
 export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
   const theme = useTheme();
   const t = useTranslations("animals");
+  const tStorage = useTranslations("storage");
   const locale = useLocale();
   const router = useRouter();
   const getAnimalByIdUseCase = useMemo(
@@ -125,13 +117,37 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isReadingFiles, setIsReadingFiles] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const photoPreviewsRef = useRef<string[]>([]);
 
   const isLoadErrorKey = (value: string): value is LoadErrorKey =>
     (loadErrorKeyList as readonly string[]).includes(value);
   const isSubmitErrorKey = (value: string): value is SubmitErrorKey =>
     (submitErrorKeyList as readonly string[]).includes(value);
+  const storageErrorKeyList = [
+    "storage.upload.error.connection",
+    "storage.upload.error.fileTooLarge",
+    "storage.upload.error.invalidFormat",
+    "storage.upload.error.permissionDenied",
+    "storage.upload.error.generic",
+    "storage.validation.maxSize",
+    "storage.validation.allowedFormats",
+  ] as const;
+  type StorageErrorKey = (typeof storageErrorKeyList)[number];
+  const isStorageErrorKey = (value: string): value is StorageErrorKey =>
+    (storageErrorKeyList as readonly string[]).includes(value);
 
   const validationSchema = useMemo(() => createAddAnimalValidationSchema(t), [t]);
+
+  useEffect(() => {
+    return () => {
+      photoPreviewsRef.current.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, []);
 
   const loadAnimal = async () => {
     setIsLoading(true);
@@ -139,9 +155,15 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
     setSubmitError(null);
 
     try {
+      photoPreviewsRef.current.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
       const animal = await getAnimalByIdUseCase.execute({ animalId });
       const { age, ageUnit } = resolveAgeValues(animal.ageMonths);
 
+      const initialPhotos = animal.photos.map((photo) => photo.url);
       setInitialValues({
         name: animal.name,
         breed: animal.breed ?? "",
@@ -158,9 +180,11 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
           spayedNeutered: false,
           wormed: false,
         },
-        photos: animal.photos.map((photo) => photo.url),
+        photos: initialPhotos,
         submissionType: animal.isPublished ? "publish" : "draft",
       });
+      photoPreviewsRef.current = initialPhotos;
+      setPhotoPreviews(initialPhotos);
     } catch (error) {
       if (error instanceof Error && isLoadErrorKey(error.message)) {
         setLoadError(t(error.message));
@@ -208,7 +232,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
           size: values.size === "unknown" ? "unknown" : values.size,
           status,
           description,
-          photoUrls: values.photos,
+          photos: values.photos,
           isPublished,
         });
 
@@ -216,7 +240,13 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
       } catch (error) {
         if (error instanceof Error && error.message) {
           const candidate = error.message;
-          setSubmitError(isSubmitErrorKey(candidate) ? t(candidate) : t("edit.errors.generic"));
+          if (isSubmitErrorKey(candidate)) {
+            setSubmitError(t(candidate));
+          } else if (isStorageErrorKey(candidate)) {
+            setSubmitError(tStorage(candidate.replace("storage.", "")));
+          } else {
+            setSubmitError(t("edit.errors.generic"));
+          }
         } else {
           setSubmitError(t("edit.errors.generic"));
         }
@@ -248,38 +278,43 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
       return;
     }
 
-    const nextFiles = files.slice(0, Math.max(0, MAX_PHOTOS - currentCount));
-    if (nextFiles.length < files.length) {
+    const selectedFiles = files.slice(0, Math.max(0, MAX_PHOTOS - currentCount));
+    if (selectedFiles.length < files.length) {
       setMediaError(t("add.media.errors.tooMany"));
     }
 
     setIsReadingFiles(true);
     try {
-      const nextDataUrls: string[] = [];
+      const acceptedFiles: File[] = [];
+      const nextPreviews: string[] = [];
 
-      for (const file of nextFiles) {
+      for (const file of selectedFiles) {
         const mimeOk = ALLOWED_MIME_TYPES.has(file.type);
         const extOk = hasAllowedExtension(file.name);
         if (!mimeOk && !extOk) {
-          setMediaError(t("add.media.errors.invalidType"));
+          setMediaError(tStorage("validation.allowedFormats"));
           continue;
         }
 
         if (file.size > MAX_SIZE_BYTES) {
-          setMediaError(t("add.media.errors.tooLarge"));
+          setMediaError(tStorage("validation.maxSize"));
           continue;
         }
 
-        try {
-          const dataUrl = await fileToDataUrl(file);
-          nextDataUrls.push(dataUrl);
-        } catch {
-          setMediaError(t("add.media.errors.readFailed"));
-        }
+        acceptedFiles.push(file);
+        const previewUrl = URL.createObjectURL(file);
+        nextPreviews.push(previewUrl);
       }
 
-      if (nextDataUrls.length > 0) {
-        await formik.setFieldValue("photos", [...formik.values.photos, ...nextDataUrls], true);
+      if (acceptedFiles.length > 0) {
+        // Agregar archivos File objects (NO base64) al array de photos
+        const updatedPhotos = [...formik.values.photos, ...acceptedFiles];
+        // Agregar blob URLs para preview (solo para visualización, no se guardan)
+        const updatedPreviews = [...photoPreviewsRef.current, ...nextPreviews];
+        photoPreviewsRef.current = updatedPreviews;
+        setPhotoPreviews(updatedPreviews);
+        // Los File objects se subirán a Supabase Storage en el use case
+        await formik.setFieldValue("photos", updatedPhotos, true);
       }
     } finally {
       setIsReadingFiles(false);
@@ -475,7 +510,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
           <input
             ref={fileInputRef}
             type="file"
-            accept=".svg,.png,.jpg,.jpeg,.gif,image/svg+xml,image/png,image/jpeg,image/gif"
+            accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/jpg,image/gif,image/webp"
             multiple
             className="hidden"
             disabled={!canInteract}
@@ -563,36 +598,56 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
           ) : null}
 
           <Box className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {formik.values.photos.map((src, index) => (
-              <Box
-                key={`${src.slice(0, 24)}-${index}`}
-                className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
-                sx={{ aspectRatio: "1 / 1" }}
-              >
-                <img src={src} alt={t("add.media.preview.alt", { index: index + 1 })} className="h-full w-full object-cover" />
-                <IconButton
-                  aria-label={t("add.media.preview.remove", { index: index + 1 })}
-                  size="small"
-                  disabled={!canInteract}
-                  onClick={() => {
-                    const next = formik.values.photos.filter((_, idx) => idx !== index);
-                    void formik.setFieldValue("photos", next, true);
-                  }}
-                  sx={{
-                    position: "absolute",
-                    top: 8,
-                    right: 8,
-                    backgroundColor: alpha(theme.palette.common.black, 0.5),
-                    color: theme.palette.common.white,
-                    "&:hover": {
-                      backgroundColor: alpha(theme.palette.common.black, 0.65),
-                    },
-                  }}
+            {formik.values.photos.map((photo, index) => {
+              // Obtener la preview correcta: si es File, usar blob URL de photoPreviews; si es string (URL existente), usar directamente
+              // Los File objects se subirán a Supabase Storage en UpdateAnimalUseCase, NO se guardan como base64
+              const previewSrc =
+                typeof photo === "string"
+                  ? photo
+                  : photoPreviewsRef.current[index] || (typeof photo === "object" && "name" in photo ? URL.createObjectURL(photo) : "");
+              
+              return (
+                <Box
+                  key={`${typeof photo === "string" ? photo.slice(0, 24) : photo.name}-${index}`}
+                  className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
+                  sx={{ aspectRatio: "1 / 1" }}
                 >
-                  <DeleteRoundedIcon fontSize="small" />
-                </IconButton>
-              </Box>
-            ))}
+                  <img src={previewSrc} alt={t("add.media.preview.alt", { index: index + 1 })} className="h-full w-full object-cover" />
+                  <IconButton
+                    aria-label={t("add.media.preview.remove", { index: index + 1 })}
+                    size="small"
+                    disabled={!canInteract}
+                    onClick={() => {
+                      // Revocar blob URL si es necesario (solo para preview, no afecta el archivo)
+                      const previewToRemove = photoPreviewsRef.current[index];
+                      if (previewToRemove?.startsWith("blob:")) {
+                        URL.revokeObjectURL(previewToRemove);
+                      }
+                      
+                      // Eliminar del mismo índice en ambos arrays para mantener sincronización
+                      const nextPhotos = formik.values.photos.filter((_, idx) => idx !== index);
+                      const nextPreviews = photoPreviewsRef.current.filter((_, idx) => idx !== index);
+                      
+                      photoPreviewsRef.current = nextPreviews;
+                      setPhotoPreviews(nextPreviews);
+                      void formik.setFieldValue("photos", nextPhotos, true);
+                    }}
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      backgroundColor: alpha(theme.palette.common.black, 0.5),
+                      color: theme.palette.common.white,
+                      "&:hover": {
+                        backgroundColor: alpha(theme.palette.common.black, 0.65),
+                      },
+                    }}
+                  >
+                    <DeleteRoundedIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              );
+            })}
           </Box>
         </Stack>
       </Box>
