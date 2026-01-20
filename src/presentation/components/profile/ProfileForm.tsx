@@ -82,6 +82,7 @@ const ProfileForm = () => {
   );
   const [initialValues, setInitialValues] = useState<ProfileFormValues>(emptyProfileValues);
   const [profileMeta, setProfileMeta] = useState<ProfileMeta>({ foundationId: '', logoUrl: null });
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
@@ -89,6 +90,18 @@ const ProfileForm = () => {
 
   const resolveErrorMessage = (error: unknown) => {
     if (error instanceof Error) {
+      if (error.message === 'storage.upload.error.invalidFormat') {
+        return t('logo.errors.invalidFormat');
+      }
+
+      if (error.message === 'storage.upload.error.fileTooLarge') {
+        return t('logo.errors.tooLarge');
+      }
+
+      if (error.message.startsWith('storage.upload.error')) {
+        return t('logo.errors.uploadFailed');
+      }
+
       const key = error.message as FoundationErrorMessageKey;
       if (errorMessageKeys.has(key)) {
         return foundationT(key);
@@ -116,6 +129,7 @@ const ProfileForm = () => {
         whatsappUrl: profile.whatsappUrl,
       });
       setProfileMeta({ foundationId: profile.foundationId, logoUrl: profile.logoUrl });
+      setLogoFile(null);
     } catch (error) {
       setSubmitError(resolveErrorMessage(error));
     } finally {
@@ -136,9 +150,10 @@ const ProfileForm = () => {
       setSubmitSuccess(null);
 
       try {
-        const payload: FoundationProfile = {
+        const payload: FoundationProfile & { logoFile?: File | null } = {
           foundationId: profileMeta.foundationId,
           logoUrl: profileMeta.logoUrl,
+          logoFile,
           ...values,
         };
 
@@ -158,6 +173,7 @@ const ProfileForm = () => {
         };
 
         setInitialValues(nextValues);
+        setLogoFile(null);
         setProfileMeta({
           foundationId: updatedProfile.foundationId,
           logoUrl: updatedProfile.logoUrl,
@@ -219,7 +235,17 @@ const ProfileForm = () => {
         </Typography>
       </div>
 
-      <LogoSection />
+      <LogoSection
+        currentLogoUrl={profileMeta.logoUrl}
+        onLogoSelect={(file) => {
+          setLogoFile(file);
+        }}
+        onLogoRemove={() => {
+          setLogoFile(null);
+          setProfileMeta((current) => ({ ...current, logoUrl: null }));
+        }}
+        isUploading={formik.isSubmitting || isLoading}
+      />
 
       <div className="rounded-xl border border-neutral-200 bg-white p-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

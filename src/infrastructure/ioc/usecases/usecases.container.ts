@@ -354,8 +354,18 @@ const useCasesModule = new ContainerModule(
         const foundationProfileRepository = context.get<IFoundationProfileRepository>(
           REPOSITORY_TYPES.FoundationProfileRepository,
         );
+        const uploadPublicImageUseCase = context.get<UploadPublicImageUseCase>(
+          USE_CASE_TYPES.UploadPublicImageUseCase,
+        );
+        const deletePublicImageUseCase = context.get<DeletePublicImageUseCase>(
+          USE_CASE_TYPES.DeletePublicImageUseCase,
+        );
 
-        return new UpdateFoundationProfileUseCase(foundationProfileRepository);
+        return new UpdateFoundationProfileUseCase(
+          foundationProfileRepository,
+          uploadPublicImageUseCase,
+          deletePublicImageUseCase,
+        );
       })
       .inSingletonScope();
 
