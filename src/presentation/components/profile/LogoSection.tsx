@@ -26,18 +26,31 @@ const LogoSection = ({
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Limpiar blob URL cuando el componente se desmonte
   useEffect(() => {
-    if (currentLogoUrl === previewUrl) {
+    return () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [objectUrl]);
+
+  // Actualizar preview cuando cambia currentLogoUrl (después de subir exitosamente)
+  useEffect(() => {
+    // Si hay un blob URL activo y currentLogoUrl cambió a una URL real (no null),
+    // significa que se subió exitosamente, entonces limpiar el blob y usar la nueva URL
+    if (objectUrl && currentLogoUrl && !currentLogoUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(objectUrl);
+      setObjectUrl(null);
+      setPreviewUrl(currentLogoUrl);
       return;
     }
 
-    if (objectUrl) {
-      URL.revokeObjectURL(objectUrl);
-      setObjectUrl(null);
+    // Si no hay blob URL activo y currentLogoUrl cambió, actualizar preview
+    if (!objectUrl && currentLogoUrl !== previewUrl) {
+      setPreviewUrl(currentLogoUrl);
     }
-
-    setPreviewUrl(currentLogoUrl);
-  }, [currentLogoUrl, previewUrl, objectUrl]);
+  }, [currentLogoUrl, objectUrl, previewUrl]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
@@ -60,10 +73,13 @@ const LogoSection = ({
       return;
     }
 
+    // Limpiar blob URL anterior si existe
     if (objectUrl) {
       URL.revokeObjectURL(objectUrl);
+      setObjectUrl(null);
     }
 
+    // Crear nuevo blob URL para preview
     const nextPreviewUrl = URL.createObjectURL(file);
     setObjectUrl(nextPreviewUrl);
     setPreviewUrl(nextPreviewUrl);
@@ -100,6 +116,16 @@ const LogoSection = ({
           src={previewUrl ?? undefined}
           className="h-24 w-24 bg-neutral-100 text-neutral-400"
           alt={t('logo.title')}
+          onError={() => {
+            // Si falla al cargar la imagen, limpiar el preview
+            if (previewUrl?.startsWith('blob:')) {
+              URL.revokeObjectURL(previewUrl);
+              setObjectUrl(null);
+              setPreviewUrl(null);
+            } else {
+              setPreviewUrl(null);
+            }
+          }}
         />
         <div className="flex flex-wrap items-center gap-3">
           <input
