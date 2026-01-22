@@ -23,7 +23,7 @@ export interface DashboardKpiTrend {
 }
 
 export interface DashboardKpiCard {
-  key: "animalsInCare" | "activeSponsorships" | "pendingAdoptions" | "monthlyRevenue";
+  key: "animalsInCare" | "pendingAdoptions";
   value: number;
   trend: DashboardKpiTrend;
 }
@@ -50,4 +50,3 @@ export interface DashboardData {
   animalsInTreatment: AnimalManagement[];
   attentionAlerts: DashboardAttentionAlert[];
 }
-

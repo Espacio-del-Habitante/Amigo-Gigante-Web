@@ -95,6 +95,7 @@
   },
   "needsAttention": {
     "title": "Requiere Atención",
+    "empty": "No hay notificaciones pendientes",
     "viewAllTasks": "Ver todas las tareas",
     "alerts": {
       "veterinaryReview": {

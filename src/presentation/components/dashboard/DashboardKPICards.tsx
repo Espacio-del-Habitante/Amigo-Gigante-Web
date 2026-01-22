@@ -1,8 +1,6 @@
 "use client";
 
-import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import type { ReactNode } from "react";
 
@@ -20,22 +18,14 @@ export function DashboardKPICards({ kpis, locale }: DashboardKPICardsProps) {
       icon: <PetsRoundedIcon fontSize="small" />,
       iconClassName: "bg-brand-50 text-brand-700",
     },
-    activeSponsorships: {
-      icon: <FavoriteRoundedIcon fontSize="small" />,
-      iconClassName: "bg-accent-50 text-accent-700",
-    },
     pendingAdoptions: {
       icon: <HomeRoundedIcon fontSize="small" />,
       iconClassName: "bg-neutral-100 text-neutral-700",
     },
-    monthlyRevenue: {
-      icon: <PaymentsRoundedIcon fontSize="small" />,
-      iconClassName: "bg-brand-50 text-brand-700",
-    },
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 lg:gap-6">
       {kpis.map((kpi) => (
         <DashboardKPICard
           key={kpi.key}
@@ -48,4 +38,3 @@ export function DashboardKPICards({ kpis, locale }: DashboardKPICardsProps) {
     </div>
   );
 }
-

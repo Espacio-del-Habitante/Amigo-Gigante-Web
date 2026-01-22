@@ -11,9 +11,11 @@ import type {
 import type { AdoptionRequestDocument, AdoptionRequestDocumentType } from "@/domain/models/AdoptionRequestDocument";
 import type {
   CreateAdoptionRequestParams,
+  GetAdoptionRequestsCountsParams,
   GetAdoptionRequestsParams,
   GetAdoptionRequestsResult,
   IAdoptionRequestRepository,
+  AdoptionRequestsCounts,
   UpdateAdoptionRequestStatusParams,
 } from "@/domain/repositories/IAdoptionRequestRepository";
 import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
@@ -271,6 +273,51 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     if (!data) {
       throw new Error("errors.notFound");
     }
+  }
+
+  async getAdoptionRequestsCounts(params: GetAdoptionRequestsCountsParams): Promise<AdoptionRequestsCounts> {
+    const { foundationId } = params;
+
+    const { count: total, error: totalError } = await supabaseClient
+      .from("adoption_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("foundation_id", foundationId);
+
+    if (totalError) {
+      throw new Error(this.translateAdoptionError(totalError));
+    }
+
+    const { data, error } = await supabaseClient
+      .from("adoption_requests")
+      .select("status")
+      .eq("foundation_id", foundationId);
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    const byStatus: AdoptionRequestsCounts["byStatus"] = {
+      pending: 0,
+      in_review: 0,
+      info_requested: 0,
+      preapproved: 0,
+      approved: 0,
+      rejected: 0,
+      cancelled: 0,
+      completed: 0,
+    };
+
+    (data ?? []).forEach((row) => {
+      const status = row.status as keyof typeof byStatus;
+      if (status in byStatus) {
+        byStatus[status] += 1;
+      }
+    });
+
+    return {
+      total: total ?? 0,
+      byStatus,
+    };
   }
 
   private async insertRequest(params: {

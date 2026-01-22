@@ -53,6 +53,24 @@ export interface AdoptionRequestAccessInfo {
   adopterUserId: string;
 }
 
+export interface GetAdoptionRequestsCountsParams {
+  foundationId: string;
+}
+
+export interface AdoptionRequestsCounts {
+  total: number;
+  byStatus: {
+    pending: number;
+    in_review: number;
+    info_requested: number;
+    preapproved: number;
+    approved: number;
+    rejected: number;
+    cancelled: number;
+    completed: number;
+  };
+}
+
 export interface UpdateAdoptionRequestStatusParams {
   foundationId: string;
   requestId: number;
@@ -65,5 +83,6 @@ export interface IAdoptionRequestRepository {
   getAdminRequests(params: GetAdoptionRequestsParams): Promise<GetAdoptionRequestsResult>;
   getRequestDetail(params: GetAdoptionRequestDetailParams): Promise<AdoptionRequestDetail>;
   getRequestAccessInfo(params: GetAdoptionRequestAccessInfoParams): Promise<AdoptionRequestAccessInfo>;
+  getAdoptionRequestsCounts(params: GetAdoptionRequestsCountsParams): Promise<AdoptionRequestsCounts>;
   updateStatus(params: UpdateAdoptionRequestStatusParams): Promise<void>;
 }

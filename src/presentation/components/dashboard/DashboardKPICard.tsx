@@ -16,15 +16,7 @@ export interface DashboardKPICardProps {
 export function DashboardKPICard({ kpi, locale, icon, iconClassName }: DashboardKPICardProps) {
   const t = useTranslations("dashboard");
 
-  const isMoney = kpi.key === "monthlyRevenue";
-
-  const formattedValue = isMoney
-    ? new Intl.NumberFormat(locale, {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-      }).format(kpi.value)
-    : new Intl.NumberFormat(locale).format(kpi.value);
+  const formattedValue = new Intl.NumberFormat(locale).format(kpi.value);
 
   const trendText = `${kpi.trend.variant === "positive" ? "+" : ""}${kpi.trend.percent}%`;
   const trendClasses =
@@ -52,4 +44,3 @@ export function DashboardKPICard({ kpi, locale, icon, iconClassName }: Dashboard
     </div>
   );
 }
-
