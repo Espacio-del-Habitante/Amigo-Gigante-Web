@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Amigo Gigante - Solicitar Información</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0EA5E9", // Sky blue - azul cielo
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        .glass-morphism {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .dark .glass-morphism {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen overflow-hidden">
+<div class="flex h-screen overflow-hidden filter blur-md pointer-events-none select-none">
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-sky-100 dark:bg-sky-900/30 rounded-full flex items-center justify-center">
+<span class="material-icons-round text-primary">pets</span>
+</div>
+<h1 class="font-bold text-xl tracking-tight">Amigo Gigante</h1>
+</div>
+<nav class="mt-4 px-4 space-y-1">
+<div class="flex items-center gap-3 p-3 text-slate-500 rounded-lg">
+<span class="material-icons-round">grid_view</span>
+<span class="font-medium">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 p-3 text-slate-500 rounded-lg">
+<span class="material-icons-round">business</span>
+<span class="font-medium">Mi Fundación</span>
+</div>
+<div class="flex items-center gap-3 p-3 text-slate-500 rounded-lg">
+<span class="material-icons-round">pets</span>
+<span class="font-medium">Animales</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-sky-50 dark:bg-sky-900/20 text-primary rounded-lg">
+<span class="material-icons-round">favorite</span>
+<span class="font-medium">Adopciones</span>
+</div>
+</nav>
+</aside>
+<main class="flex-1 flex flex-col">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 bg-white dark:bg-slate-900">
+<div class="flex items-center gap-4">
+<span class="material-icons-round text-slate-400">notifications</span>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-semibold">Hurtadev</p>
+<p class="text-xs text-slate-500">hurtadev@gmail.com</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">HU</div>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-6">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<h2 class="text-lg font-bold mb-4">Motivación para adoptar</h2>
+<div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-slate-600 dark:text-slate-400">
+                        No tengo
+                    </div>
+</div>
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<h2 class="text-lg font-bold mb-4">Documentos de soporte</h2>
+<div class="grid grid-cols-4 gap-4">
+<div class="aspect-video bg-slate-100 dark:bg-slate-700 rounded-xl"></div>
+<div class="aspect-video bg-slate-100 dark:bg-slate-700 rounded-xl"></div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-6 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-4 bg-white dark:bg-slate-900">
+<button class="px-6 py-2 border border-slate-200 dark:border-slate-700 rounded-full font-medium">SOLICITAR INFORMACIÓN</button>
+<button class="px-6 py-2 border border-slate-200 dark:border-slate-700 rounded-full font-medium">RECHAZAR</button>
+<button class="px-6 py-2 bg-slate-200 dark:bg-slate-700 rounded-full font-medium text-slate-400">APROBAR SOLICITUD</button>
+</div>
+</main>
+</div>
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+<div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in duration-200">
+<div class="px-8 pt-8 pb-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-sky-50 dark:bg-sky-900/30 rounded-lg">
+<span class="material-icons-round text-primary">mail</span>
+</div>
+<h2 class="text-xl font-bold">Solicitar Información Adicional</h2>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-icons-round">close</span>
+</button>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Envía un correo electrónico al adoptante para requerir más detalles sobre su solicitud.</p>
+</div>
+<div class="p-8 space-y-6">
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-400" for="to">Para</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-icons-round text-slate-400 text-sm">alternate_email</span>
+<input class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 focus:outline-none cursor-not-allowed" id="to" readonly="" type="email" value="hurtadev@gmail.com"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-400" for="subject">Asunto</label>
+<input class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="subject" type="text" value="Información adicional requerida - Amigo Gigante"/>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="text-xs font-semibold text-slate-400 w-full mb-1">INSERTAR PLANTILLA:</span>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-900/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-xs font-medium rounded-full border border-slate-200 dark:border-slate-700 transition-colors">
+<span class="material-icons-round text-base">videocam</span>
+                        Video del hogar
+                    </button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-900/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-xs font-medium rounded-full border border-slate-200 dark:border-slate-700 transition-colors">
+<span class="material-icons-round text-base">receipt_long</span>
+                        Comprobante de ingresos
+                    </button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-900/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-xs font-medium rounded-full border border-slate-200 dark:border-slate-700 transition-colors">
+<span class="material-icons-round text-base">home</span>
+                        Referencias personales
+                    </button>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-400" for="message">Mensaje</label>
+<textarea class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none" id="message" placeholder="Escribe el mensaje aquí..." rows="5">Hola Hurtadev, para continuar con el proceso de adopción necesitamos que nos proporciones la siguiente información...</textarea>
+</div>
+</div>
+<div class="px-8 py-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-4">
+<button class="px-6 py-2.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-semibold text-sm transition-colors">
+                    Cancelar
+                </button>
+<button class="flex items-center gap-2 px-8 py-2.5 bg-primary text-white font-bold text-sm rounded-full shadow-lg shadow-sky-500/20 hover:bg-sky-600 active:scale-95 transition-all">
+<span>Enviar Correo</span>
+<span class="material-icons-round text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="fixed bottom-4 right-4 z-[100]">
+<button class="p-3 bg-white dark:bg-slate-800 rounded-full shadow-lg border border-slate-200 dark:border-slate-700" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-icons-round block dark:hidden">dark_mode</span>
+<span class="material-icons-round hidden dark:block">light_mode</span>
+</button>
+</div>
+
+</body></html>

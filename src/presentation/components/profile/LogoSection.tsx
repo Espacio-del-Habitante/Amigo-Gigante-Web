@@ -48,7 +48,7 @@ const LogoSection = ({
 
     // Si no hay blob URL activo y currentLogoUrl cambió, actualizar preview
     if (!objectUrl && currentLogoUrl !== previewUrl) {
-      setPreviewUrl(currentLogoUrl);
+    setPreviewUrl(currentLogoUrl);
     }
   }, [currentLogoUrl, objectUrl, previewUrl]);
 
