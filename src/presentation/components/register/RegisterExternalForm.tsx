@@ -314,7 +314,9 @@ export function RegisterExternalForm({ ctaIcon }: RegisterExternalFormProps) {
                 {t.rich("external.form.terms.label", {
                   terms: (chunks) => (
                     <Link
-                      href="/terms"
+                      href={`/${locale}/terms`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-2 hover:decoration-brand-500"
                     >
                       {chunks}
@@ -322,7 +324,9 @@ export function RegisterExternalForm({ ctaIcon }: RegisterExternalFormProps) {
                   ),
                   privacy: (chunks) => (
                     <Link
-                      href="/privacy"
+                      href={`/${locale}/privacy`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-2 hover:decoration-brand-500"
                     >
                       {chunks}

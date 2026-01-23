@@ -35,7 +35,9 @@
       "hide": "Hide",
       "aria": "{action} {label}"
     },
-    "terms": "I agree to the Terms & Conditions and confirm the information is accurate.",
+    "terms": {
+      "label": "I agree to the <terms>Terms & Conditions</terms> and the <privacy>Privacy Policy</privacy>."
+    },
     "submit": "Register foundation",
     "submitting": "Submitting...",
     "submitError": "There was an error registering the foundation. Please try again.",

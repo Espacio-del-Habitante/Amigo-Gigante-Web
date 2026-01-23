@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { type FieldInputProps, useFormik } from "formik";
 import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactElement, useMemo, useState } from "react";
 
@@ -307,7 +308,28 @@ export function RegisterForm({ ctaIcon, badgeIcon }: RegisterFormProps) {
             }
             label={
               <Typography variant="body2" color="text.secondary">
-                {t("form.terms")}
+                {t.rich("form.terms.label", {
+                  terms: (chunks) => (
+                    <Link
+                      href={`/${locale}/terms`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-2 hover:decoration-brand-500"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                  privacy: (chunks) => (
+                    <Link
+                      href={`/${locale}/privacy`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-2 hover:decoration-brand-500"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </Typography>
             }
             sx={{

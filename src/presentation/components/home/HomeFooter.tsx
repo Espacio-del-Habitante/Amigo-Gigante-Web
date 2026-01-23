@@ -142,31 +142,13 @@ export function HomeFooter() {
         >
           <Copyright variant="caption" />
           <Stack direction="row" className="gap-4" color="text.secondary">
-            <Link
-              href="#"
-              underline="none"
-              color="inherit"
-              variant="caption"
-              sx={{ "&:hover": { color: "primary.main" } }}
-            >
+            <Link component={NextLink} href={`/${locale}/privacy`} underline="none" color="inherit" variant="caption">
               {t("footer.privacy")}
             </Link>
-            <Link
-              href="#"
-              underline="none"
-              color="inherit"
-              variant="caption"
-              sx={{ "&:hover": { color: "primary.main" } }}
-            >
+            <Link component={NextLink} href={`/${locale}/terms`} underline="none" color="inherit" variant="caption">
               {t("footer.terms")}
             </Link>
-            <Link
-              href="#"
-              underline="none"
-              color="inherit"
-              variant="caption"
-              sx={{ "&:hover": { color: "primary.main" } }}
-            >
+            <Link component={NextLink} href={`/${locale}/cookies`} underline="none" color="inherit" variant="caption">
               {t("footer.cookies")}
             </Link>
           </Stack>
