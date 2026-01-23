@@ -31,6 +31,19 @@ test("GetPrivateFileUrlUseCase returns signed URL for authorized adopter", async
     createAdoptionRequest: async () => {
       throw new Error("not implemented");
     },
+    getAdoptionRequestsCounts: async () => ({
+      total: 0,
+      byStatus: {
+        pending: 0,
+        in_review: 0,
+        info_requested: 0,
+        preapproved: 0,
+        approved: 0,
+        rejected: 0,
+        cancelled: 0,
+        completed: 0,
+      },
+    }),
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },
@@ -91,6 +104,19 @@ test("GetPrivateFileUrlUseCase rejects unauthorized access", async () => {
     createAdoptionRequest: async () => {
       throw new Error("not implemented");
     },
+    getAdoptionRequestsCounts: async () => ({
+      total: 0,
+      byStatus: {
+        pending: 0,
+        in_review: 0,
+        info_requested: 0,
+        preapproved: 0,
+        approved: 0,
+        rejected: 0,
+        cancelled: 0,
+        completed: 0,
+      },
+    }),
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },
@@ -152,6 +178,19 @@ test("GetPrivateFileUrlUseCase rejects invalid paths", async () => {
     createAdoptionRequest: async () => {
       throw new Error("not implemented");
     },
+    getAdoptionRequestsCounts: async () => ({
+      total: 0,
+      byStatus: {
+        pending: 0,
+        in_review: 0,
+        info_requested: 0,
+        preapproved: 0,
+        approved: 0,
+        rejected: 0,
+        cancelled: 0,
+        completed: 0,
+      },
+    }),
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },

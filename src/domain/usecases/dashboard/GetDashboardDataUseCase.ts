@@ -1,6 +1,7 @@
 import type { AnimalManagement } from "@/domain/models/AnimalManagement";
 import type { DashboardActivityItem, DashboardData, DashboardKpiCard } from "@/domain/models/DashboardData";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
+import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
 import type { IAuthRepository } from "@/domain/repositories/IAuthRepository";
 import type { IEventRepository } from "@/domain/repositories/IEventRepository";
 import type { IFoundationMembershipRepository } from "@/domain/repositories/IFoundationMembershipRepository";
@@ -15,6 +16,7 @@ export class GetDashboardDataUseCase {
     private readonly authRepository: IAuthRepository,
     private readonly foundationRepository: IFoundationRepository,
     private readonly foundationMembershipRepository: IFoundationMembershipRepository,
+    private readonly adoptionRequestRepository: IAdoptionRequestRepository,
   ) {}
 
   async execute(): Promise<DashboardData> {
@@ -33,6 +35,7 @@ export class GetDashboardDataUseCase {
       recentEvents,
       recentProducts,
       animalsInTreatment,
+      adoptionCounts,
     ] = await Promise.all([
       this.foundationRepository.getFoundationById(foundationId),
       this.animalRepository.getAnimalsCount(foundationId),
@@ -40,41 +43,32 @@ export class GetDashboardDataUseCase {
       this.eventRepository.getRecentEvents(foundationId, 5),
       this.productRepository.getRecentProducts(foundationId, 5),
       this.animalRepository.getAnimalsInTreatment(foundationId),
+      this.adoptionRequestRepository.getAdoptionRequestsCounts({ foundationId }),
     ]);
 
     const kpis: DashboardKpiCard[] = [
       {
         key: "animalsInCare",
         value: animalsCount,
-        trend: { percent: 2, variant: "positive" },
-      },
-      {
-        key: "activeSponsorships",
-        value: 120,
-        trend: { percent: 12, variant: "positive" },
-      },
-      {
-        key: "pendingAdoptions",
-        value: 3,
         trend: { percent: 0, variant: "neutral" },
       },
       {
-        key: "monthlyRevenue",
-        value: 1250,
-        trend: { percent: 5, variant: "positive" },
+        key: "pendingAdoptions",
+        value: adoptionCounts.byStatus.pending,
+        trend: { percent: 0, variant: "neutral" },
       },
     ];
 
     const adoptionFunnel = {
-      applicationsReceived: 24,
-      interviewsScheduled: 12,
-      homeVisits: 5,
-      adoptionsCompleted: 3,
+      applicationsReceived: adoptionCounts.total,
+      interviewsScheduled: adoptionCounts.byStatus.preapproved,
+      homeVisits: adoptionCounts.byStatus.preapproved,
+      adoptionsCompleted: adoptionCounts.byStatus.completed,
     };
 
     const activity = this.buildRecentActivity(recentAnimals, recentEvents, recentProducts);
 
-    const attentionAlerts = this.buildAttentionAlerts(animalsInTreatment);
+    const attentionAlerts: DashboardData["attentionAlerts"] = [];
 
     return {
       foundationId,
@@ -132,41 +126,4 @@ export class GetDashboardDataUseCase {
     if (Number.isNaN(date.getTime())) return "created";
     return date.getTime() > Date.now() ? "upcoming" : "created";
   }
-
-  private buildAttentionAlerts(animalsInTreatment: AnimalManagement[]): DashboardData["attentionAlerts"] {
-    const dueDate = this.getNextWeekdayISO(5); // Friday
-
-    const veterinaryAlerts = animalsInTreatment.slice(0, 3).map((animal) => ({
-      key: "veterinaryReview" as const,
-      animalName: animal.name,
-      dueDate,
-      variant: "danger" as const,
-    }));
-
-    const mockAlerts: DashboardData["attentionAlerts"] = [
-      {
-        key: "lowStock",
-        count: 5,
-        variant: "warning",
-      },
-      {
-        key: "volunteersNeeded",
-        count: 2,
-        variant: "neutral",
-      },
-    ];
-
-    return [...veterinaryAlerts, ...mockAlerts];
-  }
-
-  private getNextWeekdayISO(targetDay: number): string {
-    const now = new Date();
-    const current = now.getDay(); // 0=Sun..6=Sat
-    const delta = (targetDay - current + 7) % 7 || 7;
-    const next = new Date(now);
-    next.setDate(now.getDate() + delta);
-    next.setHours(0, 0, 0, 0);
-    return next.toISOString();
-  }
 }
-

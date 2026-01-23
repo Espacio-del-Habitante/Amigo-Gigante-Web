@@ -295,6 +295,9 @@ const useCasesModule = new ContainerModule(
         const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
           REPOSITORY_TYPES.FoundationMembershipRepository,
         );
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
 
         return new GetDashboardDataUseCase(
           animalRepository,
@@ -303,6 +306,7 @@ const useCasesModule = new ContainerModule(
           authRepository,
           foundationRepository,
           foundationMembershipRepository,
+          adoptionRequestRepository,
         );
       })
       .inSingletonScope();

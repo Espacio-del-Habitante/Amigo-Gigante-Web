@@ -53,6 +53,24 @@ export interface AdoptionRequestAccessInfo {
   adopterUserId: string;
 }
 
+export interface GetAdoptionRequestsCountsParams {
+  foundationId: string;
+}
+
+export interface AdoptionRequestsCounts {
+  total: number;
+  byStatus: {
+    pending: number;
+    in_review: number;
+    info_requested: number;
+    preapproved: number;
+    approved: number;
+    rejected: number;
+    cancelled: number;
+    completed: number;
+  };
+}
+
 export interface UpdateAdoptionRequestStatusParams {
   foundationId: string;
   requestId: number;
