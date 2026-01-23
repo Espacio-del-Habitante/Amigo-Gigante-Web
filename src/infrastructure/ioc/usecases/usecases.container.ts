@@ -22,6 +22,7 @@ import { DeleteAnimalUseCase } from "@/domain/usecases/animals/DeleteAnimalUseCa
 import { GetAnimalByIdUseCase } from "@/domain/usecases/animals/GetAnimalByIdUseCase";
 import { GetAnimalsUseCase } from "@/domain/usecases/animals/GetAnimalsUseCase";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
+import { GetHomeProductsUseCase } from "@/domain/usecases/home/GetHomeProductsUseCase";
 import { UpdateAnimalUseCase } from "@/domain/usecases/animals/UpdateAnimalUseCase";
 import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogUseCase";
 import { GetAdoptDetailUseCase } from "@/domain/usecases/adopt/GetAdoptDetailUseCase";
@@ -79,6 +80,15 @@ const useCasesModule = new ContainerModule(
         );
 
         return new GetHomeAnimalsUseCase(animalRepository);
+      })
+      .inSingletonScope();
+    bind<GetHomeProductsUseCase>(USE_CASE_TYPES.GetHomeProductsUseCase)
+      .toDynamicValue((context) => {
+        const productRepository = context.get<IProductRepository>(
+          REPOSITORY_TYPES.ProductRepository,
+        );
+
+        return new GetHomeProductsUseCase(productRepository);
       })
       .inSingletonScope();
 

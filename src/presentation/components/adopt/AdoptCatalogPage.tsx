@@ -28,6 +28,7 @@ import {
 import NextLink from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useRef, useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 import type { AdoptCatalogItem } from "@/domain/models/AdoptCatalogItem";
 import type {
@@ -60,6 +61,7 @@ export function AdoptCatalogPage() {
   const t = useTranslations("adopt");
   const common = useTranslations("common");
   const locale = useLocale();
+  const searchParams = useSearchParams();
 
   const getAdoptCatalogUseCase = useMemo(
     () => appContainer.get<GetAdoptCatalogUseCase>(USE_CASE_TYPES.GetAdoptCatalogUseCase),
@@ -88,6 +90,23 @@ export function AdoptCatalogPage() {
   } | null>(null);
 
   const pageSize = 9;
+
+  useEffect(() => {
+    const searchParam = searchParams.get("search") ?? "";
+    const locationParam = searchParams.get("location") ?? "";
+    const speciesParam = searchParams.get("species") ?? "";
+
+    const combinedSearch = [searchParam, locationParam].filter(Boolean).join(" ").trim();
+    setSearchValue(combinedSearch);
+
+    if (speciesParam === "dog" || speciesParam === "cat" || speciesParam === "other") {
+      setSpecies(speciesParam);
+    } else {
+      setSpecies("all");
+    }
+
+    setPage(1);
+  }, [searchParams]);
 
   const resolveErrorKey = useCallback((error: unknown): AdoptErrorKey => {
     if (error instanceof Error) {
@@ -518,4 +537,3 @@ export function AdoptCatalogPage() {
     </Box>
   );
 }
-
