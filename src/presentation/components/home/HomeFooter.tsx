@@ -1,27 +1,32 @@
-import { Box, Button, Container, Link, Stack, TextField, Typography } from "@mui/material";
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import BusinessRoundedIcon from "@mui/icons-material/BusinessRounded";
+import { Box, Container, Link, Stack, Typography } from "@mui/material";
+import NextLink from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
-import { useTranslations } from "next-intl";
 
 import { Logo, Copyright } from "../atoms";
 
 export function HomeFooter() {
   const t = useTranslations("common");
+  const locale = useLocale();
+  
   const footerLinks = useMemo(
     () => ({
       adopcion: [
-        t("footer.links.adoption.dogs"),
-        t("footer.links.adoption.cats"),
-        t("footer.links.adoption.specialCases"),
-        t("footer.links.adoption.successStories"),
+        { label: t("footer.links.adoption.dogs"), href: `/${locale}/adopt?species=dog` },
+        { label: t("footer.links.adoption.cats"), href: `/${locale}/adopt?species=cat` },
+        { label: t("footer.links.adoption.specialCases"), href: `/${locale}/adopt?urgentOnly=true` },
+        // { label: t("footer.links.adoption.successStories"), href: "#" }, // Comentado por ahora
       ],
       comunidad: [
-        t("footer.links.community.volunteering"),
-        t("footer.links.community.blog"),
-        t("footer.links.community.events"),
-        t("footer.links.community.store"),
+        // { label: t("footer.links.community.volunteering"), href: "#" }, // Oculto
+        // { label: t("footer.links.community.blog"), href: "#" }, // Oculto
+        // { label: t("footer.links.community.events"), href: "#" }, // Oculto
+        { label: t("footer.links.community.store"), href: `/${locale}/shop` },
       ],
     }),
-    [t],
+    [t, locale],
   );
 
   return (
@@ -65,8 +70,15 @@ export function HomeFooter() {
             </Typography>
             <Stack className="gap-3">
               {footerLinks.adopcion.map((item) => (
-                <Link key={item} href="#" underline="none" color="text.secondary" sx={{ fontSize: 14 }}>
-                  {item}
+                <Link
+                  key={item.label}
+                  component={NextLink}
+                  href={item.href}
+                  underline="none"
+                  color="text.secondary"
+                  sx={{ fontSize: 14, "&:hover": { color: "primary.main" } }}
+                >
+                  {item.label}
                 </Link>
               ))}
             </Stack>
@@ -77,24 +89,47 @@ export function HomeFooter() {
             </Typography>
             <Stack className="gap-3">
               {footerLinks.comunidad.map((item) => (
-                <Link key={item} href="#" underline="none" color="text.secondary" sx={{ fontSize: 14 }}>
-                  {item}
+                <Link
+                  key={item.label}
+                  component={NextLink}
+                  href={item.href}
+                  underline="none"
+                  color="text.secondary"
+                  sx={{ fontSize: 14, "&:hover": { color: "primary.main" } }}
+                >
+                  {item.label}
                 </Link>
               ))}
             </Stack>
           </Box>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2 }}>
-              {t("footer.subscribe")}
+              {t("footer.contact")}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-              {t("footer.subscribeDescription")}
-            </Typography>
-            <Stack direction="row" className="gap-2">
-              <TextField size="small" placeholder={t("footer.emailPlaceholder")} fullWidth />
-              <Button variant="contained" sx={{ fontWeight: 800 }}>
-                {t("buttons.ok")}
-              </Button>
+            <Stack className="gap-3">
+              <Stack direction="row" alignItems="center" className="gap-2">
+                <EmailRoundedIcon sx={{ fontSize: 18, color: "text.secondary" }} />
+                <Link
+                  href={`mailto:${t("footer.contactEmail")}`}
+                  underline="none"
+                  color="text.secondary"
+                  sx={{ fontSize: 14, "&:hover": { color: "primary.main" } }}
+                >
+                  {t("footer.contactEmail")}
+                </Link>
+              </Stack>
+              <Stack direction="row" alignItems="center" className="gap-2">
+                <BusinessRoundedIcon sx={{ fontSize: 18, color: "text.secondary" }} />
+                <Link
+                  component={NextLink}
+                  href={`/${locale}/register/foundation`}
+                  underline="none"
+                  color="text.secondary"
+                  sx={{ fontSize: 14, "&:hover": { color: "primary.main" } }}
+                >
+                  {t("footer.becomeFoundation")}
+                </Link>
+              </Stack>
             </Stack>
           </Box>
         </Box>
