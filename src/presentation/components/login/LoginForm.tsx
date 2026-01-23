@@ -256,7 +256,11 @@ export function LoginForm() {
           htmlFor="adopter"
           sx={{
             flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             textAlign: "center",
+            minHeight: 44,
             py: 1,
             px: 2,
             borderRadius: 999,
@@ -273,7 +277,11 @@ export function LoginForm() {
           htmlFor="foundation"
           sx={{
             flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             textAlign: "center",
+            minHeight: 44,
             py: 1,
             px: 2,
             borderRadius: 999,
