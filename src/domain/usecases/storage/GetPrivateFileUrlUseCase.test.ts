@@ -40,6 +40,12 @@ test("GetPrivateFileUrlUseCase returns signed URL for authorized adopter", async
     updateStatus: async () => {
       throw new Error("not implemented");
     },
+    getAdopterEmailByUserId: async () => {
+      throw new Error("not implemented");
+    },
+    enqueueInfoRequestEmail: async () => {
+      throw new Error("not implemented");
+    },
     getRequestAccessInfo: async () => ({
       requestId: 42,
       foundationId: "foundation-1",
@@ -92,6 +98,12 @@ test("GetPrivateFileUrlUseCase rejects unauthorized access", async () => {
       throw new Error("not implemented");
     },
     updateStatus: async () => {
+      throw new Error("not implemented");
+    },
+    getAdopterEmailByUserId: async () => {
+      throw new Error("not implemented");
+    },
+    enqueueInfoRequestEmail: async () => {
       throw new Error("not implemented");
     },
     getRequestAccessInfo: async () => ({
@@ -147,6 +159,12 @@ test("GetPrivateFileUrlUseCase rejects invalid paths", async () => {
       throw new Error("not implemented");
     },
     updateStatus: async () => {
+      throw new Error("not implemented");
+    },
+    getAdopterEmailByUserId: async () => {
+      throw new Error("not implemented");
+    },
+    enqueueInfoRequestEmail: async () => {
       throw new Error("not implemented");
     },
     getRequestAccessInfo: async () => ({

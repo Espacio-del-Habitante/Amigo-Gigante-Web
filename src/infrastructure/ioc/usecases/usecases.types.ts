@@ -8,6 +8,7 @@ const USE_CASE_TYPES = {
   GetAdminAdoptionRequestsUseCase: Symbol.for("GetAdminAdoptionRequestsUseCase"),
   GetAdoptionRequestDetailUseCase: Symbol.for("GetAdoptionRequestDetailUseCase"),
   UpdateAdoptionRequestStatusUseCase: Symbol.for("UpdateAdoptionRequestStatusUseCase"),
+  RequestAdoptionInfoUseCase: Symbol.for("RequestAdoptionInfoUseCase"),
   CreateAdoptionRequestUseCase: Symbol.for("CreateAdoptionRequestUseCase"),
   GetDashboardDataUseCase: Symbol.for("GetDashboardDataUseCase"),
   CreateAnimalUseCase: Symbol.for("CreateAnimalUseCase"),
