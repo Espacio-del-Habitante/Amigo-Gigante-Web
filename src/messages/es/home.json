@@ -6,7 +6,8 @@
     "subtitle": "Adoptar salva vidas. Apadrinar da esperanza. Conecta con fundaciones verificadas y cambia el mundo de una mascota hoy.",
     "searchPlaceholder": "Busca por nombre, ciudad o tipo",
     "verified": "Fundaciones 100% verificadas",
-    "sponsorCard": "Apadrina con amor"
+    "sponsorCard": "Apadrina con amor",
+    "animalAriaLabel": "Ver detalles de {name}"
   },
   "filters": {
     "title": "Filtros",
@@ -22,13 +23,28 @@
   "featured": {
     "title": "Amigos Destacados",
     "subtitle": "Recién llegados buscando una segunda oportunidad",
-    "action": "Ver todos"
+    "action": "Ver todos",
+    "cardAriaLabel": "Ver detalles de {name}"
   },
-  "ai": {
-    "badge": "Nuevo: IA Match",
-    "title": "¿No sabes por dónde empezar?",
-    "description": "Nuestra Inteligencia Artificial analiza tu estilo de vida y preferencias para recomendarte el compañero perfecto.",
-    "cta": "Probar recomendador IA"
+  "announcements": {
+    "badge": "Anuncios destacados",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "indicatorAria": "Ir al anuncio {index}",
+    "items": {
+      "adoption": {
+        "title": "Jornadas de adopción abiertas",
+        "description": "Conoce a los peludos que esperan un hogar este fin de semana en nuestras fundaciones aliadas."
+      },
+      "volunteering": {
+        "title": "Súmate como voluntario",
+        "description": "Apoya a las fundaciones con tiempo, transporte o donaciones en especie."
+      },
+      "store": {
+        "title": "Compras que cambian vidas",
+        "description": "Cada compra en la tienda solidaria financia alimentos y tratamientos para nuestros rescatados."
+      }
+    }
   },
   "partners": {
     "subtitle": "Nuestros Aliados",
@@ -41,10 +57,18 @@
     "cta": "Visitar tienda",
     "highlightTitle": "100% Solidario",
     "highlightDescription": "Todas las ganancias van a las fundaciones.",
+    "loading": "Cargando productos solidarios...",
+    "errorTitle": "No pudimos cargar la tienda",
+    "errorDescription": "Mostramos productos sugeridos mientras se restablece la conexión.",
+    "priceFallback": "Precio por confirmar",
     "items": {
       "handmadeCollars": "Collares Artesanales",
       "paddedBeds": "Camas Acolchadas",
       "ecoToys": "Juguetes Eco"
     }
+  },
+  "errors": {
+    "title": "No pudimos cargar la página principal",
+    "description": "Revisa tu conexión e inténtalo nuevamente en unos minutos."
   }
 }

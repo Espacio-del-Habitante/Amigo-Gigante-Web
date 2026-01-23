@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import type { Animal } from "@/domain/models/Animal";
 import { Section } from "@/presentation/components/layouts";
 import { AnimalCard } from "@/presentation/components/organisms";
+import { useHomeNavigation } from "@/presentation/components/home/hooks/useHomeNavigation";
 
 interface FeaturedAnimalsSectionProps {
   animals: Animal[];
@@ -12,6 +13,7 @@ interface FeaturedAnimalsSectionProps {
 
 export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps) {
   const t = useTranslations("home");
+  const { goToAdopt, goToAdoptDetail } = useHomeNavigation();
 
   return (
     <Section background="muted" spacingY={{ xs: 10, md: 14 }}>
@@ -25,7 +27,8 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
           </Typography>
         </Box>
         <Link
-          href="#"
+          component="button"
+          onClick={() => goToAdopt({})}
           underline="none"
           sx={{
             display: { xs: "none", sm: "inline-flex" },
@@ -33,6 +36,9 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
             color: "primary.main",
             fontWeight: 800,
             gap: 0.5,
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
           }}
         >
           {t("featured.action")}
@@ -41,7 +47,22 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
       </Stack>
       <Box className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {animals.map((animal) => (
-          <AnimalCard key={animal.id} animal={animal} />
+          <Box
+            key={animal.id}
+            role="button"
+            tabIndex={0}
+            onClick={() => goToAdoptDetail(animal.id)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                goToAdoptDetail(animal.id);
+              }
+            }}
+            aria-label={t("featured.cardAriaLabel", { name: animal.name })}
+            sx={{ cursor: "pointer" }}
+          >
+            <AnimalCard animal={animal} />
+          </Box>
         ))}
       </Box>
     </Section>

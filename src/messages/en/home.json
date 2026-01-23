@@ -6,7 +6,8 @@
     "subtitle": "Adopting saves lives. Sponsoring brings hope. Connect with verified foundations and change a pet's world today.",
     "searchPlaceholder": "Search by name, city, or type",
     "verified": "100% verified foundations",
-    "sponsorCard": "Sponsor with love"
+    "sponsorCard": "Sponsor with love",
+    "animalAriaLabel": "View details for {name}"
   },
   "filters": {
     "title": "Filters",
@@ -22,13 +23,28 @@
   "featured": {
     "title": "Featured Friends",
     "subtitle": "New arrivals looking for a second chance",
-    "action": "View all"
+    "action": "View all",
+    "cardAriaLabel": "View details for {name}"
   },
-  "ai": {
-    "badge": "New: AI Match",
-    "title": "Not sure where to start?",
-    "description": "Our AI analyzes your lifestyle and preferences to recommend the perfect companion.",
-    "cta": "Try AI recommender"
+  "announcements": {
+    "badge": "Featured announcements",
+    "prev": "Previous",
+    "next": "Next",
+    "indicatorAria": "Go to announcement {index}",
+    "items": {
+      "adoption": {
+        "title": "Adoption fairs are open",
+        "description": "Meet the pets waiting for a home this weekend with our partner foundations."
+      },
+      "volunteering": {
+        "title": "Join as a volunteer",
+        "description": "Support foundations with time, transportation, or in-kind donations."
+      },
+      "store": {
+        "title": "Purchases that change lives",
+        "description": "Every store purchase funds food and treatments for our rescued animals."
+      }
+    }
   },
   "partners": {
     "subtitle": "Our Partners",
@@ -41,10 +57,18 @@
     "cta": "Visit store",
     "highlightTitle": "100% for good",
     "highlightDescription": "All proceeds go to foundations.",
+    "loading": "Loading store products...",
+    "errorTitle": "We couldn't load the store",
+    "errorDescription": "We are showing suggested items while we reconnect.",
+    "priceFallback": "Price pending",
     "items": {
       "handmadeCollars": "Handmade Collars",
       "paddedBeds": "Padded Beds",
       "ecoToys": "Eco Toys"
     }
+  },
+  "errors": {
+    "title": "We couldn't load the home page",
+    "description": "Check your connection and try again in a few minutes."
   }
 }

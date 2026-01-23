@@ -17,11 +17,12 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import type { Animal } from "@/domain/models/Animal";
 import { Button, Chip } from "@/presentation/components/atoms";
+import { useHomeNavigation } from "@/presentation/components/home/hooks/useHomeNavigation";
 
 interface HeroSectionProps {
   heroAnimals: Animal[];
@@ -33,10 +34,33 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
   const t = useTranslations("home");
   const common = useTranslations("common");
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const { goToAdopt, goToAdoptDetail } = useHomeNavigation();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [locationValue, setLocationValue] = useState("");
+  const [selectedSpecies, setSelectedSpecies] = useState<string | null>(null);
   const filterTags = useMemo(
-    () => [t("filters.tags.dogs"), t("filters.tags.cats"), t("filters.tags.sponsor")],
+    () => [
+      { key: "dog", label: t("filters.tags.dogs") },
+      { key: "cat", label: t("filters.tags.cats") },
+      { key: "sponsor", label: t("filters.tags.sponsor") },
+    ],
     [t],
+  );
+
+  const handleSearch = useCallback(() => {
+    goToAdopt({
+      search: searchValue,
+      species: selectedSpecies ?? undefined,
+      location: locationValue,
+    });
+  }, [goToAdopt, locationValue, searchValue, selectedSpecies]);
+
+  const handleAnimalClick = useCallback(
+    (animalId: number) => {
+      goToAdoptDetail(animalId);
+    },
+    [goToAdoptDetail],
   );
 
   return (
@@ -80,11 +104,18 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
           >
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
               <Stack direction="row" spacing={1.5} alignItems="center" sx={{ width: { xs: "100%", sm: "100%" } }}>
-               
                 <TextField
                   placeholder={t("hero.searchPlaceholder")}
                   fullWidth
                   size="small"
+                  value={searchValue}
+                  onChange={(event) => setSearchValue(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      handleSearch();
+                    }
+                  }}
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       borderRadius: 2,
@@ -113,6 +144,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               <Button
                 fullWidth={isSmDown}
                 rounded="pill"
+                onClick={handleSearch}
                 sx={{ boxShadow: 2, fontWeight: 800, px: 3.5, minWidth: 130, flexShrink: 0 }}
               >
                 {common("buttons.search")}
@@ -130,7 +162,18 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                   boxShadow: 2,
                   border: "1px solid",
                   borderColor: "divider",
+                  cursor: "pointer",
                 }}
+                role="button"
+                tabIndex={0}
+                onClick={() => handleAnimalClick(first.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleAnimalClick(first.id);
+                  }
+                }}
+                aria-label={t("hero.animalAriaLabel", { name: first.name })}
               >
                 <Box sx={{ position: "relative", height: 240 }}>
                   <Image
@@ -177,7 +220,18 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                   boxShadow: 2,
                   border: "1px solid",
                   borderColor: "divider",
+                  cursor: "pointer",
                 }}
+                role="button"
+                tabIndex={0}
+                onClick={() => handleAnimalClick(second.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleAnimalClick(second.id);
+                  }
+                }}
+                aria-label={t("hero.animalAriaLabel", { name: second.name })}
               >
                 <Box sx={{ position: "relative", height: 240 }}>
                   <Image
@@ -201,16 +255,31 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
               {t("filters.typeLabel")}
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap">
-              {filterTags.map((tag) => (
-                <Chip key={tag} label={tag} tone="neutral" variant="soft" sx={{ mb: 1 }} />
-              ))}
+              {filterTags.map((tag) => {
+                const isSelected = selectedSpecies === tag.key;
+                return (
+                  <Chip
+                    key={tag.key}
+                    label={tag.label}
+                    tone={isSelected ? "brand" : "neutral"}
+                    variant={isSelected ? "solid" : "soft"}
+                    onClick={() => setSelectedSpecies(isSelected ? null : tag.key)}
+                    sx={{ mb: 1 }}
+                  />
+                );
+              })}
             </Stack>
           </Stack>
           <Stack spacing={1}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
               {t("filters.locationLabel")}
             </Typography>
-            <TextField placeholder={t("filters.locationPlaceholder")} fullWidth />
+            <TextField
+              placeholder={t("filters.locationPlaceholder")}
+              fullWidth
+              value={locationValue}
+              onChange={(event) => setLocationValue(event.target.value)}
+            />
           </Stack>
         </DialogContent>
         <DialogActions sx={{ px: 3, py: 2 }}>
