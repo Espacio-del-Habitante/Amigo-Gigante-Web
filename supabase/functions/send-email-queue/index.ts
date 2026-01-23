@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { adoptionRequestCreated } from "./templates/adoption-request-created.ts";
 import { adoptionStatusChanged } from "./templates/adoption-status-changed.ts";
+import { adoptionInfoRequested } from "./templates/adoption-info-requested.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const RESEND_FROM = Deno.env.get("RESEND_FROM") ?? "onboarding@resend.dev"; // cámbialo
@@ -14,6 +15,8 @@ function renderSubject(template: string, payload: any) {
       return "Recibimos tu solicitud de adopción";
     case "adoption_status_changed":
       return "Actualización de tu solicitud de adopción";
+    case "info_requested":
+      return payload?.subject ?? "Información adicional requerida - Amigo Gigante";
     default:
       return "Notificación";
   }
@@ -25,6 +28,8 @@ function renderHtml(template: string, payload: any) {
       return adoptionRequestCreated(payload);
     case "adoption_status_changed":
       return adoptionStatusChanged(payload);
+    case "info_requested":
+      return adoptionInfoRequested(payload);
     default:
       return "<p>Tienes una nueva notificación.</p>";
   }

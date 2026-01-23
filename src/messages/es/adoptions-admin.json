@@ -65,6 +65,40 @@
     "unauthorized": "No tienes permisos para gestionar estas solicitudes.",
     "notFound": "No pudimos encontrar la solicitud solicitada."
   },
+  "requestInfo": {
+    "title": "Solicitar Información Adicional",
+    "description": "Envía un correo electrónico al adoptante para requerir más detalles sobre su solicitud.",
+    "to": "Para",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "messagePlaceholder": "Escribe el mensaje aquí...",
+    "insertTemplate": "INSERTAR PLANTILLA:",
+    "cancel": "Cancelar",
+    "send": "Enviar Correo",
+    "close": "Cerrar",
+    "success": "Correo enviado exitosamente",
+    "defaultSubject": "Información adicional requerida - Amigo Gigante",
+    "templates": {
+      "homeVideo": {
+        "label": "Video del hogar",
+        "text": "Necesitamos que nos proporciones un video corto mostrando tu hogar y el espacio donde viviría la mascota."
+      },
+      "incomeProof": {
+        "label": "Comprobante de ingresos",
+        "text": "Por favor, comparte un comprobante de ingresos que demuestre tu capacidad económica para mantener a la mascota."
+      },
+      "references": {
+        "label": "Referencias personales",
+        "text": "Necesitamos al menos dos referencias personales (nombre, teléfono, relación) que puedan hablar sobre tu responsabilidad y capacidad para cuidar de una mascota."
+      }
+    },
+    "errors": {
+      "subjectRequired": "El asunto es requerido",
+      "messageRequired": "El mensaje es requerido",
+      "sendFailed": "Error al enviar el correo. Por favor, intenta de nuevo.",
+      "adopterEmailNotFound": "No se pudo encontrar el email del adoptante"
+    }
+  },
   "detail": {
     "breadcrumb": {
       "ariaLabel": "Navegación de solicitudes",

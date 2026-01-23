@@ -60,10 +60,27 @@ export interface UpdateAdoptionRequestStatusParams {
   rejectionReason?: string | null;
 }
 
+export interface EnqueueInfoRequestEmailParams {
+  requestId: number;
+  adopterUserId: string;
+  toEmail: string;
+  subject: string;
+  message: string;
+  animalName: string;
+  animalId: number;
+  foundationId: string;
+}
+
+export interface GetAdopterEmailByUserIdParams {
+  adopterUserId: string;
+}
+
 export interface IAdoptionRequestRepository {
   createAdoptionRequest(params: CreateAdoptionRequestParams): Promise<AdoptionRequest>;
   getAdminRequests(params: GetAdoptionRequestsParams): Promise<GetAdoptionRequestsResult>;
   getRequestDetail(params: GetAdoptionRequestDetailParams): Promise<AdoptionRequestDetail>;
   getRequestAccessInfo(params: GetAdoptionRequestAccessInfoParams): Promise<AdoptionRequestAccessInfo>;
+  getAdopterEmailByUserId(params: GetAdopterEmailByUserIdParams): Promise<string | null>;
+  enqueueInfoRequestEmail(params: EnqueueInfoRequestEmailParams): Promise<void>;
   updateStatus(params: UpdateAdoptionRequestStatusParams): Promise<void>;
 }
