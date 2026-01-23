@@ -140,5 +140,30 @@
     "confirmPasswordRequired": "Debes confirmar la contraseña",
     "confirmPasswordMismatch": "Las contraseñas no coinciden",
     "acceptTermsRequired": "Debes aceptar los términos y condiciones"
+  },
+  "selection": {
+    "title": "¿Cómo quieres comenzar tu camino?",
+    "subtitle": "Elige tu ruta para marcar la diferencia en la vida de nuestros amigos peludos.",
+    "header": {
+      "login": "¿Ya tienes una cuenta?",
+      "loginLink": "Inicia sesión"
+    },
+    "adopter": {
+      "title": "Adoptantes y padrinos",
+      "description": "¿Buscas a tu nuevo mejor amigo o apoyar a una mascota específica? Únete a nuestra comunidad de amantes de los animales y comienza a explorar miles de mascotas esperando un hogar.",
+      "button": "Quiero adoptar"
+    },
+    "foundation": {
+      "title": "Fundaciones",
+      "description": "¿Eres un refugio u organización? Administra tus mascotas, gestiona patrocinadores y conecta con adoptantes desde nuestra plataforma profesional.",
+      "button": "Registrar mi fundación"
+    },
+    "footer": {
+      "about": "Acerca de",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "contact": "Contacto",
+      "copyright": "© 2024 Amigo Gigante. Todos los derechos reservados."
+    }
   }
 }

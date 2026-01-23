@@ -1,30 +1,58 @@
 "use client";
 
-import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import { Box, Container, Stack } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
+import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo } from "react";
 
-import { RegisterFooter } from "@/presentation/components/register/RegisterFooter";
-import { RegisterForm } from "@/presentation/components/register/RegisterForm";
-import { RegisterHeader } from "@/presentation/components/register/RegisterHeader";
-import { RegisterImageSection } from "@/presentation/components/register/RegisterImageSection";
+import type { UserRole } from "@/domain/types/auth.types";
+import { RegisterTypeSelectionPage } from "@/presentation/components/register/RegisterTypeSelectionPage";
+import { useAuth } from "@/presentation/hooks/useAuth";
+
+const getRedirectTarget = (role: UserRole, locale: string) => {
+  if (role === "foundation_user") {
+    return `/${locale}/foundations`;
+  }
+
+  if (role === "admin") {
+    return `/${locale}/admin`;
+  }
+
+  return `/${locale}`;
+};
 
 export default function RegisterPage() {
-  return (
-    <Box className="min-h-screen bg-neutral-50" sx={{ display: "flex", flexDirection: "column" }}>
-      <Container maxWidth="xl" sx={{ flex: 1, py: { xs: 4, md: 6 }, maxWidth: 1440, px: { xs: 3, sm: 4 } }}>
-        <Stack spacing={{ xs: 4, md: 6 }}>
-          <RegisterHeader />
-          <Box className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]" sx={{ alignItems: "stretch" }}>
-            <RegisterForm
-              ctaIcon={<ArrowForwardRoundedIcon />}
-              badgeIcon={<LockRoundedIcon fontSize="small" />}
-            />
-            <RegisterImageSection />
-          </Box>
-        </Stack>
-      </Container>
-      <RegisterFooter />
-    </Box>
-  );
+  const router = useRouter();
+  const locale = useLocale();
+  const { isAuthenticated, role, loading } = useAuth();
+
+  const redirectTarget = useMemo(() => {
+    if (!role) {
+      return null;
+    }
+
+    return getRedirectTarget(role, locale);
+  }, [locale, role]);
+
+  useEffect(() => {
+    if (loading || !isAuthenticated || !redirectTarget) {
+      return;
+    }
+
+    router.replace(redirectTarget);
+  }, [isAuthenticated, loading, redirectTarget, router]);
+
+  if (loading) {
+    return (
+      <Box className="flex min-h-screen items-center justify-center bg-neutral-50">
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
+
+  if (isAuthenticated) {
+    return null;
+  }
+
+  return <RegisterTypeSelectionPage />;
 }

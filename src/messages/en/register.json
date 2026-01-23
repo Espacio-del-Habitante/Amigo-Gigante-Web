@@ -140,5 +140,30 @@
     "confirmPasswordRequired": "Please confirm your password",
     "confirmPasswordMismatch": "Passwords do not match",
     "acceptTermsRequired": "You must accept the terms and conditions"
+  },
+  "selection": {
+    "title": "How do you want to start your journey?",
+    "subtitle": "Choose your path to make a difference in the lives of our furry friends.",
+    "header": {
+      "login": "Already have an account?",
+      "loginLink": "Log in"
+    },
+    "adopter": {
+      "title": "Adopters & Sponsors",
+      "description": "Looking to find your new best friend or support a specific pet? Join our community of animal lovers and start browsing thousands of pets waiting for a home.",
+      "button": "Join to Adopt"
+    },
+    "foundation": {
+      "title": "Foundations",
+      "description": "Are you a shelter or an organization? Manage your pets, track sponsorships, and connect with potential adopters through our professional platform.",
+      "button": "Register your Foundation"
+    },
+    "footer": {
+      "about": "About",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "contact": "Contact",
+      "copyright": "© 2024 Amigo Gigante. All rights reserved."
+    }
   }
 }
