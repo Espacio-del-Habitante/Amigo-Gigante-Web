@@ -11,7 +11,8 @@ import type {
 import type { AdoptionRequestDocument, AdoptionRequestDocumentType } from "@/domain/models/AdoptionRequestDocument";
 import type {
   CreateAdoptionRequestParams,
-  GetAdoptionRequestsCountsParams,
+  EnqueueInfoRequestEmailParams,
+  GetAdopterEmailByUserIdParams,
   GetAdoptionRequestsParams,
   GetAdoptionRequestsResult,
   IAdoptionRequestRepository,
@@ -252,6 +253,41 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       foundationId: data.foundation_id,
       adopterUserId: data.adopter_user_id,
     };
+  }
+
+  async getAdopterEmailByUserId({ adopterUserId }: GetAdopterEmailByUserIdParams): Promise<string | null> {
+    const { data, error } = await supabaseClient
+      .from("auth.users")
+      .select("email")
+      .eq("id", adopterUserId)
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    return data?.email ?? null;
+  }
+
+  async enqueueInfoRequestEmail(params: EnqueueInfoRequestEmailParams): Promise<void> {
+    const { error } = await supabaseClient.from("email_queue").insert({
+      user_id: params.adopterUserId,
+      to_email: params.toEmail,
+      template: "info_requested",
+      payload: {
+        request_id: params.requestId,
+        animal_id: params.animalId,
+        foundation_id: params.foundationId,
+        animal_name: params.animalName,
+        subject: params.subject,
+        message: params.message,
+      },
+      status: "pending",
+    });
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
   }
 
   async updateStatus({ foundationId, requestId, status, rejectionReason }: UpdateAdoptionRequestStatusParams): Promise<void> {

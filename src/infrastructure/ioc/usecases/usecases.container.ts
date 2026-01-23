@@ -28,6 +28,7 @@ import { GetAdoptDetailUseCase } from "@/domain/usecases/adopt/GetAdoptDetailUse
 import { CreateAdoptionRequestUseCase } from "@/domain/usecases/adopt/CreateAdoptionRequestUseCase";
 import { GetAdminAdoptionRequestsUseCase } from "@/domain/usecases/adopt/GetAdminAdoptionRequestsUseCase";
 import { GetAdoptionRequestDetailUseCase } from "@/domain/usecases/adopt/GetAdoptionRequestDetailUseCase";
+import { RequestAdoptionInfoUseCase } from "@/domain/usecases/adopt/RequestAdoptionInfoUseCase";
 import { UpdateAdoptionRequestStatusUseCase } from "@/domain/usecases/adopt/UpdateAdoptionRequestStatusUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
@@ -155,6 +156,24 @@ const useCasesModule = new ContainerModule(
         );
 
         return new UpdateAdoptionRequestStatusUseCase(
+          adoptionRequestRepository,
+          authRepository,
+          foundationMembershipRepository,
+        );
+      })
+      .inSingletonScope();
+
+    bind<RequestAdoptionInfoUseCase>(USE_CASE_TYPES.RequestAdoptionInfoUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const foundationMembershipRepository = context.get<IFoundationMembershipRepository>(
+          REPOSITORY_TYPES.FoundationMembershipRepository,
+        );
+
+        return new RequestAdoptionInfoUseCase(
           adoptionRequestRepository,
           authRepository,
           foundationMembershipRepository,

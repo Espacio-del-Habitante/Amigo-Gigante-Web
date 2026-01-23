@@ -65,6 +65,40 @@
     "unauthorized": "You don't have permission to manage these requests.",
     "notFound": "We couldn't find the requested adoption request."
   },
+  "requestInfo": {
+    "title": "Request Additional Information",
+    "description": "Send an email to the adopter requesting more details about their application.",
+    "to": "To",
+    "subject": "Subject",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "insertTemplate": "INSERT TEMPLATE:",
+    "cancel": "Cancel",
+    "send": "Send Email",
+    "close": "Close",
+    "success": "Email sent successfully",
+    "defaultSubject": "Additional information required - Amigo Gigante",
+    "templates": {
+      "homeVideo": {
+        "label": "Home video",
+        "text": "We need a short video showing your home and the space where the pet would live."
+      },
+      "incomeProof": {
+        "label": "Proof of income",
+        "text": "Please share proof of income that demonstrates your ability to support the pet."
+      },
+      "references": {
+        "label": "Personal references",
+        "text": "We need at least two personal references (name, phone number, relationship) who can speak about your responsibility and ability to care for a pet."
+      }
+    },
+    "errors": {
+      "subjectRequired": "Subject is required",
+      "messageRequired": "Message is required",
+      "sendFailed": "Error sending email. Please try again.",
+      "adopterEmailNotFound": "Could not find adopter email"
+    }
+  },
   "detail": {
     "breadcrumb": {
       "ariaLabel": "Requests navigation",

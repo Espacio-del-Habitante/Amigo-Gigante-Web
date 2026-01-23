@@ -11,6 +11,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,6 +22,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { AdoptionRequestDetail, AdoptionRequestStatus } from "@/domain/models/AdoptionRequest";
 import { GetAdoptionRequestDetailUseCase } from "@/domain/usecases/adopt/GetAdoptionRequestDetailUseCase";
+import { RequestAdoptionInfoUseCase } from "@/domain/usecases/adopt/RequestAdoptionInfoUseCase";
 import { UpdateAdoptionRequestStatusUseCase } from "@/domain/usecases/adopt/UpdateAdoptionRequestStatusUseCase";
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
@@ -29,6 +31,7 @@ import { AdoptionRequestDocuments } from "@/presentation/components/adoptions-ad
 import { AdoptionRequestPriorityBadge } from "@/presentation/components/adoptions-admin/AdoptionRequestPriorityBadge";
 import { AdoptionRequestProfile } from "@/presentation/components/adoptions-admin/AdoptionRequestProfile";
 import { AdoptionRequestStatusBadge } from "@/presentation/components/adoptions-admin/AdoptionRequestStatusBadge";
+import { RequestInfoModal } from "@/presentation/components/adoptions-admin/RequestInfoModal";
 
 type AdoptionRequestErrorKey =
   | "errors.unauthorized"
@@ -54,6 +57,10 @@ export function AdoptionRequestDetailPage() {
     () => appContainer.get<UpdateAdoptionRequestStatusUseCase>(USE_CASE_TYPES.UpdateAdoptionRequestStatusUseCase),
     [],
   );
+  const requestInfoUseCase = useMemo(
+    () => appContainer.get<RequestAdoptionInfoUseCase>(USE_CASE_TYPES.RequestAdoptionInfoUseCase),
+    [],
+  );
   const requestCounterRef = useRef(0);
 
   const [detail, setDetail] = useState<AdoptionRequestDetail | null>(null);
@@ -62,6 +69,8 @@ export function AdoptionRequestDetailPage() {
   const [updateErrorKey, setUpdateErrorKey] = useState<AdoptionRequestErrorKey | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+  const [isRequestInfoModalOpen, setIsRequestInfoModalOpen] = useState(false);
+  const [showRequestInfoSuccess, setShowRequestInfoSuccess] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [rejectTouched, setRejectTouched] = useState(false);
 
@@ -213,6 +222,29 @@ export function AdoptionRequestDetailPage() {
     setIsRejectDialogOpen(false);
   };
 
+  const handleRequestInfoSubmit = useCallback(
+    async (subject: string, message: string) => {
+      if (!detail) {
+        throw new Error("errors.notFound");
+      }
+
+      await requestInfoUseCase.execute({
+        requestId: detail.id,
+        subject,
+        message,
+      });
+
+      await loadDetail();
+      setShowRequestInfoSuccess(true);
+    },
+    [detail, loadDetail, requestInfoUseCase],
+  );
+
+  const handleCloseSuccessToast = useCallback((_?: unknown, reason?: string) => {
+    if (reason === "clickaway") return;
+    setShowRequestInfoSuccess(false);
+  }, []);
+
   const status = detail?.status;
   const isFinal = status ? finalStatuses.includes(status) : true;
   const canApprove = status === "pending" || status === "in_review";
@@ -313,7 +345,7 @@ export function AdoptionRequestDetailPage() {
             isUpdating={isUpdating}
             onApprove={() => handleStatusUpdate("approved")}
             onReject={openRejectDialog}
-            onRequestInfo={() => handleStatusUpdate("info_requested")}
+            onRequestInfo={() => setIsRequestInfoModalOpen(true)}
           />
         </>
       ) : null}
@@ -350,6 +382,24 @@ export function AdoptionRequestDetailPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <RequestInfoModal
+        open={isRequestInfoModalOpen}
+        adopterEmail={detail?.adopterProfile.email ?? ""}
+        onClose={() => setIsRequestInfoModalOpen(false)}
+        onSubmit={handleRequestInfoSubmit}
+      />
+
+      <Snackbar
+        open={showRequestInfoSuccess}
+        autoHideDuration={3500}
+        onClose={handleCloseSuccessToast}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert severity="success" onClose={handleCloseSuccessToast} sx={{ width: "100%", alignItems: "center" }}>
+          {t("requestInfo.success")}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
