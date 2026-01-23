@@ -51,7 +51,7 @@ export function LoginHeader() {
               rounded="pill"
               sx={{ px: 3.5, fontWeight: 800, boxShadow: theme.shadows[2] }}
             >
-              {t("header.registerFoundation")}
+              {t("header.getStarted")}
             </Button>
           </Box>
           <Box sx={{ display: { xs: "flex", lg: "none" }, ml: "auto" }}>

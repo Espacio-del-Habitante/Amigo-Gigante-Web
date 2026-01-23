@@ -3,11 +3,18 @@
     "home": "Home",
     "about": "About",
     "contact": "Contact",
-    "registerFoundation": "Register Foundation"
+    "getStarted": "Get Started"
   },
   "form": {
     "title": "Welcome back, Partner",
-    "subtitle": "Log in to manage your adoptions and sponsorships",
+    "subtitle": {
+      "adopter": "Find your next best friend and manage your sponsorships.",
+      "foundation": "Manage your foundation's adoptions and animal profiles."
+    },
+    "userType": {
+      "adopter": "I am an Adopter/Sponsor",
+      "foundation": "I am a Foundation"
+    },
     "email": {
       "label": "Email Address",
       "placeholder": "name@foundation.org"
@@ -25,8 +32,16 @@
     "secureLogin": "Secure SSL encrypted login",
     "submit": "Log In",
     "submitting": "Signing in...",
-    "newUser": "New to Amigo Gigante?",
-    "registerLink": "Register your foundation",
+    "register": {
+      "adopter": {
+        "text": "Want to help or adopt?",
+        "link": "Create an account"
+      },
+      "foundation": {
+        "text": "Representing a shelter?",
+        "link": "Register your foundation"
+      }
+    },
     "errors": {
       "invalidCredentials": "Incorrect email or password",
       "userNotFound": "No account exists with this email",

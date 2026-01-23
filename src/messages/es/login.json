@@ -3,11 +3,18 @@
     "home": "Inicio",
     "about": "Acerca de",
     "contact": "Contacto",
-    "registerFoundation": "Registrar Fundación"
+    "getStarted": "Comenzar"
   },
   "form": {
     "title": "Bienvenido de nuevo, Socio",
-    "subtitle": "Inicia sesión para gestionar tus adopciones y apadrinamientos",
+    "subtitle": {
+      "adopter": "Encuentra a tu próximo mejor amigo y gestiona tus apadrinamientos.",
+      "foundation": "Gestiona las adopciones y los perfiles de animales de tu fundación."
+    },
+    "userType": {
+      "adopter": "Soy Adoptante/Patrocinador",
+      "foundation": "Soy una Fundación"
+    },
     "email": {
       "label": "Dirección de Email",
       "placeholder": "name@foundation.org"
@@ -25,8 +32,16 @@
     "secureLogin": "Inicio de sesión seguro SSL encriptado",
     "submit": "Iniciar Sesión",
     "submitting": "Iniciando sesión...",
-    "newUser": "¿Nuevo en Amigo Gigante?",
-    "registerLink": "Registra tu fundación",
+    "register": {
+      "adopter": {
+        "text": "¿Quieres ayudar o adoptar?",
+        "link": "Crear una cuenta"
+      },
+      "foundation": {
+        "text": "¿Representas un refugio?",
+        "link": "Registrar tu fundación"
+      }
+    },
     "errors": {
       "invalidCredentials": "Email o contraseña incorrectos",
       "userNotFound": "No existe una cuenta con este email",

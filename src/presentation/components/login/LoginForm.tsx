@@ -57,6 +57,7 @@ export function LoginForm() {
     [],
   );
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [userType, setUserType] = useState<"adopter" | "foundation">("adopter");
 
   const textFieldStyles = useMemo<SxProps<Theme>>(
     () => ({
@@ -99,7 +100,7 @@ export function LoginForm() {
     }
 
     if (role === "external") {
-      return `/${locale}/external`;
+      return `/${locale}`;
     }
 
     return `/${locale}`;
@@ -158,18 +159,135 @@ export function LoginForm() {
         display: "flex",
         flexDirection: "column",
         gap: 3,
+        "& input[type='radio']": {
+          position: "absolute",
+          opacity: 0,
+          pointerEvents: "none",
+        },
+        "& #foundation:checked ~ .user-type-selector label[for='foundation']": {
+          backgroundColor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          boxShadow: theme.shadows[1],
+        },
+        "& #adopter:checked ~ .user-type-selector label[for='adopter']": {
+          backgroundColor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          boxShadow: theme.shadows[1],
+        },
+        "& #foundation:checked ~ .login-subtitle .foundation-content": {
+          display: "block",
+        },
+        "& #foundation:checked ~ .login-subtitle .adopter-content": {
+          display: "none",
+        },
+        "& #adopter:checked ~ .login-subtitle .foundation-content": {
+          display: "none",
+        },
+        "& #adopter:checked ~ .login-subtitle .adopter-content": {
+          display: "block",
+        },
+        "& #foundation:checked ~ .login-content .foundation-content": {
+          display: "block",
+        },
+        "& #foundation:checked ~ .login-content .adopter-content": {
+          display: "none",
+        },
+        "& #adopter:checked ~ .login-content .foundation-content": {
+          display: "none",
+        },
+        "& #adopter:checked ~ .login-content .adopter-content": {
+          display: "block",
+        },
       }}
     >
-      <Stack spacing={1.5}>
+      <input
+        type="radio"
+        id="adopter"
+        name="userType"
+        value="adopter"
+        checked={userType === "adopter"}
+        onChange={() => setUserType("adopter")}
+      />
+      <input
+        type="radio"
+        id="foundation"
+        name="userType"
+        value="foundation"
+        checked={userType === "foundation"}
+        onChange={() => setUserType("foundation")}
+      />
+
+      <Stack spacing={1.5} className="login-subtitle">
         <Typography variant="h4" sx={{ fontWeight: 900 }}>
           {t("form.title")}
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, maxWidth: 520 }}>
-          {t("form.subtitle")}
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ lineHeight: 1.7, maxWidth: 520 }}
+          className="adopter-content"
+        >
+          {t("form.subtitle.adopter")}
+        </Typography>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ lineHeight: 1.7, maxWidth: 520, display: "none" }}
+          className="foundation-content"
+        >
+          {t("form.subtitle.foundation")}
         </Typography>
       </Stack>
 
-      <Stack spacing={2.5}>
+      <Stack
+        className="user-type-selector"
+        direction={{ xs: "column", sm: "row" }}
+        spacing={1}
+        sx={{
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 999,
+          p: 0.5,
+          backgroundColor: alpha(theme.palette.primary.main, 0.04),
+        }}
+      >
+        <Box
+          component="label"
+          htmlFor="adopter"
+          sx={{
+            flex: 1,
+            textAlign: "center",
+            py: 1,
+            px: 2,
+            borderRadius: 999,
+            cursor: "pointer",
+            color: "text.secondary",
+            fontWeight: 700,
+            transition: "all 0.2s ease",
+          }}
+        >
+          {t("form.userType.adopter")}
+        </Box>
+        <Box
+          component="label"
+          htmlFor="foundation"
+          sx={{
+            flex: 1,
+            textAlign: "center",
+            py: 1,
+            px: 2,
+            borderRadius: 999,
+            cursor: "pointer",
+            color: "text.secondary",
+            fontWeight: 700,
+            transition: "all 0.2s ease",
+          }}
+        >
+          {t("form.userType.foundation")}
+        </Box>
+      </Stack>
+
+      <Stack spacing={2.5} className="login-content">
         <TextField
           {...formik.getFieldProps("email")}
           type="email"
@@ -238,15 +356,32 @@ export function LoginForm() {
             {submitError}
           </Box>
         )}
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack direction="row" alignItems="center" spacing={1} className="adopter-content">
           <Typography variant="body2" color="text.secondary">
-            {t("form.newUser")}
+            {t("form.register.adopter.text")}
           </Typography>
           <Link
             href={`/${locale}/register`}
             className="text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700"
           >
-            {t("form.registerLink")}
+            {t("form.register.adopter.link")}
+          </Link>
+        </Stack>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          className="foundation-content"
+          sx={{ display: "none" }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            {t("form.register.foundation.text")}
+          </Typography>
+          <Link
+            href={`/${locale}/register`}
+            className="text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700"
+          >
+            {t("form.register.foundation.link")}
           </Link>
         </Stack>
       </Stack>
