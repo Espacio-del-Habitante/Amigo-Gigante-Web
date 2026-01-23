@@ -42,6 +42,7 @@ export default async function LocaleLayout({
     adoptionsAdmin,
     notifications,
     storage,
+    account,
   ] = await Promise.all([
     import(`@/messages/${locale}/common.json`),
     import(`@/messages/${locale}/home.json`),
@@ -61,6 +62,7 @@ export default async function LocaleLayout({
     import(`@/messages/${locale}/adoptions-admin.json`),
     import(`@/messages/${locale}/notifications.json`),
     import(`@/messages/${locale}/storage.json`),
+    import(`@/messages/${locale}/account.json`),
   ]);
 
   const messages = {
@@ -82,6 +84,7 @@ export default async function LocaleLayout({
     adoptionsAdmin: adoptionsAdmin.default,
     notifications: notifications.default,
     storage: storage.default,
+    account: account.default,
   };
 
   // Debug: verificar que los mensajes se cargaron correctamente

@@ -13,6 +13,7 @@ const REPOSITORY_TYPES = {
   FoundationProfileRepository: Symbol.for("FoundationProfileRepository"),
   FoundationMembershipRepository: Symbol.for("FoundationMembershipRepository"),
   NotificationRepository: Symbol.for("NotificationRepository"),
+  UserProfileRepository: Symbol.for("UserProfileRepository"),
 };
 
 export { REPOSITORY_TYPES };

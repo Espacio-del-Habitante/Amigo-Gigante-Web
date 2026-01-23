@@ -11,6 +11,7 @@ import type { IFoundationProfileRepository } from "@/domain/repositories/IFounda
 import type { IProductRepository } from "@/domain/repositories/IProductRepository";
 import type { IAdoptionRequestRepository } from "@/domain/repositories/IAdoptionRequestRepository";
 import type { IPublicImageStorage } from "@/domain/repositories/IPublicImageStorage";
+import type { IUserProfileRepository } from "@/domain/repositories/IUserProfileRepository";
 import { DebugUseCase } from "@/domain/usecases/debug/DebugUseCase";
 import { GetShopCatalogUseCase } from "@/domain/usecases/shop/GetShopCatalogUseCase";
 import { GetProductDetailUseCase } from "@/domain/usecases/shop/GetProductDetailUseCase";
@@ -53,6 +54,10 @@ import { GetNotificationsUseCase } from "@/domain/usecases/notifications/GetNoti
 import { MarkNotificationAsReadUseCase } from "@/domain/usecases/notifications/MarkNotificationAsReadUseCase";
 import { GetPrivateFileUrlUseCase } from "@/domain/usecases/storage/GetPrivateFileUrlUseCase";
 import { UploadPrivateFileUseCase } from "@/domain/usecases/storage/UploadPrivateFileUseCase";
+import { ChangePasswordUseCase } from "@/domain/usecases/account/ChangePasswordUseCase";
+import { DeleteUserAccountUseCase } from "@/domain/usecases/account/DeleteUserAccountUseCase";
+import { GetUserProfileUseCase } from "@/domain/usecases/account/GetUserProfileUseCase";
+import { UpdateUserProfileUseCase } from "@/domain/usecases/account/UpdateUserProfileUseCase";
 import type { INotificationRepository } from "@/domain/repositories/INotificationRepository";
 import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
 import { REPOSITORY_TYPES } from "../repositories/repositories.types";
@@ -361,6 +366,46 @@ const useCasesModule = new ContainerModule(
         );
 
         return new GetFoundationProfileUseCase(foundationProfileRepository);
+      })
+      .inSingletonScope();
+
+    bind<GetUserProfileUseCase>(USE_CASE_TYPES.GetUserProfileUseCase)
+      .toDynamicValue((context) => {
+        const userProfileRepository = context.get<IUserProfileRepository>(
+          REPOSITORY_TYPES.UserProfileRepository,
+        );
+
+        return new GetUserProfileUseCase(userProfileRepository);
+      })
+      .inSingletonScope();
+
+    bind<UpdateUserProfileUseCase>(USE_CASE_TYPES.UpdateUserProfileUseCase)
+      .toDynamicValue((context) => {
+        const userProfileRepository = context.get<IUserProfileRepository>(
+          REPOSITORY_TYPES.UserProfileRepository,
+        );
+
+        return new UpdateUserProfileUseCase(userProfileRepository);
+      })
+      .inSingletonScope();
+
+    bind<ChangePasswordUseCase>(USE_CASE_TYPES.ChangePasswordUseCase)
+      .toDynamicValue((context) => {
+        const userProfileRepository = context.get<IUserProfileRepository>(
+          REPOSITORY_TYPES.UserProfileRepository,
+        );
+
+        return new ChangePasswordUseCase(userProfileRepository);
+      })
+      .inSingletonScope();
+
+    bind<DeleteUserAccountUseCase>(USE_CASE_TYPES.DeleteUserAccountUseCase)
+      .toDynamicValue((context) => {
+        const userProfileRepository = context.get<IUserProfileRepository>(
+          REPOSITORY_TYPES.UserProfileRepository,
+        );
+
+        return new DeleteUserAccountUseCase(userProfileRepository);
       })
       .inSingletonScope();
 
