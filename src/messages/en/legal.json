@@ -1,0 +1,243 @@
+{
+  "footer": {
+    "title": "More legal information",
+    "links": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions",
+      "cookies": "Cookie Policy"
+    },
+    "contactEmail": "contacto@amigogigante.org",
+    "contact": "If you need more information, email us at {email}."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updatedAtLabel": "Last updated:",
+    "updatedAtDate": "March 10, 2024",
+    "intro": "At Amigo Gigante we protect your personal data and process information in accordance with Law 1581 of 2012 and Decree 1377 of 2013. This policy explains how we collect, use, and share your data.",
+    "sections": {
+      "responsible": {
+        "title": "1. Data controller",
+        "items": [
+          "Name: Amigo Gigante",
+          "Email: contacto@amigogigante.org",
+          "Address: [Define according to actual location]",
+          "Country: Colombia"
+        ]
+      },
+      "dataCollected": {
+        "title": "2. Data we collect",
+        "intro": "We collect data when you create an account, start adoption processes, or interact with the platform:",
+        "items": [
+          "Identification and contact data (name, email, phone, address).",
+          "Account information and access credentials.",
+          "Adoption requests and assessment forms.",
+          "Household information used for adoption processes.",
+          "Supporting documents (ID, proofs, authorizations).",
+          "Communication history with foundations and support."
+        ]
+      },
+      "purpose": {
+        "title": "3. Processing purposes",
+        "items": [
+          "Manage registration, authentication, and user profiles.",
+          "Enable adoption processes and communication with partner foundations.",
+          "Evaluate adoption requests and compatibility with animals.",
+          "Send relevant information about the process and the platform.",
+          "Improve service experience and platform security."
+        ]
+      },
+      "legalBasis": {
+        "title": "4. Legal basis",
+        "items": [
+          "Your consent when registering and using the platform.",
+          "Performance of the contractual relationship between user and platform.",
+          "Compliance with applicable legal obligations in Colombia."
+        ]
+      },
+      "foundationSharing": {
+        "title": "5. Sharing data with partner foundations",
+        "intro": "We share data with partner foundations to manage adoption processes:",
+        "items": [
+          "Shared data: adoption requests, personal and contact data of the adopter.",
+          "Household information and documents provided during the request.",
+          "Communication history related to the adoption process.",
+          "Purpose: review adoption processes and analyze whether the user can be a potential adopter.",
+          "Legal basis: explicit consent when starting an adoption request."
+        ],
+        "rights": "You may revoke your consent or request that your data is not shared with specific foundations at any time."
+      },
+      "transfers": {
+        "title": "6. International data transfers",
+        "body": "We may transfer data to technology providers such as Supabase (U.S.). These transfers are covered by contractual clauses that protect the information."
+      },
+      "security": {
+        "title": "7. Security measures",
+        "items": [
+          "Encryption in transit and at rest.",
+          "Restricted access for authorized personnel only.",
+          "Backups and continuous monitoring.",
+          "Confidentiality commitments with partner foundations."
+        ]
+      },
+      "rights": {
+        "title": "8. Data subject rights",
+        "intro": "In accordance with Law 1581 of 2012, you have the following rights:",
+        "items": [
+          "Access to your personal data.",
+          "Rectification of inaccurate or incomplete information.",
+          "Deletion when applicable.",
+          "Withdrawal of consent.",
+          "Objection to processing.",
+          "Data portability.",
+          "Request that your data is not shared with specific foundations or revoke consent for this sharing."
+        ],
+        "howTo": "You can exercise these rights by emailing contacto@amigogigante.org."
+      },
+      "retention": {
+        "title": "9. Data retention",
+        "body": "We keep information as long as necessary for the purposes described or to comply with legal obligations."
+      },
+      "changes": {
+        "title": "10. Changes to this policy",
+        "body": "We may update this policy at any time. The last update date will be published on this page."
+      },
+      "contact": {
+        "title": "11. Contact",
+        "body": "If you have questions about this policy, contact us at contacto@amigogigante.org."
+      },
+      "legalReferences": {
+        "title": "12. Legal references",
+        "items": [
+          "Law 1581 of 2012 (Personal Data Protection).",
+          "Decree 1377 of 2013 (Regulation of Law 1581).",
+          "Law 1266 of 2008 (Financial Habeas Data).",
+          "Law 1273 of 2009 (Cybercrime).",
+          "Decree 1074 of 2015 (E-commerce regulation)."
+        ]
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "updatedAtLabel": "Last updated:",
+    "updatedAtDate": "March 10, 2024",
+    "intro": "By accessing and using Amigo Gigante you accept these terms and conditions. If you disagree, you must not use the platform.",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of terms",
+        "body": "Using the platform implies express acceptance of these terms and the current legal policies."
+      },
+      "service": {
+        "title": "2. Service description",
+        "body": "Amigo Gigante is a platform that connects adopters with partner foundations, facilitates adoption processes, and offers complementary services such as a solidarity shop."
+      },
+      "registration": {
+        "title": "3. Registration and user account",
+        "items": [
+          "You must provide truthful, complete, and updated information.",
+          "You are responsible for keeping your credentials confidential.",
+          "The platform may suspend accounts with false information or misuse."
+        ]
+      },
+      "permittedUse": {
+        "title": "4. Permitted use",
+        "items": [
+          "Personal and non-commercial use of the services.",
+          "Respect for other users, foundations, and animals.",
+          "Compliance with applicable Colombian laws."
+        ]
+      },
+      "prohibitions": {
+        "title": "5. Prohibitions",
+        "items": [
+          "Engaging in illegal, fraudulent, or misleading activities.",
+          "Impersonating others or providing false information.",
+          "Sending spam, malware, or offensive content.",
+          "Attempting to breach the platform's security."
+        ]
+      },
+      "intellectualProperty": {
+        "title": "6. Intellectual property",
+        "body": "Amigo Gigante content (brand, design, text, and software) is protected by intellectual property rights. User-generated content remains the user's property but grants a license necessary to operate the platform."
+      },
+      "liability": {
+        "title": "7. Limitation of liability",
+        "body": "Amigo Gigante does not guarantee successful adoptions and is not responsible for decisions made by foundations or users. The platform is provided \"as is\" and uninterrupted availability is not guaranteed."
+      },
+      "indemnification": {
+        "title": "8. Indemnification",
+        "body": "You agree to indemnify Amigo Gigante against claims arising from misuse of the platform or breach of these terms."
+      },
+      "changes": {
+        "title": "9. Modifications",
+        "body": "We may update these terms when necessary. Changes take effect upon publication."
+      },
+      "termination": {
+        "title": "10. Termination",
+        "body": "We may suspend or cancel accounts for non-compliance. You may request account deletion at any time."
+      },
+      "jurisdiction": {
+        "title": "11. Governing law and jurisdiction",
+        "body": "These terms are governed by the laws of the Republic of Colombia. Any dispute will be resolved before the competent courts in Colombia."
+      },
+      "contact": {
+        "title": "12. Contact",
+        "body": "For questions about these terms, email contacto@amigogigante.org."
+      }
+    }
+  },
+  "cookies": {
+    "title": "Cookie Policy",
+    "updatedAtLabel": "Last updated:",
+    "updatedAtDate": "March 10, 2024",
+    "intro": "This policy explains what cookies are, how we use them, and how you can manage them.",
+    "sections": {
+      "definition": {
+        "title": "1. What are cookies?",
+        "body": "Cookies are small text files stored on your device when you visit a website."
+      },
+      "types": {
+        "title": "2. Types of cookies we use",
+        "items": [
+          "Technical cookies: necessary for site operation.",
+          "Session cookies: keep your authentication active.",
+          "Preference cookies: remember language and settings.",
+          "Analytics cookies: help us improve the experience (e.g., usage metrics).",
+          "Advertising cookies: used only if we enable specific campaigns."
+        ]
+      },
+      "purposes": {
+        "title": "3. Purpose of each type",
+        "items": [
+          "Ensure safe navigation and service delivery.",
+          "Analyze performance and improve the platform.",
+          "Personalize your experience based on preferences."
+        ]
+      },
+      "thirdParties": {
+        "title": "4. Third-party cookies",
+        "body": "We may use third-party services such as Supabase or analytics tools. These providers may set their own cookies according to their policies."
+      },
+      "consent": {
+        "title": "5. Consent",
+        "body": "By continuing to browse you agree to the use of cookies. You can adjust your consent in your browser settings."
+      },
+      "manage": {
+        "title": "6. How to disable cookies",
+        "items": [
+          "Configure your browser to block or delete cookies.",
+          "Disabling cookies may affect platform functionality.",
+          "Check your browser's help section for more information."
+        ]
+      },
+      "changes": {
+        "title": "7. Changes to this policy",
+        "body": "We may update this policy as needed. The update date will be published on this page."
+      },
+      "contact": {
+        "title": "8. Contact",
+        "body": "If you have questions about cookie usage, email contacto@amigogigante.org."
+      }
+    }
+  }
+}

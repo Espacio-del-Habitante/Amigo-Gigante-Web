@@ -1,0 +1,243 @@
+{
+  "footer": {
+    "title": "Más información legal",
+    "links": {
+      "privacy": "Política de privacidad",
+      "terms": "Términos y condiciones",
+      "cookies": "Política de cookies"
+    },
+    "contactEmail": "contacto@amigogigante.org",
+    "contact": "Si necesitas más información, escríbenos a {email}."
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "updatedAtLabel": "Última actualización:",
+    "updatedAtDate": "10 de marzo de 2024",
+    "intro": "En Amigo Gigante protegemos tus datos personales y tratamos la información de acuerdo con la Ley 1581 de 2012 y el Decreto 1377 de 2013. Esta política explica cómo recopilamos, usamos y compartimos tus datos.",
+    "sections": {
+      "responsible": {
+        "title": "1. Responsable del tratamiento",
+        "items": [
+          "Nombre: Amigo Gigante",
+          "Correo electrónico: contacto@amigogigante.org",
+          "Dirección: [Definir según ubicación real]",
+          "País: Colombia"
+        ]
+      },
+      "dataCollected": {
+        "title": "2. Datos que recopilamos",
+        "intro": "Recopilamos datos cuando creas una cuenta, inicias procesos de adopción o interactúas con la plataforma:",
+        "items": [
+          "Datos de identificación y contacto (nombre, correo, teléfono, dirección).",
+          "Información de la cuenta y credenciales de acceso.",
+          "Datos de solicitudes de adopción y formularios de evaluación.",
+          "Información del hogar y composición familiar para procesos de adopción.",
+          "Documentos de soporte (identificación, comprobantes, autorizaciones).",
+          "Historial de comunicaciones con fundaciones y el equipo de soporte."
+        ]
+      },
+      "purpose": {
+        "title": "3. Finalidades del tratamiento",
+        "items": [
+          "Gestionar registros, autenticación y perfiles de usuario.",
+          "Facilitar procesos de adopción y comunicación con fundaciones aliadas.",
+          "Evaluar solicitudes de adopción y compatibilidad con animales.",
+          "Enviar información relevante sobre el proceso y la plataforma.",
+          "Mejorar la experiencia del servicio y la seguridad de la plataforma."
+        ]
+      },
+      "legalBasis": {
+        "title": "4. Base legal",
+        "items": [
+          "Consentimiento del titular al registrarse y usar la plataforma.",
+          "Ejecución de la relación contractual entre usuario y plataforma.",
+          "Cumplimiento de obligaciones legales aplicables en Colombia."
+        ]
+      },
+      "foundationSharing": {
+        "title": "5. Compartimiento de datos con fundaciones aliadas",
+        "intro": "Compartimos datos con fundaciones aliadas para gestionar procesos de adopción:",
+        "items": [
+          "Datos compartidos: solicitudes de adopción, datos personales y de contacto del adoptante.",
+          "Información del hogar y documentos aportados durante la solicitud.",
+          "Historial de comunicación relacionado con el proceso de adopción.",
+          "Finalidad: revisión de procesos de adopción y análisis para determinar si el usuario puede ser potencial adoptante.",
+          "Base legal: consentimiento explícito del usuario al iniciar el proceso de adopción."
+        ],
+        "rights": "Puedes revocar tu consentimiento o solicitar que no se compartan tus datos con fundaciones específicas en cualquier momento."
+      },
+      "transfers": {
+        "title": "6. Transferencia internacional de datos",
+        "body": "Podemos transferir datos a proveedores tecnológicos como Supabase (EE. UU.). Estas transferencias se realizan con cláusulas contractuales que protegen la información."
+      },
+      "security": {
+        "title": "7. Medidas de seguridad",
+        "items": [
+          "Cifrado de datos en tránsito y en reposo.",
+          "Acceso restringido y controlado al personal autorizado.",
+          "Copias de seguridad y monitoreo continuo.",
+          "Compromisos de confidencialidad con fundaciones aliadas."
+        ]
+      },
+      "rights": {
+        "title": "8. Derechos del titular",
+        "intro": "De acuerdo con la Ley 1581 de 2012, puedes ejercer los siguientes derechos:",
+        "items": [
+          "Acceso a tus datos personales.",
+          "Rectificación de información incorrecta o incompleta.",
+          "Supresión de datos cuando sea procedente.",
+          "Revocación del consentimiento.",
+          "Oposición al tratamiento.",
+          "Portabilidad de datos.",
+          "Solicitar que no se compartan datos con fundaciones específicas o revocar el consentimiento para este compartimiento."
+        ],
+        "howTo": "Puedes ejercer estos derechos escribiendo a contacto@amigogigante.org."
+      },
+      "retention": {
+        "title": "9. Retención de datos",
+        "body": "Conservamos la información mientras sea necesaria para las finalidades descritas o para cumplir obligaciones legales."
+      },
+      "changes": {
+        "title": "10. Cambios a esta política",
+        "body": "Podemos actualizar esta política en cualquier momento. Publicaremos la fecha de última actualización en esta página."
+      },
+      "contact": {
+        "title": "11. Contacto",
+        "body": "Si tienes preguntas sobre esta política, contáctanos en contacto@amigogigante.org."
+      },
+      "legalReferences": {
+        "title": "12. Referencias legales",
+        "items": [
+          "Ley 1581 de 2012 (Protección de Datos Personales).",
+          "Decreto 1377 de 2013 (Reglamentación de la Ley 1581).",
+          "Ley 1266 de 2008 (Habeas Data financiero).",
+          "Ley 1273 de 2009 (Delitos informáticos).",
+          "Decreto 1074 de 2015 (Comercio electrónico)."
+        ]
+      }
+    }
+  },
+  "terms": {
+    "title": "Términos y Condiciones",
+    "updatedAtLabel": "Última actualización:",
+    "updatedAtDate": "10 de marzo de 2024",
+    "intro": "Al acceder y utilizar Amigo Gigante aceptas estos términos y condiciones. Si no estás de acuerdo, debes abstenerte de usar la plataforma.",
+    "sections": {
+      "acceptance": {
+        "title": "1. Aceptación de los términos",
+        "body": "El uso de la plataforma implica la aceptación expresa de estos términos y de las políticas legales vigentes."
+      },
+      "service": {
+        "title": "2. Descripción del servicio",
+        "body": "Amigo Gigante es una plataforma que conecta adoptantes con fundaciones aliadas, facilita procesos de adopción y ofrece servicios complementarios como tienda solidaria."
+      },
+      "registration": {
+        "title": "3. Registro y cuenta de usuario",
+        "items": [
+          "Debes proporcionar información veraz, completa y actualizada.",
+          "Eres responsable de la confidencialidad de tus credenciales.",
+          "La plataforma puede suspender cuentas con información falsa o uso indebido."
+        ]
+      },
+      "permittedUse": {
+        "title": "4. Uso permitido",
+        "items": [
+          "Uso personal y no comercial de los servicios.",
+          "Respeto hacia otros usuarios, fundaciones y animales.",
+          "Cumplimiento de las leyes colombianas aplicables."
+        ]
+      },
+      "prohibitions": {
+        "title": "5. Prohibiciones",
+        "items": [
+          "Realizar actividades ilícitas, fraudulentas o engañosas.",
+          "Suplantar identidades o aportar información falsa.",
+          "Enviar spam, malware o contenido ofensivo.",
+          "Intentar vulnerar la seguridad de la plataforma."
+        ]
+      },
+      "intellectualProperty": {
+        "title": "6. Propiedad intelectual",
+        "body": "El contenido de Amigo Gigante (marca, diseño, textos y software) está protegido por derechos de propiedad intelectual. El contenido aportado por usuarios sigue siendo propiedad de sus autores, pero otorgan una licencia de uso necesaria para operar la plataforma."
+      },
+      "liability": {
+        "title": "7. Limitaciones de responsabilidad",
+        "body": "Amigo Gigante no garantiza la adopción exitosa ni se hace responsable por decisiones tomadas por fundaciones o usuarios. La plataforma se ofrece \"tal cual\" y no garantiza disponibilidad continua."
+      },
+      "indemnification": {
+        "title": "8. Indemnización",
+        "body": "Aceptas mantener indemne a Amigo Gigante frente a reclamaciones derivadas de tu uso indebido de la plataforma o incumplimiento de estos términos."
+      },
+      "changes": {
+        "title": "9. Modificaciones",
+        "body": "Podemos actualizar estos términos cuando sea necesario. Las modificaciones entran en vigor al publicarse."
+      },
+      "termination": {
+        "title": "10. Terminación",
+        "body": "Podemos suspender o cancelar cuentas por incumplimiento. Puedes solicitar la eliminación de tu cuenta en cualquier momento."
+      },
+      "jurisdiction": {
+        "title": "11. Ley aplicable y jurisdicción",
+        "body": "Estos términos se rigen por las leyes de la República de Colombia. Cualquier disputa será resuelta ante los tribunales competentes en Colombia."
+      },
+      "contact": {
+        "title": "12. Contacto",
+        "body": "Para consultas sobre estos términos, escríbenos a contacto@amigogigante.org."
+      }
+    }
+  },
+  "cookies": {
+    "title": "Política de Cookies",
+    "updatedAtLabel": "Última actualización:",
+    "updatedAtDate": "10 de marzo de 2024",
+    "intro": "Esta política explica qué son las cookies, cómo las usamos y cómo puedes gestionarlas.",
+    "sections": {
+      "definition": {
+        "title": "1. ¿Qué son las cookies?",
+        "body": "Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web."
+      },
+      "types": {
+        "title": "2. Tipos de cookies que usamos",
+        "items": [
+          "Cookies técnicas: necesarias para el funcionamiento del sitio.",
+          "Cookies de sesión: permiten mantener tu autenticación activa.",
+          "Cookies de preferencias: recuerdan idioma y configuraciones.",
+          "Cookies analíticas: nos ayudan a mejorar la experiencia (por ejemplo, métricas de uso).",
+          "Cookies publicitarias: se usan únicamente si habilitamos campañas específicas."
+        ]
+      },
+      "purposes": {
+        "title": "3. Finalidad de cada tipo",
+        "items": [
+          "Garantizar la navegación segura y la prestación de servicios.",
+          "Analizar el desempeño y mejorar la plataforma.",
+          "Personalizar la experiencia según tus preferencias."
+        ]
+      },
+      "thirdParties": {
+        "title": "4. Cookies de terceros",
+        "body": "Podemos utilizar servicios de terceros como Supabase o herramientas analíticas. Estos proveedores pueden establecer cookies propias según sus políticas."
+      },
+      "consent": {
+        "title": "5. Consentimiento",
+        "body": "Al continuar navegando aceptas el uso de cookies. Puedes modificar tu consentimiento desde la configuración de tu navegador."
+      },
+      "manage": {
+        "title": "6. Cómo deshabilitar cookies",
+        "items": [
+          "Configura tu navegador para bloquear o eliminar cookies.",
+          "Ten en cuenta que deshabilitar cookies puede afectar el funcionamiento de la plataforma.",
+          "Consulta las secciones de ayuda de tu navegador para más información."
+        ]
+      },
+      "changes": {
+        "title": "7. Cambios a esta política",
+        "body": "Podemos actualizar esta política cuando sea necesario. Publicaremos la fecha de actualización en esta página."
+      },
+      "contact": {
+        "title": "8. Contacto",
+        "body": "Si tienes preguntas sobre el uso de cookies, escríbenos a contacto@amigogigante.org."
+      }
+    }
+  }
+}

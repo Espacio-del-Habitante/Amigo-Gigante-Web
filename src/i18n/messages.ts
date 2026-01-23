@@ -6,6 +6,7 @@ import login from "../messages/en/login.json";
 import navigation from "../messages/en/navigation.json";
 import profile from "../messages/en/profile.json";
 import register from "../messages/en/register.json";
+import legal from "../messages/en/legal.json";
 import animals from "../messages/en/animals.json";
 import adopt from "../messages/en/adopt.json";
 import adoptDetail from "../messages/en/adopt-detail.json";
@@ -26,6 +27,7 @@ export const messages = {
   navigation,
   profile,
   register,
+  legal,
   animals,
   adopt,
   adoptDetail,
