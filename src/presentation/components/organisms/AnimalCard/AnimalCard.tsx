@@ -53,6 +53,8 @@ export function AnimalCard({ animal }: AnimalCardProps) {
               transform: animal.imageUrl ? "scale(1.04)" : "none",
             },
             p: animal.imageUrl ? 0 : 3,
+            filter: animal.imageUrl ? "none" : "grayscale(100%)",
+            opacity: animal.imageUrl ? 1 : 0.5,
           }}
         />
         <IconButton

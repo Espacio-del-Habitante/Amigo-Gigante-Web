@@ -25,7 +25,7 @@ export function AnnouncementsCarousel({ autoPlayMs = 6000 }: AnnouncementsCarous
         title: t("announcements.items.adoption.title"),
         description: t("announcements.items.adoption.description"),
         imageUrl:
-          "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=900&q=80",
+          "https://gvckjvnuqulazmhlhcpu.supabase.co/storage/v1/object/public/amg-public-image/media/imagen_maxi_1.png",
       },
       {
         id: "volunteering",
@@ -39,7 +39,7 @@ export function AnnouncementsCarousel({ autoPlayMs = 6000 }: AnnouncementsCarous
         title: t("announcements.items.store.title"),
         description: t("announcements.items.store.description"),
         imageUrl:
-          "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=900&q=80",
+          "https://gvckjvnuqulazmhlhcpu.supabase.co/storage/v1/object/public/amg-public-image/media/imagen_barto_1.png",
       },
     ],
     [t],
@@ -73,23 +73,11 @@ export function AnnouncementsCarousel({ autoPlayMs = 6000 }: AnnouncementsCarous
         <Box
           className="relative overflow-hidden rounded-[32px] px-6 py-8 md:px-10 md:py-12"
           sx={(theme) => ({
-            background: `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.primary.main})`,
+            backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
             boxShadow: theme.shadows[3],
           })}
         >
-          <Box
-            sx={{
-              position: "absolute",
-              right: -60,
-              top: -80,
-              width: 240,
-              height: 240,
-              backgroundColor: "rgba(255,255,255,0.12)",
-              filter: "blur(60px)",
-              borderRadius: "50%",
-            }}
-          />
           <Stack
             direction={{ xs: "column", md: "row" }}
             alignItems="center"
@@ -124,7 +112,7 @@ export function AnnouncementsCarousel({ autoPlayMs = 6000 }: AnnouncementsCarous
                       width: index === activeIndex ? 20 : 8,
                       height: 8,
                       borderRadius: 999,
-                      backgroundColor: index === activeIndex ? "common.white" : "rgba(255,255,255,0.45)",
+                      backgroundColor: index === activeIndex ? "common.white" : "rgba(255,255,255,0.3)",
                       transition: "all 0.2s ease",
                       cursor: "pointer",
                     }}
@@ -147,9 +135,9 @@ export function AnnouncementsCarousel({ autoPlayMs = 6000 }: AnnouncementsCarous
               onClick={handlePrev}
               aria-label={t("announcements.prev")}
               sx={{
-                backgroundColor: "rgba(255,255,255,0.18)",
+                backgroundColor: "rgba(255,255,255,0.2)",
                 color: "common.white",
-                "&:hover": { backgroundColor: "rgba(255,255,255,0.28)" },
+                "&:hover": { backgroundColor: "rgba(255,255,255,0.3)" },
               }}
             >
               <ArrowBackRoundedIcon />
@@ -158,9 +146,9 @@ export function AnnouncementsCarousel({ autoPlayMs = 6000 }: AnnouncementsCarous
               onClick={handleNext}
               aria-label={t("announcements.next")}
               sx={{
-                backgroundColor: "rgba(255,255,255,0.18)",
+                backgroundColor: "rgba(255,255,255,0.2)",
                 color: "common.white",
-                "&:hover": { backgroundColor: "rgba(255,255,255,0.28)" },
+                "&:hover": { backgroundColor: "rgba(255,255,255,0.3)" },
               }}
             >
               <ArrowForwardRoundedIcon />

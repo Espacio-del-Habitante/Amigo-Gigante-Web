@@ -58,8 +58,8 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
   }, [goToAdopt, locationValue, searchValue, selectedSpecies]);
 
   const handleAnimalClick = useCallback(
-    (animalId: number) => {
-      goToAdoptDetail(animalId);
+    (animalId: string | number) => {
+      goToAdoptDetail(typeof animalId === "string" ? Number.parseInt(animalId, 10) : animalId);
     },
     [goToAdoptDetail],
   );
@@ -182,7 +182,12 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                     alt={first.name}
                     fill
                     priority
-                    style={{ objectFit: first.imageUrl ? "cover" : "contain", padding: first.imageUrl ? 0 : "24px" }}
+                    style={{
+                      objectFit: first.imageUrl ? "cover" : "contain",
+                      padding: first.imageUrl ? 0 : "24px",
+                      filter: first.imageUrl ? "none" : "grayscale(100%)",
+                      opacity: first.imageUrl ? 1 : 0.5,
+                    }}
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
                   />
                 </Box>
@@ -239,7 +244,12 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                     src={second.imageUrl || LogoImage}
                     alt={second.name}
                     fill
-                    style={{ objectFit: second.imageUrl ? "cover" : "contain", padding: second.imageUrl ? 0 : "24px" }}
+                    style={{
+                      objectFit: second.imageUrl ? "cover" : "contain",
+                      padding: second.imageUrl ? 0 : "24px",
+                      filter: second.imageUrl ? "none" : "grayscale(100%)",
+                      opacity: second.imageUrl ? 1 : 0.5,
+                    }}
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
                   />
                 </Box>
