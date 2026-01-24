@@ -11,10 +11,6 @@
       "label": "Full Name",
       "placeholder": "e.g. Carlos Mendoza"
     },
-    "displayName": {
-      "label": "Username (Display Name)",
-      "placeholder": "e.g. CarlosM"
-    },
     "phone": {
       "label": "Phone",
       "placeholder": "+34 600 000 000"
