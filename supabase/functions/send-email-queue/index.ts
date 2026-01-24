@@ -4,6 +4,8 @@ import { baseLayout } from "./templates/base-layout.ts";
 import { adoptionRequestCreated } from "./templates/adoption-request-created.ts";
 import { adoptionStatusChanged } from "./templates/adoption-status-changed.ts";
 import { adoptionInfoRequested } from "./templates/adoption-info-requested.ts";
+import { purchaseVoucher } from "./templates/purchase-voucher.ts";
+import { purchaseInvoice } from "./templates/purchase-invoice.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const RESEND_FROM = Deno.env.get("RESEND_FROM") ?? "onboarding@resend.dev"; // cámbialo
@@ -19,6 +21,10 @@ function renderSubject(template: string, payload: any): string {
       return "Actualización de tu solicitud de adopción";
     case "info_requested":
       return payload?.subject ?? "Información adicional requerida - Amigo Gigante";
+    case "purchase_voucher":
+      return "Comprobante de solicitud de compra";
+    case "purchase_invoice":
+      return "Factura de solicitud de compra";
     default:
       return "Notificación";
   }
@@ -33,6 +39,10 @@ function renderHtml(template: string, payload: any): string {
       return adoptionStatusChanged(payload ?? {});
     case "info_requested":
       return adoptionInfoRequested(payload ?? {});
+    case "purchase_voucher":
+      return purchaseVoucher(payload ?? {});
+    case "purchase_invoice":
+      return purchaseInvoice(payload ?? {});
     default:
       return baseLayout({
         title: "Notificación",
