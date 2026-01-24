@@ -47,12 +47,13 @@ export class RegisterFoundationUseCase {
         this.buildFoundationPayload(foundationName, taxId),
       );
 
-      await this.foundationRepository.createFoundationContact(
-        this.buildContactPayload(foundation.id, officialEmail, taxId),
-      );
-
+      // Crear el miembro ANTES del contacto para que la política RLS permita la inserción
       await this.foundationRepository.createFoundationMember(
         this.buildMemberPayload(foundation.id, user.id),
+      );
+
+      await this.foundationRepository.createFoundationContact(
+        this.buildContactPayload(foundation.id, officialEmail, taxId),
       );
 
       return {

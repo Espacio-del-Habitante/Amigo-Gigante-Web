@@ -15,7 +15,8 @@ import { supabaseClient } from "@/infrastructure/config/supabase";
 class FoundationRepository implements IFoundationRepository {
   async createFoundation(params: CreateFoundationParams): Promise<Foundation> {
     const { name, taxId } = params;
-    const basePayload = this.buildFoundationPayload(name, taxId);
+    // La tabla foundations NO tiene columna tax_id, solo se guarda en foundation_contacts
+    const basePayload = { name };
 
     try {
       const { data, error } = await supabaseClient
@@ -25,10 +26,6 @@ class FoundationRepository implements IFoundationRepository {
         .single();
 
       if (error) {
-        if (taxId && this.isMissingTaxIdColumn(error)) {
-          return this.createFoundationWithoutTaxId(name);
-        }
-
         throw new Error(this.translateFoundationError(error));
       }
 
@@ -241,31 +238,6 @@ class FoundationRepository implements IFoundationRepository {
     await supabaseClient.from("foundations").delete().eq("id", foundationId);
   }
 
-  private buildFoundationPayload(name: string, taxId?: string) {
-    if (taxId) {
-      return { name, tax_id: taxId };
-    }
-
-    return { name };
-  }
-
-  private isMissingTaxIdColumn(error: PostgrestError): boolean {
-    return error.message?.toLowerCase?.().includes('column "tax_id"');
-  }
-
-  private async createFoundationWithoutTaxId(name: string): Promise<Foundation> {
-    const { data, error } = await supabaseClient
-      .from("foundations")
-      .insert({ name })
-      .select("id, name")
-      .single();
-
-    if (error || !data) {
-      throw new Error(this.translateFoundationError(error ?? new Error("No se pudo crear la fundación.")));
-    }
-
-    return { id: data.id, name: data.name, taxId: null };
-  }
 
   private translateFoundationError(error: PostgrestError | Error): string {
     const message = error.message?.toLowerCase?.() ?? "";
