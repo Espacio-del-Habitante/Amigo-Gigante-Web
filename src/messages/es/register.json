@@ -35,7 +35,9 @@
       "hide": "Ocultar",
       "aria": "{action} {label}"
     },
-    "terms": "Acepto los Términos y Condiciones y confirmo que la información es correcta.",
+    "terms": {
+      "label": "Acepto los <terms>Términos y Condiciones</terms> y la <privacy>Política de privacidad</privacy>."
+    },
     "submit": "Registrar fundación",
     "submitting": "Enviando...",
     "submitError": "Ocurrió un error al registrar la fundación. Inténtalo nuevamente.",
