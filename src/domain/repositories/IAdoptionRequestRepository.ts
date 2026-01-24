@@ -6,6 +6,7 @@ import type {
   AdoptionRequestPriority,
   AdoptionRequestStatus,
   AdoptionRequestSummary,
+  AdoptionRequestMessage,
   UserAdoptionRequestSummary,
 } from "@/domain/models/AdoptionRequest";
 
@@ -85,8 +86,6 @@ export interface UpdateAdoptionRequestStatusParams {
   requestId: number;
   status: AdoptionRequestStatus;
   rejectionReason?: string | null;
-  infoRequestMessage?: string | null;
-  infoResponseMessage?: string | null;
 }
 
 export interface EnqueueInfoRequestEmailParams {
@@ -100,9 +99,16 @@ export interface EnqueueInfoRequestEmailParams {
   foundationId: string;
 }
 
-export interface AddResponseDocumentsParams {
+export interface SaveResponseMessageParams {
   requestId: number;
+  senderUserId: string;
+  senderRole: "foundation" | "adopter";
+  messageText: string;
   fileUrls: string[];
+}
+
+export interface GetRequestMessagesParams {
+  requestId: number;
 }
 
 export interface NotifyFoundationMembersParams {
@@ -124,9 +130,10 @@ export interface IAdoptionRequestRepository {
   getUserRequests(params: GetUserAdoptionRequestsParams): Promise<GetUserAdoptionRequestsResult>;
   getRequestDetail(params: GetAdoptionRequestDetailParams): Promise<AdoptionRequestDetail>;
   getRequestAccessInfo(params: GetAdoptionRequestAccessInfoParams): Promise<AdoptionRequestAccessInfo>;
+  getRequestMessages(params: GetRequestMessagesParams): Promise<AdoptionRequestMessage[]>;
   getAdopterEmailByUserId(params: GetAdopterEmailByUserIdParams): Promise<string | null>;
   enqueueInfoRequestEmail(params: EnqueueInfoRequestEmailParams): Promise<void>;
-  addResponseDocuments(params: AddResponseDocumentsParams): Promise<void>;
+  saveResponseMessage(params: SaveResponseMessageParams): Promise<void>;
   notifyFoundationMembers(params: NotifyFoundationMembersParams): Promise<void>;
   updateStatus(params: UpdateAdoptionRequestStatusParams): Promise<void>;
 }

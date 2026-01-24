@@ -12,8 +12,6 @@ const buildDetail = (overrides?: Partial<AdoptionRequestDetail>): AdoptionReques
   status: "info_requested",
   priority: "low",
   rejectionReason: null,
-  infoRequestMessage: "Información solicitada",
-  infoResponseMessage: null,
   createdAt: new Date().toISOString(),
   adopterProfile: {
     displayName: "Alex",
@@ -64,7 +62,7 @@ const createAuthRepository = (session: Awaited<ReturnType<IAuthRepository["getSe
 
 test("RespondToInfoRequestUseCase saves response, updates status, and notifies", async () => {
   let statusPayload: Parameters<IAdoptionRequestRepository["updateStatus"]>[0] | null = null;
-  let responseDocumentsPayload: Parameters<IAdoptionRequestRepository["addResponseDocuments"]>[0] | null = null;
+  let savedPayload: Parameters<IAdoptionRequestRepository["saveResponseMessage"]>[0] | null = null;
   let notificationPayload: Parameters<IAdoptionRequestRepository["notifyFoundationMembers"]>[0] | null = null;
 
   const adoptionRequestRepository: IAdoptionRequestRepository = {
@@ -83,8 +81,8 @@ test("RespondToInfoRequestUseCase saves response, updates status, and notifies",
     }),
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {},
-    addResponseDocuments: async (params) => {
-      responseDocumentsPayload = params;
+    saveResponseMessage: async (params) => {
+      savedPayload = params;
     },
     notifyFoundationMembers: async (params) => {
       notificationPayload = params;
@@ -122,8 +120,11 @@ test("RespondToInfoRequestUseCase saves response, updates status, and notifies",
     status: "in_review",
     infoResponseMessage: "Respuesta",
   });
-  assert.deepEqual(responseDocumentsPayload, {
+  assert.deepEqual(savedPayload, {
     requestId: 1,
+    senderUserId: "user-1",
+    senderRole: "adopter",
+    messageText: "Respuesta",
     fileUrls: ["adoption-requests/foundation-1/1/response-file.pdf"],
   });
   assert.ok(notificationPayload);
@@ -147,7 +148,7 @@ test("RespondToInfoRequestUseCase rejects empty messages", async () => {
     }),
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {},
-    addResponseDocuments: async () => {},
+    saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
   };

@@ -123,8 +123,6 @@ export interface AdoptionRequestDetail {
   status: AdoptionRequestStatus;
   priority: AdoptionRequestPriority;
   rejectionReason: string | null;
-  infoRequestMessage: string | null;
-  infoResponseMessage: string | null;
   createdAt: string;
   adopterProfile: AdoptionRequestAdopterProfile;
   animal: AdoptionRequestAnimalSnapshot;

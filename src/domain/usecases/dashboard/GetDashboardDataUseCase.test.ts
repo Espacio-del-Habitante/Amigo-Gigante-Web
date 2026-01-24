@@ -127,7 +127,7 @@ test("GetDashboardDataUseCase returns KPI and funnel data from repositories", as
     },
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {},
-    addResponseDocuments: async () => {},
+    saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
   };

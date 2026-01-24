@@ -41,7 +41,7 @@ const baseRepository: IAdoptionRequestRepository = {
   },
   getAdopterEmailByUserId: async () => null,
   enqueueInfoRequestEmail: async () => {},
-  addResponseDocuments: async () => {},
+  saveResponseMessage: async () => {},
   notifyFoundationMembers: async () => {},
   updateStatus: async () => {},
 };
