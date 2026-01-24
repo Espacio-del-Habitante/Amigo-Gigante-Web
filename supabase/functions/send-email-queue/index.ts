@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 import { adoptionRequestCreated } from "./templates/adoption-request-created.ts";
 import { adoptionStatusChanged } from "./templates/adoption-status-changed.ts";
 import { adoptionInfoRequested } from "./templates/adoption-info-requested.ts";
