@@ -7,9 +7,10 @@ export const PRIVATE_FILE_ALLOWED_TYPES = new Set([
   "image/jpg",
   "image/gif",
   "image/webp",
+  "video/mp4",
 ]);
 
-export const PRIVATE_FILE_MAX_SIZE_BYTES = 10 * 1024 * 1024;
+export const PRIVATE_FILE_MAX_SIZE_BYTES = 50 * 1024 * 1024;
 
 export interface UploadPrivateFileParams {
   file: File;

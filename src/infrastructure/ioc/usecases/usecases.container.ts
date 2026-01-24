@@ -33,6 +33,8 @@ import { GetUserAdoptionRequestsUseCase } from "@/domain/usecases/adopt/GetUserA
 import { GetAdoptionRequestDetailUseCase } from "@/domain/usecases/adopt/GetAdoptionRequestDetailUseCase";
 import { RequestAdoptionInfoUseCase } from "@/domain/usecases/adopt/RequestAdoptionInfoUseCase";
 import { UpdateAdoptionRequestStatusUseCase } from "@/domain/usecases/adopt/UpdateAdoptionRequestStatusUseCase";
+import { GetRequestInfoForResponseUseCase } from "@/domain/usecases/adopt/GetRequestInfoForResponseUseCase";
+import { RespondToInfoRequestUseCase } from "@/domain/usecases/adopt/RespondToInfoRequestUseCase";
 import { GetSessionUseCase } from "@/domain/usecases/auth/GetSessionUseCase";
 import { LoginUseCase } from "@/domain/usecases/auth/LoginUseCase";
 import { LogoutUseCase } from "@/domain/usecases/auth/LogoutUseCase";
@@ -215,6 +217,29 @@ const useCasesModule = new ContainerModule(
           authRepository,
           foundationMembershipRepository,
         );
+      })
+      .inSingletonScope();
+
+    bind<GetRequestInfoForResponseUseCase>(USE_CASE_TYPES.GetRequestInfoForResponseUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new GetRequestInfoForResponseUseCase(adoptionRequestRepository, authRepository);
+      })
+      .inSingletonScope();
+
+    bind<RespondToInfoRequestUseCase>(USE_CASE_TYPES.RespondToInfoRequestUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+        const privateFileStorage = context.get<IPrivateFileStorage>(REPOSITORY_TYPES.PrivateFileStorage);
+
+        return new RespondToInfoRequestUseCase(adoptionRequestRepository, authRepository, privateFileStorage);
       })
       .inSingletonScope();
 

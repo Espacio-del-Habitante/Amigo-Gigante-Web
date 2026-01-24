@@ -764,12 +764,12 @@ create policy adoption_requests_update
 on adoption_requests for update
 using (
   is_foundation_member(foundation_id) 
-  or (adopter_user_id = auth.uid() and status = 'cancelled')
+  or (adopter_user_id = auth.uid() and (status = 'cancelled' or status = 'info_requested'))
   or is_admin()
 )
 with check (
   is_foundation_member(foundation_id) 
-  or (adopter_user_id = auth.uid() and status = 'cancelled')
+  or (adopter_user_id = auth.uid() and (status = 'cancelled' or status = 'in_review'))
   or is_admin()
 );
 

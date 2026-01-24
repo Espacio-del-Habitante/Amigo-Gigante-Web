@@ -48,6 +48,11 @@ const resolveNotificationCopy = (notification: Notification, translate: (key: st
         title: translate("types.adoption_status_changed.title"),
         body: translate("types.adoption_status_changed.body"),
       };
+    case "adoption_info_response":
+      return {
+        title: translate("types.adoption_info_response.title"),
+        body: translate("types.adoption_info_response.body"),
+      };
     default:
       return {
         title: translate("types.unknown.title"),

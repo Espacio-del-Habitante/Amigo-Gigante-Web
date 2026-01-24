@@ -7,6 +7,7 @@ import type {
   AdoptionRequestPriority,
   AdoptionRequestStatus,
   AdoptionRequestSummary,
+  AdoptionRequestMessage,
 } from "@/domain/models/AdoptionRequest";
 import type { AdoptionRequestDocument, AdoptionRequestDocumentType } from "@/domain/models/AdoptionRequestDocument";
 import type {
@@ -20,6 +21,10 @@ import type {
   IAdoptionRequestRepository,
   AdoptionRequestsCounts,
   UpdateAdoptionRequestStatusParams,
+  UpdateAdoptionRequestStatusByAdopterParams,
+  SaveResponseMessageParams,
+  GetRequestMessagesParams,
+  NotifyFoundationMembersParams,
 } from "@/domain/repositories/IAdoptionRequestRepository";
 import type { IPrivateFileStorage } from "@/domain/repositories/IPrivateFileStorage";
 import { supabaseClient } from "@/infrastructure/config/supabase";
@@ -76,6 +81,16 @@ interface AdoptionRequestDocumentRow {
   notes: string | null;
   created_at: string;
 }
+
+interface AdoptionRequestMessageRow {
+  id: number;
+  request_id: number;
+  sender_user_id: string;
+  sender_role: "foundation" | "adopter";
+  message_text: string;
+  created_at: string;
+}
+
 
 interface AdoptionRequestFoundationRow {
   id: string;
@@ -294,6 +309,53 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     };
   }
 
+  async getRequestMessages({ requestId }: GetRequestMessagesParams): Promise<AdoptionRequestMessage[]> {
+    const { data, error } = await supabaseClient
+      .from("adoption_request_messages")
+      .select("id, request_id, sender_user_id, sender_role, message_text, created_at")
+      .eq("request_id", requestId)
+      .order("created_at", { ascending: true })
+      .returns<AdoptionRequestMessageRow[]>();
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    const { data: documents, error: documentsError } = await supabaseClient
+      .from("adoption_request_documents")
+      .select("id, request_id, doc_type, file_url, notes, created_at")
+      .eq("request_id", requestId)
+      .eq("doc_type", "response")
+      .returns<AdoptionRequestDocumentRow[]>();
+
+    if (documentsError) {
+      throw new Error(this.translateAdoptionError(documentsError));
+    }
+
+    const documentsByMessageId = new Map<number, AdoptionRequestMessage["files"]>();
+
+    (documents ?? []).forEach((document) => {
+      const messageId = this.extractMessageId(document.notes);
+      if (!messageId) return;
+      const current = documentsByMessageId.get(messageId) ?? [];
+      current.push({
+        id: document.id,
+        fileUrl: document.file_url,
+        docType: document.doc_type,
+      });
+      documentsByMessageId.set(messageId, current);
+    });
+
+    return (data ?? []).map((row) => ({
+      id: row.id,
+      senderUserId: row.sender_user_id,
+      senderRole: row.sender_role,
+      messageText: row.message_text,
+      createdAt: row.created_at,
+      files: documentsByMessageId.get(row.id) ?? [],
+    }));
+  }
+
   async getAdopterEmailByUserId({ adopterUserId }: GetAdopterEmailByUserIdParams): Promise<string | null> {
     const { data, error } = await supabaseClient
       .from("auth.users")
@@ -329,6 +391,60 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     }
   }
 
+  async saveResponseMessage(params: SaveResponseMessageParams): Promise<void> {
+    const { data: message, error: messageError } = await supabaseClient
+      .from("adoption_request_messages")
+      .insert({
+        request_id: params.requestId,
+        sender_user_id: params.senderUserId,
+        sender_role: params.senderRole,
+        message_text: params.messageText,
+      })
+      .select("id")
+      .single<{ id: number }>();
+
+    if (messageError) {
+      throw new Error(this.translateAdoptionError(messageError));
+    }
+
+    if (!message) {
+      throw new Error("errors.generic");
+    }
+
+    if (params.fileUrls.length > 0) {
+      const documents = params.fileUrls.map((url) => ({
+        request_id: params.requestId,
+        doc_type: "response",
+        file_url: url,
+        notes: `Response message ID: ${message.id}`,
+      }));
+
+      const { error: docsError } = await supabaseClient
+        .from("adoption_request_documents")
+        .insert(documents);
+
+      if (docsError) {
+        throw new Error(this.translateAdoptionError(docsError));
+      }
+    }
+  }
+
+  async notifyFoundationMembers(params: NotifyFoundationMembersParams): Promise<void> {
+    const { foundationId, actorUserId, title, body, type, data } = params;
+    const { error } = await supabaseClient.rpc("notify_foundation_members", {
+      p_foundation_id: foundationId,
+      p_actor_user_id: actorUserId,
+      p_title: title,
+      p_body: body,
+      p_type: type,
+      p_data: data,
+    });
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+  }
+
   async updateStatus({ foundationId, requestId, status, rejectionReason }: UpdateAdoptionRequestStatusParams): Promise<void> {
     const { data, error } = await supabaseClient
       .from("adoption_requests")
@@ -340,6 +456,28 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       .eq("foundation_id", foundationId)
       .select("id")
       .single();
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+  }
+
+  async updateStatusByAdopter({
+    adopterUserId,
+    requestId,
+    status,
+  }: UpdateAdoptionRequestStatusByAdopterParams): Promise<void> {
+    const { data, error } = await supabaseClient
+      .from("adoption_requests")
+      .update({ status })
+      .eq("id", requestId)
+      .eq("adopter_user_id", adopterUserId)
+      .select("id")
+      .maybeSingle();
 
     if (error) {
       throw new Error(this.translateAdoptionError(error));
@@ -613,6 +751,15 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       createdAt: document.created_at,
     };
   }
+
+  private extractMessageId(notes: string | null): number | null {
+    if (!notes) return null;
+    const match = notes.match(/Response message ID:\s*(\d+)/i);
+    if (!match) return null;
+    const id = Number(match[1]);
+    return Number.isNaN(id) ? null : id;
+  }
+
 
   private normalizeDetails(
     details: AdoptionRequestDetailsRow | AdoptionRequestDetailsRow[] | null,

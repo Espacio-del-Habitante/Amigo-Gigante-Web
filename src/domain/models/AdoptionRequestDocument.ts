@@ -1,4 +1,4 @@
-export type AdoptionRequestDocumentType = "id_document" | "home_photos" | "vaccination_card" | "other";
+export type AdoptionRequestDocumentType = "id_document" | "home_photos" | "vaccination_card" | "response" | "other";
 
 export interface AdoptionRequestDocument {
   id: number;

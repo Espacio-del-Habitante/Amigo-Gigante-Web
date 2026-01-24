@@ -3,7 +3,6 @@
 import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useLocale, useTranslations } from "next-intl";
-import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -20,6 +19,7 @@ import { AccountProfilePicture } from "@/presentation/components/account/Account
 import { AccountSecurity } from "@/presentation/components/account/AccountSecurity";
 import { AccountFormValues, createAccountValidationSchema } from "@/presentation/components/account/accountValidation";
 import { ConfirmDialog } from "@/presentation/components/atoms/ConfirmDialog";
+import { AccountLayout } from "@/presentation/components/layouts";
 
 interface ProfileMeta {
   id: string;
@@ -218,47 +218,7 @@ export function AccountSettingsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-50">
-      <aside className="hidden w-72 flex-col border-r border-neutral-200 bg-white px-6 py-8 md:flex">
-        <div className="mb-8 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-white">
-            <span className="material-symbols-outlined">pets</span>
-          </div>
-          <div className="text-lg font-extrabold leading-tight text-neutral-900">
-            {t("sidebar.brand.name")} <span className="text-brand-500">{t("sidebar.brand.accent")}</span>
-          </div>
-        </div>
-        <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 text-lg font-semibold text-neutral-700">
-            {formik.values.displayName.trim().slice(0, 1).toUpperCase() || "?"}
-          </div>
-          <div className="min-w-0">
-            <Typography variant="subtitle2" className="truncate font-semibold text-neutral-900">
-              {formik.values.displayName || t("sidebar.fallbackName")}
-            </Typography>
-            <Typography variant="caption" className="text-neutral-500">
-              {t("sidebar.subtitle")}
-            </Typography>
-          </div>
-        </div>
-        <nav className="flex flex-col gap-2">
-          <NextLink
-            href={`/${locale}/account`}
-            className="flex items-center gap-3 rounded-lg bg-brand-50 px-3 py-2 text-brand-600"
-          >
-            <span className="material-symbols-outlined">person</span>
-            <span className="text-sm font-semibold">{t("sidebar.account")}</span>
-          </NextLink>
-          <NextLink
-            href={`/${locale}/account/adoptions`}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700"
-          >
-            <span className="material-symbols-outlined">pets</span>
-            <span className="text-sm font-medium">{t("sidebar.requests")}</span>
-          </NextLink>
-        </nav>
-      </aside>
-
+    <AccountLayout profileName={formik.values.displayName} activeRoute="account">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
         <header>
           <Typography variant="h4" className="font-black text-neutral-900">
@@ -343,6 +303,6 @@ export function AccountSettingsPage() {
           onClose={() => setShowDeleteDialog(false)}
         />
       </div>
-    </div>
+    </AccountLayout>
   );
 }

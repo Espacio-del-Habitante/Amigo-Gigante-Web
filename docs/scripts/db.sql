@@ -176,6 +176,7 @@ create table adoption_request_documents (
       'id_document',
       'home_photos',
       'vaccination_card',
+      'response',
       'other'
     )),
 
@@ -184,6 +185,24 @@ create table adoption_request_documents (
 
   created_at timestamptz not null default now()
 );
+
+-- ALTER EXISTING DOCUMENTS TYPE CHECK (for existing databases)
+alter table adoption_request_documents
+  drop constraint if exists adoption_request_documents_doc_type_check;
+alter table adoption_request_documents
+  add constraint adoption_request_documents_doc_type_check
+  check (doc_type in ('id_document', 'home_photos', 'vaccination_card', 'response', 'other'));
+
+-- REQUEST MESSAGES
+create table adoption_request_messages (
+  id bigint primary key generated always as identity,
+  request_id bigint not null references adoption_requests(id) on delete cascade,
+  sender_user_id uuid not null references profiles(id) on delete cascade,
+  sender_role text not null check (sender_role in ('foundation', 'adopter')),
+  message_text text not null,
+  created_at timestamptz not null default now()
+);
+
 -- NOTIFICATIONS (in-app)
 create table notifications (
   id uuid primary key default gen_random_uuid(),
@@ -247,6 +266,9 @@ create index adoption_request_details_request_idx on adoption_request_details(re
 create index adoption_request_documents_request_idx on adoption_request_documents(request_id);
 create index adoption_request_documents_type_idx on adoption_request_documents(doc_type);
 
+create index adoption_request_messages_request_idx on adoption_request_messages(request_id);
+create index adoption_request_messages_created_idx on adoption_request_messages(created_at desc);
+
 create index notifications_user_created_idx on notifications(user_id, created_at desc);
 create index notifications_user_read_idx on notifications(user_id, read_at);
 
@@ -270,6 +292,58 @@ for each row execute function set_updated_at();
 create trigger trg_adoption_request_details_updated_at
 before update on adoption_request_details
 for each row execute function set_updated_at();
+
+alter table adoption_request_messages enable row level security;
+
+create policy adoption_request_messages_read_adopter
+on adoption_request_messages
+for select
+using (
+  exists (
+    select 1
+    from adoption_requests ar
+    where ar.id = adoption_request_messages.request_id
+      and ar.adopter_user_id = auth.uid()
+  )
+);
+
+create policy adoption_request_messages_read_foundation
+on adoption_request_messages
+for select
+using (
+  exists (
+    select 1
+    from adoption_requests ar
+    join foundation_members fm on fm.foundation_id = ar.foundation_id
+    where ar.id = adoption_request_messages.request_id
+      and fm.user_id = auth.uid()
+  )
+);
+
+create policy adoption_request_messages_insert_adopter
+on adoption_request_messages
+for insert
+with check (
+  exists (
+    select 1
+    from adoption_requests ar
+    where ar.id = adoption_request_messages.request_id
+      and ar.adopter_user_id = auth.uid()
+  )
+);
+
+create policy adoption_request_messages_insert_foundation
+on adoption_request_messages
+for insert
+with check (
+  exists (
+    select 1
+    from adoption_requests ar
+    join foundation_members fm on fm.foundation_id = ar.foundation_id
+    where ar.id = adoption_request_messages.request_id
+      and fm.user_id = auth.uid()
+  )
+);
 
 
 create or replace function notify_foundation_members(

@@ -1,0 +1,57 @@
+{
+  "title": "Respond to Information Request",
+  "description": "Please complete the details requested by the foundation to continue with your process.",
+  "loading": "Loading request...",
+  "breadcrumbs": {
+    "home": "Home",
+    "myAdoptions": "My Requests"
+  },
+  "foundationMessage": {
+    "title": "Foundation Message",
+    "label": "Message from {{foundationName}}"
+  },
+  "form": {
+    "message": {
+      "label": "Your Message or Explanation",
+      "placeholder": "Write your response to the foundation here..."
+    },
+    "files": {
+      "label": "Attached Files (Video or Photos)",
+      "dropzone": {
+        "title": "Click or drag files here",
+        "description": "Supports MP4, JPG, PNG or PDF (Max. 50MB)"
+      }
+    },
+    "cancel": "Cancel",
+    "submit": "Send Response"
+  },
+  "animalCard": {
+    "title": "Responding for:",
+    "viewProfile": "View Animal Profile"
+  },
+  "progress": {
+    "title": "Adoption Progress",
+    "step": "Step {{current}} of {{total}}",
+    "percentage": "{{percentage}}%",
+    "steps": {
+      "initial": "Initial Request",
+      "interview": "Phone Interview",
+      "additionalInfo": "Additional Information",
+      "homeVisit": "Home Visit",
+      "approval": "Final Approval"
+    }
+  },
+  "errors": {
+    "unauthorized": "Unauthorized",
+    "invalidStatus": "This request does not require a response at this time",
+    "messageRequired": "Message is required",
+    "fileTooLarge": "File is too large (max. 50MB)",
+    "invalidFileType": "File type not allowed",
+    "uploadFailed": "Error uploading files",
+    "submitFailed": "Error sending response"
+  },
+  "success": {
+    "title": "Response sent",
+    "message": "Your response has been sent successfully. The foundation will be notified."
+  }
+}

@@ -15,7 +15,7 @@
       }
     },
     "validation": {
-      "maxSize": "The file exceeds the maximum size (10MB).",
+      "maxSize": "The file exceeds the maximum size (50MB).",
       "invalidType": "The file format is not valid.",
       "empty": "The file is empty."
     },

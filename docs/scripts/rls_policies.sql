@@ -337,18 +337,20 @@ with check (
 );
 
 -- Política: Las fundaciones pueden actualizar solicitudes de sus animales
--- Los adoptantes solo pueden cancelar sus propias solicitudes
+-- Los adoptantes pueden:
+--   - Cancelar sus propias solicitudes
+--   - Actualizar de 'info_requested' a 'in_review' cuando responden a solicitudes de información
 drop policy if exists adoption_requests_update on adoption_requests;
 create policy adoption_requests_update
 on adoption_requests for update
 using (
   is_foundation_member(foundation_id) 
-  or (adopter_user_id = auth.uid() and status = 'cancelled')
+  or (adopter_user_id = auth.uid() and (status = 'cancelled' or status = 'info_requested'))
   or is_admin()
 )
 with check (
   is_foundation_member(foundation_id) 
-  or (adopter_user_id = auth.uid() and status = 'cancelled')
+  or (adopter_user_id = auth.uid() and (status = 'cancelled' or status = 'in_review'))
   or is_admin()
 );
 

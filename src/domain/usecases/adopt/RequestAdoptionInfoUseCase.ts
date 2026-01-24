@@ -55,6 +55,14 @@ export class RequestAdoptionInfoUseCase {
       foundationId,
     });
 
+    await this.adoptionRequestRepository.saveResponseMessage({
+      requestId: input.requestId,
+      senderUserId: session.user.id,
+      senderRole: "foundation",
+      messageText: input.message,
+      fileUrls: [],
+    });
+
     await this.adoptionRequestRepository.updateStatus({
       foundationId,
       requestId: input.requestId,
