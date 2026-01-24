@@ -69,6 +69,22 @@ export interface AdoptionRequestSummary {
   createdAt: string;
 }
 
+export interface UserAdoptionRequestSummary {
+  id: number;
+  animal: {
+    id: number;
+    name: string;
+    species: "dog" | "cat";
+    coverImageUrl: string | null;
+  };
+  foundation: {
+    id: string;
+    name: string;
+  };
+  status: AdoptionRequestStatus;
+  createdAt: string;
+}
+
 export interface AdoptionRequestAdopterProfile {
   displayName: string;
   phone: string | null;

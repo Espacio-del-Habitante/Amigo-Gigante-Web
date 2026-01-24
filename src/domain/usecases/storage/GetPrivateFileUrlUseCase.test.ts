@@ -47,6 +47,7 @@ test("GetPrivateFileUrlUseCase returns signed URL for authorized adopter", async
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },
+    getUserRequests: async () => ({ requests: [] }),
     getRequestDetail: async () => {
       throw new Error("not implemented");
     },
@@ -120,6 +121,7 @@ test("GetPrivateFileUrlUseCase rejects unauthorized access", async () => {
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },
+    getUserRequests: async () => ({ requests: [] }),
     getRequestDetail: async () => {
       throw new Error("not implemented");
     },
@@ -194,6 +196,7 @@ test("GetPrivateFileUrlUseCase rejects invalid paths", async () => {
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },
+    getUserRequests: async () => ({ requests: [] }),
     getRequestDetail: async () => {
       throw new Error("not implemented");
     },

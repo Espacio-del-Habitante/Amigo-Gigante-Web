@@ -1,0 +1,40 @@
+{
+  "title": "Mis Solicitudes de Adopción",
+  "description": "Sigue el estado de tus procesos de adopción y responde a las solicitudes de información.",
+  "loading": "Cargando tus solicitudes...",
+  "empty": {
+    "title": "No tienes solicitudes de adopción",
+    "description": "Explora los animales disponibles y crea tu primera solicitud.",
+    "button": "Explorar Animales"
+  },
+  "status": {
+    "pending": "Pendiente",
+    "in_review": "En Revisión",
+    "info_requested": "Info Requerida",
+    "preapproved": "Preaprobada",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "cancelled": "Cancelada",
+    "completed": "Completada"
+  },
+  "species": {
+    "dog": "Perro",
+    "cat": "Gato"
+  },
+  "actions": {
+    "respond": "Responder",
+    "view": "Ver Detalle"
+  },
+  "requestedOn": "Solicitado el {{date}}",
+  "infoSection": {
+    "title": "¿Tienes dudas sobre tu proceso?",
+    "description": "Nuestro equipo de soporte y las fundaciones están aquí para ayudarte en cada paso del camino.",
+    "button": "Contactar Soporte"
+  },
+  "errors": {
+    "unauthorized": "No autorizado",
+    "forbidden": "No tienes permisos para acceder a esta sección.",
+    "connection": "No pudimos conectarnos para cargar tus solicitudes.",
+    "generic": "Error al cargar tus solicitudes"
+  }
+}

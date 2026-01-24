@@ -15,6 +15,8 @@ import type {
   GetAdopterEmailByUserIdParams,
   GetAdoptionRequestsParams,
   GetAdoptionRequestsResult,
+  GetUserAdoptionRequestsParams,
+  GetUserAdoptionRequestsResult,
   IAdoptionRequestRepository,
   AdoptionRequestsCounts,
   UpdateAdoptionRequestStatusParams,
@@ -73,6 +75,19 @@ interface AdoptionRequestDocumentRow {
   file_url: string;
   notes: string | null;
   created_at: string;
+}
+
+interface AdoptionRequestFoundationRow {
+  id: string;
+  name: string | null;
+}
+
+interface AdoptionRequestUserRow {
+  id: number;
+  status: AdoptionRequestStatus;
+  created_at: string;
+  animals: AdoptionRequestAnimalRow | AdoptionRequestAnimalRow[] | null;
+  foundations: AdoptionRequestFoundationRow | AdoptionRequestFoundationRow[] | null;
 }
 
 const PRIORITY_VALUE_MAP: Record<AdoptionRequestPriority, number> = {
@@ -159,6 +174,30 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     return {
       requests: (data ?? []).map((row) => this.mapSummary(row)),
       total: count ?? 0,
+    };
+  }
+
+  async getUserRequests(params: GetUserAdoptionRequestsParams): Promise<GetUserAdoptionRequestsResult> {
+    const { adopterUserId } = params;
+    const { data, error } = await supabaseClient
+      .from("adoption_requests")
+      .select(
+        `id,
+        status,
+        created_at,
+        animals (id, name, species, cover_image_url),
+        foundations (id, name)`,
+      )
+      .eq("adopter_user_id", adopterUserId)
+      .order("created_at", { ascending: false })
+      .returns<AdoptionRequestUserRow[]>();
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    return {
+      requests: (data ?? []).map((row) => this.mapUserSummary(row)),
     };
   }
 
@@ -595,6 +634,23 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
     return animal;
   }
 
+  private normalizeFoundation(
+    foundation: AdoptionRequestFoundationRow | AdoptionRequestFoundationRow[] | null,
+  ): AdoptionRequestFoundationRow | null {
+    if (!foundation) return null;
+    if (Array.isArray(foundation)) {
+      return foundation[0] ?? null;
+    }
+    return foundation;
+  }
+
+  private normalizeSpecies(value: AdoptionRequestDetail["animal"]["species"] | null | undefined): "dog" | "cat" {
+    if (value === "cat") {
+      return "cat";
+    }
+    return "dog";
+  }
+
   private normalizePriority(priority: number | null | undefined): AdoptionRequestPriority {
     if (priority === null || priority === undefined) {
       return "low";
@@ -606,6 +662,27 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       return "medium";
     }
     return "low";
+  }
+
+  private mapUserSummary(row: AdoptionRequestUserRow): GetUserAdoptionRequestsResult["requests"][number] {
+    const animal = this.normalizeAnimal(row.animals);
+    const foundation = this.normalizeFoundation(row.foundations);
+
+    return {
+      id: row.id,
+      status: row.status,
+      createdAt: row.created_at,
+      animal: {
+        id: animal?.id ?? 0,
+        name: animal?.name ?? "",
+        species: this.normalizeSpecies(animal?.species),
+        coverImageUrl: animal?.cover_image_url ?? null,
+      },
+      foundation: {
+        id: foundation?.id ?? "",
+        name: foundation?.name ?? "",
+      },
+    };
   }
 
   private translateAdoptionError(error: { message?: string; code?: string }): string {

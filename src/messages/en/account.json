@@ -82,9 +82,13 @@
   },
   "sidebar": {
     "account": "My Account",
-    "requests": "My Requests",
+    "requests": "My Adoptions",
     "subtitle": "Adopter Profile",
-    "fallbackName": "Adopter"
+    "fallbackName": "Adopter",
+    "brand": {
+      "name": "Amigo",
+      "accent": "Gigante"
+    }
   },
   "validation": {
     "displayName": {

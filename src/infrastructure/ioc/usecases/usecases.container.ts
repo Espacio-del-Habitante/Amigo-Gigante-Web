@@ -29,6 +29,7 @@ import { GetAdoptCatalogUseCase } from "@/domain/usecases/adopt/GetAdoptCatalogU
 import { GetAdoptDetailUseCase } from "@/domain/usecases/adopt/GetAdoptDetailUseCase";
 import { CreateAdoptionRequestUseCase } from "@/domain/usecases/adopt/CreateAdoptionRequestUseCase";
 import { GetAdminAdoptionRequestsUseCase } from "@/domain/usecases/adopt/GetAdminAdoptionRequestsUseCase";
+import { GetUserAdoptionRequestsUseCase } from "@/domain/usecases/adopt/GetUserAdoptionRequestsUseCase";
 import { GetAdoptionRequestDetailUseCase } from "@/domain/usecases/adopt/GetAdoptionRequestDetailUseCase";
 import { RequestAdoptionInfoUseCase } from "@/domain/usecases/adopt/RequestAdoptionInfoUseCase";
 import { UpdateAdoptionRequestStatusUseCase } from "@/domain/usecases/adopt/UpdateAdoptionRequestStatusUseCase";
@@ -149,6 +150,17 @@ const useCasesModule = new ContainerModule(
           authRepository,
           foundationMembershipRepository,
         );
+      })
+      .inSingletonScope();
+
+    bind<GetUserAdoptionRequestsUseCase>(USE_CASE_TYPES.GetUserAdoptionRequestsUseCase)
+      .toDynamicValue((context) => {
+        const adoptionRequestRepository = context.get<IAdoptionRequestRepository>(
+          REPOSITORY_TYPES.AdoptionRequestRepository,
+        );
+        const authRepository = context.get<IAuthRepository>(REPOSITORY_TYPES.AuthRepository);
+
+        return new GetUserAdoptionRequestsUseCase(adoptionRequestRepository, authRepository);
       })
       .inSingletonScope();
 
