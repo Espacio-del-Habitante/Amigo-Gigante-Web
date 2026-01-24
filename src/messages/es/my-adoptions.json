@@ -25,7 +25,7 @@
     "respond": "Responder",
     "view": "Ver Detalle"
   },
-  "requestedOn": "Solicitado el {{date}}",
+  "requestedOn": "Solicitado el {date}",
   "infoSection": {
     "title": "¿Tienes dudas sobre tu proceso?",
     "description": "Nuestro equipo de soporte y las fundaciones están aquí para ayudarte en cada paso del camino.",

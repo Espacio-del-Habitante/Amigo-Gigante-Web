@@ -25,7 +25,7 @@
     "respond": "Respond",
     "view": "View Detail"
   },
-  "requestedOn": "Requested on {{date}}",
+  "requestedOn": "Requested on {date}",
   "infoSection": {
     "title": "Do you have questions about your process?",
     "description": "Our support team and foundations are here to help you every step of the way.",
