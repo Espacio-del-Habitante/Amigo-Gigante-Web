@@ -21,6 +21,8 @@
   },
   "account": {
     "menu": {
+      "myDashboard": "My Dashboard",
+      "myRequests": "My Requests",
       "editAccount": "Edit account",
       "logout": "Log out"
     }

@@ -9,10 +9,10 @@ import { Logo } from "@/presentation/components/atoms";
 
 export interface AccountSidebarProps {
   profileName: string;
-  activeRoute?: "account" | "adoptions";
+  activeRoute?: "dashboard" | "account" | "adoptions";
 }
 
-export function AccountSidebar({ profileName, activeRoute = "account" }: AccountSidebarProps) {
+export function AccountSidebar({ profileName, activeRoute = "dashboard" }: AccountSidebarProps) {
   const t = useTranslations("account");
   const common = useTranslations("common");
   const locale = useLocale();
@@ -50,16 +50,16 @@ export function AccountSidebar({ profileName, activeRoute = "account" }: Account
       </div>
       <nav className="flex flex-col gap-2">
         <Link
-          href={`/${locale}/account`}
+          href={`/${locale}/account/dashboard`}
           className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
-            activeRoute === "account"
+            activeRoute === "dashboard"
               ? "bg-brand-50 text-brand-600"
               : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700"
           }`}
         >
-          <span className="material-symbols-outlined">person</span>
-          <span className={`text-sm ${activeRoute === "account" ? "font-semibold" : "font-medium"}`}>
-            {t("sidebar.account")}
+          <span className="material-symbols-outlined">dashboard</span>
+          <span className={`text-sm ${activeRoute === "dashboard" ? "font-semibold" : "font-medium"}`}>
+            {t("sidebar.dashboard")}
           </span>
         </Link>
         <Link
@@ -73,6 +73,19 @@ export function AccountSidebar({ profileName, activeRoute = "account" }: Account
           <span className="material-symbols-outlined">pets</span>
           <span className={`text-sm ${activeRoute === "adoptions" ? "font-semibold" : "font-medium"}`}>
             {t("sidebar.requests")}
+          </span>
+        </Link>
+        <Link
+          href={`/${locale}/account`}
+          className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
+            activeRoute === "account"
+              ? "bg-brand-50 text-brand-600"
+              : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700"
+          }`}
+        >
+          <span className="material-symbols-outlined">person</span>
+          <span className={`text-sm ${activeRoute === "account" ? "font-semibold" : "font-medium"}`}>
+            {t("sidebar.account")}
           </span>
         </Link>
       </nav>

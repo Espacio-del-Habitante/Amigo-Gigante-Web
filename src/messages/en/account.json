@@ -81,6 +81,7 @@
     "deleteFailed": "We couldn't delete your account. Please try again."
   },
   "sidebar": {
+    "dashboard": "My Dashboard",
     "account": "My Account",
     "requests": "My Adoptions",
     "subtitle": "Adopter Profile",

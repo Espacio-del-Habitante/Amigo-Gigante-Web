@@ -63,6 +63,60 @@ export function HomeNavBar() {
   const router = useRouter();
   const { isAuthenticated, role, user, loading: authLoading, logout } = useAuth();
   const [accountMenuAnchor, setAccountMenuAnchor] = useState<null | HTMLElement>(null);
+  
+  // Estado optimista persistente: usar localStorage para mantener el estado entre navegaciones
+  const [optimisticAuth, setOptimisticAuth] = useState<{ isAuthenticated: boolean; role: string | null } | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const stored = localStorage.getItem("amigo_gigante_auth_state");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+  
+  // Actualizar estado optimista cuando la sesión cambia
+  useEffect(() => {
+    if (!authLoading) {
+      const newState = isAuthenticated && role 
+        ? { isAuthenticated: true, role } 
+        : { isAuthenticated: false, role: null };
+      
+      setOptimisticAuth(newState);
+      
+      // Persistir en localStorage
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("amigo_gigante_auth_state", JSON.stringify(newState));
+        } catch {
+          // Ignorar errores de localStorage
+        }
+      }
+    }
+  }, [authLoading, isAuthenticated, role]);
+  
+  // Limpiar localStorage al hacer logout
+  useEffect(() => {
+    if (!isAuthenticated && !authLoading && optimisticAuth?.isAuthenticated) {
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem("amigo_gigante_auth_state");
+        } catch {
+          // Ignorar errores
+        }
+      }
+      setOptimisticAuth({ isAuthenticated: false, role: null });
+    }
+  }, [isAuthenticated, authLoading, optimisticAuth]);
+  
+  // Usar estado optimista si está cargando, sino usar el estado real
+  const shouldShowSkeleton = authLoading && optimisticAuth === null;
+  const optimisticIsAuthenticated = authLoading && optimisticAuth 
+    ? optimisticAuth.isAuthenticated 
+    : isAuthenticated;
+  const optimisticRole = authLoading && optimisticAuth 
+    ? optimisticAuth.role 
+    : role;
 
   const adoptHref = `/${locale}/adopt`;
   const foundationsHref = `/${locale}/foundations`;
@@ -70,20 +124,21 @@ export function HomeNavBar() {
   const cartHref = `/${locale}/shop/cart`;
 
   // Determinar la ruta del dashboard según el rol
-  const getDashboardHref = () => {
-    if (role === "admin") {
+  const getDashboardHref = useCallback(() => {
+    const currentRole = optimisticRole || role;
+    if (currentRole === "admin") {
       return `/${locale}/admin`;
-    } else if (role === "foundation_user") {
+    } else if (currentRole === "foundation_user") {
       return `/${locale}/foundations`;
-    } else if (role === "external") {
-      return `/${locale}/external`;
+    } else if (currentRole === "external") {
+      return `/${locale}/account/dashboard`;
     }
     return `/${locale}/foundations`; // Default
-  };
+  }, [locale, optimisticRole, role]);
 
-  const isExternalUser = isAuthenticated && role === "external";
-  const loginButtonHref = isAuthenticated ? getDashboardHref() : `/${locale}/login`;
-  const loginButtonText = isAuthenticated
+  const isExternalUser = optimisticIsAuthenticated && optimisticRole === "external";
+  const loginButtonHref = optimisticIsAuthenticated ? getDashboardHref() : `/${locale}/login`;
+  const loginButtonText = optimisticIsAuthenticated
     ? isExternalUser
       ? t("buttons.account")
       : t("buttons.goToDashboard")
@@ -126,6 +181,15 @@ export function HomeNavBar() {
 
   const handleLogout = useCallback(async () => {
     await logout();
+    // Limpiar estado optimista del localStorage
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem("amigo_gigante_auth_state");
+      } catch {
+        // Ignorar errores
+      }
+    }
+    setOptimisticAuth({ isAuthenticated: false, role: null });
     handleAccountMenuClose();
     router.push(`/${locale}`);
   }, [handleAccountMenuClose, locale, logout, router]);
@@ -244,7 +308,7 @@ export function HomeNavBar() {
               </Badge>
             </MuiIconButton>
 
-          {authLoading ? (
+          {shouldShowSkeleton ? (
             <Skeleton
               variant="rounded"
               width={120}
@@ -291,11 +355,26 @@ export function HomeNavBar() {
                 <Divider />
                 <MenuItem
                   component={NextLink}
+                  href={`/${locale}/account/dashboard`}
+                  onClick={handleAccountMenuClose}
+                >
+                  {t("account.menu.myDashboard")}
+                </MenuItem>
+                <MenuItem
+                  component={NextLink}
+                  href={`/${locale}/account/adoptions`}
+                  onClick={handleAccountMenuClose}
+                >
+                  {t("account.menu.myRequests")}
+                </MenuItem>
+                <MenuItem
+                  component={NextLink}
                   href={`/${locale}/account`}
                   onClick={handleAccountMenuClose}
                 >
                   {t("account.menu.editAccount")}
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={handleLogout}>
                   {t("account.menu.logout")}
                 </MenuItem>
@@ -362,7 +441,7 @@ export function HomeNavBar() {
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <LanguageSelector fullWidth />
           </Box>
-          {authLoading ? (
+          {shouldShowSkeleton ? (
             <Skeleton
               variant="rounded"
               width="100%"
@@ -407,6 +486,26 @@ export function HomeNavBar() {
                 <Divider />
                 <MenuItem
                   component={NextLink}
+                  href={`/${locale}/account/dashboard`}
+                  onClick={() => {
+                    handleAccountMenuClose();
+                    setOpen(false);
+                  }}
+                >
+                  {t("account.menu.myDashboard")}
+                </MenuItem>
+                <MenuItem
+                  component={NextLink}
+                  href={`/${locale}/account/adoptions`}
+                  onClick={() => {
+                    handleAccountMenuClose();
+                    setOpen(false);
+                  }}
+                >
+                  {t("account.menu.myRequests")}
+                </MenuItem>
+                <MenuItem
+                  component={NextLink}
                   href={`/${locale}/account`}
                   onClick={() => {
                     handleAccountMenuClose();
@@ -415,6 +514,7 @@ export function HomeNavBar() {
                 >
                   {t("account.menu.editAccount")}
                 </MenuItem>
+                <Divider />
                 <MenuItem
                   onClick={async () => {
                     await handleLogout();

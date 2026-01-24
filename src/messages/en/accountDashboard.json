@@ -1,0 +1,46 @@
+{
+  "title": "My Dashboard",
+  "description": "Welcome to your personal space. Here you can view the status of your adoption requests and manage your account.",
+  "loading": "Loading your information...",
+  "stats": {
+    "total": "Total Requests",
+    "pending": "In Process",
+    "approved": "Approved",
+    "needsAction": "Needs Action"
+  },
+  "recentRequests": {
+    "title": "Recent Requests",
+    "viewAll": "View All",
+    "empty": {
+      "title": "You don't have any requests yet",
+      "description": "Explore available animals and create your first adoption request.",
+      "button": "Explore Animals"
+    }
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "viewAllRequests": "View All Requests",
+    "exploreAnimals": "Explore Animals",
+    "editProfile": "Edit Profile"
+  },
+  "mainSections": {
+    "adopt": {
+      "title": "Adopt",
+      "subtitle": "Find your ideal companion",
+      "description": "Explore over 500 animals looking for a home. Every adoption saves a life and changes a pet's world.",
+      "button": "Explore Animals"
+    },
+    "shop": {
+      "title": "Solidarity Store",
+      "subtitle": "Shop with purpose",
+      "description": "Every purchase is a helping paw. 100% of profits go directly to foundations to help pets looking for a home.",
+      "button": "Visit Store"
+    }
+  },
+  "errors": {
+    "unauthorized": "Unauthorized",
+    "forbidden": "You don't have permission to access this section.",
+    "connection": "We couldn't connect to load your information.",
+    "generic": "Error loading your information"
+  }
+}

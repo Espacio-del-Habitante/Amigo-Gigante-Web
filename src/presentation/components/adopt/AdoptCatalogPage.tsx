@@ -42,6 +42,8 @@ import { Button } from "@/presentation/components/atoms";
 import { AdoptStartModal } from "@/presentation/components/adopt-modal/AdoptStartModal";
 import { HomeFooter } from "@/presentation/components/home/HomeFooter";
 import { HomeNavBar } from "@/presentation/components/organisms";
+import { LoginRequiredModal } from "@/presentation/components/common/LoginRequiredModal";
+import { useAuth } from "@/presentation/hooks/useAuth";
 
 type AdoptErrorKey = "errors.unauthorized" | "errors.connection" | "errors.generic";
 
@@ -83,11 +85,14 @@ export function AdoptCatalogPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<AdoptErrorKey | null>(null);
   const [isAdoptModalOpen, setIsAdoptModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [adoptModalAnimal, setAdoptModalAnimal] = useState<{
     id: number;
     name: string;
     foundationId: string;
   } | null>(null);
+  const [selectedAnimalForLogin, setSelectedAnimalForLogin] = useState<AdoptCatalogItem | null>(null);
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   const pageSize = 9;
 
@@ -196,6 +201,15 @@ export function AdoptCatalogPage() {
 
   const handleOpenAdoptModal = (animal: AdoptCatalogItem) => {
     if (!animal.foundationId) return;
+    
+    if (authLoading) return;
+    
+    if (!isAuthenticated) {
+      setSelectedAnimalForLogin(animal);
+      setIsLoginModalOpen(true);
+      return;
+    }
+    
     setAdoptModalAnimal({
       id: animal.id,
       name: animal.name,
@@ -531,6 +545,12 @@ export function AdoptCatalogPage() {
         open={isAdoptModalOpen}
         onClose={handleCloseAdoptModal}
         animal={adoptModalAnimal}
+      />
+
+      <LoginRequiredModal
+        open={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        redirectTo={selectedAnimalForLogin ? `/${locale}/adopt/${selectedAnimalForLogin.id}` : undefined}
       />
 
       <HomeFooter />

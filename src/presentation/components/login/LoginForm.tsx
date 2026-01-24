@@ -100,7 +100,7 @@ export function LoginForm() {
     }
 
     if (role === "external") {
-      return `/${locale}`;
+      return `/${locale}/account/dashboard`;
     }
 
     return `/${locale}`;

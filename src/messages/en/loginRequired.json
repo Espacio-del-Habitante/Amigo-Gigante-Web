@@ -1,0 +1,10 @@
+{
+  "title": "Sign in to continue",
+  "description": "You need to sign in to adopt this friend. It's quick and secure, and will allow you to track your adoption process.",
+  "actions": {
+    "login": "Sign In",
+    "register": "Create Account",
+    "close": "Close"
+  },
+  "footer": "By continuing, you agree to our terms and conditions of use."
+}

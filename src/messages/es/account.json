@@ -81,6 +81,7 @@
     "deleteFailed": "No pudimos eliminar tu cuenta. Intenta de nuevo."
   },
   "sidebar": {
+    "dashboard": "Mi Panel",
     "account": "Mi Cuenta",
     "requests": "Mis Adopciones",
     "subtitle": "Perfil de Adoptante",

@@ -18,6 +18,8 @@ import { AdoptHistory } from "./AdoptHistory";
 import { AdoptInfoPanel } from "./AdoptInfoPanel";
 import { AdoptStartModal } from "@/presentation/components/adopt-modal/AdoptStartModal";
 import { AdoptRelatedGrid } from "./AdoptRelatedGrid";
+import { LoginRequiredModal } from "@/presentation/components/common/LoginRequiredModal";
+import { useAuth } from "@/presentation/hooks/useAuth";
 
 type AdoptDetailErrorKey =
   | "errors.unauthorized"
@@ -45,6 +47,8 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<AdoptDetailErrorKey | null>(null);
   const [isAdoptModalOpen, setIsAdoptModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   const resolveErrorKey = useCallback((error: unknown): AdoptDetailErrorKey => {
     if (error instanceof Error) {
@@ -162,6 +166,17 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
     ? { id: detail.id, name: detail.name, foundationId: detail.foundationId }
     : null;
 
+  const handleAdoptClick = useCallback(() => {
+    if (authLoading) return;
+    
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+    
+    setIsAdoptModalOpen(true);
+  }, [isAuthenticated, authLoading]);
+
   return (
     <Box className="bg-slate-50">
       <HomeNavBar />
@@ -203,7 +218,7 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
                   speciesLabel={renderSpeciesLabel(detail.species)}
                   description={detail.description}
                   locationLabel={t("labels.locationPlaceholder")}
-                  onAdopt={() => setIsAdoptModalOpen(true)}
+                  onAdopt={handleAdoptClick}
                 />
               </Box>
             </Box>
@@ -220,6 +235,12 @@ export function AdoptDetailPage({ animalId }: AdoptDetailPageProps) {
         open={isAdoptModalOpen}
         onClose={() => setIsAdoptModalOpen(false)}
         animal={modalAnimal}
+      />
+
+      <LoginRequiredModal
+        open={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        redirectTo={detail ? `/${locale}/adopt/${detail.id}` : undefined}
       />
     </Box>
   );

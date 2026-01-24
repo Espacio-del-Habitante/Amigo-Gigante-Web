@@ -1,0 +1,46 @@
+{
+  "title": "Mi Panel",
+  "description": "Bienvenido a tu espacio personal. Aquí puedes ver el estado de tus solicitudes de adopción y gestionar tu cuenta.",
+  "loading": "Cargando tu información...",
+  "stats": {
+    "total": "Total Solicitudes",
+    "pending": "En Proceso",
+    "approved": "Aprobadas",
+    "needsAction": "Requieren Acción"
+  },
+  "recentRequests": {
+    "title": "Solicitudes Recientes",
+    "viewAll": "Ver Todas",
+    "empty": {
+      "title": "Aún no tienes solicitudes",
+      "description": "Explora los animales disponibles y crea tu primera solicitud de adopción.",
+      "button": "Explorar Animales"
+    }
+  },
+  "quickActions": {
+    "title": "Acciones Rápidas",
+    "viewAllRequests": "Ver Todas las Solicitudes",
+    "exploreAnimals": "Explorar Animales",
+    "editProfile": "Editar Perfil"
+  },
+  "mainSections": {
+    "adopt": {
+      "title": "Adopta",
+      "subtitle": "Encuentra tu compañero ideal",
+      "description": "Explora más de 500 animales buscando un hogar. Cada adopción salva una vida y cambia el mundo de una mascota.",
+      "button": "Explorar Animales"
+    },
+    "shop": {
+      "title": "Tienda Solidaria",
+      "subtitle": "Compra con propósito",
+      "description": "Cada compra es una patita amiga. El 100% de las ganancias van directamente a las fundaciones para ayudar a peludos que buscan un hogar.",
+      "button": "Visitar Tienda"
+    }
+  },
+  "errors": {
+    "unauthorized": "No autorizado",
+    "forbidden": "No tienes permisos para acceder a esta sección.",
+    "connection": "No pudimos conectarnos para cargar tu información.",
+    "generic": "Error al cargar tu información"
+  }
+}

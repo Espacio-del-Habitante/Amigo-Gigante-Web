@@ -1,0 +1,10 @@
+{
+  "title": "Inicia sesión para continuar",
+  "description": "Necesitas iniciar sesión para adoptar a este amigo. Es rápido y seguro, y te permitirá hacer seguimiento de tu proceso de adopción.",
+  "actions": {
+    "login": "Iniciar Sesión",
+    "register": "Crear Cuenta",
+    "close": "Cerrar"
+  },
+  "footer": "Al continuar, aceptas nuestros términos y condiciones de uso."
+}

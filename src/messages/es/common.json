@@ -21,6 +21,8 @@
   },
   "account": {
     "menu": {
+      "myDashboard": "Mi Panel",
+      "myRequests": "Mis Solicitudes",
       "editAccount": "Editar cuenta",
       "logout": "Cerrar sesión"
     }
