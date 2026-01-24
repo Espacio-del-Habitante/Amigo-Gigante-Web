@@ -8,8 +8,6 @@ export interface ChangePasswordParams {
 export interface IUserProfileRepository {
   getUserProfile(): Promise<UserProfile>;
   updateUserProfile(profile: UserProfile): Promise<UserProfile>;
-  uploadAvatar(file: File, userId: string): Promise<string>;
-  deleteAvatar(url: string): Promise<void>;
   changePassword(params: ChangePasswordParams): Promise<void>;
   deleteUserAccount(): Promise<void>;
 }

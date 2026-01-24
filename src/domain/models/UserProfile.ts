@@ -3,5 +3,4 @@ export interface UserProfile {
   displayName: string;
   phone: string | null;
   email: string;
-  avatarUrl: string | null;
 }

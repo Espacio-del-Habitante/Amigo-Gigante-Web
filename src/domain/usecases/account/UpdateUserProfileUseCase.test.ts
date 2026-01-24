@@ -9,12 +9,9 @@ const baseProfile = {
   displayName: "Test User",
   phone: "+57 300 000 0000",
   email: "test@example.com",
-  avatarUrl: "https://example.com/old.png",
 };
 
-test("UpdateUserProfileUseCase uploads new avatar and updates profile", async () => {
-  let deletedUrl: string | null = null;
-  let uploadedForUser: { userId: string; fileName: string } | null = null;
+test("UpdateUserProfileUseCase updates profile data", async () => {
   let updatedProfile: typeof baseProfile | null = null;
 
   const repository: IUserProfileRepository = {
@@ -23,28 +20,17 @@ test("UpdateUserProfileUseCase uploads new avatar and updates profile", async ()
       updatedProfile = profile;
       return profile;
     },
-    uploadAvatar: async (file, userId) => {
-      uploadedForUser = { userId, fileName: file.name };
-      return "https://example.com/new.png";
-    },
-    deleteAvatar: async (url) => {
-      deletedUrl = url;
-    },
     changePassword: async () => {},
     deleteUserAccount: async () => {},
   };
 
   const useCase = new UpdateUserProfileUseCase(repository);
-  const file = new File(["avatar"], "avatar.png", { type: "image/png" });
 
   const result = await useCase.execute({
     ...baseProfile,
     displayName: "Updated",
-    avatarFile: file,
   });
 
-  assert.equal(deletedUrl, baseProfile.avatarUrl);
-  assert.deepEqual(uploadedForUser, { userId: baseProfile.id, fileName: "avatar.png" });
-  assert.equal(result.avatarUrl, "https://example.com/new.png");
-  assert.equal(updatedProfile?.avatarUrl, "https://example.com/new.png");
+  assert.equal(result.displayName, "Updated");
+  assert.equal(updatedProfile?.displayName, "Updated");
 });

@@ -13,11 +13,8 @@ test("DeleteUserAccountUseCase delegates to repository", async () => {
       displayName: "Test",
       phone: null,
       email: "test@example.com",
-      avatarUrl: null,
     }),
     updateUserProfile: async (profile) => profile,
-    uploadAvatar: async () => "",
-    deleteAvatar: async () => {},
     changePassword: async () => {},
     deleteUserAccount: async () => {
       deleteCalled = true;
