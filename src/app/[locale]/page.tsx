@@ -31,9 +31,11 @@ export default function Home() {
       .execute()
       .then((result) => {
         setHomeAnimals(result);
+        console.log("Animales cargados correctamente", result);
         setHasError(false);
       })
       .catch(() => {
+        console.error("Error al cargar los animales");
         setHasError(true);
       });
   }, [getHomeAnimalsUseCase]);

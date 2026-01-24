@@ -224,7 +224,7 @@ export function HomeNavBar() {
               boxShadow: theme.shadows[1],
             }}
           >
-            <SearchButton tone="neutral" variant="ghost" />
+            {/*<SearchButton tone="neutral" variant="ghost" />*/}
             <LanguageSelector />
             <MuiIconButton
               component={NextLink}

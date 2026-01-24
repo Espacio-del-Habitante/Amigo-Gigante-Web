@@ -89,14 +89,14 @@ export function AdoptInfoPanel({
           >
             {t("buttons.adopt")}
           </Button>
-          <Button
+          {/*<Button
             fullWidth
             rounded="pill"
             tone="secondary"
             startIcon={<StarRoundedIcon fontSize="small" />}
           >
             {t("buttons.sponsor")}
-          </Button>
+          </Button>*/}
         </Box>
       </Stack>
     </Box>

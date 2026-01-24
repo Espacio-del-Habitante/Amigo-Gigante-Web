@@ -28,14 +28,7 @@ export function DashboardHeader({ foundationName, locale }: DashboardHeaderProps
           {t("dashboardHeader.subtitle", { date: formattedDate })}
         </p>
       </div>
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-neutral-white text-neutral-600 shadow-soft">
-          <NotificationBell />
-        </div>
-        <div className="flex h-10 items-center rounded-full border border-neutral-200 bg-neutral-white px-4 text-sm font-semibold text-neutral-600 shadow-soft">
-          {t("dashboardHeader.viewMode")}
-        </div>
-      </div>
+      
     </div>
   );
 }

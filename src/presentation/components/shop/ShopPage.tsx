@@ -1,7 +1,8 @@
 "use client";
 
 import { Box, Container, CircularProgress, Stack, Typography } from "@mui/material";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import NextLink from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { ShopCatalogResult } from "@/domain/usecases/shop/GetShopCatalogUseCase";
@@ -32,6 +33,7 @@ const getErrorKey = (message: string | undefined): ShopErrorKey => {
 
 export function ShopPage() {
   const t = useTranslations("shop");
+  const locale = useLocale();
 
   const getShopCatalogUseCase = useMemo(
     () => appContainer.get<GetShopCatalogUseCase>(USE_CASE_TYPES.GetShopCatalogUseCase),
@@ -133,7 +135,8 @@ export function ShopPage() {
                   products={section.products}
                   onViewAll={handleViewAllFoundation}
                   formatPrice={formatPrice}
-                  showDonationCard={index === catalog.sections.length - 1}
+                  // TODO: Remove this once we have a donation card {index === catalog.sections.length - 1}
+                  showDonationCard={false}
                 />
               ))}
               <ShopPagination
@@ -161,17 +164,16 @@ export function ShopPage() {
                   <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8 }}>
                     {t("cta.description")}
                   </Typography>
-                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 1, width: "100%", justifyContent: "center" }}>
-                    <Box component="button" className="rounded-full bg-brand-500 px-6 py-3 font-bold text-white">
+                  <Box sx={{ pt: 1, display: "flex", justifyContent: "center" }}>
+                    <Box
+                      component={NextLink}
+                      href={`/${locale}/register/foundation`}
+                      className="rounded-full bg-brand-500 px-6 py-3 font-bold text-white text-center transition-colors hover:bg-brand-600"
+                      sx={{ textDecoration: "none", display: "inline-block" }}
+                    >
                       {t("cta.primary")}
                     </Box>
-                    <Box
-                      component="button"
-                      className="rounded-full border-2 border-brand-500 px-6 py-3 font-bold text-brand-500"
-                    >
-                      {t("cta.secondary")}
-                    </Box>
-                  </Stack>
+                  </Box>
                 </Stack>
               </Box>
             </Stack>

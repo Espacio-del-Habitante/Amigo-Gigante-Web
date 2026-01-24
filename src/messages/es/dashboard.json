@@ -89,7 +89,7 @@
   },
   "quickActions": {
     "title": "Acciones Rápidas",
-    "newAnimal": "+ Nuevo Animal",
+    "newAnimal": "Nuevo Animal",
     "registerExpense": "Registrar Gasto",
     "createCampaign": "Crear Campaña"
   },
