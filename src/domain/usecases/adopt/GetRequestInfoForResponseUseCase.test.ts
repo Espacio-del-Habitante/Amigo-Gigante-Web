@@ -106,6 +106,7 @@ test("GetRequestInfoForResponseUseCase returns request info and foundation messa
     saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
+    updateStatusByAdopter: async () => {},
   };
 
   const authRepository = createAuthRepository({
@@ -164,6 +165,7 @@ test("GetRequestInfoForResponseUseCase rejects when status is invalid", async ()
     saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
+    updateStatusByAdopter: async () => {},
   };
 
   const authRepository = createAuthRepository({

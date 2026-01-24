@@ -88,6 +88,12 @@ export interface UpdateAdoptionRequestStatusParams {
   rejectionReason?: string | null;
 }
 
+export interface UpdateAdoptionRequestStatusByAdopterParams {
+  adopterUserId: string;
+  requestId: number;
+  status: AdoptionRequestStatus;
+}
+
 export interface EnqueueInfoRequestEmailParams {
   requestId: number;
   adopterUserId: string;
@@ -136,4 +142,5 @@ export interface IAdoptionRequestRepository {
   saveResponseMessage(params: SaveResponseMessageParams): Promise<void>;
   notifyFoundationMembers(params: NotifyFoundationMembersParams): Promise<void>;
   updateStatus(params: UpdateAdoptionRequestStatusParams): Promise<void>;
+  updateStatusByAdopter(params: UpdateAdoptionRequestStatusByAdopterParams): Promise<void>;
 }

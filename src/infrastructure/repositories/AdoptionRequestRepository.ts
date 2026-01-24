@@ -21,6 +21,7 @@ import type {
   IAdoptionRequestRepository,
   AdoptionRequestsCounts,
   UpdateAdoptionRequestStatusParams,
+  UpdateAdoptionRequestStatusByAdopterParams,
   SaveResponseMessageParams,
   GetRequestMessagesParams,
   NotifyFoundationMembersParams,
@@ -453,6 +454,28 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       })
       .eq("id", requestId)
       .eq("foundation_id", foundationId)
+      .select("id")
+      .single();
+
+    if (error) {
+      throw new Error(this.translateAdoptionError(error));
+    }
+
+    if (!data) {
+      throw new Error("errors.notFound");
+    }
+  }
+
+  async updateStatusByAdopter({
+    adopterUserId,
+    requestId,
+    status,
+  }: UpdateAdoptionRequestStatusByAdopterParams): Promise<void> {
+    const { data, error } = await supabaseClient
+      .from("adoption_requests")
+      .update({ status })
+      .eq("id", requestId)
+      .eq("adopter_user_id", adopterUserId)
       .select("id")
       .single();
 

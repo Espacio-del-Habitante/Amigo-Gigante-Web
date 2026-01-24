@@ -67,6 +67,7 @@ test("GetPrivateFileUrlUseCase returns signed URL for authorized adopter", async
     }),
     saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
+    updateStatusByAdopter: async () => {},
   };
 
   const foundationMembershipRepository: IFoundationMembershipRepository = {
@@ -143,6 +144,7 @@ test("GetPrivateFileUrlUseCase rejects unauthorized access", async () => {
     }),
     saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
+    updateStatusByAdopter: async () => {},
   };
 
   const foundationMembershipRepository: IFoundationMembershipRepository = {
@@ -220,6 +222,7 @@ test("GetPrivateFileUrlUseCase rejects invalid paths", async () => {
     }),
     saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
+    updateStatusByAdopter: async () => {},
   };
 
   const foundationMembershipRepository: IFoundationMembershipRepository = {

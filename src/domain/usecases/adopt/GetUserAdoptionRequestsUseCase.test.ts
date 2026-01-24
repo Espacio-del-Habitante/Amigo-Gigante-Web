@@ -44,6 +44,7 @@ const baseRepository: IAdoptionRequestRepository = {
   saveResponseMessage: async () => {},
   notifyFoundationMembers: async () => {},
   updateStatus: async () => {},
+  updateStatusByAdopter: async () => {},
 };
 
 const createAuthRepository = (session: Awaited<ReturnType<IAuthRepository["getSession"]>>) => {

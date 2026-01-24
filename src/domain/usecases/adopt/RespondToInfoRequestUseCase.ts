@@ -70,8 +70,8 @@ export class RespondToInfoRequestUseCase {
       fileUrls,
     });
 
-    await this.adoptionRequestRepository.updateStatus({
-      foundationId: accessInfo.foundationId,
+    await this.adoptionRequestRepository.updateStatusByAdopter({
+      adopterUserId: session.user.id,
       requestId: input.requestId,
       status: "in_review",
     });

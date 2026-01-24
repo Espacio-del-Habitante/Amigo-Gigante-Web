@@ -77,6 +77,7 @@ test("RequestAdoptionInfoUseCase enqueues email and updates status", async () =>
     updateStatus: async (params) => {
       updatePayload = params;
     },
+    updateStatusByAdopter: async () => {},
   };
 
   const authRepository: IAuthRepository = {
@@ -151,6 +152,9 @@ test("RequestAdoptionInfoUseCase rejects when adopter email is missing", async (
     },
     updateStatus: async () => {
       throw new Error("should not update");
+    },
+    updateStatusByAdopter: async () => {
+      throw new Error("should not update by adopter");
     },
   };
 

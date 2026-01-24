@@ -130,6 +130,7 @@ test("GetDashboardDataUseCase returns KPI and funnel data from repositories", as
     saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
+    updateStatusByAdopter: async () => {},
   };
 
   const useCase = new GetDashboardDataUseCase(

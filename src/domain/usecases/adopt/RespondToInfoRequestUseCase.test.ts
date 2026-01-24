@@ -61,7 +61,7 @@ const createAuthRepository = (session: Awaited<ReturnType<IAuthRepository["getSe
 });
 
 test("RespondToInfoRequestUseCase saves response, updates status, and notifies", async () => {
-  let statusPayload: Parameters<IAdoptionRequestRepository["updateStatus"]>[0] | null = null;
+  let statusPayload: Parameters<IAdoptionRequestRepository["updateStatusByAdopter"]>[0] | null = null;
   let savedPayload: Parameters<IAdoptionRequestRepository["saveResponseMessage"]>[0] | null = null;
   let notificationPayload: Parameters<IAdoptionRequestRepository["notifyFoundationMembers"]>[0] | null = null;
 
@@ -87,7 +87,8 @@ test("RespondToInfoRequestUseCase saves response, updates status, and notifies",
     notifyFoundationMembers: async (params) => {
       notificationPayload = params;
     },
-    updateStatus: async (params) => {
+    updateStatus: async () => {},
+    updateStatusByAdopter: async (params) => {
       statusPayload = params;
     },
   };
@@ -115,10 +116,9 @@ test("RespondToInfoRequestUseCase saves response, updates status, and notifies",
   });
 
   assert.deepEqual(statusPayload, {
-    foundationId: "foundation-1",
+    adopterUserId: "user-1",
     requestId: 1,
     status: "in_review",
-    infoResponseMessage: "Respuesta",
   });
   assert.deepEqual(savedPayload, {
     requestId: 1,
@@ -151,6 +151,7 @@ test("RespondToInfoRequestUseCase rejects empty messages", async () => {
     saveResponseMessage: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
+    updateStatusByAdopter: async () => {},
   };
 
   const authRepository = createAuthRepository({
