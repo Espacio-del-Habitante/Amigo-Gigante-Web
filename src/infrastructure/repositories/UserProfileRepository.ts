@@ -5,10 +5,6 @@ import type { UserProfile } from "@/domain/models/UserProfile";
 import type { ChangePasswordParams, IUserProfileRepository } from "@/domain/repositories/IUserProfileRepository";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
-const AVATAR_ALLOWED_MIME_TYPES = new Set(["image/png", "image/jpeg", "image/jpg", "image/gif"]);
-const AVATAR_ALLOWED_EXTENSIONS = [".png", ".jpg", ".jpeg", ".gif"];
-const AVATAR_MAX_SIZE_BYTES = 5 * 1024 * 1024;
-
 @injectable()
 export class UserProfileRepository implements IUserProfileRepository {
   async getUserProfile(): Promise<UserProfile> {
@@ -16,7 +12,7 @@ export class UserProfileRepository implements IUserProfileRepository {
 
     const { data, error } = await supabaseClient
       .from("profiles")
-      .select("display_name, phone, avatar_url")
+      .select("display_name, phone")
       .eq("id", user.id)
       .single();
 
@@ -29,7 +25,6 @@ export class UserProfileRepository implements IUserProfileRepository {
       email: user.email ?? "",
       displayName: data?.display_name ?? "",
       phone: data?.phone ?? null,
-      avatarUrl: data?.avatar_url ?? null,
     };
   }
 
@@ -39,10 +34,9 @@ export class UserProfileRepository implements IUserProfileRepository {
       .update({
         display_name: profile.displayName || null,
         phone: profile.phone,
-        avatar_url: profile.avatarUrl,
       })
       .eq("id", profile.id)
-      .select("display_name, phone, avatar_url")
+      .select("display_name, phone")
       .single();
 
     if (error) {
@@ -53,51 +47,7 @@ export class UserProfileRepository implements IUserProfileRepository {
       ...profile,
       displayName: data?.display_name ?? profile.displayName,
       phone: data?.phone ?? null,
-      avatarUrl: data?.avatar_url ?? null,
     };
-  }
-
-  async uploadAvatar(file: File, userId: string): Promise<string> {
-    this.validateAvatarFile(file);
-
-    const bucketName = "avatars";
-    const path = `${userId}/${Date.now()}-${this.sanitizeFileName(file.name)}`;
-
-    const { data, error } = await supabaseClient.storage.from(bucketName).upload(path, file, {
-      upsert: false,
-    });
-
-    if (error) {
-      throw new Error(this.translateStorageError(error));
-    }
-
-    const { data: urlData } = supabaseClient.storage.from(bucketName).getPublicUrl(data?.path ?? "");
-    const publicUrl = urlData?.publicUrl ?? "";
-
-    if (!publicUrl) {
-      throw new Error("account.photo.errors.uploadFailed");
-    }
-
-    return publicUrl;
-  }
-
-  async deleteAvatar(url: string): Promise<void> {
-    if (!this.isStorageUrl(url)) {
-      return;
-    }
-
-    const bucketName = "avatars";
-    const path = this.extractPathFromUrl(url);
-
-    if (!path) {
-      return;
-    }
-
-    const { error } = await supabaseClient.storage.from(bucketName).remove([path]);
-
-    if (error) {
-      throw new Error("account.photo.errors.removeFailed");
-    }
   }
 
   async changePassword({ currentPassword, newPassword }: ChangePasswordParams): Promise<void> {
@@ -144,62 +94,6 @@ export class UserProfileRepository implements IUserProfileRepository {
     }
 
     return data.user;
-  }
-
-  private validateAvatarFile(file: File): void {
-    const hasValidMimeType = AVATAR_ALLOWED_MIME_TYPES.has(file.type);
-    const hasValidExtension = AVATAR_ALLOWED_EXTENSIONS.some((extension) =>
-      file.name.toLowerCase().endsWith(extension),
-    );
-
-    if (!hasValidMimeType && !hasValidExtension) {
-      throw new Error("account.photo.errors.invalidFormat");
-    }
-
-    if (file.size > AVATAR_MAX_SIZE_BYTES) {
-      throw new Error("account.photo.errors.tooLarge");
-    }
-  }
-
-  private sanitizeFileName(fileName: string): string {
-    return fileName
-      .replace(/[^a-z0-9.\-_]/gi, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$|^_+|_+$/g, "")
-      .toLowerCase();
-  }
-
-  private isStorageUrl(url: string): boolean {
-    return url.includes("/storage/v1/object/public/avatars/");
-  }
-
-  private extractPathFromUrl(url: string): string {
-    const prefix = "/storage/v1/object/public/avatars/";
-    const index = url.indexOf(prefix);
-
-    if (index === -1) return "";
-
-    return url.substring(index + prefix.length);
-  }
-
-  private translateStorageError(error: { message?: string; code?: string }): string {
-    const message = error.message?.toLowerCase?.() ?? "";
-    const code = error.code?.toLowerCase?.() ?? "";
-
-    if (code === "request_entity_too_large" || message.includes("too large")) {
-      return "account.photo.errors.tooLarge";
-    }
-
-    if (
-      message.includes("invalid") ||
-      message.includes("mime") ||
-      message.includes("content-type") ||
-      message.includes("format")
-    ) {
-      return "account.photo.errors.invalidFormat";
-    }
-
-    return "account.photo.errors.uploadFailed";
   }
 
   private translatePasswordError(error: AuthApiError | Error): string {

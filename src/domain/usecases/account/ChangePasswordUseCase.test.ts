@@ -13,11 +13,8 @@ test("ChangePasswordUseCase delegates to repository", async () => {
       displayName: "Test",
       phone: null,
       email: "test@example.com",
-      avatarUrl: null,
     }),
     updateUserProfile: async (profile) => profile,
-    uploadAvatar: async () => "",
-    deleteAvatar: async () => {},
     changePassword: async (params) => {
       receivedParams = params;
     },

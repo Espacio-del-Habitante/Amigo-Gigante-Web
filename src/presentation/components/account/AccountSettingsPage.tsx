@@ -3,6 +3,7 @@
 import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useLocale, useTranslations } from "next-intl";
+import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -17,17 +18,12 @@ import { AccountDeleteSection } from "@/presentation/components/account/AccountD
 import { AccountPersonalInfo } from "@/presentation/components/account/AccountPersonalInfo";
 import { AccountProfilePicture } from "@/presentation/components/account/AccountProfilePicture";
 import { AccountSecurity } from "@/presentation/components/account/AccountSecurity";
-import {
-  AccountFormValues,
-  createAccountValidationSchema,
-  validateAvatarFile,
-} from "@/presentation/components/account/accountValidation";
+import { AccountFormValues, createAccountValidationSchema } from "@/presentation/components/account/accountValidation";
 import { ConfirmDialog } from "@/presentation/components/atoms/ConfirmDialog";
 
 interface ProfileMeta {
   id: string;
   email: string;
-  avatarUrl: string | null;
 }
 
 const emptyProfileValues: AccountFormValues = {
@@ -46,11 +42,6 @@ const errorMessageKeyList = [
   "account.errors.passwordUpdateFailed",
   "account.errors.currentPasswordInvalid",
   "account.errors.deleteFailed",
-  "account.photo.errors.invalidFormat",
-  "account.photo.errors.tooLarge",
-  "account.photo.errors.tooSmall",
-  "account.photo.errors.uploadFailed",
-  "account.photo.errors.removeFailed",
 ] as const;
 
 type AccountErrorMessageKey = (typeof errorMessageKeyList)[number];
@@ -80,10 +71,7 @@ export function AccountSettingsPage() {
   );
 
   const [initialValues, setInitialValues] = useState<AccountFormValues>(emptyProfileValues);
-  const [profileMeta, setProfileMeta] = useState<ProfileMeta>({ id: "", email: "", avatarUrl: null });
-  const [initialAvatarUrl, setInitialAvatarUrl] = useState<string | null>(null);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarError, setAvatarError] = useState<string | null>(null);
+  const [profileMeta, setProfileMeta] = useState<ProfileMeta>({ id: "", email: "" });
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -116,10 +104,7 @@ export function AccountSettingsPage() {
         newPassword: "",
         confirmPassword: "",
       });
-      setProfileMeta({ id: profile.id, email: profile.email, avatarUrl: profile.avatarUrl });
-      setInitialAvatarUrl(profile.avatarUrl);
-      setAvatarFile(null);
-      setAvatarError(null);
+      setProfileMeta({ id: profile.id, email: profile.email });
     } catch (error) {
       setSubmitError(resolveErrorMessage(error));
     } finally {
@@ -144,30 +129,23 @@ export function AccountSettingsPage() {
       try {
         const profileChangesDetected =
           values.displayName.trim() !== initialValues.displayName.trim() ||
-          values.phone.trim() !== initialValues.phone.trim() ||
-          Boolean(avatarFile) ||
-          profileMeta.avatarUrl !== initialAvatarUrl;
+          values.phone.trim() !== initialValues.phone.trim();
 
         let updatedProfile: UserProfile | null = null;
 
         if (profileChangesDetected) {
-          const payload: UserProfile & { avatarFile?: File | null } = {
+          const payload: UserProfile = {
             id: profileMeta.id,
             email: profileMeta.email,
             displayName: values.displayName.trim(),
             phone: values.phone.trim() || null,
-            avatarUrl: profileMeta.avatarUrl,
-            avatarFile,
           };
 
           updatedProfile = await updateUserProfileUseCase.execute(payload);
           setProfileMeta({
             id: updatedProfile.id,
             email: updatedProfile.email,
-            avatarUrl: updatedProfile.avatarUrl,
           });
-          setInitialAvatarUrl(updatedProfile.avatarUrl);
-          setAvatarFile(null);
         }
 
         const wantsPasswordChange = Boolean(
@@ -208,31 +186,11 @@ export function AccountSettingsPage() {
     },
   });
 
-  const handleAvatarSelect = async (file: File) => {
-    setAvatarError(null);
-
-    const errorKey = await validateAvatarFile(file);
-
-    if (errorKey) {
-      setAvatarError(t(`photo.errors.${errorKey}`));
-      setAvatarFile(null);
-      return;
-    }
-
-    setAvatarFile(file);
-  };
-
-  const handleAvatarRemove = () => {
-    setAvatarError(null);
-    setAvatarFile(null);
-    setProfileMeta((current) => ({ ...current, avatarUrl: null }));
-  };
-
   const handleCancel = () => {
     setSubmitSuccess(null);
     setSubmitError(null);
 
-    if (!formik.dirty && !avatarFile && profileMeta.avatarUrl === initialAvatarUrl) {
+    if (!formik.dirty) {
       return;
     }
 
@@ -260,97 +218,128 @@ export function AccountSettingsPage() {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
-      <header>
-        <Typography variant="h4" className="font-black text-neutral-900">
-          {t("title")}
-        </Typography>
-        <Typography variant="body1" className="mt-2 text-neutral-600">
-          {t("subtitle")}
-        </Typography>
-      </header>
-
-      {isLoading && (
-        <Box className="flex items-center gap-3 text-neutral-600">
-          <CircularProgress size={20} />
-          <Typography variant="body2">{t("status.loading")}</Typography>
-        </Box>
-      )}
-
-      {submitError && (
-        <Alert severity="error" className="font-semibold">
-          {submitError}
-        </Alert>
-      )}
-
-      {submitSuccess && (
-        <Alert severity="success" className="font-semibold">
-          {submitSuccess}
-        </Alert>
-      )}
-
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-8">
-        <AccountPersonalInfo t={t} formik={formik} isLoading={isLoading} />
-        <AccountProfilePicture
-          t={t}
-          displayName={formik.values.displayName}
-          avatarUrl={profileMeta.avatarUrl}
-          isLoading={formik.isSubmitting || isLoading}
-          errorMessage={avatarError}
-          onSelect={handleAvatarSelect}
-          onRemove={handleAvatarRemove}
-        />
-        <AccountSecurity t={t} formik={formik} isLoading={isLoading} />
-
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button
-            variant="outlined"
-            className="border-neutral-300 text-neutral-700 hover:border-neutral-400"
-            type="button"
-            fullWidth
-            disabled={formik.isSubmitting || isLoading}
-            onClick={handleCancel}
-          >
-            {t("buttons.cancel")}
-          </Button>
-          <Button
-            variant="contained"
-            className="bg-brand-500 text-white hover:bg-brand-600"
-            type="submit"
-            fullWidth
-            disabled={formik.isSubmitting || isLoading}
-            startIcon={formik.isSubmitting ? <CircularProgress size={18} color="inherit" /> : undefined}
-          >
-            {formik.isSubmitting ? t("buttons.saving") : t("buttons.save")}
-          </Button>
+    <div className="flex min-h-screen bg-neutral-50">
+      <aside className="hidden w-72 flex-col border-r border-neutral-200 bg-white px-6 py-8 md:flex">
+        <div className="mb-8 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-white">
+            <span className="material-symbols-outlined">pets</span>
+          </div>
+          <div className="text-lg font-extrabold leading-tight text-neutral-900">
+            Amigo <span className="text-brand-500">Gigante</span>
+          </div>
         </div>
-      </form>
+        <div className="mb-6 flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 text-lg font-semibold text-neutral-700">
+            {formik.values.displayName.trim().slice(0, 1).toUpperCase() || "?"}
+          </div>
+          <div className="min-w-0">
+            <Typography variant="subtitle2" className="truncate font-semibold text-neutral-900">
+              {formik.values.displayName || t("sidebar.fallbackName")}
+            </Typography>
+            <Typography variant="caption" className="text-neutral-500">
+              {t("sidebar.subtitle")}
+            </Typography>
+          </div>
+        </div>
+        <nav className="flex flex-col gap-2">
+          <NextLink
+            href={`/${locale}/account`}
+            className="flex items-center gap-3 rounded-lg bg-brand-50 px-3 py-2 text-brand-600"
+          >
+            <span className="material-symbols-outlined">person</span>
+            <span className="text-sm font-semibold">{t("sidebar.account")}</span>
+          </NextLink>
+          <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-neutral-500">
+            <span className="material-symbols-outlined">assignment</span>
+            <span className="text-sm font-medium">{t("sidebar.requests")}</span>
+          </div>
+        </nav>
+      </aside>
 
-      <AccountDeleteSection
-        t={t}
-        onDelete={() => setShowDeleteDialog(true)}
-        isLoading={formik.isSubmitting || isLoading || isDeleting}
-      />
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+        <header>
+          <Typography variant="h4" className="font-black text-neutral-900">
+            {t("title")}
+          </Typography>
+          <Typography variant="body1" className="mt-2 text-neutral-600">
+            {t("subtitle")}
+          </Typography>
+        </header>
 
-      <ConfirmDialog
-        open={showDiscardDialog}
-        title={t("dialog.discard.title")}
-        description={t("dialog.discard.description")}
-        confirmLabel={t("dialog.discard.confirm")}
-        cancelLabel={t("dialog.discard.cancel")}
-        onConfirm={handleDiscardConfirm}
-        onClose={() => setShowDiscardDialog(false)}
-      />
+        {isLoading && (
+          <Box className="flex items-center gap-3 text-neutral-600">
+            <CircularProgress size={20} />
+            <Typography variant="body2">{t("status.loading")}</Typography>
+          </Box>
+        )}
 
-      <ConfirmDialog
-        open={showDeleteDialog}
-        title={t("dialog.delete.title")}
-        description={t("dialog.delete.description")}
-        confirmLabel={t("dialog.delete.confirm")}
-        cancelLabel={t("dialog.delete.cancel")}
-        onConfirm={handleDeleteConfirm}
-        onClose={() => setShowDeleteDialog(false)}
-      />
+        {submitError && (
+          <Alert severity="error" className="font-semibold">
+            {submitError}
+          </Alert>
+        )}
+
+        {submitSuccess && (
+          <Alert severity="success" className="font-semibold">
+            {submitSuccess}
+          </Alert>
+        )}
+
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-8">
+          <AccountPersonalInfo t={t} formik={formik} isLoading={isLoading} />
+          <AccountProfilePicture t={t} displayName={formik.values.displayName} />
+          <AccountSecurity t={t} formik={formik} isLoading={isLoading} />
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <Button
+              variant="outlined"
+              className="border-neutral-300 text-neutral-700 hover:border-neutral-400"
+              type="button"
+              fullWidth
+              disabled={formik.isSubmitting || isLoading}
+              onClick={handleCancel}
+            >
+              {t("buttons.cancel")}
+            </Button>
+            <Button
+              variant="contained"
+              className="bg-brand-500 text-white hover:bg-brand-600"
+              type="submit"
+              fullWidth
+              disabled={formik.isSubmitting || isLoading}
+              startIcon={formik.isSubmitting ? <CircularProgress size={18} color="inherit" /> : undefined}
+            >
+              {formik.isSubmitting ? t("buttons.saving") : t("buttons.save")}
+            </Button>
+          </div>
+        </form>
+
+        <AccountDeleteSection
+          t={t}
+          onDelete={() => setShowDeleteDialog(true)}
+          isLoading={formik.isSubmitting || isLoading || isDeleting}
+        />
+
+        <ConfirmDialog
+          open={showDiscardDialog}
+          title={t("dialog.discard.title")}
+          description={t("dialog.discard.description")}
+          confirmLabel={t("dialog.discard.confirm")}
+          cancelLabel={t("dialog.discard.cancel")}
+          onConfirm={handleDiscardConfirm}
+          onClose={() => setShowDiscardDialog(false)}
+        />
+
+        <ConfirmDialog
+          open={showDeleteDialog}
+          title={t("dialog.delete.title")}
+          description={t("dialog.delete.description")}
+          confirmLabel={t("dialog.delete.confirm")}
+          cancelLabel={t("dialog.delete.cancel")}
+          onConfirm={handleDeleteConfirm}
+          onClose={() => setShowDeleteDialog(false)}
+        />
+      </div>
     </div>
   );
 }

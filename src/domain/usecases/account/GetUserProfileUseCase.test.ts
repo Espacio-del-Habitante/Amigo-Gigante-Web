@@ -9,15 +9,12 @@ const baseProfile = {
   displayName: "Test User",
   phone: "+57 300 000 0000",
   email: "test@example.com",
-  avatarUrl: null,
 };
 
 test("GetUserProfileUseCase returns repository profile", async () => {
   const repository: IUserProfileRepository = {
     getUserProfile: async () => baseProfile,
     updateUserProfile: async () => baseProfile,
-    uploadAvatar: async () => "",
-    deleteAvatar: async () => {},
     changePassword: async () => {},
     deleteUserAccount: async () => {},
   };

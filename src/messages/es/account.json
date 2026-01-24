@@ -38,17 +38,7 @@
     }
   },
   "photo": {
-    "upload": "Subir Nueva Foto",
-    "remove": "Eliminar",
-    "hint": "Recomendado: JPG, PNG o GIF. Tamaño mínimo 400x400px.",
-    "errors": {
-      "invalidFormat": "Formato no válido. Solo se permiten JPG, PNG o GIF.",
-      "tooLarge": "El archivo es demasiado grande. Tamaño máximo: 5MB.",
-      "tooSmall": "La imagen debe tener al menos 400x400px.",
-      "readError": "No se pudo leer la imagen seleccionada.",
-      "uploadFailed": "Error al subir la foto. Por favor, intenta de nuevo.",
-      "removeFailed": "No se pudo eliminar la foto. Por favor, intenta de nuevo."
-    }
+    "description": "Tu avatar se mostrará con las iniciales de tu nombre."
   },
   "security": {
     "hint": "La contraseña debe tener al menos 8 caracteres e incluir una letra y un número."
@@ -93,6 +83,12 @@
     "passwordUpdateFailed": "No pudimos actualizar la contraseña. Intenta de nuevo.",
     "currentPasswordInvalid": "Contraseña actual incorrecta.",
     "deleteFailed": "No pudimos eliminar tu cuenta. Intenta de nuevo."
+  },
+  "sidebar": {
+    "account": "Mi Cuenta",
+    "requests": "Mis Solicitudes",
+    "subtitle": "Perfil de Adoptante",
+    "fallbackName": "Adoptante"
   },
   "validation": {
     "displayName": {

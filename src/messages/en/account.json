@@ -38,17 +38,7 @@
     }
   },
   "photo": {
-    "upload": "Upload New Photo",
-    "remove": "Remove",
-    "hint": "Recommended: JPG, PNG, or GIF. Minimum size 400x400px.",
-    "errors": {
-      "invalidFormat": "Invalid format. Only JPG, PNG, or GIF are allowed.",
-      "tooLarge": "The file is too large. Maximum size: 5MB.",
-      "tooSmall": "The image must be at least 400x400px.",
-      "readError": "We couldn't read the selected image.",
-      "uploadFailed": "Error uploading the photo. Please try again.",
-      "removeFailed": "We couldn't remove the photo. Please try again."
-    }
+    "description": "Your avatar will display the initials from your name."
   },
   "security": {
     "hint": "Your password must be at least 8 characters and include a letter and a number."
@@ -93,6 +83,12 @@
     "passwordUpdateFailed": "We couldn't update your password. Please try again.",
     "currentPasswordInvalid": "Current password is incorrect.",
     "deleteFailed": "We couldn't delete your account. Please try again."
+  },
+  "sidebar": {
+    "account": "My Account",
+    "requests": "My Requests",
+    "subtitle": "Adopter Profile",
+    "fallbackName": "Adopter"
   },
   "validation": {
     "displayName": {
