@@ -11,10 +11,6 @@
       "label": "Nombre Completo",
       "placeholder": "Ej. Carlos Mendoza"
     },
-    "displayName": {
-      "label": "Nombre de Usuario (Display Name)",
-      "placeholder": "Ej. CarlosM"
-    },
     "phone": {
       "label": "Teléfono",
       "placeholder": "+34 600 000 000"

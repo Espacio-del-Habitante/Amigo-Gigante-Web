@@ -33,16 +33,6 @@ export function AccountPersonalInfo({ t, formik, isLoading }: AccountPersonalInf
           helperText={displayNameError}
         />
         <TextField
-          name="displayName"
-          value={formik.values.displayName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          fullWidth
-          label={t("fields.displayName.label")}
-          placeholder={t("fields.displayName.placeholder")}
-          disabled={formik.isSubmitting || isLoading}
-        />
-        <TextField
           {...formik.getFieldProps("phone")}
           fullWidth
           label={t("fields.phone.label")}

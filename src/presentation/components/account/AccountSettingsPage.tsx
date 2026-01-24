@@ -286,8 +286,8 @@ export function AccountSettingsPage() {
         )}
 
         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-8">
-          <AccountPersonalInfo t={t} formik={formik} isLoading={isLoading} />
           <AccountProfilePicture t={t} displayName={formik.values.displayName} />
+          <AccountPersonalInfo t={t} formik={formik} isLoading={isLoading} />
           <AccountSecurity t={t} formik={formik} isLoading={isLoading} />
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
