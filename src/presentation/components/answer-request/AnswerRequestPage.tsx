@@ -14,7 +14,6 @@ import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
 import { AnimalInfoCard } from "@/presentation/components/answer-request/AnimalInfoCard";
 import { FoundationMessageSection } from "@/presentation/components/answer-request/FoundationMessageSection";
-import { ProgressBar } from "@/presentation/components/answer-request/ProgressBar";
 import { ResponseForm } from "@/presentation/components/answer-request/ResponseForm";
 
 interface AnswerRequestPageProps {
@@ -189,7 +188,6 @@ export function AnswerRequestPage({ requestId }: AnswerRequestPageProps) {
             </div>
             <div className="space-y-6">
               <AnimalInfoCard request={requestSummary} />
-              <ProgressBar status={requestSummary.status} />
             </div>
           </div>
         ) : (
