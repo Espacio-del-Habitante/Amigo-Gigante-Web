@@ -1,0 +1,106 @@
+{
+  "title": "Account Settings",
+  "subtitle": "Manage your personal information and account security for Amigo Gigante.",
+  "sections": {
+    "personalInfo": "Personal Information",
+    "profilePhoto": "Profile Photo",
+    "security": "Security"
+  },
+  "fields": {
+    "fullName": {
+      "label": "Full Name",
+      "placeholder": "e.g. Carlos Mendoza"
+    },
+    "phone": {
+      "label": "Phone",
+      "placeholder": "+34 600 000 000"
+    },
+    "email": {
+      "label": "Email Address",
+      "placeholder": "email@example.com",
+      "hint": "Email cannot be changed from here."
+    },
+    "currentPassword": {
+      "label": "Current Password",
+      "placeholder": "••••••••"
+    },
+    "newPassword": {
+      "label": "New Password",
+      "placeholder": "••••••••"
+    },
+    "confirmPassword": {
+      "label": "Confirm New Password",
+      "placeholder": "••••••••"
+    }
+  },
+  "photo": {
+    "description": "Your avatar will display the initials from your name."
+  },
+  "security": {
+    "hint": "Your password must be at least 8 characters and include a letter and a number."
+  },
+  "buttons": {
+    "cancel": "Cancel",
+    "save": "Save Changes",
+    "saving": "Saving..."
+  },
+  "danger": {
+    "title": "Danger Zone",
+    "description": "Once you delete your account, there is no going back. Please be certain.",
+    "button": "Delete My Account"
+  },
+  "dialog": {
+    "discard": {
+      "title": "Discard changes",
+      "description": "You have unsaved changes. Are you sure you want to discard them?",
+      "confirm": "Discard",
+      "cancel": "Keep editing"
+    },
+    "delete": {
+      "title": "Delete account",
+      "description": "This action will permanently delete your account. Do you want to continue?",
+      "confirm": "Delete account",
+      "cancel": "Cancel"
+    }
+  },
+  "status": {
+    "loading": "Loading information..."
+  },
+  "feedback": {
+    "saveSuccess": "Your information was saved successfully.",
+    "passwordSuccess": "Your password was updated successfully.",
+    "saveAndPasswordSuccess": "Your information and password were updated successfully."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "unauthorized": "You must sign in to edit your account.",
+    "profileLoadFailed": "We couldn't load your information. Please try again.",
+    "profileUpdateFailed": "We couldn't save your changes. Please try again.",
+    "passwordUpdateFailed": "We couldn't update your password. Please try again.",
+    "currentPasswordInvalid": "Current password is incorrect.",
+    "deleteFailed": "We couldn't delete your account. Please try again."
+  },
+  "sidebar": {
+    "account": "My Account",
+    "requests": "My Requests",
+    "subtitle": "Adopter Profile",
+    "fallbackName": "Adopter"
+  },
+  "validation": {
+    "displayName": {
+      "required": "Name is required",
+      "minLength": "Name must be at least 2 characters"
+    },
+    "phone": {
+      "invalid": "Please enter a valid phone number"
+    },
+    "password": {
+      "currentRequired": "Enter your current password",
+      "newRequired": "Enter a new password",
+      "minLength": "Password must be at least 8 characters",
+      "letterNumber": "Password must include a letter and a number",
+      "confirmRequired": "Confirm your new password",
+      "mismatch": "Passwords do not match"
+    }
+  }
+}

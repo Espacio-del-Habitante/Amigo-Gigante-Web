@@ -1,0 +1,106 @@
+{
+  "title": "Configuración de la Cuenta",
+  "subtitle": "Gestiona tu información personal y seguridad de tu cuenta de Amigo Gigante.",
+  "sections": {
+    "personalInfo": "Información Personal",
+    "profilePhoto": "Foto de Perfil",
+    "security": "Seguridad"
+  },
+  "fields": {
+    "fullName": {
+      "label": "Nombre Completo",
+      "placeholder": "Ej. Carlos Mendoza"
+    },
+    "phone": {
+      "label": "Teléfono",
+      "placeholder": "+34 600 000 000"
+    },
+    "email": {
+      "label": "Correo Electrónico",
+      "placeholder": "correo@ejemplo.com",
+      "hint": "El correo no se puede cambiar desde aquí."
+    },
+    "currentPassword": {
+      "label": "Contraseña Actual",
+      "placeholder": "••••••••"
+    },
+    "newPassword": {
+      "label": "Nueva Contraseña",
+      "placeholder": "••••••••"
+    },
+    "confirmPassword": {
+      "label": "Confirmar Nueva Contraseña",
+      "placeholder": "••••••••"
+    }
+  },
+  "photo": {
+    "description": "Tu avatar se mostrará con las iniciales de tu nombre."
+  },
+  "security": {
+    "hint": "La contraseña debe tener al menos 8 caracteres e incluir una letra y un número."
+  },
+  "buttons": {
+    "cancel": "Cancelar",
+    "save": "Guardar Cambios",
+    "saving": "Guardando..."
+  },
+  "danger": {
+    "title": "Zona de Peligro",
+    "description": "Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate.",
+    "button": "Eliminar Mi Cuenta"
+  },
+  "dialog": {
+    "discard": {
+      "title": "Descartar cambios",
+      "description": "Tienes cambios sin guardar. ¿Seguro que deseas descartarlos?",
+      "confirm": "Descartar",
+      "cancel": "Continuar editando"
+    },
+    "delete": {
+      "title": "Eliminar cuenta",
+      "description": "Esta acción eliminará tu cuenta de forma permanente. ¿Deseas continuar?",
+      "confirm": "Eliminar cuenta",
+      "cancel": "Cancelar"
+    }
+  },
+  "status": {
+    "loading": "Cargando información..."
+  },
+  "feedback": {
+    "saveSuccess": "La información se guardó correctamente.",
+    "passwordSuccess": "La contraseña se actualizó correctamente.",
+    "saveAndPasswordSuccess": "La información y la contraseña se actualizaron correctamente."
+  },
+  "errors": {
+    "generic": "Ocurrió un error inesperado. Intenta de nuevo.",
+    "unauthorized": "Debes iniciar sesión para editar tu cuenta.",
+    "profileLoadFailed": "No pudimos cargar tu información. Intenta de nuevo.",
+    "profileUpdateFailed": "No pudimos guardar los cambios. Intenta de nuevo.",
+    "passwordUpdateFailed": "No pudimos actualizar la contraseña. Intenta de nuevo.",
+    "currentPasswordInvalid": "Contraseña actual incorrecta.",
+    "deleteFailed": "No pudimos eliminar tu cuenta. Intenta de nuevo."
+  },
+  "sidebar": {
+    "account": "Mi Cuenta",
+    "requests": "Mis Solicitudes",
+    "subtitle": "Perfil de Adoptante",
+    "fallbackName": "Adoptante"
+  },
+  "validation": {
+    "displayName": {
+      "required": "El nombre es requerido",
+      "minLength": "El nombre debe tener al menos 2 caracteres"
+    },
+    "phone": {
+      "invalid": "Ingresa un teléfono válido"
+    },
+    "password": {
+      "currentRequired": "Ingresa tu contraseña actual",
+      "newRequired": "Ingresa una nueva contraseña",
+      "minLength": "La contraseña debe tener al menos 8 caracteres",
+      "letterNumber": "La contraseña debe incluir una letra y un número",
+      "confirmRequired": "Confirma tu nueva contraseña",
+      "mismatch": "Las contraseñas no coinciden"
+    }
+  }
+}

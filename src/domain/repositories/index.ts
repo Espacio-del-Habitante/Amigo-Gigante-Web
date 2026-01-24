@@ -21,3 +21,4 @@ export type { ICartRepository } from "./ICartRepository";
 export type { INotificationRepository } from "./INotificationRepository";
 export type { IPublicImageStorage, PublicImageType, UploadPublicImageParams } from "./IPublicImageStorage";
 export type { IPrivateFileStorage, UploadPrivateFileParams, GetPrivateFileUrlParams } from "./IPrivateFileStorage";
+export type { IUserProfileRepository, ChangePasswordParams } from "./IUserProfileRepository";
