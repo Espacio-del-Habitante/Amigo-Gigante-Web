@@ -42,7 +42,7 @@ export function AnimalInfoCard({ request }: AnimalInfoCardProps) {
           />
         </div>
         <div className="mt-3 flex items-center justify-center">
-          <Chip label={tMyAdoptions(`status.${request.status}`)} size="small" tone="primary" variant="soft" />
+          <Chip label={tMyAdoptions(`status.${request.status}`)} size="small" tone="brand" variant="soft" />
         </div>
         <Button
           component={Link}

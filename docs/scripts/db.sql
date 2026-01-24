@@ -186,6 +186,13 @@ create table adoption_request_documents (
   created_at timestamptz not null default now()
 );
 
+-- ALTER EXISTING DOCUMENTS TYPE CHECK (for existing databases)
+alter table adoption_request_documents
+  drop constraint if exists adoption_request_documents_doc_type_check;
+alter table adoption_request_documents
+  add constraint adoption_request_documents_doc_type_check
+  check (doc_type in ('id_document', 'home_photos', 'vaccination_card', 'response', 'other'));
+
 -- REQUEST MESSAGES
 create table adoption_request_messages (
   id bigint primary key generated always as identity,
