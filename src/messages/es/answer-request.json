@@ -8,7 +8,7 @@
   },
   "foundationMessage": {
     "title": "Mensaje de la Fundación",
-    "label": "Mensaje de {{foundationName}}"
+    "label": "Mensaje de {foundationName}"
   },
   "form": {
     "message": {
@@ -31,8 +31,8 @@
   },
   "progress": {
     "title": "Progreso de Adopción",
-    "step": "Paso {{current}} de {{total}}",
-    "percentage": "{{percentage}}%",
+    "step": "Paso {current} de {total}",
+    "percentage": "{percentage}%",
     "steps": {
       "initial": "Solicitud Inicial",
       "interview": "Entrevista Telefónica",

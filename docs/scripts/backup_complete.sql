@@ -569,6 +569,12 @@ with check (
 alter table foundation_contacts enable row level security;
 alter table foundation_contacts force row level security;
 
+-- Política: Lectura pública de contactos (para que los adoptantes puedan contactar fundaciones)
+drop policy if exists foundation_contacts_select_public on foundation_contacts;
+create policy foundation_contacts_select_public
+on foundation_contacts for select
+using (true);
+
 drop policy if exists foundation_contacts_select_member on foundation_contacts;
 create policy foundation_contacts_select_member
 on foundation_contacts for select

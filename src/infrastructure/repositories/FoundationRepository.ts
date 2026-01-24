@@ -207,30 +207,61 @@ class FoundationRepository implements IFoundationRepository {
       foundations: { name: string | null } | { name: string | null }[] | null;
     };
 
-    const { data, error } = await supabaseClient
+    // Intentar obtener el contacto de la fundación
+    const { data: contactData, error: contactError } = await supabaseClient
       .from("foundation_contacts")
       .select("foundation_id, public_email, public_phone, instagram_url, whatsapp_url, address, foundations(name)")
       .eq("foundation_id", foundationId)
-      .single()
+      .maybeSingle()
       .returns<FoundationContactRow>();
 
-    if (error || !data) {
-      throw new Error(this.translateFoundationLookupError(error ?? new Error("not found")));
+    // Si hay un error que no sea "no encontrado", lanzar error
+    if (contactError && contactError.code !== "PGRST116") {
+      throw new Error(this.translateFoundationLookupError(contactError));
     }
 
-    const foundationValue = data.foundations;
-    const foundationName = Array.isArray(foundationValue)
-      ? (foundationValue[0]?.name ?? "")
-      : (foundationValue?.name ?? "");
+    // Si hay datos de contacto, usarlos
+    if (contactData) {
+      const foundationValue = contactData.foundations;
+      const foundationName = Array.isArray(foundationValue)
+        ? (foundationValue[0]?.name ?? "")
+        : (foundationValue?.name ?? "");
 
+      return {
+        foundationId: contactData.foundation_id,
+        foundationName,
+        publicEmail: contactData.public_email ?? null,
+        publicPhone: contactData.public_phone ?? null,
+        instagramUrl: contactData.instagram_url ?? null,
+        whatsappUrl: contactData.whatsapp_url ?? null,
+        address: contactData.address ?? null,
+      };
+    }
+
+    // Si no hay contacto, obtener al menos el nombre de la fundación
+    const { data: foundationData, error: foundationError } = await supabaseClient
+      .from("foundations")
+      .select("id, name")
+      .eq("id", foundationId)
+      .maybeSingle<{ id: string; name: string | null }>();
+
+    if (foundationError) {
+      throw new Error(this.translateFoundationLookupError(foundationError));
+    }
+
+    if (!foundationData) {
+      throw new Error("errors.notFound");
+    }
+
+    // Devolver contacto con valores null pero con el nombre de la fundación
     return {
-      foundationId: data.foundation_id,
-      foundationName,
-      publicEmail: data.public_email ?? null,
-      publicPhone: data.public_phone ?? null,
-      instagramUrl: data.instagram_url ?? null,
-      whatsappUrl: data.whatsapp_url ?? null,
-      address: data.address ?? null,
+      foundationId: foundationData.id,
+      foundationName: foundationData.name ?? "",
+      publicEmail: null,
+      publicPhone: null,
+      instagramUrl: null,
+      whatsappUrl: null,
+      address: null,
     };
   }
 
