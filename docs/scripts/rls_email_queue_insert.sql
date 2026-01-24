@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
     -- ============================================
     -- RLS Policy para INSERT en email_queue
     -- ============================================
@@ -36,3 +37,19 @@
         )
     )
     );
+=======
+-- RLS: Permitir INSERT en email_queue desde la app (checkout, compras)
+-- Sin esto, el cliente (anon/authenticated) recibe 42501 al encolar emails.
+-- Los triggers de adopción usan SECURITY DEFINER y no pasan por RLS.
+
+alter table email_queue enable row level security;
+
+drop policy if exists "email_queue_insert_app" on email_queue;
+create policy "email_queue_insert_app"
+on email_queue for insert
+to anon, authenticated
+with check (true);
+
+-- Opcional: el cron/edge function usa service_role y bypasea RLS.
+-- No se necesita policy de SELECT/UPDATE para el cliente.
+>>>>>>> Stashed changes

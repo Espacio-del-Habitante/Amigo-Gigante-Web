@@ -1,0 +1,49 @@
+{
+  "checkout": {
+    "title": "Finalizar compra",
+    "checkoutButton": "Finalizar compra",
+    "backToCart": "Volver al carrito",
+    "emptyCart": "Tu carrito está vacío. Agrega productos para continuar.",
+    "form": {
+      "buyerName": "Nombre completo",
+      "buyerEmail": "Correo electrónico",
+      "buyerPhone": "Teléfono",
+      "buyerAddress": "Dirección",
+      "buyerCity": "Ciudad",
+      "buyerCountry": "País",
+      "notes": "Observaciones"
+    },
+    "summary": "Resumen de la solicitud",
+    "submit": "Enviar solicitud de compra",
+    "singleFoundationRequired": "Solo puedes comprar productos de una fundación a la vez. Ajusta tu carrito."
+  },
+  "confirm": {
+    "title": "¡Solicitud de compra realizada!",
+    "subtitle": "La tienda recibió tu solicitud y completará el proceso de compra contigo.",
+    "reference": "Referencia de solicitud",
+    "emailsSent": "Te enviamos el voucher y la factura por correo como comprobante.",
+    "whatsapp": "Enviar solicitud por WhatsApp a la tienda",
+    "backToShop": "Volver a la tienda",
+    "invalidOrExpired": "No encontramos los datos de tu solicitud de compra. Puede que hayas llegado aquí sin completar el checkout.",
+    "invalidTitle": "Solicitud no encontrada"
+  },
+  "voucher": {
+    "title": "Comprobante de solicitud de compra",
+    "foundation": "Fundación",
+    "items": "Productos",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "total": "Total"
+  },
+  "validation": {
+    "buyerNameRequired": "El nombre es obligatorio.",
+    "buyerNameMin": "El nombre debe tener al menos 2 caracteres.",
+    "buyerEmailRequired": "El correo es obligatorio.",
+    "buyerEmailInvalid": "Correo electrónico no válido."
+  },
+  "errors": {
+    "emailQueueEnqueue": "No se pudieron encolar los correos. Inténtalo de nuevo.",
+    "connection": "Error de conexión. Revisa tu internet e inténtalo de nuevo.",
+    "generic": "Algo salió mal. Inténtalo de nuevo."
+  }
+}

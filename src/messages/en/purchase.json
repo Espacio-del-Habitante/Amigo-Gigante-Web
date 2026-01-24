@@ -1,0 +1,49 @@
+{
+  "checkout": {
+    "title": "Checkout",
+    "checkoutButton": "Proceed to checkout",
+    "backToCart": "Back to cart",
+    "emptyCart": "Your cart is empty. Add products to continue.",
+    "form": {
+      "buyerName": "Full name",
+      "buyerEmail": "Email",
+      "buyerPhone": "Phone",
+      "buyerAddress": "Address",
+      "buyerCity": "City",
+      "buyerCountry": "Country",
+      "notes": "Notes"
+    },
+    "summary": "Request summary",
+    "submit": "Submit purchase request",
+    "singleFoundationRequired": "You can only purchase products from one foundation at a time. Please update your cart."
+  },
+  "confirm": {
+    "title": "Purchase request submitted!",
+    "subtitle": "The store received your request and will complete the purchase process with you.",
+    "reference": "Request reference",
+    "emailsSent": "We've sent the voucher and invoice to your email as proof.",
+    "whatsapp": "Send request to store via WhatsApp",
+    "backToShop": "Back to shop",
+    "invalidOrExpired": "We couldn't find your purchase request. You may have landed here without completing checkout.",
+    "invalidTitle": "Request not found"
+  },
+  "voucher": {
+    "title": "Purchase request voucher",
+    "foundation": "Foundation",
+    "items": "Products",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total"
+  },
+  "validation": {
+    "buyerNameRequired": "Name is required.",
+    "buyerNameMin": "Name must be at least 2 characters.",
+    "buyerEmailRequired": "Email is required.",
+    "buyerEmailInvalid": "Invalid email address."
+  },
+  "errors": {
+    "emailQueueEnqueue": "Could not queue emails. Please try again.",
+    "connection": "Connection error. Check your connection and try again.",
+    "generic": "Something went wrong. Please try again."
+  }
+}
