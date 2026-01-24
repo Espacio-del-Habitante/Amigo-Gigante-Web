@@ -13,7 +13,7 @@ import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboar
 
 test("GetDashboardDataUseCase returns KPI and funnel data from repositories", async () => {
   const animalRepository: IAnimalRepository = {
-    getHomeAnimals: async () => ({ urgent: [], sponsored: [], recent: [] }),
+    getHomeAnimals: async () => ({ heroAnimals: [], featuredAnimals: [] }),
     getAnimals: async () => ({ animals: [], total: 0 }),
     getAnimalsCount: async () => 8,
     getRecentAnimals: async () => [],
@@ -87,6 +87,7 @@ test("GetDashboardDataUseCase returns KPI and funnel data from repositories", as
       throw new Error("not-used");
     },
     getFoundationsList: async () => [],
+    getFeaturedFoundations: async () => [],
     getFoundationContacts: async () => {
       throw new Error("not-used");
     },

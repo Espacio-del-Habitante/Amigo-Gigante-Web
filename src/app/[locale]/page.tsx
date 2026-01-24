@@ -1,11 +1,12 @@
 "use client";
 
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
 
+import type { FeaturedFoundation } from "@/domain/models/FeaturedFoundation";
 import type { HomeAnimals } from "@/domain/models/HomeAnimals";
 import { GetHomeAnimalsUseCase } from "@/domain/usecases/animals/GetHomeAnimalsUseCase";
+import { GetFeaturedFoundationsUseCase } from "@/domain/usecases/foundation/GetFeaturedFoundationsUseCase";
 import { appContainer } from "@/infrastructure/ioc/container";
 import { USE_CASE_TYPES } from "@/infrastructure/ioc/usecases/usecases.types";
 import { AnnouncementsCarousel } from "@/presentation/components/home/AnnouncementsCarousel";
@@ -21,40 +22,51 @@ export default function Home() {
     () => appContainer.get<GetHomeAnimalsUseCase>(USE_CASE_TYPES.GetHomeAnimalsUseCase),
     [],
   );
-  const t = useTranslations("home");
-
+  const getFeaturedFoundationsUseCase = useMemo(
+    () => appContainer.get<GetFeaturedFoundationsUseCase>(USE_CASE_TYPES.GetFeaturedFoundationsUseCase),
+    [],
+  );
   const [homeAnimals, setHomeAnimals] = useState<HomeAnimals | null>(null);
-  const [hasError, setHasError] = useState(false);
+  const [featuredFoundations, setFeaturedFoundations] = useState<FeaturedFoundation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getHomeAnimalsUseCase
-      .execute()
-      .then((result) => {
-        setHomeAnimals(result);
-        console.log("Animales cargados correctamente", result);
-        setHasError(false);
-      })
-      .catch(() => {
-        console.error("Error al cargar los animales");
-        setHasError(true);
-      });
-  }, [getHomeAnimalsUseCase]);
+    let isMounted = true;
+    setIsLoading(true);
+    Promise.allSettled([
+      getHomeAnimalsUseCase.execute(),
+      getFeaturedFoundationsUseCase.execute({ limit: 6 }),
+    ])
+      .then(([animalsResult, foundationsResult]) => {
+        if (!isMounted) return;
 
-  if (!homeAnimals) {
+        if (animalsResult.status === "fulfilled") {
+          setHomeAnimals(animalsResult.value);
+        } else {
+          setHomeAnimals({ heroAnimals: [], featuredAnimals: [] });
+        }
+
+        if (foundationsResult.status === "fulfilled") {
+          setFeaturedFoundations(foundationsResult.value);
+        } else {
+          setFeaturedFoundations([]);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [getHomeAnimalsUseCase, getFeaturedFoundationsUseCase]);
+
+  if (isLoading) {
     return (
       <Stack alignItems="center" justifyContent="center" className="min-h-screen bg-slate-50">
-        {hasError ? (
-          <Stack spacing={1} alignItems="center">
-            <Typography variant="h6" sx={{ fontWeight: 900 }}>
-              {t("errors.title")}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" textAlign="center">
-              {t("errors.description")}
-            </Typography>
-          </Stack>
-        ) : (
-          <CircularProgress />
-        )}
+        <CircularProgress />
       </Stack>
     );
   }
@@ -62,10 +74,12 @@ export default function Home() {
   return (
     <Box className="bg-slate-50">
       <HomeNavBar />
-      <HeroSection heroAnimals={homeAnimals.heroAnimals} />
+      <HeroSection heroAnimals={homeAnimals?.heroAnimals ?? []} />
       <AnnouncementsCarousel />
-      <FeaturedAnimalsSection animals={homeAnimals.featuredAnimals} />
-      <PartnersSection />
+      {homeAnimals?.featuredAnimals?.length ? (
+        <FeaturedAnimalsSection animals={homeAnimals.featuredAnimals.slice(0, 3)} />
+      ) : null}
+      {featuredFoundations.length ? <PartnersSection foundations={featuredFoundations} /> : null}
       <StoreSection />
       <HomeFooter />
     </Box>

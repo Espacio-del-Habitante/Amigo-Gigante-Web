@@ -1,11 +1,72 @@
+import type { Animal } from "@/domain/models/Animal";
 import type { IAnimalRepository } from "@/domain/repositories/IAnimalRepository";
 import type { AnimalManagement } from "@/domain/models/AnimalManagement";
-import { animalsMock } from "@/infrastructure/mocks/animals.mock";
 import { supabaseClient } from "@/infrastructure/config/supabase";
 
 export class AnimalRepository implements IAnimalRepository {
   async getHomeAnimals() {
-    return animalsMock;
+    type HomeAnimalRow = {
+      id: number;
+      name: string | null;
+      breed: string | null;
+      sex: "male" | "female" | "unknown" | null;
+      species: "dog" | "cat" | "bird" | "other" | null;
+      age_months: number | null;
+      status: "available" | "adopted" | "pending" | "in_treatment" | "inactive" | null;
+      cover_image_url: string | null;
+      created_at: string;
+      foundations:
+        | {
+            id: string;
+            name: string | null;
+            city: string | null;
+            country: string | null;
+          }
+        | {
+            id: string;
+            name: string | null;
+            city: string | null;
+            country: string | null;
+          }[]
+        | null;
+    };
+
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select(
+        "id, name, breed, sex, species, age_months, status, cover_image_url, created_at, foundations(id, name, city, country)",
+      )
+      .eq("is_published", true)
+      .order("created_at", { ascending: true })
+      .limit(12)
+      .returns<HomeAnimalRow[]>();
+
+    if (error) {
+      throw new Error(this.translateAnimalsError(error));
+    }
+
+    const animalsWithPhotos = await this.attachCoverPhotoFallback(
+      (data ?? []).map((row) => ({
+        id: row.id,
+        name: row.name ?? "",
+        breed: row.breed ?? "",
+        sex: row.sex ?? "unknown",
+        species: row.species ?? "other",
+        ageMonths: row.age_months ?? null,
+        coverImageUrl: row.cover_image_url ?? null,
+        createdAt: row.created_at,
+        status: row.status ?? "available",
+        foundation: row.foundations,
+      })),
+    );
+
+    const featuredAnimals = animalsWithPhotos.map((row) => this.mapHomeAnimal(row));
+    const heroAnimals = featuredAnimals.slice(0, 2);
+
+    return {
+      heroAnimals,
+      featuredAnimals,
+    };
   }
 
   async getAdoptCatalog({ filters, pagination }: Parameters<IAnimalRepository["getAdoptCatalog"]>[0]) {
@@ -552,6 +613,62 @@ export class AnimalRepository implements IAnimalRepository {
       if (!fallback) return animal;
       return { ...animal, coverImageUrl: fallback };
     });
+  }
+
+  private mapHomeAnimal(data: {
+    id: number;
+    name: string;
+    breed: string;
+    sex: "male" | "female" | "unknown";
+    species: "dog" | "cat" | "bird" | "other";
+    ageMonths: number | null;
+    status: "available" | "adopted" | "pending" | "in_treatment" | "inactive";
+    coverImageUrl: string | null;
+    createdAt: string;
+    foundation:
+      | {
+          id: string;
+          name: string | null;
+          city: string | null;
+          country: string | null;
+        }
+      | {
+          id: string;
+          name: string | null;
+          city: string | null;
+          country: string | null;
+        }[]
+      | null;
+  }): Animal {
+    const foundationValue = data.foundation;
+    const foundation = Array.isArray(foundationValue) ? foundationValue[0] : foundationValue;
+    const locationParts = [foundation?.city ?? null, foundation?.country ?? null].filter(Boolean);
+
+    return {
+      id: String(data.id),
+      name: data.name,
+      age: this.formatAgeLabel(data.ageMonths),
+      breed: data.breed || "",
+      gender: data.sex === "female" ? "Hembra" : "Macho",
+      type: data.species === "cat" ? "Gato" : "Perro",
+      location: locationParts.length > 0 ? locationParts.join(", ") : "",
+      imageUrl: data.coverImageUrl ?? "",
+      status: data.status === "in_treatment" ? "Urgente" : "Adopción",
+      foundation: foundation?.name ?? "",
+    };
+  }
+
+  private formatAgeLabel(ageMonths: number | null): string {
+    if (!ageMonths || ageMonths <= 0) {
+      return "0 meses";
+    }
+
+    if (ageMonths < 12) {
+      return `${ageMonths} meses`;
+    }
+
+    const years = Math.floor(ageMonths / 12);
+    return `${years} ${years === 1 ? "año" : "años"}`;
   }
 
   private isUrgentNeed(createdAt: string, ageMonths: number | null): boolean {

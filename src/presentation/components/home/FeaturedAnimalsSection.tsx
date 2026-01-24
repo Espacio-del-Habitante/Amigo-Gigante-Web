@@ -22,7 +22,7 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
           <Typography variant="h4" sx={{ fontWeight: 800, color: "text.primary" }}>
             {t("featured.title")}
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
+          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }} noWrap>
             {t("featured.subtitle")}
           </Typography>
         </Box>
@@ -45,7 +45,7 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
           <ArrowRightAltRoundedIcon />
         </Link>
       </Stack>
-      <Box className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <Box className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {animals.map((animal) => (
           <Box
             key={animal.id}

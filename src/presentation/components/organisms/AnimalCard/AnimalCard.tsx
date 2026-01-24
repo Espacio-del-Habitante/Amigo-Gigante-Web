@@ -4,6 +4,7 @@ import { alpha, Box, Card, CardContent, Stack, Typography, useTheme } from "@mui
 import { useTranslations } from "next-intl";
 
 import type { Animal } from "@/domain/models/Animal";
+import LogoImage from "@/presentation/assets/images/LOGO2.png";
 import { IconButton } from "@/presentation/components/atoms";
 import { StatusChip } from "@/presentation/components/molecules";
 
@@ -36,20 +37,24 @@ export function AnimalCard({ animal }: AnimalCardProps) {
           overflow: "hidden",
           height: 240,
           borderRadius: 2,
+          backgroundColor: animal.imageUrl ? "transparent" : "grey.100",
         }}
       >
         <Box
           component="img"
-          src={animal.imageUrl}
+          src={animal.imageUrl || LogoImage.src}
           alt={animal.name}
           sx={{
             width: "100%",
             height: "100%",
-            objectFit: "cover",
+            objectFit: animal.imageUrl ? "cover" : "contain",
             transition: "transform 0.4s ease",
             ":hover": {
-              transform: "scale(1.04)",
+              transform: animal.imageUrl ? "scale(1.04)" : "none",
             },
+            p: animal.imageUrl ? 0 : 3,
+            filter: animal.imageUrl ? "none" : "grayscale(100%)",
+            opacity: animal.imageUrl ? 1 : 0.5,
           }}
         />
         <IconButton

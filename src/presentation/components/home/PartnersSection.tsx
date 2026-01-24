@@ -1,20 +1,15 @@
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
-import VolunteerActivismRoundedIcon from "@mui/icons-material/VolunteerActivismRounded";
-import HealthAndSafetyRoundedIcon from "@mui/icons-material/HealthAndSafetyRounded";
 import { Box, Stack, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 
+import type { FeaturedFoundation } from "@/domain/models/FeaturedFoundation";
 import { Section } from "@/presentation/components/layouts";
 
-const partners = [
-  { name: "Huellitas", icon: <PetsRoundedIcon fontSize="large" /> },
-  { name: "Vida Animal", icon: <HealthAndSafetyRoundedIcon fontSize="large" /> },
-  { name: "Corazones Peludos", icon: <VolunteerActivismRoundedIcon fontSize="large" /> },
-  { name: "Casa Canina", icon: <HomeRoundedIcon fontSize="large" /> },
-];
+interface PartnersSectionProps {
+  foundations: FeaturedFoundation[];
+}
 
-export function PartnersSection() {
+export function PartnersSection({ foundations }: PartnersSectionProps) {
   const t = useTranslations("home");
 
   return (
@@ -28,9 +23,9 @@ export function PartnersSection() {
         </Typography>
       </Box>
       <Stack direction="row" flexWrap="wrap" className="mt-4 flex items-center justify-center gap-8 md:gap-12">
-        {partners.map((partner) => (
+        {foundations.map((foundation) => (
           <Stack
-            key={partner.name}
+            key={foundation.id}
             spacing={1.5}
             alignItems="center"
             sx={{
@@ -48,12 +43,22 @@ export function PartnersSection() {
                 color: "text.secondary",
                 display: "grid",
                 placeItems: "center",
+                overflow: "hidden",
               }}
             >
-              {partner.icon}
+              {foundation.logoUrl ? (
+                <Box
+                  component="img"
+                  src={foundation.logoUrl}
+                  alt={foundation.name}
+                  sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                <PetsRoundedIcon fontSize="large" />
+              )}
             </Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-              {partner.name}
+              {foundation.name}
             </Typography>
           </Stack>
         ))}

@@ -23,6 +23,7 @@ import { useTranslations } from "next-intl";
 import type { Animal } from "@/domain/models/Animal";
 import { Button, Chip } from "@/presentation/components/atoms";
 import { useHomeNavigation } from "@/presentation/components/home/hooks/useHomeNavigation";
+import LogoImage from "@/presentation/assets/images/LOGO2.png";
 
 interface HeroSectionProps {
   heroAnimals: Animal[];
@@ -57,8 +58,8 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
   }, [goToAdopt, locationValue, searchValue, selectedSpecies]);
 
   const handleAnimalClick = useCallback(
-    (animalId: number) => {
-      goToAdoptDetail(animalId);
+    (animalId: string | number) => {
+      goToAdoptDetail(typeof animalId === "string" ? Number.parseInt(animalId, 10) : animalId);
     },
     [goToAdoptDetail],
   );
@@ -154,7 +155,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
         </Stack>
         <Box className="grid items-start gap-4 sm:grid-cols-2 md:gap-6">
           <Stack className="gap-3 sm:mt-4">
-            {first && (
+            {first ? (
               <Card
                 sx={{
                   borderRadius: 2,
@@ -175,18 +176,23 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 }}
                 aria-label={t("hero.animalAriaLabel", { name: first.name })}
               >
-                <Box sx={{ position: "relative", height: 240 }}>
+                <Box sx={{ position: "relative", height: 240, backgroundColor: first.imageUrl ? "transparent" : "grey.100" }}>
                   <Image
-                    src={first.imageUrl}
+                    src={first.imageUrl || LogoImage}
                     alt={first.name}
                     fill
                     priority
-                    style={{ objectFit: "cover" }}
+                    style={{
+                      objectFit: first.imageUrl ? "cover" : "contain",
+                      padding: first.imageUrl ? 0 : "24px",
+                      filter: first.imageUrl ? "none" : "grayscale(100%)",
+                      opacity: first.imageUrl ? 1 : 0.5,
+                    }}
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
                   />
                 </Box>
               </Card>
-            )}
+            ) : null}
             <Card className="flex items-center gap-3 rounded-2xl border border-solid p-3" sx={{ borderColor: "divider", boxShadow: 2 }}>
               <Chip
                 icon={<PetsRoundedIcon color="secondary" />}
@@ -212,7 +218,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 {t("hero.sponsorCard")}
               </Typography>
             </Card>
-            {second && (
+            {second ? (
               <Card
                 sx={{
                   borderRadius: 2,
@@ -233,17 +239,22 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 }}
                 aria-label={t("hero.animalAriaLabel", { name: second.name })}
               >
-                <Box sx={{ position: "relative", height: 240 }}>
+                <Box sx={{ position: "relative", height: 240, backgroundColor: second.imageUrl ? "transparent" : "grey.100" }}>
                   <Image
-                    src={second.imageUrl}
+                    src={second.imageUrl || LogoImage}
                     alt={second.name}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{
+                      objectFit: second.imageUrl ? "cover" : "contain",
+                      padding: second.imageUrl ? 0 : "24px",
+                      filter: second.imageUrl ? "none" : "grayscale(100%)",
+                      opacity: second.imageUrl ? 1 : 0.5,
+                    }}
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
                   />
                 </Box>
               </Card>
-            )}
+            ) : null}
           </Stack>
         </Box>
       </Container>
