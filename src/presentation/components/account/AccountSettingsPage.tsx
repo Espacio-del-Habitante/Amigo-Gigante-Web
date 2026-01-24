@@ -225,7 +225,7 @@ export function AccountSettingsPage() {
             <span className="material-symbols-outlined">pets</span>
           </div>
           <div className="text-lg font-extrabold leading-tight text-neutral-900">
-            Amigo <span className="text-brand-500">Gigante</span>
+            {t("sidebar.brand.name")} <span className="text-brand-500">{t("sidebar.brand.accent")}</span>
           </div>
         </div>
         <div className="mb-6 flex items-center gap-3">
@@ -249,10 +249,13 @@ export function AccountSettingsPage() {
             <span className="material-symbols-outlined">person</span>
             <span className="text-sm font-semibold">{t("sidebar.account")}</span>
           </NextLink>
-          <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-neutral-500">
-            <span className="material-symbols-outlined">assignment</span>
+          <NextLink
+            href={`/${locale}/account/adoptions`}
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700"
+          >
+            <span className="material-symbols-outlined">pets</span>
             <span className="text-sm font-medium">{t("sidebar.requests")}</span>
-          </div>
+          </NextLink>
         </nav>
       </aside>
 

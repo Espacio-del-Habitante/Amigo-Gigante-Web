@@ -118,6 +118,7 @@ test("GetDashboardDataUseCase returns KPI and funnel data from repositories", as
     getAdminRequests: async () => {
       throw new Error("not-used");
     },
+    getUserRequests: async () => ({ requests: [] }),
     getRequestDetail: async () => {
       throw new Error("not-used");
     },

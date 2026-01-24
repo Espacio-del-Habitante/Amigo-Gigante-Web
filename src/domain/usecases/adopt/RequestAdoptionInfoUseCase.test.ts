@@ -59,6 +59,7 @@ test("RequestAdoptionInfoUseCase enqueues email and updates status", async () =>
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },
+    getUserRequests: async () => ({ requests: [] }),
     getRequestDetail: async () => buildDetail(),
     getRequestAccessInfo: async () => ({
       requestId: 12,
@@ -129,6 +130,7 @@ test("RequestAdoptionInfoUseCase rejects when adopter email is missing", async (
     getAdminRequests: async () => {
       throw new Error("not implemented");
     },
+    getUserRequests: async () => ({ requests: [] }),
     getRequestDetail: async () => buildDetail({ adopterProfile: { ...buildDetail().adopterProfile, email: null } }),
     getRequestAccessInfo: async () => ({
       requestId: 12,

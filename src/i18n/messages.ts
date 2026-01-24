@@ -17,6 +17,7 @@ import products from "../messages/en/products.json";
 import productForm from "../messages/en/product-form.json";
 import adoptionsAdmin from "../messages/en/adoptions-admin.json";
 import storage from "../messages/en/storage.json";
+import myAdoptions from "../messages/en/my-adoptions.json";
 
 export const messages = {
   common,
@@ -38,6 +39,7 @@ export const messages = {
   productForm,
   adoptionsAdmin,
   storage,
+  myAdoptions,
 };
 
 export type AppMessages = typeof messages;

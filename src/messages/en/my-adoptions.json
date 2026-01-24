@@ -1,0 +1,40 @@
+{
+  "title": "My Adoption Requests",
+  "description": "Track the status of your adoption processes and respond to information requests.",
+  "loading": "Loading your requests...",
+  "empty": {
+    "title": "You don't have any adoption requests",
+    "description": "Explore available animals and create your first request.",
+    "button": "Explore Animals"
+  },
+  "status": {
+    "pending": "Pending",
+    "in_review": "In Review",
+    "info_requested": "Info Requested",
+    "preapproved": "Preapproved",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled",
+    "completed": "Completed"
+  },
+  "species": {
+    "dog": "Dog",
+    "cat": "Cat"
+  },
+  "actions": {
+    "respond": "Respond",
+    "view": "View Detail"
+  },
+  "requestedOn": "Requested on {date}",
+  "infoSection": {
+    "title": "Do you have questions about your process?",
+    "description": "Our support team and foundations are here to help you every step of the way.",
+    "button": "Contact Support"
+  },
+  "errors": {
+    "unauthorized": "Unauthorized",
+    "forbidden": "You don't have permission to access this section.",
+    "connection": "We couldn't connect to load your requests.",
+    "generic": "Error loading your requests"
+  }
+}

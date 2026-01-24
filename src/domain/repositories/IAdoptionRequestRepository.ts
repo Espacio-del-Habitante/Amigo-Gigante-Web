@@ -6,6 +6,7 @@ import type {
   AdoptionRequestPriority,
   AdoptionRequestStatus,
   AdoptionRequestSummary,
+  UserAdoptionRequestSummary,
 } from "@/domain/models/AdoptionRequest";
 
 export interface CreateAdoptionRequestParams {
@@ -36,6 +37,14 @@ export interface GetAdoptionRequestsParams {
 export interface GetAdoptionRequestsResult {
   requests: AdoptionRequestSummary[];
   total: number;
+}
+
+export interface GetUserAdoptionRequestsParams {
+  adopterUserId: string;
+}
+
+export interface GetUserAdoptionRequestsResult {
+  requests: UserAdoptionRequestSummary[];
 }
 
 export interface GetAdoptionRequestDetailParams {
@@ -96,6 +105,7 @@ export interface GetAdopterEmailByUserIdParams {
 export interface IAdoptionRequestRepository {
   createAdoptionRequest(params: CreateAdoptionRequestParams): Promise<AdoptionRequest>;
   getAdminRequests(params: GetAdoptionRequestsParams): Promise<GetAdoptionRequestsResult>;
+  getUserRequests(params: GetUserAdoptionRequestsParams): Promise<GetUserAdoptionRequestsResult>;
   getRequestDetail(params: GetAdoptionRequestDetailParams): Promise<AdoptionRequestDetail>;
   getRequestAccessInfo(params: GetAdoptionRequestAccessInfoParams): Promise<AdoptionRequestAccessInfo>;
   getAdopterEmailByUserId(params: GetAdopterEmailByUserIdParams): Promise<string | null>;

@@ -29,6 +29,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     productForm,
     adoptionsAdmin,
     storage,
+    myAdoptions,
   ] = await Promise.all([
     import(`../messages/${locale}/common.json`),
     import(`../messages/${locale}/home.json`),
@@ -49,6 +50,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`../messages/${locale}/product-form.json`),
     import(`../messages/${locale}/adoptions-admin.json`),
     import(`../messages/${locale}/storage.json`),
+    import(`../messages/${locale}/my-adoptions.json`),
   ]);
 
   return {
@@ -73,6 +75,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       productForm: productForm.default,
       adoptionsAdmin: adoptionsAdmin.default,
       storage: storage.default,
+      myAdoptions: myAdoptions.default,
     },
   };
 });

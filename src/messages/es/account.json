@@ -82,9 +82,13 @@
   },
   "sidebar": {
     "account": "Mi Cuenta",
-    "requests": "Mis Solicitudes",
+    "requests": "Mis Adopciones",
     "subtitle": "Perfil de Adoptante",
-    "fallbackName": "Adoptante"
+    "fallbackName": "Adoptante",
+    "brand": {
+      "name": "Amigo",
+      "accent": "Gigante"
+    }
   },
   "validation": {
     "displayName": {
