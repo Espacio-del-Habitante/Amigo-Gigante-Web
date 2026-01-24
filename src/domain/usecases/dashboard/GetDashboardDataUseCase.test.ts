@@ -125,6 +125,11 @@ test("GetDashboardDataUseCase returns KPI and funnel data from repositories", as
     getRequestAccessInfo: async () => {
       throw new Error("not-used");
     },
+    getRequestMessages: async () => [],
+    getAdopterEmailByUserId: async () => null,
+    enqueueInfoRequestEmail: async () => {},
+    saveResponseMessage: async () => {},
+    notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
   };
 

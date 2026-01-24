@@ -66,12 +66,15 @@ test("RequestAdoptionInfoUseCase enqueues email and updates status", async () =>
       foundationId: "foundation-1",
       adopterUserId: "user-99",
     }),
+    getRequestMessages: async () => [],
     getAdopterEmailByUserId: async () => {
       throw new Error("not implemented");
     },
     enqueueInfoRequestEmail: async (params) => {
       enqueuePayload = params;
     },
+    saveResponseMessage: async () => {},
+    notifyFoundationMembers: async () => {},
     updateStatus: async (params) => {
       updatePayload = params;
     },
@@ -137,9 +140,16 @@ test("RequestAdoptionInfoUseCase rejects when adopter email is missing", async (
       foundationId: "foundation-1",
       adopterUserId: "user-99",
     }),
+    getRequestMessages: async () => [],
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {
       throw new Error("should not enqueue");
+    },
+    saveResponseMessage: async () => {
+      throw new Error("should not save response");
+    },
+    notifyFoundationMembers: async () => {
+      throw new Error("should not notify");
     },
     updateStatus: async () => {
       throw new Error("should not update");

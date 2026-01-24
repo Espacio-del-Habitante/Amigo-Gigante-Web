@@ -176,12 +176,23 @@ create table adoption_request_documents (
       'id_document',
       'home_photos',
       'vaccination_card',
+      'response',
       'other'
     )),
 
   file_url text not null,
   notes text,
 
+  created_at timestamptz not null default now()
+);
+
+-- REQUEST MESSAGES
+create table adoption_request_messages (
+  id bigint primary key generated always as identity,
+  request_id bigint not null references adoption_requests(id) on delete cascade,
+  sender_user_id uuid not null references profiles(id) on delete cascade,
+  sender_role text not null check (sender_role in ('foundation', 'adopter')),
+  message_text text not null,
   created_at timestamptz not null default now()
 );
 -- NOTIFICATIONS (in-app)
@@ -246,6 +257,9 @@ create index adoption_request_details_request_idx on adoption_request_details(re
 
 create index adoption_request_documents_request_idx on adoption_request_documents(request_id);
 create index adoption_request_documents_type_idx on adoption_request_documents(doc_type);
+
+create index adoption_request_messages_request_idx on adoption_request_messages(request_id);
+create index adoption_request_messages_created_idx on adoption_request_messages(created_at desc);
 
 create index notifications_user_created_idx on notifications(user_id, created_at desc);
 create index notifications_user_read_idx on notifications(user_id, read_at);

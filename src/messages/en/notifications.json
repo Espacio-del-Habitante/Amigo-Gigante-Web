@@ -19,6 +19,10 @@
       "title": "Adoption status updated",
       "body": "An adoption request has changed status."
     },
+    "adoption_info_response": {
+      "title": "Response received",
+      "body": "Additional information was received for an adoption request."
+    },
     "unknown": {
       "title": "New notification",
       "body": "You have a new update."

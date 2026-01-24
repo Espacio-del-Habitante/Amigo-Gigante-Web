@@ -12,6 +12,8 @@ const USE_CASE_TYPES = {
   GetAdoptionRequestDetailUseCase: Symbol.for("GetAdoptionRequestDetailUseCase"),
   UpdateAdoptionRequestStatusUseCase: Symbol.for("UpdateAdoptionRequestStatusUseCase"),
   RequestAdoptionInfoUseCase: Symbol.for("RequestAdoptionInfoUseCase"),
+  GetRequestInfoForResponseUseCase: Symbol.for("GetRequestInfoForResponseUseCase"),
+  RespondToInfoRequestUseCase: Symbol.for("RespondToInfoRequestUseCase"),
   CreateAdoptionRequestUseCase: Symbol.for("CreateAdoptionRequestUseCase"),
   GetDashboardDataUseCase: Symbol.for("GetDashboardDataUseCase"),
   CreateAnimalUseCase: Symbol.for("CreateAnimalUseCase"),

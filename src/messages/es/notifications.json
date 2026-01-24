@@ -19,6 +19,10 @@
       "title": "Estado de adopción actualizado",
       "body": "Una solicitud de adopción cambió de estado."
     },
+    "adoption_info_response": {
+      "title": "Respuesta recibida",
+      "body": "Se recibió información adicional para una solicitud de adopción."
+    },
     "unknown": {
       "title": "Nueva notificación",
       "body": "Tienes una actualización pendiente."

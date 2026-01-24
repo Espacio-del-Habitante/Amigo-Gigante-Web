@@ -1,0 +1,57 @@
+{
+  "title": "Responder Solicitud de Información",
+  "description": "Por favor, completa los detalles solicitados por la fundación para continuar con tu proceso.",
+  "loading": "Cargando solicitud...",
+  "breadcrumbs": {
+    "home": "Inicio",
+    "myAdoptions": "Mis Solicitudes"
+  },
+  "foundationMessage": {
+    "title": "Mensaje de la Fundación",
+    "label": "Mensaje de {{foundationName}}"
+  },
+  "form": {
+    "message": {
+      "label": "Tu Mensaje o Explicación",
+      "placeholder": "Escribe aquí tu respuesta para la fundación..."
+    },
+    "files": {
+      "label": "Archivos Adjuntos (Video o Fotos)",
+      "dropzone": {
+        "title": "Haz clic o arrastra los archivos aquí",
+        "description": "Soporta MP4, JPG, PNG o PDF (Máx. 50MB)"
+      }
+    },
+    "cancel": "Cancelar",
+    "submit": "Enviar Respuesta"
+  },
+  "animalCard": {
+    "title": "Respondiendo por:",
+    "viewProfile": "Ver Perfil del Animal"
+  },
+  "progress": {
+    "title": "Progreso de Adopción",
+    "step": "Paso {{current}} de {{total}}",
+    "percentage": "{{percentage}}%",
+    "steps": {
+      "initial": "Solicitud Inicial",
+      "interview": "Entrevista Telefónica",
+      "additionalInfo": "Información Adicional",
+      "homeVisit": "Visita Domiciliaria",
+      "approval": "Aprobación Final"
+    }
+  },
+  "errors": {
+    "unauthorized": "No autorizado",
+    "invalidStatus": "Esta solicitud no requiere respuesta en este momento",
+    "messageRequired": "El mensaje es requerido",
+    "fileTooLarge": "El archivo es demasiado grande (máx. 50MB)",
+    "invalidFileType": "Tipo de archivo no permitido",
+    "uploadFailed": "Error al subir archivos",
+    "submitFailed": "Error al enviar la respuesta"
+  },
+  "success": {
+    "title": "Respuesta enviada",
+    "message": "Tu respuesta ha sido enviada exitosamente. La fundación será notificada."
+  }
+}
