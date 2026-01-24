@@ -6,6 +6,7 @@ import type {
   CreateFoundationParams,
   IFoundationRepository,
 } from "@/domain/repositories/IFoundationRepository";
+import type { FeaturedFoundation } from "@/domain/models/FeaturedFoundation";
 import type { Foundation } from "@/domain/models/Foundation";
 import type { FoundationContact } from "@/domain/models/FoundationContact";
 import type { ShopFoundation } from "@/domain/models/ShopFoundation";
@@ -120,6 +121,61 @@ class FoundationRepository implements IFoundationRepository {
       country: row.country ?? null,
       logoUrl: row.logo_url ?? null,
     }));
+  }
+
+  async getFeaturedFoundations(limit: number): Promise<FeaturedFoundation[]> {
+    type FeaturedFoundationRow = {
+      foundation_id: string | null;
+      foundations:
+        | {
+            id: string;
+            name: string | null;
+            city: string | null;
+            country: string | null;
+            logo_url: string | null;
+          }
+        | {
+            id: string;
+            name: string | null;
+            city: string | null;
+            country: string | null;
+            logo_url: string | null;
+          }[]
+        | null;
+      count: number | null;
+    };
+
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .select("foundation_id, foundations(id, name, city, country, logo_url), count:foundation_id")
+      .eq("is_published", true)
+      .not("foundation_id", "is", null)
+      .order("count", { ascending: false })
+      .limit(limit)
+      .returns<FeaturedFoundationRow[]>();
+
+    if (error) {
+      throw new Error(this.translateFoundationLookupError(error));
+    }
+
+    return (data ?? [])
+      .map((row) => {
+        const foundationValue = row.foundations;
+        const foundation = Array.isArray(foundationValue) ? foundationValue[0] : foundationValue;
+        if (!foundation && !row.foundation_id) {
+          return null;
+        }
+
+        return {
+          id: foundation?.id ?? row.foundation_id ?? "",
+          name: foundation?.name ?? "",
+          logoUrl: foundation?.logo_url ?? null,
+          city: foundation?.city ?? null,
+          country: foundation?.country ?? null,
+          animalsCount: Number(row.count ?? 0),
+        };
+      })
+      .filter((foundation): foundation is FeaturedFoundation => Boolean(foundation?.id));
   }
 
   async getShopFoundationById(foundationId: string): Promise<ShopFoundation> {

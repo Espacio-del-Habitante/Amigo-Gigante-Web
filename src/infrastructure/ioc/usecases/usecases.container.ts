@@ -39,6 +39,7 @@ import { RegisterExternalUserUseCase } from "@/domain/usecases/auth/RegisterExte
 import { RegisterFoundationUseCase } from "@/domain/usecases/auth/RegisterFoundationUseCase";
 import { GetDashboardDataUseCase } from "@/domain/usecases/dashboard/GetDashboardDataUseCase";
 import { GetFoundationProfileUseCase } from "@/domain/usecases/foundation/GetFoundationProfileUseCase";
+import { GetFeaturedFoundationsUseCase } from "@/domain/usecases/foundation/GetFeaturedFoundationsUseCase";
 import { GetFoundationContactsUseCase } from "@/domain/usecases/foundation/GetFoundationContactsUseCase";
 import { UpdateFoundationProfileUseCase } from "@/domain/usecases/foundation/UpdateFoundationProfileUseCase";
 import { AddToCartUseCase } from "@/domain/usecases/cart/AddToCartUseCase";
@@ -85,6 +86,15 @@ const useCasesModule = new ContainerModule(
         );
 
         return new GetHomeAnimalsUseCase(animalRepository);
+      })
+      .inSingletonScope();
+    bind<GetFeaturedFoundationsUseCase>(USE_CASE_TYPES.GetFeaturedFoundationsUseCase)
+      .toDynamicValue((context) => {
+        const foundationRepository = context.get<IFoundationRepository>(
+          REPOSITORY_TYPES.FoundationRepository,
+        );
+
+        return new GetFeaturedFoundationsUseCase(foundationRepository);
       })
       .inSingletonScope();
     bind<GetHomeProductsUseCase>(USE_CASE_TYPES.GetHomeProductsUseCase)

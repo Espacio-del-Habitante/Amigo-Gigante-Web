@@ -6,6 +6,7 @@ export { LoginUseCase } from "./auth/LoginUseCase";
 export { LogoutUseCase } from "./auth/LogoutUseCase";
 export { GetSessionUseCase } from "./auth/GetSessionUseCase";
 export { GetFoundationProfileUseCase } from "./foundation/GetFoundationProfileUseCase";
+export { GetFeaturedFoundationsUseCase } from "./foundation/GetFeaturedFoundationsUseCase";
 export { GetFoundationContactsUseCase } from "./foundation/GetFoundationContactsUseCase";
 export { UpdateFoundationProfileUseCase } from "./foundation/UpdateFoundationProfileUseCase";
 export { GetUserProfileUseCase } from "./account/GetUserProfileUseCase";

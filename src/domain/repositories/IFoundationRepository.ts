@@ -1,3 +1,4 @@
+import type { FeaturedFoundation } from "@/domain/models/FeaturedFoundation";
 import type { Foundation } from "@/domain/models/Foundation";
 import type { FoundationContact } from "@/domain/models/FoundationContact";
 import type { ShopFoundation } from "@/domain/models/ShopFoundation";
@@ -28,6 +29,7 @@ export interface IFoundationRepository {
   getFoundationById(foundationId: string): Promise<Foundation>;
   getShopFoundationById(foundationId: string): Promise<ShopFoundation>;
   getFoundationsList(): Promise<ShopFoundation[]>;
+  getFeaturedFoundations(limit: number): Promise<FeaturedFoundation[]>;
   getFoundationContacts(foundationId: string): Promise<FoundationContact>;
   rollbackFoundation(foundationId: string): Promise<void>;
 }
