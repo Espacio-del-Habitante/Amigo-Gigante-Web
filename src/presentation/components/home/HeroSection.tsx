@@ -154,7 +154,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
         </Stack>
         <Box className="grid items-start gap-4 sm:grid-cols-2 md:gap-6">
           <Stack className="gap-3 sm:mt-4">
-            {first && (
+            {first && first.imageUrl ? (
               <Card
                 sx={{
                   borderRadius: 2,
@@ -186,7 +186,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                   />
                 </Box>
               </Card>
-            )}
+            ) : null}
             <Card className="flex items-center gap-3 rounded-2xl border border-solid p-3" sx={{ borderColor: "divider", boxShadow: 2 }}>
               <Chip
                 icon={<PetsRoundedIcon color="secondary" />}
@@ -212,7 +212,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 {t("hero.sponsorCard")}
               </Typography>
             </Card>
-            {second && (
+            {second && second.imageUrl ? (
               <Card
                 sx={{
                   borderRadius: 2,
@@ -243,7 +243,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                   />
                 </Box>
               </Card>
-            )}
+            ) : null}
           </Stack>
         </Box>
       </Container>

@@ -22,7 +22,7 @@ export function FeaturedAnimalsSection({ animals }: FeaturedAnimalsSectionProps)
           <Typography variant="h4" sx={{ fontWeight: 800, color: "text.primary" }}>
             {t("featured.title")}
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
+          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }} noWrap>
             {t("featured.subtitle")}
           </Typography>
         </Box>

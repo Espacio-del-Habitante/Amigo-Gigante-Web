@@ -94,8 +94,10 @@ export default function Home() {
       ) : null}
       <HeroSection heroAnimals={homeAnimals?.heroAnimals ?? []} />
       <AnnouncementsCarousel />
-      <FeaturedAnimalsSection animals={homeAnimals?.featuredAnimals ?? []} />
-      <PartnersSection foundations={featuredFoundations} />
+      {homeAnimals?.featuredAnimals?.length ? (
+        <FeaturedAnimalsSection animals={homeAnimals.featuredAnimals} />
+      ) : null}
+      {featuredFoundations.length ? <PartnersSection foundations={featuredFoundations} /> : null}
       <StoreSection />
       <HomeFooter />
     </Box>

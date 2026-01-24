@@ -36,22 +36,25 @@ export function AnimalCard({ animal }: AnimalCardProps) {
           overflow: "hidden",
           height: 240,
           borderRadius: 2,
+          backgroundColor: animal.imageUrl ? "transparent" : "grey.100",
         }}
       >
-        <Box
-          component="img"
-          src={animal.imageUrl}
-          alt={animal.name}
-          sx={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "transform 0.4s ease",
-            ":hover": {
-              transform: "scale(1.04)",
-            },
-          }}
-        />
+        {animal.imageUrl ? (
+          <Box
+            component="img"
+            src={animal.imageUrl}
+            alt={animal.name}
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              transition: "transform 0.4s ease",
+              ":hover": {
+                transform: "scale(1.04)",
+              },
+            }}
+          />
+        ) : null}
         <IconButton
           size="small"
           variant="ghost"
