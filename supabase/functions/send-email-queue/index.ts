@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { baseLayout } from "./templates/base-layout.ts";
 import { adoptionRequestCreated } from "./templates/adoption-request-created.ts";
 import { adoptionStatusChanged } from "./templates/adoption-status-changed.ts";
 import { adoptionInfoRequested } from "./templates/adoption-info-requested.ts";
@@ -9,8 +10,9 @@ const RESEND_FROM = Deno.env.get("RESEND_FROM") ?? "onboarding@resend.dev"; // c
 const CRON_SECRET = Deno.env.get("CRON_SECRET")!;
 const BATCH_SIZE = 10;
 
-function renderSubject(template: string, payload: any) {
-  switch (template) {
+function renderSubject(template: string, payload: any): string {
+  const t = (template ?? "").trim();
+  switch (t) {
     case "adoption_request_created":
       return "Recibimos tu solicitud de adopción";
     case "adoption_status_changed":
@@ -22,16 +24,20 @@ function renderSubject(template: string, payload: any) {
   }
 }
 
-function renderHtml(template: string, payload: any) {
-  switch (template) {
+function renderHtml(template: string, payload: any): string {
+  const t = (template ?? "").trim();
+  switch (t) {
     case "adoption_request_created":
-      return adoptionRequestCreated(payload);
+      return adoptionRequestCreated(payload ?? {});
     case "adoption_status_changed":
-      return adoptionStatusChanged(payload);
+      return adoptionStatusChanged(payload ?? {});
     case "info_requested":
-      return adoptionInfoRequested(payload);
+      return adoptionInfoRequested(payload ?? {});
     default:
-      return "<p>Tienes una nueva notificación.</p>";
+      return baseLayout({
+        title: "Notificación",
+        contentHtml: "<p>Tienes una nueva notificación.</p>",
+      });
   }
 }
 
@@ -103,6 +109,10 @@ serve(async (req) => {
     try {
       const subject = renderSubject(row.template, row.payload);
       const html = renderHtml(row.template, row.payload);
+
+      if (!html || typeof html !== "string" || html.length < 50) {
+        throw new Error(`Template "${row.template}" produced invalid or empty HTML`);
+      }
 
       await resendSendEmail(row.to_email, subject, html);
 
