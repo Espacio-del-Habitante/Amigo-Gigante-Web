@@ -291,7 +291,7 @@ export function HomeNavBar() {
                 <Divider />
                 <MenuItem
                   component={NextLink}
-                  href={`/${locale}/account/edit`}
+                  href={`/${locale}/account`}
                   onClick={handleAccountMenuClose}
                 >
                   {t("account.menu.editAccount")}
@@ -407,7 +407,7 @@ export function HomeNavBar() {
                 <Divider />
                 <MenuItem
                   component={NextLink}
-                  href={`/${locale}/account/edit`}
+                  href={`/${locale}/account`}
                   onClick={() => {
                     handleAccountMenuClose();
                     setOpen(false);

@@ -85,27 +85,43 @@ export const createAccountValidationSchema = (t: AccountTranslator) =>
         return /^[+()\d\s-]+$/.test(value);
       }),
     email: Yup.string().trim().notRequired(),
-    currentPassword: Yup.string().when(["newPassword", "confirmPassword"], {
-      is: (newPassword: string, confirmPassword: string) => Boolean(newPassword || confirmPassword),
-      then: (schema) => schema.required(t("validation.password.currentRequired")),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-    newPassword: Yup.string().when(["currentPassword", "confirmPassword"], {
-      is: (currentPassword: string, confirmPassword: string) =>
-        Boolean(currentPassword || confirmPassword),
-      then: (schema) =>
-        schema
-          .required(t("validation.password.newRequired"))
-          .min(8, t("validation.password.minLength"))
-          .matches(/^(?=.*[A-Za-z])(?=.*\d).+$/, t("validation.password.letterNumber")),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-    confirmPassword: Yup.string().when("newPassword", {
-      is: (newPassword: string) => Boolean(newPassword),
-      then: (schema) =>
-        schema
-          .required(t("validation.password.confirmRequired"))
-          .oneOf([Yup.ref("newPassword")], t("validation.password.mismatch")),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+    currentPassword: Yup.string()
+      .test("current-required", t("validation.password.currentRequired"), (value, context) => {
+        const { newPassword, confirmPassword } = context.parent as AccountFormValues;
+        if (!newPassword && !confirmPassword) {
+          return true;
+        }
+        return Boolean(value);
+      }),
+    newPassword: Yup.string()
+      .test("new-required", t("validation.password.newRequired"), (value, context) => {
+        const { currentPassword, confirmPassword } = context.parent as AccountFormValues;
+        if (!currentPassword && !confirmPassword) {
+          return true;
+        }
+        return Boolean(value);
+      })
+      .test("new-min", t("validation.password.minLength"), (value) => {
+        if (!value) return true;
+        return value.length >= 8;
+      })
+      .test("new-format", t("validation.password.letterNumber"), (value) => {
+        if (!value) return true;
+        return /^(?=.*[A-Za-z])(?=.*\d).+$/.test(value);
+      }),
+    confirmPassword: Yup.string()
+      .test("confirm-required", t("validation.password.confirmRequired"), (value, context) => {
+        const { newPassword } = context.parent as AccountFormValues;
+        if (!newPassword) {
+          return true;
+        }
+        return Boolean(value);
+      })
+      .test("confirm-match", t("validation.password.mismatch"), (value, context) => {
+        const { newPassword } = context.parent as AccountFormValues;
+        if (!newPassword) {
+          return true;
+        }
+        return value === newPassword;
+      }),
   });
