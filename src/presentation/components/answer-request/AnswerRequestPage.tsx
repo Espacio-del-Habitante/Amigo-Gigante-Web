@@ -132,7 +132,7 @@ export function AnswerRequestPage({ requestId }: AnswerRequestPageProps) {
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700"
           >
             <span className="material-symbols-outlined">person</span>
-            <span className="text-sm font-medium">{account("sidebar.account")}</span>
+            <span className="text-sm font-medium">{account("sidebar.account")} </span>
           </Link>
           <Link
             href={`/${locale}/account/adoptions`}

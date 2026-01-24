@@ -477,7 +477,7 @@ export class AdoptionRequestRepository implements IAdoptionRequestRepository {
       .eq("id", requestId)
       .eq("adopter_user_id", adopterUserId)
       .select("id")
-      .single();
+      .maybeSingle();
 
     if (error) {
       throw new Error(this.translateAdoptionError(error));
