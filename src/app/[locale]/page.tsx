@@ -1,8 +1,7 @@
 "use client";
 
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
 
 import type { FeaturedFoundation } from "@/domain/models/FeaturedFoundation";
 import type { HomeAnimals } from "@/domain/models/HomeAnimals";
@@ -27,18 +26,13 @@ export default function Home() {
     () => appContainer.get<GetFeaturedFoundationsUseCase>(USE_CASE_TYPES.GetFeaturedFoundationsUseCase),
     [],
   );
-  const t = useTranslations("home");
-
   const [homeAnimals, setHomeAnimals] = useState<HomeAnimals | null>(null);
   const [featuredFoundations, setFeaturedFoundations] = useState<FeaturedFoundation[]>([]);
-  const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
-    setHasError(false);
-
     Promise.allSettled([
       getHomeAnimalsUseCase.execute(),
       getFeaturedFoundationsUseCase.execute({ limit: 6 }),
@@ -50,14 +44,12 @@ export default function Home() {
           setHomeAnimals(animalsResult.value);
         } else {
           setHomeAnimals({ heroAnimals: [], featuredAnimals: [] });
-          setHasError(true);
         }
 
         if (foundationsResult.status === "fulfilled") {
           setFeaturedFoundations(foundationsResult.value);
         } else {
           setFeaturedFoundations([]);
-          setHasError(true);
         }
       })
       .finally(() => {
@@ -82,20 +74,10 @@ export default function Home() {
   return (
     <Box className="bg-slate-50">
       <HomeNavBar />
-      {hasError ? (
-        <Stack spacing={1} alignItems="center" className="px-6 py-6 text-center">
-          <Typography variant="h6" sx={{ fontWeight: 900 }}>
-            {t("errors.title")}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" textAlign="center">
-            {t("errors.description")}
-          </Typography>
-        </Stack>
-      ) : null}
       <HeroSection heroAnimals={homeAnimals?.heroAnimals ?? []} />
       <AnnouncementsCarousel />
       {homeAnimals?.featuredAnimals?.length ? (
-        <FeaturedAnimalsSection animals={homeAnimals.featuredAnimals} />
+        <FeaturedAnimalsSection animals={homeAnimals.featuredAnimals.slice(0, 3)} />
       ) : null}
       {featuredFoundations.length ? <PartnersSection foundations={featuredFoundations} /> : null}
       <StoreSection />

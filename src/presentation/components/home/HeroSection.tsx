@@ -23,6 +23,7 @@ import { useTranslations } from "next-intl";
 import type { Animal } from "@/domain/models/Animal";
 import { Button, Chip } from "@/presentation/components/atoms";
 import { useHomeNavigation } from "@/presentation/components/home/hooks/useHomeNavigation";
+import LogoImage from "@/presentation/assets/images/LOGO2.png";
 
 interface HeroSectionProps {
   heroAnimals: Animal[];
@@ -154,7 +155,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
         </Stack>
         <Box className="grid items-start gap-4 sm:grid-cols-2 md:gap-6">
           <Stack className="gap-3 sm:mt-4">
-            {first && first.imageUrl ? (
+            {first ? (
               <Card
                 sx={{
                   borderRadius: 2,
@@ -175,13 +176,13 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 }}
                 aria-label={t("hero.animalAriaLabel", { name: first.name })}
               >
-                <Box sx={{ position: "relative", height: 240 }}>
+                <Box sx={{ position: "relative", height: 240, backgroundColor: first.imageUrl ? "transparent" : "grey.100" }}>
                   <Image
-                    src={first.imageUrl}
+                    src={first.imageUrl || LogoImage}
                     alt={first.name}
                     fill
                     priority
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: first.imageUrl ? "cover" : "contain", padding: first.imageUrl ? 0 : "24px" }}
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
                   />
                 </Box>
@@ -212,7 +213,7 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 {t("hero.sponsorCard")}
               </Typography>
             </Card>
-            {second && second.imageUrl ? (
+            {second ? (
               <Card
                 sx={{
                   borderRadius: 2,
@@ -233,12 +234,12 @@ export function HeroSection({ heroAnimals }: HeroSectionProps) {
                 }}
                 aria-label={t("hero.animalAriaLabel", { name: second.name })}
               >
-                <Box sx={{ position: "relative", height: 240 }}>
+                <Box sx={{ position: "relative", height: 240, backgroundColor: second.imageUrl ? "transparent" : "grey.100" }}>
                   <Image
-                    src={second.imageUrl}
+                    src={second.imageUrl || LogoImage}
                     alt={second.name}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: second.imageUrl ? "cover" : "contain", padding: second.imageUrl ? 0 : "24px" }}
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 620px"
                   />
                 </Box>
