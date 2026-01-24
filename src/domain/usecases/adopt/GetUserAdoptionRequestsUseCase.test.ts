@@ -39,10 +39,9 @@ const baseRepository: IAdoptionRequestRepository = {
   getRequestAccessInfo: async () => {
     throw new Error("not implemented");
   },
-  getRequestMessages: async () => [],
   getAdopterEmailByUserId: async () => null,
   enqueueInfoRequestEmail: async () => {},
-  saveResponseMessage: async () => {},
+  addResponseDocuments: async () => {},
   notifyFoundationMembers: async () => {},
   updateStatus: async () => {},
 };

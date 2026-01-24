@@ -11,6 +11,8 @@ const buildDetail = (overrides?: Partial<AdoptionRequestDetail>): AdoptionReques
   status: "info_requested",
   priority: "low",
   rejectionReason: null,
+  infoRequestMessage: "Necesitamos un video del patio.",
+  infoResponseMessage: null,
   createdAt: new Date().toISOString(),
   adopterProfile: {
     displayName: "Alex",
@@ -92,19 +94,9 @@ test("GetRequestInfoForResponseUseCase returns request info and foundation messa
       foundationId: "foundation-1",
       adopterUserId: "user-1",
     }),
-    getRequestMessages: async () => [
-      {
-        id: 10,
-        senderUserId: "foundation-user",
-        senderRole: "foundation",
-        messageText: "Necesitamos un video del patio.",
-        createdAt: "2024-02-01T10:00:00Z",
-        files: [],
-      },
-    ],
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {},
-    saveResponseMessage: async () => {},
+    addResponseDocuments: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
   };
@@ -160,10 +152,9 @@ test("GetRequestInfoForResponseUseCase rejects when status is invalid", async ()
       foundationId: "foundation-1",
       adopterUserId: "user-1",
     }),
-    getRequestMessages: async () => [],
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {},
-    saveResponseMessage: async () => {},
+    addResponseDocuments: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
   };

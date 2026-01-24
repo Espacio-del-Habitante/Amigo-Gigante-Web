@@ -65,8 +65,7 @@ test("GetPrivateFileUrlUseCase returns signed URL for authorized adopter", async
       foundationId: "foundation-1",
       adopterUserId: "user-1",
     }),
-    getRequestMessages: async () => [],
-    saveResponseMessage: async () => {},
+    addResponseDocuments: async () => {},
     notifyFoundationMembers: async () => {},
   };
 
@@ -142,8 +141,7 @@ test("GetPrivateFileUrlUseCase rejects unauthorized access", async () => {
       foundationId: "foundation-1",
       adopterUserId: "user-1",
     }),
-    getRequestMessages: async () => [],
-    saveResponseMessage: async () => {},
+    addResponseDocuments: async () => {},
     notifyFoundationMembers: async () => {},
   };
 
@@ -220,8 +218,7 @@ test("GetPrivateFileUrlUseCase rejects invalid paths", async () => {
       foundationId: "foundation-1",
       adopterUserId: "user-1",
     }),
-    getRequestMessages: async () => [],
-    saveResponseMessage: async () => {},
+    addResponseDocuments: async () => {},
     notifyFoundationMembers: async () => {},
   };
 

@@ -10,7 +10,6 @@ export interface RequestInfoForResponse {
   request: UserAdoptionRequestSummary;
   foundationMessage: {
     message: string;
-    createdAt: string;
     foundationName: string;
   } | null;
 }
@@ -50,20 +49,20 @@ export class GetRequestInfoForResponseUseCase {
       throw new Error("errors.invalidStatus");
     }
 
-    const messages = await this.adoptionRequestRepository.getRequestMessages({
+    const detail = await this.adoptionRequestRepository.getRequestDetail({
+      foundationId: accessInfo.foundationId,
       requestId: input.requestId,
     });
 
-    const foundationMessage = [...messages]
-      .reverse()
-      .find((message) => message.senderRole === "foundation");
+    if (detail.status !== "info_requested") {
+      throw new Error("errors.invalidStatus");
+    }
 
     return {
       request,
-      foundationMessage: foundationMessage
+      foundationMessage: detail.infoRequestMessage
         ? {
-            message: foundationMessage.messageText,
-            createdAt: foundationMessage.createdAt,
+            message: detail.infoRequestMessage,
             foundationName: request.foundation.name,
           }
         : null,

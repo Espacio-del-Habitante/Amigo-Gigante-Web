@@ -62,11 +62,8 @@ export class RespondToInfoRequestUseCase {
       }
     }
 
-    await this.adoptionRequestRepository.saveResponseMessage({
+    await this.adoptionRequestRepository.addResponseDocuments({
       requestId: input.requestId,
-      senderUserId: session.user.id,
-      senderRole: "adopter",
-      messageText: input.message,
       fileUrls,
     });
 
@@ -74,6 +71,7 @@ export class RespondToInfoRequestUseCase {
       foundationId: accessInfo.foundationId,
       requestId: input.requestId,
       status: "in_review",
+      infoResponseMessage: input.message,
     });
 
     await this.adoptionRequestRepository.notifyFoundationMembers({

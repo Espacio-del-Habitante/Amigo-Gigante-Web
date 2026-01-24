@@ -12,6 +12,8 @@ const buildDetail = (overrides?: Partial<AdoptionRequestDetail>): AdoptionReques
   status: "pending",
   priority: "low",
   rejectionReason: null,
+  infoRequestMessage: null,
+  infoResponseMessage: null,
   createdAt: new Date().toISOString(),
   adopterProfile: {
     displayName: "Alex",
@@ -66,14 +68,13 @@ test("RequestAdoptionInfoUseCase enqueues email and updates status", async () =>
       foundationId: "foundation-1",
       adopterUserId: "user-99",
     }),
-    getRequestMessages: async () => [],
     getAdopterEmailByUserId: async () => {
       throw new Error("not implemented");
     },
     enqueueInfoRequestEmail: async (params) => {
       enqueuePayload = params;
     },
-    saveResponseMessage: async () => {},
+    addResponseDocuments: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async (params) => {
       updatePayload = params;
@@ -122,6 +123,7 @@ test("RequestAdoptionInfoUseCase enqueues email and updates status", async () =>
     foundationId: "foundation-1",
     requestId: 12,
     status: "info_requested",
+    infoRequestMessage: "Message",
   });
 });
 
@@ -140,13 +142,12 @@ test("RequestAdoptionInfoUseCase rejects when adopter email is missing", async (
       foundationId: "foundation-1",
       adopterUserId: "user-99",
     }),
-    getRequestMessages: async () => [],
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {
       throw new Error("should not enqueue");
     },
-    saveResponseMessage: async () => {
-      throw new Error("should not save response");
+    addResponseDocuments: async () => {
+      throw new Error("should not add response documents");
     },
     notifyFoundationMembers: async () => {
       throw new Error("should not notify");

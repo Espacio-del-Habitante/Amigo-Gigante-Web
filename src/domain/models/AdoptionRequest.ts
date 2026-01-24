@@ -123,23 +123,10 @@ export interface AdoptionRequestDetail {
   status: AdoptionRequestStatus;
   priority: AdoptionRequestPriority;
   rejectionReason: string | null;
+  infoRequestMessage: string | null;
+  infoResponseMessage: string | null;
   createdAt: string;
   adopterProfile: AdoptionRequestAdopterProfile;
   animal: AdoptionRequestAnimalSnapshot;
   documents: AdoptionRequestDocument[];
-}
-
-export interface AdoptionRequestMessageFile {
-  id: number;
-  fileUrl: string;
-  docType: string;
-}
-
-export interface AdoptionRequestMessage {
-  id: number;
-  senderUserId: string;
-  senderRole: "foundation" | "adopter";
-  messageText: string;
-  createdAt: string;
-  files: AdoptionRequestMessageFile[];
 }

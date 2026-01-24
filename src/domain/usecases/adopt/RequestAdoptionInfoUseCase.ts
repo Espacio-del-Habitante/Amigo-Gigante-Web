@@ -59,6 +59,7 @@ export class RequestAdoptionInfoUseCase {
       foundationId,
       requestId: input.requestId,
       status: "info_requested",
+      infoRequestMessage: input.message,
     });
   }
 

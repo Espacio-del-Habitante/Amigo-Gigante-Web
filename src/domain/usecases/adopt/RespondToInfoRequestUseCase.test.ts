@@ -12,6 +12,8 @@ const buildDetail = (overrides?: Partial<AdoptionRequestDetail>): AdoptionReques
   status: "info_requested",
   priority: "low",
   rejectionReason: null,
+  infoRequestMessage: "Información solicitada",
+  infoResponseMessage: null,
   createdAt: new Date().toISOString(),
   adopterProfile: {
     displayName: "Alex",
@@ -61,8 +63,8 @@ const createAuthRepository = (session: Awaited<ReturnType<IAuthRepository["getSe
 });
 
 test("RespondToInfoRequestUseCase saves response, updates status, and notifies", async () => {
-  let savedPayload: Parameters<IAdoptionRequestRepository["saveResponseMessage"]>[0] | null = null;
   let statusPayload: Parameters<IAdoptionRequestRepository["updateStatus"]>[0] | null = null;
+  let responseDocumentsPayload: Parameters<IAdoptionRequestRepository["addResponseDocuments"]>[0] | null = null;
   let notificationPayload: Parameters<IAdoptionRequestRepository["notifyFoundationMembers"]>[0] | null = null;
 
   const adoptionRequestRepository: IAdoptionRequestRepository = {
@@ -79,11 +81,10 @@ test("RespondToInfoRequestUseCase saves response, updates status, and notifies",
       foundationId: "foundation-1",
       adopterUserId: "user-1",
     }),
-    getRequestMessages: async () => [],
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {},
-    saveResponseMessage: async (params) => {
-      savedPayload = params;
+    addResponseDocuments: async (params) => {
+      responseDocumentsPayload = params;
     },
     notifyFoundationMembers: async (params) => {
       notificationPayload = params;
@@ -115,17 +116,15 @@ test("RespondToInfoRequestUseCase saves response, updates status, and notifies",
     files: [new File(["content"], "file.pdf", { type: "application/pdf" })],
   });
 
-  assert.deepEqual(savedPayload, {
-    requestId: 1,
-    senderUserId: "user-1",
-    senderRole: "adopter",
-    messageText: "Respuesta",
-    fileUrls: ["adoption-requests/foundation-1/1/response-file.pdf"],
-  });
   assert.deepEqual(statusPayload, {
     foundationId: "foundation-1",
     requestId: 1,
     status: "in_review",
+    infoResponseMessage: "Respuesta",
+  });
+  assert.deepEqual(responseDocumentsPayload, {
+    requestId: 1,
+    fileUrls: ["adoption-requests/foundation-1/1/response-file.pdf"],
   });
   assert.ok(notificationPayload);
   assert.equal(notificationPayload?.type, "adoption_info_response");
@@ -146,10 +145,9 @@ test("RespondToInfoRequestUseCase rejects empty messages", async () => {
       foundationId: "foundation-1",
       adopterUserId: "user-1",
     }),
-    getRequestMessages: async () => [],
     getAdopterEmailByUserId: async () => null,
     enqueueInfoRequestEmail: async () => {},
-    saveResponseMessage: async () => {},
+    addResponseDocuments: async () => {},
     notifyFoundationMembers: async () => {},
     updateStatus: async () => {},
   };
